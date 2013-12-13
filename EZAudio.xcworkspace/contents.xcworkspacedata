@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:EZAudioExample-OSX/../EZAudioExample-iOS/EZAudioExample-iOS.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:EZAudioExample-OSX/EZAudioExample-OSX.xcodeproj">
+   </FileRef>
+</Workspace>
