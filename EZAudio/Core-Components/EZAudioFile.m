@@ -124,19 +124,21 @@
   audioBufferList:(AudioBufferList *)audioBufferList
        bufferSize:(UInt32 *)bufferSize
               eof:(BOOL *)eof {
-  // Setup the buffers
-  UInt32 outputBufferSize = 32 * frames; // 32 KB
-	audioBufferList->mNumberBuffers = 1;
-	audioBufferList->mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
-	audioBufferList->mBuffers[0].mDataByteSize = outputBufferSize;
-	audioBufferList->mBuffers[0].mData = (Float64 *)malloc(sizeof(Float64 *)*outputBufferSize);
-  [EZAudio checkResult:ExtAudioFileRead(_audioFile,
-                                        &frames,
-                                        audioBufferList)
-             operation:"Failed to read audio data from audio file"];
-  *bufferSize = audioBufferList->mBuffers[0].mDataByteSize/sizeof(Float32);
-  *eof = frames == 0;
-  _frameIndex += frames;
+  @autoreleasepool {
+    // Setup the buffers
+    UInt32 outputBufferSize = 32 * frames; // 32 KB
+    audioBufferList->mNumberBuffers = 1;
+    audioBufferList->mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
+    audioBufferList->mBuffers[0].mDataByteSize = outputBufferSize;
+    audioBufferList->mBuffers[0].mData = (Float64 *)malloc(sizeof(Float64 *)*outputBufferSize);
+    [EZAudio checkResult:ExtAudioFileRead(_audioFile,
+                                          &frames,
+                                          audioBufferList)
+               operation:"Failed to read audio data from audio file"];
+    *bufferSize = audioBufferList->mBuffers[0].mDataByteSize/sizeof(Float32);
+    *eof = frames == 0;
+    _frameIndex += frames;
+  }
 }
 
 -(void)readFrames:(UInt32)frames withBufferListCompletionBlock:(BufferListReadCompletionBlock)completionBlock {

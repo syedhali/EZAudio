@@ -94,4 +94,13 @@ void CheckResult(OSStatus result, const char *operation)
   }
 }
 
++(void)freeBufferList:(AudioBufferList *)bufferList {
+  for( int i = 0; i < bufferList->mNumberBuffers; i++ ){
+    if( bufferList->mBuffers[i].mData ){
+      free(bufferList->mBuffers[i].mData);
+    }
+  }
+  free(bufferList);
+}
+
 @end

@@ -90,4 +90,11 @@ void CheckResult(OSStatus result, const char *operation);
                               numberOfChannels:(UInt32)nChannels
                                    interleaved:(BOOL)interleaved;
 
+
+/**
+ Deallocates buffer list from memory.
+ *  @param bufferList A pointer to the buffer list you would like to free
+ */
++(void)freeBufferList:(AudioBufferList*)bufferList;
+
 @end
