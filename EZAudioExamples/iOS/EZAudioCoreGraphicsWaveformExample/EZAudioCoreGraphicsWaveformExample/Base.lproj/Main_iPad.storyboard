@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <deployment defaultVersion="1536" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+    </dependencies>
+    <scenes>
+        <!--Core Graphics Waveform View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="CoreGraphicsWaveformViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Rz3-HH-m41"/>
+                        <viewControllerLayoutGuide type="bottom" id="Edn-LO-SgE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KVj-SX-30V" customClass="EZAudioPlot">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="HOo-wT-4Gl">
+                                        <rect key="frame" x="635" y="975" width="113" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <segments>
+                                            <segment title="Buffer"/>
+                                            <segment title="Rolling"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="changePlotType:" destination="BYZ-38-t0r" eventType="valueChanged" id="u5I-m7-Eca"/>
+                                        </connections>
+                                    </segmentedControl>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IdG-24-t3E">
+                                        <rect key="frame" x="20" y="973" width="51" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="toggleMicrophone:" destination="BYZ-38-t0r" eventType="valueChanged" id="z0i-Io-nWB"/>
+                                        </connections>
+                                    </switch>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Microphone " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBJ-Ob-1px">
+                                        <rect key="frame" x="20" y="944" width="728" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="HOo-wT-4Gl" secondAttribute="trailing" constant="20" id="1bj-GM-5u9"/>
+                                    <constraint firstItem="dBJ-Ob-1px" firstAttribute="leading" secondItem="KVj-SX-30V" secondAttribute="leading" constant="20" id="FGd-WH-dE1"/>
+                                    <constraint firstAttribute="trailing" secondItem="dBJ-Ob-1px" secondAttribute="trailing" constant="20" id="LPb-Al-dww"/>
+                                    <constraint firstItem="IdG-24-t3E" firstAttribute="leading" secondItem="KVj-SX-30V" secondAttribute="leading" constant="20" id="g5e-84-did"/>
+                                    <constraint firstAttribute="bottom" secondItem="HOo-wT-4Gl" secondAttribute="bottom" constant="21" id="iaS-pz-dXC"/>
+                                    <constraint firstAttribute="bottom" secondItem="IdG-24-t3E" secondAttribute="bottom" constant="20" id="mks-lI-4PW"/>
+                                    <constraint firstItem="IdG-24-t3E" firstAttribute="top" secondItem="dBJ-Ob-1px" secondAttribute="bottom" constant="8" id="uLY-bf-9Qc"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="KVj-SX-30V" secondAttribute="bottom" id="Egg-Wh-pwI"/>
+                            <constraint firstItem="KVj-SX-30V" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="LI6-AN-HB1"/>
+                            <constraint firstAttribute="trailing" secondItem="KVj-SX-30V" secondAttribute="trailing" id="PDo-8E-1OC"/>
+                            <constraint firstItem="KVj-SX-30V" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Z3Y-9k-ddm"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="audioPlot" destination="KVj-SX-30V" id="eVz-n9-mDV"/>
+                        <outlet property="microphoneTextLabel" destination="dBJ-Ob-1px" id="IoH-VO-TDK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="12" y="-240"/>
+        </scene>
+    </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackOpaque"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
+</document>

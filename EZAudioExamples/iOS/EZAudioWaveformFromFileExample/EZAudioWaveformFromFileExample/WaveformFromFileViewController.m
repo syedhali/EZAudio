@@ -2,7 +2,7 @@
 //  WaveformFromFileViewController.m
 //  EZAudioWaveformFromFileExample
 //
-//  Created by Syed Haris Ali on 12/13/13.
+//  Created by Syed Haris Ali on 12/15/13.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
 //
 
@@ -14,49 +14,23 @@
 @end
 
 @implementation WaveformFromFileViewController
-@synthesize audioFile;
-@synthesize audioPlot;
+@synthesize audioPlot = _audioPlot;
+@synthesize audioFile = _audioFile;
 @synthesize eof = _eof;
-
-#pragma mark - Initialization
--(id)init {
-  self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil];
-  if(self){
-    [self initializeViewController];
-  }
-  return self;
-}
-
--(id)initWithCoder:(NSCoder *)aDecoder {
-  self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil];
-  if(self){
-    [self initializeViewController];
-  }
-  return self;
-}
-
--(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-  self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil];
-  if(self){
-    [self initializeViewController];
-  }
-  return self;
-}
-
-#pragma mark - Initialize View Controller
--(void)initializeViewController {
-}
+@synthesize filePathLabel = _filePathLabel;
 
 #pragma mark - Customize the Audio Plot
--(void)awakeFromNib {
+-(void)viewDidLoad {
+  
+  [super viewDidLoad];
   
   /*
    Customizing the audio plot's look
    */
   // Background color
-  self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.993 green: 0.881 blue: 0.751 alpha: 1];
+  self.audioPlot.backgroundColor = [UIColor colorWithRed: 0.993 green: 0.881 blue: 0.751 alpha: 1];
   // Waveform color
-  self.audioPlot.color           = [NSColor colorWithCalibratedRed: 0.219 green: 0.234 blue: 0.29 alpha: 1];
+  self.audioPlot.color           = [UIColor colorWithRed: 0.219 green: 0.234 blue: 0.29 alpha: 1];
   // Plot type
   self.audioPlot.plotType        = EZPlotTypeBuffer;
   // Fill
@@ -65,30 +39,18 @@
   self.audioPlot.shouldMirror    = YES;
   
   /*
-   Try opening the sample file
+   Load in the sample file
    */
   [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
   
 }
 
-#pragma mark - Actions
--(void)openFile:(id)sender {
-  NSOpenPanel* openDlg = [NSOpenPanel openPanel];
-  openDlg.canChooseFiles = YES;
-  openDlg.canChooseDirectories = NO;
-  openDlg.delegate = self;
-  if( [openDlg runModal] == NSOKButton ){
-    NSArray *selectedFiles = [openDlg URLs];
-    [self openFileWithFilePathURL:selectedFiles.firstObject];
-  }
-}
-
 #pragma mark - Action Extensions
 -(void)openFileWithFilePathURL:(NSURL*)filePathURL {
   
-  self.audioFile                 = [EZAudioFile audioFileWithURL:filePathURL];
-  self.eof                       = NO;
-  self.filePathLabel.stringValue = filePathURL.lastPathComponent;
+  self.audioFile          = [EZAudioFile audioFileWithURL:filePathURL];
+  self.eof                = NO;
+  self.filePathLabel.text = filePathURL.lastPathComponent;
   
   // The EZAudioFile provides convenience methods to optimize the waveform drawings. It will choose a proper window to iterate through the file that will generate roughly ~2048 buffers and so 2048 points on the waveform graph. This ensures that we get a good looking plot for both very small and very large files
   UInt32 frameRate = [self.audioFile recommendedDrawingFrameRate];
@@ -126,28 +88,6 @@
   // Update the audio plot once all the snapshots have been taken
   [self.audioPlot updateBuffer:data withBufferSize:buffers];
   
-}
-
-#pragma mark - NSOpenSavePanelDelegate
-/**
- Here's an example how to filter the open panel to only show the supported file types by the EZAudioFile (which are just the audio file types supported by Core Audio).
- */
--(BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename {
-  NSString* ext = [filename pathExtension];
-  if ([ext isEqualToString:@""] || [ext isEqualToString:@"/"] || ext == nil || ext == NULL || [ext length] < 1) {
-    return YES;
-  }
-  NSArray *fileTypes = [EZAudioFile supportedAudioFileTypes];
-  NSEnumerator* tagEnumerator = [fileTypes objectEnumerator];
-  NSString* allowedExt;
-  while ((allowedExt = [tagEnumerator nextObject]))
-  {
-    if ([ext caseInsensitiveCompare:allowedExt] == NSOrderedSame)
-    {
-      return YES;
-    }
-  }
-  return NO;
 }
 
 @end

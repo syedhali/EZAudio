@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+    </dependencies>
+    <scenes>
+        <!--Waveform From File View Controller-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController id="vXZ-lx-hvc" customClass="WaveformFromFileViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Uy4-gb-cCK"/>
+                        <viewControllerLayoutGuide type="bottom" id="anR-IY-kWc"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wJ1-QR-zjX" customClass="EZAudioPlot">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="wJ1-QR-zjX" secondAttribute="trailing" id="5iy-IT-HrP"/>
+                            <constraint firstItem="wJ1-QR-zjX" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="BW5-rx-Rbd"/>
+                            <constraint firstAttribute="trailing" secondItem="wJ1-QR-zjX" secondAttribute="trailing" id="HPH-gi-fep"/>
+                            <constraint firstItem="wJ1-QR-zjX" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="KJa-p3-PCH"/>
+                            <constraint firstAttribute="bottom" secondItem="wJ1-QR-zjX" secondAttribute="bottom" id="Kfc-GW-cwF"/>
+                            <constraint firstItem="wJ1-QR-zjX" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="WV3-7B-eJI"/>
+                            <constraint firstItem="wJ1-QR-zjX" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="gJX-Eu-y6Z"/>
+                            <constraint firstAttribute="bottom" secondItem="wJ1-QR-zjX" secondAttribute="bottom" id="gla-h7-kPa"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="audioPlot" destination="wJ1-QR-zjX" id="6n2-mE-oz7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>

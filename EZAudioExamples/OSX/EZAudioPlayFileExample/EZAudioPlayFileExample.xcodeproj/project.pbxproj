@@ -230,9 +230,9 @@
 			children = (
 				94056F34185BD88500EB94BA /* 3rd-Party-Components */,
 				94056F39185BD88500EB94BA /* Core-Components */,
+				94056F44185BD88500EB94BA /* Interface-Components */,
 				94056F42185BD88500EB94BA /* EZAudio.h */,
 				94056F43185BD88500EB94BA /* EZAudio.mm */,
-				94056F44185BD88500EB94BA /* Interface-Components */,
 				94056F4D185BD88500EB94BA /* simple-drum-beat.wav */,
 			);
 			name = EZAudio;
@@ -605,6 +605,7 @@
 				94056F2A185BD83400EB94BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		94056F2B185BD83400EB94BA /* Build configuration list for PBXNativeTarget "EZAudioPlayFileExampleTests" */ = {
 			isa = XCConfigurationList;
@@ -613,6 +614,7 @@
 				94056F2D185BD83400EB94BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
