@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="VkE-dw-grN">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+    </dependencies>
+    <scenes>
+        <!--Record View Controller-->
+        <scene sceneID="gLX-7K-SjM">
+            <objects>
+                <viewController id="VkE-dw-grN" customClass="RecordViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="JfR-45-pXu"/>
+                        <viewControllerLayoutGuide type="bottom" id="9cb-qL-Zmv"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Hyu-ye-8OY">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t0I-ON-JZS" customClass="EZAudioPlotGL">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JB1-eK-YSn">
+                                        <rect key="frame" x="20" y="478" width="51" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="toggleMicrophone:" destination="VkE-dw-grN" eventType="valueChanged" id="NTq-PI-CzF"/>
+                                        </connections>
+                                    </switch>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Microphone On" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CDC-Ch-Fho">
+                                        <rect key="frame" x="98" y="483" width="202" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Vcz-2g-LzN">
+                                        <rect key="frame" x="20" y="517" width="51" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="toggleRecording:" destination="VkE-dw-grN" eventType="valueChanged" id="E5K-Cn-FX0"/>
+                                        </connections>
+                                    </switch>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recording On" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Duh-kO-JzM">
+                                        <rect key="frame" x="98" y="522" width="202" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p26-Wa-31q">
+                                        <rect key="frame" x="20" y="440" width="49" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="49" id="3Fv-MJ-4Gc"/>
+                                        </constraints>
+                                        <state key="normal" title="Play">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="playFile:" destination="VkE-dw-grN" eventType="touchUpInside" id="Ujp-Fn-ATQ"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not Playing" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d75-bW-Eba">
+                                        <rect key="frame" x="98" y="444" width="202" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="Vcz-2g-LzN" firstAttribute="leading" secondItem="t0I-ON-JZS" secondAttribute="leading" constant="20" id="2kz-9c-gmC"/>
+                                    <constraint firstItem="CDC-Ch-Fho" firstAttribute="leading" secondItem="JB1-eK-YSn" secondAttribute="trailing" constant="29" id="3Kv-P3-fap"/>
+                                    <constraint firstAttribute="trailing" secondItem="d75-bW-Eba" secondAttribute="trailing" constant="20" id="48Q-N8-BAx"/>
+                                    <constraint firstItem="Vcz-2g-LzN" firstAttribute="top" secondItem="JB1-eK-YSn" secondAttribute="bottom" constant="8" id="4v8-2b-5zs"/>
+                                    <constraint firstItem="p26-Wa-31q" firstAttribute="leading" secondItem="t0I-ON-JZS" secondAttribute="leading" constant="20" id="95u-7s-xQq"/>
+                                    <constraint firstItem="JB1-eK-YSn" firstAttribute="leading" secondItem="t0I-ON-JZS" secondAttribute="leading" constant="20" id="EDu-dT-JHK"/>
+                                    <constraint firstItem="Duh-kO-JzM" firstAttribute="top" secondItem="CDC-Ch-Fho" secondAttribute="bottom" constant="18" id="Or3-Lq-gss"/>
+                                    <constraint firstItem="JB1-eK-YSn" firstAttribute="top" secondItem="p26-Wa-31q" secondAttribute="bottom" constant="8" id="PAQ-m0-I9r"/>
+                                    <constraint firstItem="d75-bW-Eba" firstAttribute="leading" secondItem="p26-Wa-31q" secondAttribute="trailing" constant="29" id="Q2y-Vg-UQW"/>
+                                    <constraint firstAttribute="trailing" secondItem="Duh-kO-JzM" secondAttribute="trailing" constant="20" id="ShU-aZ-r6q"/>
+                                    <constraint firstAttribute="bottom" secondItem="Vcz-2g-LzN" secondAttribute="bottom" constant="20" id="VrH-4r-DiV"/>
+                                    <constraint firstItem="CDC-Ch-Fho" firstAttribute="top" secondItem="d75-bW-Eba" secondAttribute="bottom" constant="18" id="ctc-R3-4TV"/>
+                                    <constraint firstAttribute="bottom" secondItem="Duh-kO-JzM" secondAttribute="bottom" constant="25" id="ez0-5y-4ot"/>
+                                    <constraint firstItem="Duh-kO-JzM" firstAttribute="leading" secondItem="Vcz-2g-LzN" secondAttribute="trailing" constant="29" id="iPc-Cm-zun"/>
+                                    <constraint firstAttribute="trailing" secondItem="CDC-Ch-Fho" secondAttribute="trailing" constant="20" id="pzm-bq-ZkM"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="t0I-ON-JZS" secondAttribute="bottom" id="4HU-rI-iGr"/>
+                            <constraint firstItem="t0I-ON-JZS" firstAttribute="leading" secondItem="Hyu-ye-8OY" secondAttribute="leading" id="LUm-42-bes"/>
+                            <constraint firstAttribute="trailing" secondItem="t0I-ON-JZS" secondAttribute="trailing" id="M4b-3j-j4O"/>
+                            <constraint firstItem="t0I-ON-JZS" firstAttribute="top" secondItem="Hyu-ye-8OY" secondAttribute="top" id="ilk-0D-qEO"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="audioPlot" destination="t0I-ON-JZS" id="oAe-HP-CdM"/>
+                        <outlet property="microphoneSwitch" destination="JB1-eK-YSn" id="Svv-Wg-W6B"/>
+                        <outlet property="microphoneTextField" destination="CDC-Ch-Fho" id="e2a-08-MSx"/>
+                        <outlet property="playButton" destination="p26-Wa-31q" id="Ce9-5s-zYj"/>
+                        <outlet property="playingTextField" destination="d75-bW-Eba" id="ZaA-Ip-wON"/>
+                        <outlet property="recordSwitch" destination="Vcz-2g-LzN" id="7V2-Ya-b5a"/>
+                        <outlet property="recordingTextField" destination="Duh-kO-JzM" id="bFG-29-NjE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mpg-RW-vA2" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>

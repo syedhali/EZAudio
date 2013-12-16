@@ -56,19 +56,16 @@
   UInt32 frameRate = [self.audioFile recommendedDrawingFrameRate];
   UInt32 buffers   = [self.audioFile minBuffersWithFrameRate:frameRate];
   
-  // Check if we have allocated a read buffer
-  if( readBuffer == NULL ){
-    readBuffer = (AudioBufferList*)malloc(sizeof(AudioBufferList));
-  }
-  
   // Take a snapshot of each buffer through the audio file to form the waveform
   __block float rms;
   float data[buffers];
   for( int i = 0; i < buffers; i++ ){
     
     // Allocate a buffer list to hold the audio file's data
-    UInt32          bufferSize;
-    BOOL            eof;
+    // Check if we have allocated a read buffer
+    readBuffer = (AudioBufferList*)malloc(sizeof(AudioBufferList));
+    UInt32 bufferSize;
+    BOOL   eof;
     
     // Read some data from the audio file (the audio file internally maintains the seek position you're at). You can manually seek to whatever position in the audio file using the seekToFileOffset: function on the EZAudioFile.
     [self.audioFile readFrames:frameRate
@@ -80,10 +77,10 @@
     rms = [EZAudio RMS:readBuffer->mBuffers[0].mData length:bufferSize];
     data[i] = rms;
     
+    // Since we malloc'ed, we should cleanup
+    [EZAudio freeBufferList:readBuffer];
+    
   }
-  
-  // Since we malloc'ed, we should cleanup
-  [EZAudio freeBufferList:readBuffer];
   
   // Update the audio plot once all the snapshots have been taken
   [self.audioPlot updateBuffer:data withBufferSize:buffers];

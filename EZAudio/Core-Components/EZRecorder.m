@@ -106,22 +106,25 @@ typedef struct {
   
   // Setup output buffers
   UInt32 outputBufferSize = 32 * 1024; // 32 KB
-  AudioBufferList convertedData;
-  convertedData.mNumberBuffers = 1;
-  convertedData.mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
-  convertedData.mBuffers[0].mDataByteSize   = outputBufferSize;
-  convertedData.mBuffers[0].mData           = (UInt8 *)malloc(sizeof(UInt8)*outputBufferSize);
+  AudioBufferList *convertedData = (AudioBufferList*)malloc(sizeof(AudioBufferList));
+  convertedData->mNumberBuffers = 1;
+  convertedData->mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
+  convertedData->mBuffers[0].mDataByteSize   = outputBufferSize;
+  convertedData->mBuffers[0].mData           = (UInt8 *)malloc(sizeof(UInt8)*outputBufferSize);
   
   [EZAudio checkResult:AudioConverterFillComplexBuffer(_audioConverter,
                                                        complexInputDataProc,
                                                        &(EZRecorderConverterStruct){ .sourceBuffer = bufferList },
                                                        &bufferSize,
-                                                       &convertedData,
+                                                       convertedData,
                                                        NULL) operation:"Failed while converting buffers"];
   
   // Write the destination audio buffer list into t
-  [EZAudio checkResult:ExtAudioFileWriteAsync(_destinationFile, bufferSize, &convertedData)
+  [EZAudio checkResult:ExtAudioFileWriteAsync(_destinationFile, bufferSize, convertedData)
              operation:"Failed to write audio data to file"];
+  
+  // Free resources
+  [EZAudio freeBufferList:convertedData];
   
 }
 

@@ -52,10 +52,12 @@
   /*
    Customizing the audio plot's look
    */
-  // Background color
-  self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.993 green: 0.881 blue: 0.751 alpha: 1];
-  // Waveform color
-  self.audioPlot.color           = [NSColor colorWithCalibratedRed: 0.219 green: 0.234 blue: 0.29 alpha: 1];
+//  // Background color
+//  self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.993 green: 0.881 blue: 0.751 alpha: 1];
+//  // Waveform color
+//  self.audioPlot.color           = [NSColor colorWithCalibratedRed: 0.219 green: 0.234 blue: 0.29 alpha: 1];
+  self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.943 green: 0.738 blue: 0.305 alpha: 1];
+  self.audioPlot.color = [NSColor colorWithCalibratedRed: 0.97 green: 0.493 blue: 0.002 alpha: 1];
   // Plot type
   self.audioPlot.plotType        = EZPlotTypeBuffer;
   // Fill

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+    </dependencies>
+    <scenes>
+        <!--Record View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="RecordViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="cLh-rO-CXL"/>
+                        <viewControllerLayoutGuide type="bottom" id="shN-NY-6DZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TYc-dR-BMS" customClass="EZAudioPlotGL">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0tD-PJ-5HB">
+                                        <rect key="frame" x="20" y="934" width="51" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="toggleMicrophone:" destination="BYZ-38-t0r" eventType="valueChanged" id="kGv-3N-6Ce"/>
+                                        </connections>
+                                    </switch>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Microphone On" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b10-vH-Ls7">
+                                        <rect key="frame" x="98" y="939" width="202" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="3Py-Pv-4UJ">
+                                        <rect key="frame" x="20" y="973" width="51" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="toggleRecording:" destination="BYZ-38-t0r" eventType="valueChanged" id="ZXV-tP-8aa"/>
+                                        </connections>
+                                    </switch>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recording On" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4b1-0v-k7S">
+                                        <rect key="frame" x="98" y="978" width="202" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iZv-0A-qmR">
+                                        <rect key="frame" x="20" y="896" width="49" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="49" id="6fm-An-FfZ"/>
+                                        </constraints>
+                                        <state key="normal" title="Play">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="playFile:" destination="BYZ-38-t0r" eventType="touchUpInside" id="knI-6E-ycs"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not Playing" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fzp-2j-SfX">
+                                        <rect key="frame" x="98" y="900" width="202" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="b10-vH-Ls7" firstAttribute="leading" secondItem="0tD-PJ-5HB" secondAttribute="trailing" constant="29" id="2uc-dh-1tV"/>
+                                    <constraint firstAttribute="trailing" secondItem="b10-vH-Ls7" secondAttribute="trailing" constant="468" id="3en-RB-Ods"/>
+                                    <constraint firstItem="b10-vH-Ls7" firstAttribute="top" secondItem="fzp-2j-SfX" secondAttribute="bottom" constant="18" id="HFC-Na-uAB"/>
+                                    <constraint firstItem="iZv-0A-qmR" firstAttribute="leading" secondItem="TYc-dR-BMS" secondAttribute="leading" constant="20" id="Hxs-kM-8JK"/>
+                                    <constraint firstAttribute="bottom" secondItem="4b1-0v-k7S" secondAttribute="bottom" constant="25" id="RQj-Ww-eHw"/>
+                                    <constraint firstItem="0tD-PJ-5HB" firstAttribute="leading" secondItem="TYc-dR-BMS" secondAttribute="leading" constant="20" id="TTI-tw-eau"/>
+                                    <constraint firstAttribute="trailing" secondItem="4b1-0v-k7S" secondAttribute="trailing" constant="468" id="WIp-hc-r3N"/>
+                                    <constraint firstItem="3Py-Pv-4UJ" firstAttribute="top" secondItem="0tD-PJ-5HB" secondAttribute="bottom" constant="8" id="Xme-pu-Ofl"/>
+                                    <constraint firstItem="0tD-PJ-5HB" firstAttribute="top" secondItem="iZv-0A-qmR" secondAttribute="bottom" constant="8" id="aGd-M6-xKE"/>
+                                    <constraint firstItem="4b1-0v-k7S" firstAttribute="leading" secondItem="3Py-Pv-4UJ" secondAttribute="trailing" constant="29" id="dj1-yi-zg1"/>
+                                    <constraint firstItem="3Py-Pv-4UJ" firstAttribute="leading" secondItem="TYc-dR-BMS" secondAttribute="leading" constant="20" id="drs-ij-id4"/>
+                                    <constraint firstItem="4b1-0v-k7S" firstAttribute="top" secondItem="b10-vH-Ls7" secondAttribute="bottom" constant="18" id="hzZ-gt-qKX"/>
+                                    <constraint firstItem="fzp-2j-SfX" firstAttribute="leading" secondItem="iZv-0A-qmR" secondAttribute="trailing" constant="29" id="jF7-XT-h70"/>
+                                    <constraint firstAttribute="bottom" secondItem="3Py-Pv-4UJ" secondAttribute="bottom" constant="20" id="m4u-dO-JTX"/>
+                                    <constraint firstAttribute="trailing" secondItem="fzp-2j-SfX" secondAttribute="trailing" constant="468" id="nF9-mU-sg8"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="TYc-dR-BMS" secondAttribute="bottom" id="O90-fI-u1c"/>
+                            <constraint firstItem="TYc-dR-BMS" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Vk4-YU-qtG"/>
+                            <constraint firstAttribute="trailing" secondItem="TYc-dR-BMS" secondAttribute="trailing" id="emV-aZ-QoA"/>
+                            <constraint firstItem="TYc-dR-BMS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="uJy-33-Es2"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="audioPlot" destination="TYc-dR-BMS" id="U5n-IQ-ked"/>
+                        <outlet property="microphoneSwitch" destination="0tD-PJ-5HB" id="bRw-xt-t8h"/>
+                        <outlet property="microphoneTextField" destination="b10-vH-Ls7" id="Jlx-8X-pSb"/>
+                        <outlet property="playButton" destination="iZv-0A-qmR" id="cX4-8t-kFg"/>
+                        <outlet property="playingTextField" destination="fzp-2j-SfX" id="OOk-pv-CL3"/>
+                        <outlet property="recordSwitch" destination="3Py-Pv-4UJ" id="IeM-gw-H5A"/>
+                        <outlet property="recordingTextField" destination="4b1-0v-k7S" id="39n-M5-HbP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackOpaque"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
+</document>
