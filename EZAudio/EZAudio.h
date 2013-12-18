@@ -24,14 +24,55 @@
 #import "EZAudioPlotGL.h"
 #import "EZAudioPlotGLKViewController.h"
 
+/**
+ EZAudio is a simple, intuitive framework for iOS and OSX. The goal of EZAudio was to provide a modular, cross-platform framework to simplify performing everyday audio operations like getting microphone input, creating audio waveforms, recording/playing audio files, etc. The visualization tools like the EZAudioPlot and EZAudioPlotGL were created to plug right into the framework's various components and provide highly optimized drawing routines that work in harmony with audio callback loops. All components retain the same namespace whether you're on an iOS device or a Mac computer so an EZAudioPlot understands it will subclass an UIView on an iOS device or an NSView on a Mac.
+
+ Class methods for EZAudio are provided as utility methods used throughout the other modules within the framework. For instance, these methods help make sense of error codes (checkResult:operation:), map values betwen coordinate systems (MAP:leftMin:leftMax:rightMin:rightMax:), calculate root mean squared values for buffers (RMS:length:), etc.
+ */
 @interface EZAudio : NSObject
 
-#pragma mark - Utility
+#pragma mark - AudioBufferList Utility
+///-----------------------------------------------------------
+/// @name AudioBufferList Utility
+///-----------------------------------------------------------
+
 /**
  Allocates an AudioBufferList structure. Make sure to call freeBufferList when done using AudioBufferList or it will leak.
  @return An AudioBufferList struct that has been allocated in memory
  */
 +(AudioBufferList*)audioBufferList;
+
+/**
+ Deallocates an AudioBufferList structure from memory.
+ @param bufferList A pointer to the buffer list you would like to free
+ */
++(void)freeBufferList:(AudioBufferList*)bufferList;
+
+#pragma mark - AudioStreamBasicDescription Utilties
+///-----------------------------------------------------------
+/// @name AudioStreamBasicDescription Utilities
+///-----------------------------------------------------------
+
+/**
+ Nicely logs out the contents of an AudioStreamBasicDescription struct
+ @param 	asbd 	The AudioStreamBasicDescription struct with content to print out
+ */
++(void)printASBD:(AudioStreamBasicDescription)asbd;
+
+/**
+ Just a wrapper around the setCanonical function provided in the Core Audio Utility C++ class.
+ @param asbd        The AudioStreamBasicDescription structure to modify
+ @param nChannels   The number of expected channels on the description
+ @param interleaved A flag indicating whether the stereo samples should be interleaved in the buffer
+ */
++(void)setCanonicalAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd
+                              numberOfChannels:(UInt32)nChannels
+                                   interleaved:(BOOL)interleaved;
+
+#pragma mark - OSStatus Utility
+///-----------------------------------------------------------
+/// @name OSStatus Utility
+///-----------------------------------------------------------
 
 /**
  Basic check result function useful for checking each step of the audio setup process
@@ -40,6 +81,11 @@
  */
 +(void)checkResult:(OSStatus)result
          operation:(const char*)operation;
+
+#pragma mark - Math Utilities
+///-----------------------------------------------------------
+/// @name Math Utilities
+///-----------------------------------------------------------
 
 /**
  Maps a value from one coordinate system into another one. Takes in the current value to map, the minimum and maximum values of the first coordinate system, and the minimum and maximum values of the second coordinate system and calculates the mapped value in the second coordinate system's constraints.
@@ -57,12 +103,6 @@
    rightMax:(float)rightMax;
 
 /**
- Nicely logs out the contents of an AudioStreamBasicDescription struct
- @param 	asbd 	The AudioStreamBasicDescription struct with content to print out
- */
-+(void)printASBD:(AudioStreamBasicDescription)asbd;
-
-/**
  Calculates the root mean squared for a buffer.
  @param 	buffer 	A float buffer array of values whose root mean squared to calculate
  @param 	bufferSize 	The size of the float buffer
@@ -70,22 +110,5 @@
  */
 +(float)RMS:(float*)buffer
      length:(int)bufferSize;
-
-/**
- Just a wrapper around the setCanonical function provided in the Core Audio Utility C++ class.
- @param asbd        The AudioStreamBasicDescription structure to modify
- @param nChannels   The number of expected channels on the description
- @param interleaved A flag indicating whether the stereo samples should be interleaved in the buffer
- */
-+(void)setCanonicalAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd
-                              numberOfChannels:(UInt32)nChannels
-                                   interleaved:(BOOL)interleaved;
-
-
-/**
- Deallocates an AudioBufferList structure from memory.
- @param bufferList A pointer to the buffer list you would like to free
- */
-+(void)freeBufferList:(AudioBufferList*)bufferList;
 
 @end

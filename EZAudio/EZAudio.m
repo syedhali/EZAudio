@@ -10,38 +10,23 @@
 
 @implementation EZAudio
 
-#pragma mark - Utility
+#pragma mark - AudioBufferList Utility
 +(AudioBufferList *)audioBufferList {
   return (AudioBufferList*)malloc(sizeof(AudioBufferList));
 }
 
-+(void)checkResult:(OSStatus)result
-         operation:(const char *)operation {
-	if (result == noErr) return;
-	char errorString[20];
-	// see if it appears to be a 4-char-code
-	*(UInt32 *)(errorString + 1) = CFSwapInt32HostToBig(result);
-	if (isprint(errorString[1]) && isprint(errorString[2]) && isprint(errorString[3]) && isprint(errorString[4])) {
-		errorString[0] = errorString[5] = '\'';
-		errorString[6] = '\0';
-	} else
-		// no, format it as an integer
-		sprintf(errorString, "%d", (int)result);
-	fprintf(stderr, "Error: %s (%s)\n", operation, errorString);
-	exit(1);
++(void)freeBufferList:(AudioBufferList *)bufferList {
+  if( bufferList ){
+    for( int i = 0; i < bufferList->mNumberBuffers; i++ ){
+      if( bufferList->mBuffers[i].mData ){
+        free(bufferList->mBuffers[i].mData);
+      }
+    }
+    free(bufferList);
+  }
 }
 
-+(float)MAP:(float)value
-    leftMin:(float)leftMin
-    leftMax:(float)leftMax
-   rightMin:(float)rightMin
-   rightMax:(float)rightMax {
-  float leftSpan    = leftMax  - leftMin;
-  float rightSpan   = rightMax - rightMin;
-  float valueScaled = ( value  - leftMin ) / leftSpan;
-  return rightMin + (valueScaled * rightSpan);
-}
-
+#pragma mark - AudioStreamBasicDescription Utility
 +(void)printASBD:(AudioStreamBasicDescription)asbd {
   char formatIDString[5];
   UInt32 formatID = CFSwapInt32HostToBig(asbd.mFormatID);
@@ -55,14 +40,6 @@
   NSLog (@"  Bytes per Frame:     %10d",    (unsigned int)asbd.mBytesPerFrame);
   NSLog (@"  Channels per Frame:  %10d",    (unsigned int)asbd.mChannelsPerFrame);
   NSLog (@"  Bits per Channel:    %10d",    (unsigned int)asbd.mBitsPerChannel);
-}
-
-+(float)RMS:(float *)buffer
-     length:(int)bufferSize {
-  float sum = 0.0;
-  for(int i = 0; i < bufferSize; i++)
-    sum += buffer[i] * buffer[i];
-  return sqrtf( sum / bufferSize );
 }
 
 +(void)setCanonicalAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd
@@ -82,15 +59,41 @@
   }
 }
 
-+(void)freeBufferList:(AudioBufferList *)bufferList {
-  if( bufferList ){
-    for( int i = 0; i < bufferList->mNumberBuffers; i++ ){
-      if( bufferList->mBuffers[i].mData ){
-        free(bufferList->mBuffers[i].mData);
-      }
-    }
-    free(bufferList);
-  }
+#pragma mark - OSStatus Utility
++(void)checkResult:(OSStatus)result
+         operation:(const char *)operation {
+	if (result == noErr) return;
+	char errorString[20];
+	// see if it appears to be a 4-char-code
+	*(UInt32 *)(errorString + 1) = CFSwapInt32HostToBig(result);
+	if (isprint(errorString[1]) && isprint(errorString[2]) && isprint(errorString[3]) && isprint(errorString[4])) {
+		errorString[0] = errorString[5] = '\'';
+		errorString[6] = '\0';
+	} else
+		// no, format it as an integer
+		sprintf(errorString, "%d", (int)result);
+	fprintf(stderr, "Error: %s (%s)\n", operation, errorString);
+	exit(1);
+}
+
+#pragma mark - Math Utility
++(float)MAP:(float)value
+    leftMin:(float)leftMin
+    leftMax:(float)leftMax
+   rightMin:(float)rightMin
+   rightMax:(float)rightMax {
+  float leftSpan    = leftMax  - leftMin;
+  float rightSpan   = rightMax - rightMin;
+  float valueScaled = ( value  - leftMin ) / leftSpan;
+  return rightMin + (valueScaled * rightSpan);
+}
+
++(float)RMS:(float *)buffer
+     length:(int)bufferSize {
+  float sum = 0.0;
+  for(int i = 0; i < bufferSize; i++)
+    sum += buffer[i] * buffer[i];
+  return sqrtf( sum / bufferSize );
 }
 
 @end

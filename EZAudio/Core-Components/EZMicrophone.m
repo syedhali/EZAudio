@@ -70,16 +70,18 @@ static OSStatus inputCallback(void                          *inRefCon,
                            inNumberFrames,
                            microphone->microphoneInputBuffer);
 #endif
-  AEFloatConverterToFloat(microphone->converter,
-                          microphone->microphoneInputBuffer,
-                          microphone->floatBuffers,
-                          inNumberFrames);
   if( !result ){
     // Notify delegate (OF-style)
     @autoreleasepool {
       // Audio Received (float array)
       if( microphone.microphoneDelegate ){
         // THIS IS NOT OCCURING ON THE MAIN THREAD
+        if( [microphone.microphoneDelegate respondsToSelector:@selector(microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:)] ){
+          AEFloatConverterToFloat(microphone->converter,
+                                  microphone->microphoneInputBuffer,
+                                  microphone->floatBuffers,
+                                  inNumberFrames);
+        }
         [microphone.microphoneDelegate microphone:microphone
                                  hasAudioReceived:microphone->floatBuffers
                                    withBufferSize:inNumberFrames

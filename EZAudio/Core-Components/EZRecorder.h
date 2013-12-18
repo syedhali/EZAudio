@@ -15,7 +15,6 @@
 @interface EZRecorder : NSObject
 
 #pragma mark - Initializers
-
 -(EZRecorder*)initWithDestinationURL:(NSURL*)url
                    destinationFormat:(AudioStreamBasicDescription)destinationFormat
                      andSourceFormat:(AudioStreamBasicDescription)sourceFormat;
