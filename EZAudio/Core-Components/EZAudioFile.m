@@ -44,9 +44,21 @@
   return self;
 }
 
+-(EZAudioFile *)initWithURL:(NSURL *)url andDelegate:(id<EZAudioFileDelegate>)delegate {
+  self = [self initWithURL:url];
+  if(self){
+    self.audioFileDelegate = delegate;
+  }
+  return self;
+}
+
 #pragma mark - Class Initializers
 +(EZAudioFile*)audioFileWithURL:(NSURL*)url {
   return [[EZAudioFile alloc] initWithURL:url];
+}
+
++(EZAudioFile *)audioFileWithURL:(NSURL *)url andDelegate:(id<EZAudioFileDelegate>)delegate {
+  return [[EZAudioFile alloc] initWithURL:url andDelegate:delegate];
 }
 
 #pragma mark - Class Methods

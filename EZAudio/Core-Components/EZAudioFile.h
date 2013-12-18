@@ -55,7 +55,7 @@ typedef void (^WaveformDataCompletionBlock)(float *waveformData, UInt32 length);
 
 #pragma mark - Properties
 /**
- A EZAudioFileDelegate for the audio file that is used to return events such as new seek positions within the file and the read audio data as a float buffer.
+ A EZAudioFileDelegate for the audio file that is used to return events such as new seek positions within the file and the read audio data as a float array.
  */
 @property (nonatomic,assign) id<EZAudioFileDelegate> audioFileDelegate;
 
