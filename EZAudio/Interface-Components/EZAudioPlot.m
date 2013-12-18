@@ -49,14 +49,14 @@
 #if TARGET_OS_IPHONE
 -(id)initWithFrame:(CGRect)frameRect {
 #elif TARGET_OS_MAC
-  -(id)initWithFrame:(NSRect)frameRect {
+-(id)initWithFrame:(NSRect)frameRect {
 #endif
-    self = [super initWithFrame:frameRect];
-    if(self){
-      [self initPlot];
-    }
-    return self;
+  self = [super initWithFrame:frameRect];
+  if(self){
+    [self initPlot];
   }
+  return self;
+}
   
 -(void)initPlot {
 #if TARGET_OS_IPHONE
@@ -73,59 +73,37 @@
 }
   
 #pragma mark - Setters
-#if TARGET_OS_IPHONE
--(void)setBackgroundColor:(UIColor *)backgroundColor {
+-(void)setBackgroundColor:(id)backgroundColor {
   _backgroundColor = backgroundColor;
-  [self setNeedsDisplay];
+  [self _refreshDisplay];
 }
-#elif TARGET_OS_MAC
--(void)setBackgroundColor:(NSColor *)backgroundColor {
-  _backgroundColor = backgroundColor;
-  [self setNeedsDisplay:YES];
-}
-#endif
   
-#if TARGET_OS_IPHONE
--(void)setColor:(UIColor *)color {
+-(void)setColor:(id)color {
   _color = color;
-  [self setNeedsDisplay];
+  [self _refreshDisplay];
 }
-#elif TARGET_OS_MAC
--(void)setColor:(NSColor *)color {
-  _color = color;
-  [self setNeedsDisplay:YES];
-}
-#endif
   
 -(void)setGain:(float)gain {
   _gain = gain;
-#if TARGET_OS_IPHONE
-  [self setNeedsDisplay];
-#elif TARGET_OS_MAC
-  [self setNeedsDisplay:YES];
-#endif
+  [self _refreshDisplay];
 }
 
 -(void)setPlotType:(EZPlotType)plotType {
   _plotType = plotType;
-#if TARGET_OS_IPHONE
-  [self setNeedsDisplay];
-#elif TARGET_OS_MAC
-  [self setNeedsDisplay:YES];
-#endif
+  [self _refreshDisplay];
 }
 
 -(void)setShouldFill:(BOOL)shouldFill {
   _shouldFill = shouldFill;
-#if TARGET_OS_IPHONE
-  [self setNeedsDisplay];
-#elif TARGET_OS_MAC
-  [self setNeedsDisplay:YES];
-#endif
+  [self _refreshDisplay];
 }
 
 -(void)setShouldMirror:(BOOL)shouldMirror {
   _shouldMirror = shouldMirror;
+  [self _refreshDisplay];
+}
+  
+-(void)_refreshDisplay {
 #if TARGET_OS_IPHONE
   [self setNeedsDisplay];
 #elif TARGET_OS_MAC
@@ -148,11 +126,7 @@
     _sampleData[i]    = CGPointMake(i,the_sampleData[i] * _gain);
   }
     
-#if TARGET_OS_IPHONE
-  [self setNeedsDisplay];
-#elif TARGET_OS_MAC
-  [self setNeedsDisplay:YES];
-#endif
+  [self _refreshDisplay];
 }
   
 #pragma mark - Update
@@ -224,17 +198,17 @@
     NSRect frame = self.bounds;
 #endif
     
-    // Set the background color
-    [self.backgroundColor set];
-    
 #if TARGET_OS_IPHONE
+    // Set the background color
+    [(UIColor*)self.backgroundColor set];
     UIRectFill(frame);
+    // Set the waveform line color
+    [(UIColor*)self.color set];
 #elif TARGET_OS_MAC
+    [(NSColor*)self.backgroundColor set];
     NSRectFill(frame);
+    [(NSColor*)self.color set];
 #endif
-    
-    // Set the line color
-    [self.color set];
     
     if(_sampleLength > 0) {
       CGMutablePathRef halfPath = CGPathCreateMutable();

@@ -259,7 +259,7 @@
       // Mirrored plot
       [self.baseEffect prepareToDraw];
       glPushMatrix();
-      self.baseEffect.transform.modelviewMatrix = GLKMatrix4MakeXRotation(PI);
+      self.baseEffect.transform.modelviewMatrix = GLKMatrix4MakeXRotation(M_PI);
       glDrawArrays(_drawingType, 0, _bufferPlotGraphSize);
       glPopMatrix();
     }

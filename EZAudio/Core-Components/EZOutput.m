@@ -32,19 +32,32 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
                                       needsBufferListWithFrames:inNumberFrames
                                                  withBufferSize:&bufferSize];
   
-  for(int i = 0; i < inNumberFrames; i++ ){
+  BOOL isInterleaved = ioData->mNumberBuffers == 1;
+  
+  if( !isInterleaved ){
     Float32 *left  = (Float32*)ioData->mBuffers[0].mData;
     Float32 *right = (Float32*)ioData->mBuffers[1].mData;
-    if( bufferList ){
-      Float32 *interleaved = (Float32*)bufferList->mBuffers[0].mData;
-      left[i]  = interleaved[i];
-      right[i] = interleaved[i];
-    }
-    else {
-      left[i] = 0.0f;
-      right[i] = 0.0f;
+    for(int i = 0; i < inNumberFrames; i++ ){
+      if( bufferList ){
+        Float32 *interleaved = (Float32*)bufferList->mBuffers[0].mData;
+        left[i]  = interleaved[i];
+        right[i] = interleaved[i];
+      }
+      else {
+        left[i]  = 0.0f;
+        right[i] = 0.0f;
+      }
     }
   }
+  else {
+      memcpy(ioData,
+             bufferList,
+             sizeof(AudioBufferList)+(bufferList->mNumberBuffers-1)*sizeof(AudioBuffer));
+  }
+  
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0ul),^{
+    [EZAudio freeBufferList:bufferList];
+  });
   
   return noErr;
 }
@@ -87,6 +100,78 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
 #if TARGET_OS_IPHONE
 -(void)_configureOutput {
   
+  //
+  AudioComponentDescription outputcd;
+  outputcd.componentFlags = 0;
+  outputcd.componentFlagsMask = 0;
+  outputcd.componentManufacturer = kAudioUnitManufacturer_Apple;
+  outputcd.componentSubType = kAudioUnitSubType_RemoteIO;
+  outputcd.componentType = kAudioUnitType_Output;
+  
+  //
+  AudioComponent comp = AudioComponentFindNext(NULL,&outputcd);
+  [EZAudio checkResult:AudioComponentInstanceNew(comp,&_outputUnit)
+             operation:"Failed to get output unit"];
+  
+  // Setup the output unit for playback
+  UInt32 oneFlag = 1;
+  AudioUnitElement bus0 = 0;
+  [EZAudio checkResult:AudioUnitSetProperty(_outputUnit,
+                                            kAudioOutputUnitProperty_EnableIO,
+                                            kAudioUnitScope_Output,
+                                            bus0,
+                                            &oneFlag,
+                                            sizeof(oneFlag))
+             operation:"Failed to enable output unit"];
+  
+  // Get the hardware sample rate
+  Float64 hardwareSampleRate = 44100;
+#if !(TARGET_IPHONE_SIMULATOR)
+  UInt32 propSize = sizeof(hardwareSampleRate);
+  [EZAudio checkResult:AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate,
+                                               &propSize,
+                                               &hardwareSampleRate)
+             operation:"Could not get hardware sample rate"];
+#endif
+  
+  // Setup an ASBD in canonical format
+  AudioStreamBasicDescription asbd;
+  memset(&asbd, 0, sizeof(asbd));
+  asbd.mBitsPerChannel   = 8 * sizeof(AudioUnitSampleType);
+  asbd.mBytesPerFrame    = sizeof(AudioUnitSampleType);
+  asbd.mBytesPerPacket   = sizeof(AudioUnitSampleType);
+  asbd.mChannelsPerFrame = 2;
+  asbd.mFormatFlags      = kAudioFormatFlagsCanonical | kAudioFormatFlagIsNonInterleaved;
+  asbd.mFormatID         = kAudioFormatLinearPCM;
+  asbd.mFramesPerPacket  = 1;
+	asbd.mSampleRate       = hardwareSampleRate;
+  
+  // Set the format for output
+  [EZAudio checkResult:AudioUnitSetProperty(_outputUnit,
+                                            kAudioUnitProperty_StreamFormat,
+                                            kAudioUnitScope_Input,
+                                            bus0,
+                                            &asbd,
+                                            sizeof(asbd))
+             operation:"Couldn't set the ASBD for input scope/bos 0"];
+  
+  //
+  AURenderCallbackStruct input;
+  input.inputProc = OutputRenderCallback;
+  input.inputProcRefCon = (__bridge void *)self;
+  [EZAudio checkResult:AudioUnitSetProperty(_outputUnit,
+                                            kAudioUnitProperty_SetRenderCallback,
+                                            kAudioUnitScope_Input,
+                                            bus0,
+                                            &input,
+                                            sizeof(input))
+             operation:"Failed to set the render callback on the output unit"];
+  
+  //
+  [EZAudio checkResult:AudioUnitInitialize(_outputUnit)
+             operation:"Couldn't initialize output unit"];
+  
+  
 }
 #elif TARGET_OS_MAC
 -(void)_configureOutput {
@@ -106,6 +191,8 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
   [EZAudio checkResult:AudioComponentInstanceNew(comp,&_outputUnit)
              operation:"Failed to open component for output unit"];
   
+  
+
   //
   AURenderCallbackStruct input;
   input.inputProc = OutputRenderCallback;

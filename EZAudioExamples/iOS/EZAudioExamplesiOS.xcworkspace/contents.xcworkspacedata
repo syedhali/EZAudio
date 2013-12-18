@@ -8,9 +8,12 @@
       location = "group:EZAudioOpenGLWaveformExample/EZAudioOpenGLWaveformExample.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:EZAudioWaveformFromFileExample/EZAudioWaveformFromFileExample.xcodeproj">
+      location = "group:EZAudioPlayFileExample/EZAudioPlayFileExample.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:EZAudioRecordExample/EZAudioRecordExample.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:EZAudioWaveformFromFileExample/EZAudioWaveformFromFileExample.xcodeproj">
    </FileRef>
 </Workspace>

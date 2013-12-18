@@ -39,11 +39,6 @@
 
 #endif
 
-/**
- The value of PI (~3.14...) to use for the X rotation
- */
-#define PI (3.14159265359)
-
 #pragma mark - Enumerations
 /**
  *  <#Description#>

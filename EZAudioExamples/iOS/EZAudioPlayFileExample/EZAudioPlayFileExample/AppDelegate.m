@@ -1,23 +1,17 @@
 //
 //  AppDelegate.m
-//  EZAudioRecordExample
+//  EZAudioPlayFileExample
 //
-//  Created by Syed Haris Ali on 12/15/13.
+//  Created by Syed Haris Ali on 12/16/13.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
 //
 
 #import "AppDelegate.h"
 
-#import <AVFoundation/AVFoundation.h>
-
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-  [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:NULL];
-  UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
-  AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,sizeof (audioRouteOverride),&audioRouteOverride);
     // Override point for customization after application launch.
     return YES;
 }

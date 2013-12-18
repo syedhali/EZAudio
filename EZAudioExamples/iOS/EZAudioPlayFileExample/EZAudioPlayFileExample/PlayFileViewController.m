@@ -2,24 +2,29 @@
 //  PlayFileViewController.m
 //  EZAudioPlayFileExample
 //
-//  Created by Syed Haris Ali on 12/13/13.
+//  Created by Syed Haris Ali on 12/16/13.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
 //
 
 #import "PlayFileViewController.h"
 
-@interface PlayFileViewController ()
-
+@interface PlayFileViewController (){
+  float  *_waveformData;
+  UInt32 _waveformDrawingIndex;
+  UInt32 _waveformFrameRate;
+  UInt32 _waveformTotalBuffers;
+}
 @end
 
 @implementation PlayFileViewController
-@synthesize audioFile;
-@synthesize audioPlot;
+@synthesize audioFile = _audioFile;
+@synthesize audioPlot = _audioPlot;
 @synthesize eof = _eof;
+@synthesize framePositionSlider = _framePositionSlider;
 
 #pragma mark - Initialization
 -(id)init {
-  self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil];
+  self = [super init];
   if(self){
     [self initializeViewController];
   }
@@ -27,35 +32,29 @@
 }
 
 -(id)initWithCoder:(NSCoder *)aDecoder {
-  self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil];
+  self = [super initWithCoder:aDecoder];
   if(self){
     [self initializeViewController];
   }
   return self;
 }
 
--(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-  self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil];
-  if(self){
-    [self initializeViewController];
-  }
-  return self;
-}
-
-#pragma mark - Initialize View Controller
+#pragma mark - Initialize View Controller Here
 -(void)initializeViewController {
 }
 
 #pragma mark - Customize the Audio Plot
--(void)awakeFromNib {
+-(void)viewDidLoad {
+  
+  [super viewDidLoad];
   
   /*
    Customizing the audio plot's look
    */
   // Background color
-  self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.943 green: 0.738 blue: 0.305 alpha: 1];
+  self.audioPlot.backgroundColor = [UIColor colorWithRed: 0.943 green: 0.738 blue: 0.305 alpha: 1];
   // Waveform color
-  self.audioPlot.color           = [NSColor colorWithCalibratedRed: 0.97 green: 0.493 blue: 0.002 alpha: 1];
+  self.audioPlot.color           = [UIColor colorWithRed: 0.97 green: 0.493 blue: 0.002 alpha: 1];
   // Plot type
   self.audioPlot.plotType        = EZPlotTypeBuffer;
   // Fill
@@ -72,7 +71,7 @@
 
 #pragma mark - Actions
 -(void)changePlotType:(id)sender {
-  NSInteger selectedSegment = [sender selectedSegment];
+  NSInteger selectedSegment = [sender selectedSegmentIndex];
   switch(selectedSegment){
     case 0:
       [self drawBufferPlot];
@@ -82,17 +81,6 @@
       break;
     default:
       break;
-  }
-}
-
--(void)openFile:(id)sender {
-  NSOpenPanel* openDlg = [NSOpenPanel openPanel];
-  openDlg.canChooseFiles = YES;
-  openDlg.canChooseDirectories = NO;
-  openDlg.delegate = self;
-  if( [openDlg runModal] == NSOKButton ){
-    NSArray *selectedFiles = [openDlg URLs];
-    [self openFileWithFilePathURL:selectedFiles.firstObject];
   }
 }
 
@@ -108,6 +96,10 @@
     [EZOutput sharedOutput].outputDataSource = nil;
     [[EZOutput sharedOutput] stopPlayback];
   }
+}
+
+-(void)seekToFrame:(id)sender {
+  [self.audioFile seekToFrame:(SInt64)[(UISlider*)sender value]];
 }
 
 #pragma mark - Action Extensions
@@ -143,15 +135,10 @@
   self.audioFile                 = [EZAudioFile audioFileWithURL:filePathURL];
   self.audioFile.audioFileDelegate = self;
   self.eof                       = NO;
-  self.filePathLabel.stringValue = filePathURL.lastPathComponent;
+  self.filePathLabel.text = filePathURL.lastPathComponent;
+  self.framePositionSlider.maximumValue = (float)self.audioFile.totalFrames;
 
   // Plot the whole waveform
-  // Plot type
-  self.audioPlot.plotType        = EZPlotTypeBuffer;
-  // Fill
-  self.audioPlot.shouldFill      = YES;
-  // Mirror
-  self.audioPlot.shouldMirror    = YES;
   [self.audioFile getWaveformDataWithCompletionBlock:^(float *waveformData, UInt32 length) {
     [self.audioPlot updateBuffer:waveformData withBufferSize:length];
   }];
@@ -159,18 +146,22 @@
 }
 
 #pragma mark - EZAudioFileDelegate
--(void)audioFile:(EZAudioFile *)audioFile readAudio:(float **)buffer withBufferSize:(UInt32)bufferSize withNumberOfChannels:(UInt32)numberOfChannels {
-  if( [EZOutput sharedOutput].isPlaying ){
-    if( self.audioPlot.plotType == EZPlotTypeBuffer  &&
-        self.audioPlot.shouldFill == YES              &&
-        self.audioPlot.shouldMirror == YES ){
-      self.audioPlot.shouldFill = NO;
-      self.audioPlot.shouldMirror = NO;
+-(void)audioFile:(EZAudioFile *)audioFile
+       readAudio:(float **)buffer
+  withBufferSize:(UInt32)bufferSize
+withNumberOfChannels:(UInt32)numberOfChannels {
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
+  });
+}
+
+-(void)audioFile:(EZAudioFile *)audioFile
+ updatedPosition:(SInt64)framePosition {
+  dispatch_async(dispatch_get_main_queue(), ^{
+    if( !self.framePositionSlider.touchInside ){
+      self.framePositionSlider.value = (float)framePosition;
     }
-    dispatch_async(dispatch_get_main_queue(), ^{
-      [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
-    });
-  }
+  });
 }
 
 #pragma mark - EZOutputDataSource
@@ -200,11 +191,10 @@
     
     // Reached the end of the file on the last read
     if( eof ){
-      [EZAudio freeBufferList:bufferList];
+      free(bufferList);
       [self.audioFile seekToFrame:0];
       return nil;
     }
-    
     return bufferList;
   }
   return nil;
@@ -212,28 +202,6 @@
 
 -(AudioStreamBasicDescription)outputHasAudioStreamBasicDescription:(EZOutput *)output {
   return self.audioFile.clientFormat;
-}
-
-#pragma mark - NSOpenSavePanelDelegate
-/**
- Here's an example how to filter the open panel to only show the supported file types by the EZAudioFile (which are just the audio file types supported by Core Audio).
- */
--(BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename {
-  NSString* ext = [filename pathExtension];
-  if ([ext isEqualToString:@""] || [ext isEqualToString:@"/"] || ext == nil || ext == NULL || [ext length] < 1) {
-    return YES;
-  }
-  NSArray *fileTypes = [EZAudioFile supportedAudioFileTypes];
-  NSEnumerator* tagEnumerator = [fileTypes objectEnumerator];
-  NSString* allowedExt;
-  while ((allowedExt = [tagEnumerator nextObject]))
-  {
-    if ([ext caseInsensitiveCompare:allowedExt] == NSOrderedSame)
-    {
-      return YES;
-    }
-  }
-  return NO;
 }
 
 @end

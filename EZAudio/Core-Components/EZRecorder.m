@@ -54,7 +54,7 @@ typedef struct {
 +(AudioStreamBasicDescription)defaultDestinationFormat {
   AudioStreamBasicDescription destinationFormat;
   destinationFormat.mFormatID = kAudioFormatLinearPCM;
-  destinationFormat.mChannelsPerFrame = 1;
+  destinationFormat.mChannelsPerFrame = 2;
   destinationFormat.mBitsPerChannel = 16;
   destinationFormat.mBytesPerPacket = destinationFormat.mBytesPerFrame = 2 * destinationFormat.mChannelsPerFrame;
   destinationFormat.mFramesPerPacket = 1;
@@ -94,6 +94,10 @@ typedef struct {
                                                &_clientFormat)
              operation:"Failed to set client data format on destination file"];
   
+  // Instantiate the writer
+  [EZAudio checkResult:ExtAudioFileWriteAsync(_destinationFile, 0, NULL)
+             operation:"Failed to initialize with ExtAudioFileWriteAsync"];
+  
   // Setup the audio converter
   [EZAudio checkResult:AudioConverterNew(&_sourceFormat, &_destinationFormat, &_audioConverter)
              operation:"Failed to create new audio converter"];
@@ -110,7 +114,7 @@ typedef struct {
   convertedData->mNumberBuffers = 1;
   convertedData->mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
   convertedData->mBuffers[0].mDataByteSize   = outputBufferSize;
-  convertedData->mBuffers[0].mData           = (UInt8 *)malloc(sizeof(UInt8)*outputBufferSize);
+  convertedData->mBuffers[0].mData           = (UInt8*)malloc(sizeof(UInt8)*outputBufferSize);
   
   [EZAudio checkResult:AudioConverterFillComplexBuffer(_audioConverter,
                                                        complexInputDataProc,

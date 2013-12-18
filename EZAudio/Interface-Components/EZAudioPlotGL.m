@@ -509,7 +509,7 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   // Mirrored
   if( self.shouldMirror ){
     [self.baseEffect prepareToDraw];
-    self.baseEffect.transform.modelviewMatrix = GLKMatrix4MakeXRotation(PI);
+    self.baseEffect.transform.modelviewMatrix = GLKMatrix4MakeXRotation(M_PI);
     
     // Enable the vertex data
     glEnableVertexAttribArray(GLKVertexAttribPosition);
@@ -539,7 +539,7 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   // Mirrored
   if( self.shouldMirror ){
     [self.baseEffect prepareToDraw];
-    self.baseEffect.transform.modelviewMatrix = GLKMatrix4MakeXRotation(PI);
+    self.baseEffect.transform.modelviewMatrix = GLKMatrix4MakeXRotation(M_PI);
     
     // Enable the vertex data
     glEnableVertexAttribArray(GLKVertexAttribPosition);

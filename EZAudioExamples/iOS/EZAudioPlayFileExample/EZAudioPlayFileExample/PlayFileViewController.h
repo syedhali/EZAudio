@@ -2,11 +2,11 @@
 //  PlayFileViewController.h
 //  EZAudioPlayFileExample
 //
-//  Created by Syed Haris Ali on 12/13/13.
+//  Created by Syed Haris Ali on 12/16/13.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <UIKit/UIKit.h>
 
 // Import EZAudio header
 #import "EZAudio.h"
@@ -17,9 +17,9 @@
 #define kAudioFileDefault [[NSBundle mainBundle] pathForResource:@"simple-drum-beat" ofType:@"wav"]
 
 /**
- Using the EZOutputDataSource to provide output data to the EZOutput component. 
+ Using the EZOutputDataSource to provide output data to the EZOutput component.
  */
-@interface PlayFileViewController : NSViewController <NSOpenSavePanelDelegate,EZAudioFileDelegate,EZOutputDataSource>
+@interface PlayFileViewController : UIViewController <EZAudioFileDelegate,EZOutputDataSource>
 
 #pragma mark - Components
 /**
@@ -30,13 +30,15 @@
 /**
  The CoreGraphics based audio plot
  */
-@property (nonatomic,weak) IBOutlet EZAudioPlot *audioPlot;
+@property (nonatomic,weak) IBOutlet EZAudioPlotGL *audioPlot;
 
 #pragma mark - UI Extras
+@property (nonatomic,weak) IBOutlet UISlider *framePositionSlider;
+
 /**
  A label to display the current file path with the waveform shown
  */
-@property (nonatomic,weak) IBOutlet NSTextField *filePathLabel;
+@property (nonatomic,weak) IBOutlet UILabel *filePathLabel;
 
 /**
  A BOOL indicating whether or not we've reached the end of the file
@@ -50,13 +52,13 @@
 -(IBAction)changePlotType:(id)sender;
 
 /**
- Prompts the file manager and loads in a new audio file into the EZAudioFile representation.
- */
--(IBAction)openFile:(id)sender;
-
-/**
  Begins playback if a file is loaded. Pauses if the file is already playing.
  */
 -(IBAction)play:(id)sender;
+
+/**
+ Seeks to a specific frame in the audio file.
+ */
+-(IBAction)seekToFrame:(id)sender;
 
 @end

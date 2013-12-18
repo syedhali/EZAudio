@@ -107,7 +107,7 @@
  
  @param 	microphoneDelegate 	A EZMicrophoneDelegate delegate that will receive the audioReceived callback.
  
- @return	An instance of the EZMicrophone class. This should be strongly retained.
+ @return	An instance of the EZMicrophone class. This should be declared as a strong property!
  */
 +(EZMicrophone*)microphoneWithDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate;
 
