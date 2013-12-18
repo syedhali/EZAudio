@@ -15,7 +15,7 @@
 @class EZAudio;
 
 /**
-
+ EZAudioPlotGLKViewController is a subclass of the GLKViewController and handles the OpenGL drawing routine for iOS OpenGL ES views. This class has not been used outside the scope of the EZAudioPlotGL, but should be safe to use by itself if the intended use case is to have a view controller take up the whole screen.
  */
 @interface EZAudioPlotGLKViewController : GLKViewController
 
@@ -29,7 +29,7 @@
 @property (nonatomic,strong) UIColor *backgroundColor;
 
 /**
- *  <#Description#>
+ The default shader to use to fill the graph.
  */
 @property (nonatomic,strong) GLKBaseEffect *baseEffect;
 
@@ -39,12 +39,12 @@
 @property (nonatomic,strong) UIColor *color;
 
 /**
- *  <#Description#>
+ The OpenGL ES context (EAGLContext) in which to perform the drawing
  */
 @property (nonatomic,strong) EAGLContext *context;
 
 /**
- *  <#Description#>
+ The EZAudioPlotGLDrawType specifying which OpenGL primitive to use for drawing (either line strip for stroke and no fill or triangle strip for fill)
  */
 @property (nonatomic,assign) EZAudioPlotGLDrawType drawingType;
 

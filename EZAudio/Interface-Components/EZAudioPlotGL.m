@@ -12,6 +12,9 @@
 
 #if TARGET_OS_IPHONE
   #import "EZAudioPlotGLKViewController.h"
+@interface EZAudioPlotGL ()
+@property (nonatomic,strong,readonly) EZAudioPlotGLKViewController *glViewController;
+@end
 #elif TARGET_OS_MAC
 @interface EZAudioPlotGL (){
   
@@ -37,8 +40,9 @@
   // History buffer
   UInt32 _historyIndex;
   float  _historyBuffer[kEZAudioPlotHistoryBufferSize];
-  
 }
+@property (nonatomic,assign,readonly) EZAudioPlotGLDrawType drawingType;
+@property (nonatomic,strong) GLKBaseEffect *baseEffect;
 @end
 #endif
 
@@ -107,31 +111,23 @@
 }
 
 #pragma mark - Setters
-#if TARGET_OS_IPHONE
--(void)setBackgroundColor:(UIColor *)backgroundColor {
+-(void)setBackgroundColor:(id)backgroundColor {
   _backgroundColor = backgroundColor;
+#if TARGET_OS_IPHONE
   self.glViewController.backgroundColor = backgroundColor;
-}
 #elif TARGET_OS_MAC
--(void)setBackgroundColor:(NSColor *)backgroundColor {
-  _backgroundColor = backgroundColor;
   [self _refreshWithBackgroundColor:backgroundColor];
-}
 #endif
+}
 
+-(void)setColor:(id)color {
+  _color = color;
 #if TARGET_OS_IPHONE
--(void)setColor:(UIColor *)color {
-  _color = color;
   self.glViewController.color = color;
-}
 #elif TARGET_OS_MAC
--(void)setColor:(NSColor *)color {
-  // Set the color
-  _color = color;
-  // Refresh the color (map to GL vector)
   [self _refreshWithColor:color];
-}
 #endif
+}
 
 #if TARGET_OS_IPHONE
 #elif TARGET_OS_MAC
@@ -346,7 +342,7 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   return result;
 }
 
-- (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime
+- (CVReturn)getFrameForTime:(const CVTimeStamp*)outputTime
 {
   @autoreleasepool {
    	[self drawFrame];

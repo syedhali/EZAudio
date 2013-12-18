@@ -6,6 +6,25 @@
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
 //
 
+#pragma mark - Enumerations
+///-----------------------------------------------------------
+/// @name Plot Types
+///-----------------------------------------------------------
+
+/**
+ The types of plots that can be displayed in the view using the data.
+ */
+typedef NS_ENUM(NSInteger,EZPlotType){
+  /**
+   *  Plot that displays only the samples of the current buffer
+   */
+  EZPlotTypeBuffer,
+  /**
+   *  Plot that displays a rolling history of values using the RMS calculated for each incoming buffer
+   */
+  EZPlotTypeRolling
+};
+
 /**
  EZPlot is a cross-platform (iOS and OSX) class used to subclass the default view type (either UIView or NSView, respectively).
  
@@ -20,18 +39,6 @@
 #import <Cocoa/Cocoa.h>
 @interface EZPlot : NSView
 #endif
-
-#pragma mark - Enumerations
-///-----------------------------------------------------------
-/// @name Plot Types
-///-----------------------------------------------------------
-/**
- *  The types of plots that can be displayed in the view using the data.
- */
-typedef NS_ENUM(NSInteger,EZPlotType){
-  EZPlotTypeBuffer,  /**< Plot that plots only the samples of the current buffer */
-  EZPlotTypeRolling  /**< Plot that displays a rolling history of values using the RMS calculated for each incoming buffer */
-};
 
 #pragma mark - Properties
 ///-----------------------------------------------------------
