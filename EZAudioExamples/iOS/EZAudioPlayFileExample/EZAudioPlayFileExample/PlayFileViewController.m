@@ -139,6 +139,10 @@
   self.framePositionSlider.maximumValue = (float)self.audioFile.totalFrames;
 
   // Plot the whole waveform
+  // Plot the whole waveform
+  self.audioPlot.plotType        = EZPlotTypeBuffer;
+  self.audioPlot.shouldFill      = YES;
+  self.audioPlot.shouldMirror    = YES;
   [self.audioFile getWaveformDataWithCompletionBlock:^(float *waveformData, UInt32 length) {
     [self.audioPlot updateBuffer:waveformData withBufferSize:length];
   }];
@@ -191,7 +195,7 @@ withNumberOfChannels:(UInt32)numberOfChannels {
     
     // Reached the end of the file on the last read
     if( eof ){
-      free(bufferList);
+      [EZAudio freeBufferList:bufferList];
       [self.audioFile seekToFrame:0];
       return nil;
     }

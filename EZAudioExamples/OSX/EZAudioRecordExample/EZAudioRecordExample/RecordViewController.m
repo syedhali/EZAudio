@@ -111,7 +111,6 @@ withNumberOfChannels:(UInt32)numberOfChannels {
   
   // We can initialize the recorder with this ASBD
   self.recorder = [EZRecorder recorderWithDestinationURL:[NSURL fileURLWithPath:kAudioFilePath]
-                                       destinationFormat:[EZRecorder defaultDestinationFormat]
                                          andSourceFormat:audioStreamBasicDescription];
   
 }

@@ -30,13 +30,18 @@
 /**
  The CoreGraphics based audio plot
  */
-@property (nonatomic,weak) IBOutlet EZAudioPlot *audioPlot;
+@property (nonatomic,weak) IBOutlet EZAudioPlotGL *audioPlot;
 
 #pragma mark - UI Extras
 /**
  A label to display the current file path with the waveform shown
  */
 @property (nonatomic,weak) IBOutlet NSTextField *filePathLabel;
+
+/**
+ A slider to indicate the current frame position in the audio file
+ */
+@property (nonatomic,weak) IBOutlet NSSlider *framePositionSlider;
 
 /**
  A BOOL indicating whether or not we've reached the end of the file
@@ -58,5 +63,10 @@
  Begins playback if a file is loaded. Pauses if the file is already playing.
  */
 -(IBAction)play:(id)sender;
+
+/**
+ Seeks to a specific frame in the audio file.
+ */
+-(IBAction)seekToFrame:(id)sender;
 
 @end

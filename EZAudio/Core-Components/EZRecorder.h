@@ -25,8 +25,8 @@
 
 /**
  Creates a new instance of an EZRecorder using a destination file path URL and the source format of the incoming audio.
- @param url               An NSURL specifying the file path location of where the audio file should be written to.
- @param sourceFormat      The AudioStreamBasicDescription for the incoming audio that will be written to the file.
+ @param url                 An NSURL specifying the file path location of where the audio file should be written to.
+ @param sourceFormat        The AudioStreamBasicDescription for the incoming audio that will be written to the file.
  @return The newly created EZRecorder instance.
  */
 -(EZRecorder*)initWithDestinationURL:(NSURL*)url
@@ -40,8 +40,8 @@
 
 /**
  Class method to create a new instance of an EZRecorder using a destination file path URL and the source format of the incoming audio.
- @param url               An NSURL specifying the file path location of where the audio file should be written to.
- @param sourceFormat      The AudioStreamBasicDescription for the incoming audio that will be written to the file.
+ @param url                 An NSURL specifying the file path location of where the audio file should be written to.
+ @param sourceFormat        The AudioStreamBasicDescription for the incoming audio that will be written to the file.
  @return The newly created EZRecorder instance.
  */
 +(EZRecorder*)recorderWithDestinationURL:(NSURL*)url

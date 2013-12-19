@@ -52,38 +52,13 @@
   self.eof                = NO;
   self.filePathLabel.text = filePathURL.lastPathComponent;
   
-  // The EZAudioFile provides convenience methods to optimize the waveform drawings. It will choose a proper window to iterate through the file that will generate roughly ~2048 buffers and so 2048 points on the waveform graph. This ensures that we get a good looking plot for both very small and very large files
-  UInt32 frameRate = [self.audioFile recommendedDrawingFrameRate];
-  UInt32 buffers   = [self.audioFile minBuffersWithFrameRate:frameRate];
-  
-  // Take a snapshot of each buffer through the audio file to form the waveform
-  __block float rms;
-  float data[buffers];
-  for( int i = 0; i < buffers; i++ ){
-    
-    // Allocate a buffer list to hold the audio file's data
-    // Check if we have allocated a read buffer
-    readBuffer = (AudioBufferList*)malloc(sizeof(AudioBufferList));
-    UInt32 bufferSize;
-    BOOL   eof;
-    
-    // Read some data from the audio file (the audio file internally maintains the seek position you're at). You can manually seek to whatever position in the audio file using the seekToFileOffset: function on the EZAudioFile.
-    [self.audioFile readFrames:frameRate
-               audioBufferList:readBuffer
-                    bufferSize:&bufferSize
-                           eof:&eof];
-    
-    // Get the RMS of the buffeer
-    rms = [EZAudio RMS:readBuffer->mBuffers[0].mData length:bufferSize];
-    data[i] = rms;
-    
-    // Since we malloc'ed, we should cleanup
-    [EZAudio freeBufferList:readBuffer];
-    
-  }
-  
-  // Update the audio plot once all the snapshots have been taken
-  [self.audioPlot updateBuffer:data withBufferSize:buffers];
+  // Plot the whole waveform
+  self.audioPlot.plotType        = EZPlotTypeBuffer;
+  self.audioPlot.shouldFill      = YES;
+  self.audioPlot.shouldMirror    = YES;
+  [self.audioFile getWaveformDataWithCompletionBlock:^(float *waveformData, UInt32 length) {
+    [self.audioPlot updateBuffer:waveformData withBufferSize:length];
+  }];
   
 }
 

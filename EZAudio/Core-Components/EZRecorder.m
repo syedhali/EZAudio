@@ -51,7 +51,7 @@ typedef struct {
 +(AudioStreamBasicDescription)defaultDestinationFormat {
   AudioStreamBasicDescription destinationFormat;
   destinationFormat.mFormatID = kAudioFormatLinearPCM;
-  destinationFormat.mChannelsPerFrame = 2;
+  destinationFormat.mChannelsPerFrame = 1;
   destinationFormat.mBitsPerChannel = 16;
   destinationFormat.mBytesPerPacket = destinationFormat.mBytesPerFrame = 2 * destinationFormat.mChannelsPerFrame;
   destinationFormat.mFramesPerPacket = 1;
@@ -69,12 +69,12 @@ typedef struct {
   
   // Create the extended audio file
   [EZAudio checkResult:ExtAudioFileCreateWithURL(_destinationFileURL,
-                                                 kAudioFileCAFType,
-                                                 &_destinationFormat,
-                                                 NULL,
-                                                 kAudioFileFlags_EraseFile,
-                                                 &_destinationFile)
-             operation:"Failed to create ExtendedAudioFile reference"];
+                                               kAudioFileCAFType,
+                                               &_destinationFormat,
+                                               NULL,
+                                               kAudioFileFlags_EraseFile,
+                                               &_destinationFile)
+           operation:"Failed to create ExtendedAudioFile reference"];
   
   // Set the client format
   _clientFormat = _destinationFormat;
@@ -83,7 +83,6 @@ typedef struct {
                                     numberOfChannels:_destinationFormat.mChannelsPerFrame
                                          interleaved:YES];
   }
-  
   UInt32 propertySize = sizeof(_clientFormat);
   [EZAudio checkResult:ExtAudioFileSetProperty(_destinationFile,
                                                kExtAudioFileProperty_ClientDataFormat,
@@ -96,7 +95,7 @@ typedef struct {
              operation:"Failed to initialize with ExtAudioFileWriteAsync"];
   
   // Setup the audio converter
-  [EZAudio checkResult:AudioConverterNew(&_sourceFormat, &_destinationFormat, &_audioConverter)
+  [EZAudio checkResult:AudioConverterNew(&_sourceFormat, &_clientFormat, &_audioConverter)
              operation:"Failed to create new audio converter"];
   
 }
@@ -107,7 +106,7 @@ typedef struct {
   
   // Setup output buffers
   UInt32 outputBufferSize = 32 * 1024; // 32 KB
-  AudioBufferList *convertedData = (AudioBufferList*)malloc(sizeof(AudioBufferList));
+  AudioBufferList *convertedData = [EZAudio audioBufferList];
   convertedData->mNumberBuffers = 1;
   convertedData->mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
   convertedData->mBuffers[0].mDataByteSize   = outputBufferSize;

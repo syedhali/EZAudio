@@ -33,12 +33,15 @@
 @property (nonatomic,weak) IBOutlet EZAudioPlotGL *audioPlot;
 
 #pragma mark - UI Extras
-@property (nonatomic,weak) IBOutlet UISlider *framePositionSlider;
-
 /**
  A label to display the current file path with the waveform shown
  */
 @property (nonatomic,weak) IBOutlet UILabel *filePathLabel;
+
+/**
+ A slider to indicate the current frame position in the audio file
+ */
+@property (nonatomic,weak) IBOutlet UISlider *framePositionSlider;
 
 /**
  A BOOL indicating whether or not we've reached the end of the file

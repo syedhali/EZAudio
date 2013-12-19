@@ -16,6 +16,7 @@
 @synthesize audioFile;
 @synthesize audioPlot;
 @synthesize eof = _eof;
+@synthesize framePositionSlider;
 
 #pragma mark - Initialization
 -(id)init {
@@ -110,6 +111,10 @@
   }
 }
 
+-(void)seekToFrame:(id)sender {
+  [self.audioFile seekToFrame:(SInt64)[(NSSlider*)sender doubleValue]];
+}
+
 #pragma mark - Action Extensions
 /*
  Give the visualization of the current buffer (this is almost exactly the openFrameworks audio input example)
@@ -140,17 +145,15 @@
   // Stop playback
   [[EZOutput sharedOutput] stopPlayback];
   
-  self.audioFile                 = [EZAudioFile audioFileWithURL:filePathURL];
-  self.audioFile.audioFileDelegate = self;
-  self.eof                       = NO;
-  self.filePathLabel.stringValue = filePathURL.lastPathComponent;
+  self.audioFile                    = [EZAudioFile audioFileWithURL:filePathURL andDelegate:self];
+  self.eof                          = NO;
+  self.filePathLabel.stringValue    = filePathURL.lastPathComponent;
+  self.framePositionSlider.minValue = 0.0f;
+  self.framePositionSlider.maxValue = (double)self.audioFile.totalFrames;
 
   // Plot the whole waveform
-  // Plot type
   self.audioPlot.plotType        = EZPlotTypeBuffer;
-  // Fill
   self.audioPlot.shouldFill      = YES;
-  // Mirror
   self.audioPlot.shouldMirror    = YES;
   [self.audioFile getWaveformDataWithCompletionBlock:^(float *waveformData, UInt32 length) {
     [self.audioPlot updateBuffer:waveformData withBufferSize:length];
@@ -171,6 +174,15 @@
       [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
     });
   }
+}
+
+-(void)audioFile:(EZAudioFile *)audioFile
+ updatedPosition:(SInt64)framePosition {
+  dispatch_async(dispatch_get_main_queue(), ^{
+    if( ![self.framePositionSlider.cell isHighlighted] ){
+      self.framePositionSlider.floatValue = (float)framePosition;
+    }
+  });
 }
 
 #pragma mark - EZOutputDataSource
@@ -204,7 +216,6 @@
       [self.audioFile seekToFrame:0];
       return nil;
     }
-    
     return bufferList;
   }
   return nil;

@@ -183,9 +183,9 @@
 				94056F0C185BD83400EB94BA /* AppDelegate.h */,
 				94056F0D185BD83400EB94BA /* AppDelegate.m */,
 				94056F2E185BD86D00EB94BA /* PlayFileViewController.h */,
+				94056F2F185BD86D00EB94BA /* PlayFileViewController.m */,
 				94056F30185BD86D00EB94BA /* PlayFileViewController.xib */,
 				94056F0F185BD83400EB94BA /* MainMenu.xib */,
-				94056F2F185BD86D00EB94BA /* PlayFileViewController.m */,
 				94056F12185BD83400EB94BA /* Images.xcassets */,
 				94056F01185BD83400EB94BA /* Supporting Files */,
 			);
