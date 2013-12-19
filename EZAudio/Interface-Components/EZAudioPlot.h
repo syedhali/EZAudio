@@ -1,6 +1,6 @@
 //
-//  SHAAudioPlot.h
-//  SHAAudioExampleOSX
+//  EZAudioPlot.h
+//  EZAudio
 //
 //  Created by Syed Haris Ali on 9/2/13.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.

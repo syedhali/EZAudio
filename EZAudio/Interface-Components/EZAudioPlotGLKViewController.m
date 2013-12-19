@@ -1,6 +1,6 @@
 //
 //  EZAudioPlotGLKViewController.m
-//  EZAudioExampleiOS
+//  EZAudio
 //
 //  Created by Syed Haris Ali on 11/22/13.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.

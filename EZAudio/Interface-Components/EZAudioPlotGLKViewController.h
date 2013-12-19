@@ -1,6 +1,6 @@
 //
 //  EZAudioPlotGLKViewController.h
-//  EZAudioExampleiOS
+//  EZAudio
 //
 //  Created by Syed Haris Ali on 11/22/13.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
@@ -54,7 +54,7 @@
 @property (nonatomic,assign,setter=setGain:) float gain;
 
 /**
- The type of plot as specified by the `SHAPlotType` enumeration (i.e. a buffer or rolling plot type).
+ The type of plot as specified by the `EZPlotType` enumeration (i.e. a buffer or rolling plot type).
  */
 @property (nonatomic,assign,setter=setPlotType:) EZPlotType plotType;
 

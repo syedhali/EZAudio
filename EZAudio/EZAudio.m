@@ -1,6 +1,6 @@
 //
-//  SHAAudio.m
-//  SHAAudio
+//  EZAudio.m
+//  EZAudio
 //
 //  Created by Syed Haris Ali on 11/21/13.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.

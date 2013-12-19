@@ -1,6 +1,6 @@
 //
-//  SHAPlot.m
-//  SHAAudioExampleiOS
+//  EZPlot.m
+//  EZAudio
 //
 //  Created by Syed Haris Ali on 11/24/13.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
