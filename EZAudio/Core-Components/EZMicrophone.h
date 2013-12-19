@@ -76,7 +76,7 @@
 
 #pragma mark - EZMicrophone
 /**
- A component to get audio data from the default microphone. On OSX this is the default selected input device in the system preferences while on iOS this defaults to use the default RemoteIO audio unit. The microphone data is converted to a float buffer array and returned back to the caller via the EZMicrophoneDelegate protocol.
+ The EZMicrophone provides a component to get audio data from the default device microphone. On OSX this is the default selected input device in the system preferences while on iOS this defaults to use the default RemoteIO audio unit. The microphone data is converted to a float buffer array and returned back to the caller via the EZMicrophoneDelegate protocol.
  */
 @interface EZMicrophone : NSObject
 

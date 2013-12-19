@@ -194,12 +194,12 @@
 		944D093418604CD80076EF7A /* EZAudio */ = {
 			isa = PBXGroup;
 			children = (
+				944D094E18604CD90076EF7A /* simple-drum-beat.wav */,
 				944D093518604CD80076EF7A /* 3rd-Party-Components */,
 				944D093A18604CD80076EF7A /* Core-Components */,
 				944D094318604CD80076EF7A /* EZAudio.h */,
 				944D094418604CD80076EF7A /* EZAudio.m */,
 				944D094518604CD80076EF7A /* Interface-Components */,
-				944D094E18604CD90076EF7A /* simple-drum-beat.wav */,
 			);
 			name = EZAudio;
 			path = ../../../../EZAudio;

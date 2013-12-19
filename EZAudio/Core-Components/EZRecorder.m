@@ -29,13 +29,12 @@ typedef struct {
 
 #pragma mark - Initializers
 -(EZRecorder*)initWithDestinationURL:(NSURL*)url
-                   destinationFormat:(AudioStreamBasicDescription)destinationFormat
                      andSourceFormat:(AudioStreamBasicDescription)sourceFormat {
   self = [super init];
   if(self){
     _destinationFileURL = (__bridge CFURLRef)url;
     _sourceFormat = sourceFormat;
-    _destinationFormat = destinationFormat;
+    _destinationFormat = [EZRecorder defaultDestinationFormat];
     [self _configureRecorder];
   }
   return self;
@@ -43,10 +42,8 @@ typedef struct {
 
 #pragma mark - Class Initializers
 +(EZRecorder*)recorderWithDestinationURL:(NSURL*)url
-                       destinationFormat:(AudioStreamBasicDescription)destinationFormat
                          andSourceFormat:(AudioStreamBasicDescription)sourceFormat {
   return [[EZRecorder alloc] initWithDestinationURL:url
-                                  destinationFormat:destinationFormat
                                     andSourceFormat:sourceFormat];
 }
 

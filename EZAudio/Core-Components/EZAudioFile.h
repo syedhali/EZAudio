@@ -145,7 +145,7 @@ typedef void (^WaveformDataCompletionBlock)(float *waveformData, UInt32 length);
 ///-----------------------------------------------------------
 
 /**
- Provides the AudioStreamBasicDescription structure used within the app. The file's format will be converted to this format and then sent back as either a float array or a `AudioBufferList` pointer.
+ Provides the AudioStreamBasicDescription structure used within the app. The file's format will be converted to this format and then sent back as either a float array or a `AudioBufferList` pointer. Use this when communicating with other EZAudio components.
  @return An AudioStreamBasicDescription structure describing the format of the audio file.
  */
 -(AudioStreamBasicDescription)clientFormat;
