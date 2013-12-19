@@ -8,6 +8,9 @@
         <customObject id="-2" userLabel="File's Owner" customClass="RecordViewController">
             <connections>
                 <outlet property="audioPlot" destination="dEs-hA-819" id="iGa-BH-xLn"/>
+                <outlet property="microphoneToggle" destination="642-4u-aBm" id="FYB-Cp-aPB"/>
+                <outlet property="playButton" destination="y4R-NE-icG" id="1FP-aQ-BcB"/>
+                <outlet property="recordingToggle" destination="fdr-L4-Y6i" id="dYX-uf-6YS"/>
                 <outlet property="view" destination="178-e9-GIn" id="bPz-Je-f18"/>
             </connections>
         </customObject>
@@ -46,15 +49,29 @@
                         <action selector="toggleRecording:" target="-2" id="WKw-uD-CBI"/>
                     </connections>
                 </button>
+                <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y4R-NE-icG">
+                    <rect key="frame" x="137" y="6" width="65" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="Play" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XoV-qX-N9x">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="playFile:" target="-2" id="jrd-yg-pvq"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="642-4u-aBm" secondAttribute="bottom" constant="16" id="LIb-Ej-46s"/>
                 <constraint firstAttribute="bottom" secondItem="fdr-L4-Y6i" secondAttribute="bottom" constant="16" id="Pvr-gh-o7q"/>
                 <constraint firstItem="642-4u-aBm" firstAttribute="top" secondItem="dEs-hA-819" secondAttribute="bottom" constant="12" id="QgB-Ty-AN0"/>
+                <constraint firstAttribute="bottom" secondItem="y4R-NE-icG" secondAttribute="bottom" constant="13" id="UX6-ts-w3M"/>
+                <constraint firstItem="y4R-NE-icG" firstAttribute="leading" secondItem="642-4u-aBm" secondAttribute="trailing" constant="8" id="ZbS-5O-fFJ"/>
                 <constraint firstItem="642-4u-aBm" firstAttribute="leading" secondItem="178-e9-GIn" secondAttribute="leading" constant="20" id="ayr-0v-aOC"/>
                 <constraint firstAttribute="trailing" secondItem="fdr-L4-Y6i" secondAttribute="trailing" constant="20" id="hk9-I9-9g5"/>
                 <constraint firstItem="dEs-hA-819" firstAttribute="top" secondItem="178-e9-GIn" secondAttribute="top" id="mv6-AK-Cz4"/>
                 <constraint firstAttribute="trailing" secondItem="dEs-hA-819" secondAttribute="trailing" id="tqk-1H-SZ4"/>
+                <constraint firstItem="y4R-NE-icG" firstAttribute="top" secondItem="dEs-hA-819" secondAttribute="bottom" constant="8" id="xzp-cM-xAL"/>
                 <constraint firstItem="dEs-hA-819" firstAttribute="leading" secondItem="178-e9-GIn" secondAttribute="leading" id="yvm-d3-Fzl"/>
             </constraints>
         </customView>

@@ -25,15 +25,23 @@
 
 #import "RecordViewController.h"
 
-@interface RecordViewController ()
-
+@interface RecordViewController (){
+  BOOL _hasSomethingToPlay;
+}
+@property (nonatomic,strong) AVAudioPlayer *audioPlayer;
+@property (nonatomic,weak) IBOutlet NSButton *microphoneToggle;
+@property (nonatomic,weak) IBOutlet NSButton *playButton;
+@property (nonatomic,weak) IBOutlet NSButton *recordingToggle;
 @end
 
 @implementation RecordViewController
+@synthesize audioPlayer;
 @synthesize audioPlot;
 @synthesize isRecording;
 @synthesize microphone;
+@synthesize microphoneToggle;
 @synthesize recorder;
+@synthesize recordingToggle;
 
 #pragma mark - Initialization
 -(id)init {
@@ -77,7 +85,14 @@
   // Waveform color
   self.audioPlot.color           = [NSColor colorWithCalibratedRed: 0.114 green: 0.346 blue: 0.685 alpha: 1];
   // Plot type
-  self.audioPlot.plotType        = EZPlotTypeBuffer;
+  self.audioPlot.plotType        = EZPlotTypeRolling;
+  // Fill
+  self.audioPlot.shouldFill      = YES;
+  // Mirror
+  self.audioPlot.shouldMirror    = YES;
+  
+  // Configure the play button
+  [self.playButton setHidden:YES];
   
   /*
    Start the microphone
@@ -87,6 +102,32 @@
 }
 
 #pragma mark - Actions
+-(void)playFile:(id)sender {
+  
+  // Update microphone state
+  [self.microphone stopFetchingAudio];
+  self.microphoneToggle.state = NSOffState;
+  [self.microphoneToggle setEnabled:NO];
+  
+  // Update recording state
+  self.isRecording = NO;
+  self.recordingToggle.state = NSOffState;
+  [self.recordingToggle setEnabled:NO];
+  
+  // Create Audio Player
+  if( self.audioPlayer ){
+    if( self.audioPlayer.playing ) [self.audioPlayer stop];
+    self.audioPlayer = nil;
+  }
+  NSError *err;
+  self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:kAudioFilePath]
+                                                            error:&err];
+  
+  [self.audioPlayer play];
+  self.audioPlayer.delegate = self;
+  
+}
+
 -(void)toggleMicrophone:(id)sender {
   switch([sender state]){
     case NSOffState:
@@ -101,6 +142,7 @@
 }
 
 -(void)toggleRecording:(id)sender {
+  [self.playButton setHidden:NO];
   self.isRecording = (BOOL)[sender state];
 }
 
@@ -143,6 +185,22 @@ withNumberOfChannels:(UInt32)numberOfChannels {
                              withBufferSize:bufferSize];
   }
   
+}
+
+#pragma mark - AVAudioPlayerDelegate
+/*
+ Occurs when the audio player instance completes playback
+ */
+-(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+  // Update microphone state
+  self.microphoneToggle.state = NSOnState;
+  [self.microphoneToggle setEnabled:YES];
+  [self.microphone startFetchingAudio];
+  
+  // Update recording state
+  self.isRecording = NO;
+  self.recordingToggle.state = NSOffState;
+  [self.recordingToggle setEnabled:YES];
 }
 
 @end

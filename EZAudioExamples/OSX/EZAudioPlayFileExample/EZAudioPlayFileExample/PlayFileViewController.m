@@ -181,13 +181,13 @@
 #pragma mark - EZAudioFileDelegate
 -(void)audioFile:(EZAudioFile *)audioFile readAudio:(float **)buffer withBufferSize:(UInt32)bufferSize withNumberOfChannels:(UInt32)numberOfChannels {
   if( [EZOutput sharedOutput].isPlaying ){
-    if( self.audioPlot.plotType == EZPlotTypeBuffer  &&
-        self.audioPlot.shouldFill == YES              &&
-        self.audioPlot.shouldMirror == YES ){
-      self.audioPlot.shouldFill = NO;
-      self.audioPlot.shouldMirror = NO;
-    }
     dispatch_async(dispatch_get_main_queue(), ^{
+      if( self.audioPlot.plotType     == EZPlotTypeBuffer &&
+         self.audioPlot.shouldFill   == YES              &&
+         self.audioPlot.shouldMirror == YES ){
+        self.audioPlot.shouldFill = NO;
+        self.audioPlot.shouldMirror = NO;
+      }
       [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
     });
   }

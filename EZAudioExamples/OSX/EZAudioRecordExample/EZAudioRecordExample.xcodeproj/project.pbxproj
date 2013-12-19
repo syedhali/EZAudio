@@ -26,6 +26,7 @@
 		94056E70185BB42100EB94BA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056E6F185BB42100EB94BA /* QuartzCore.framework */; };
 		94056E74185BB44200EB94BA /* RecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94056E72185BB44200EB94BA /* RecordViewController.m */; };
 		94056E75185BB44200EB94BA /* RecordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94056E73185BB44200EB94BA /* RecordViewController.xib */; };
+		941D71AA186298AA007D52D8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 941D71A9186298AA007D52D8 /* AVFoundation.framework */; };
 		944D07B5186049E80076EF7A /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D0699186049E70076EF7A /* AEFloatConverter.m */; };
 		944D07B6186049E80076EF7A /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 944D069A186049E70076EF7A /* TPCircularBuffer.c */; };
 		944D07B7186049E80076EF7A /* EZAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D069E186049E70076EF7A /* EZAudioFile.m */; };
@@ -79,6 +80,7 @@
 		94056E71185BB44200EB94BA /* RecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordViewController.h; sourceTree = "<group>"; };
 		94056E72185BB44200EB94BA /* RecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordViewController.m; sourceTree = "<group>"; };
 		94056E73185BB44200EB94BA /* RecordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecordViewController.xib; sourceTree = "<group>"; };
+		941D71A9186298AA007D52D8 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		944D0698186049E70076EF7A /* AEFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEFloatConverter.h; sourceTree = "<group>"; };
 		944D0699186049E70076EF7A /* AEFloatConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEFloatConverter.m; sourceTree = "<group>"; };
 		944D069A186049E70076EF7A /* TPCircularBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = TPCircularBuffer.c; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				941D71AA186298AA007D52D8 /* AVFoundation.framework in Frameworks */,
 				94056E70185BB42100EB94BA /* QuartzCore.framework in Frameworks */,
 				94056E6E185BB41900EB94BA /* CoreAudio.framework in Frameworks */,
 				94056E6B185BB40F00EB94BA /* AudioToolbox.framework in Frameworks */,
@@ -153,6 +156,7 @@
 		94056E0B185BB3D800EB94BA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				941D71A9186298AA007D52D8 /* AVFoundation.framework */,
 				94056E6F185BB42100EB94BA /* QuartzCore.framework */,
 				94056E6D185BB41900EB94BA /* CoreAudio.framework */,
 				94056E69185BB40F00EB94BA /* AudioToolbox.framework */,

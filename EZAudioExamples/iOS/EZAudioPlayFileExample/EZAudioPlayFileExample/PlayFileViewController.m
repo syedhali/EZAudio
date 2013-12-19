@@ -154,9 +154,17 @@
        readAudio:(float **)buffer
   withBufferSize:(UInt32)bufferSize
 withNumberOfChannels:(UInt32)numberOfChannels {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
-  });
+  if( [EZOutput sharedOutput].isPlaying ){
+    dispatch_async(dispatch_get_main_queue(), ^{
+      if( self.audioPlot.plotType     == EZPlotTypeBuffer &&
+         self.audioPlot.shouldFill   == YES              &&
+         self.audioPlot.shouldMirror == YES ){
+        self.audioPlot.shouldFill = NO;
+        self.audioPlot.shouldMirror = NO;
+      }
+      [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
+    });
+  }
 }
 
 -(void)audioFile:(EZAudioFile *)audioFile

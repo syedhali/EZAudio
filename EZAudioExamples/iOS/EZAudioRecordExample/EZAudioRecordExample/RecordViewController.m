@@ -80,6 +80,9 @@
   self.recordingTextField.text = @"Not Recording";
   self.playingTextField.text = @"Not Playing";
   
+  // Hide the play button
+  self.playButton.hidden = YES;
+  
   /*
    Log out where the file is being written to within the app's documents directory
    */
@@ -139,6 +142,7 @@
     if( self.audioPlayer.playing ) [self.audioPlayer stop];
     self.audioPlayer = nil;
   }
+  self.playButton.hidden = NO;
   
   self.isRecording = (BOOL)[sender isOn];
   self.recordingTextField.text = self.isRecording ? @"Recording" : @"Not Recording";

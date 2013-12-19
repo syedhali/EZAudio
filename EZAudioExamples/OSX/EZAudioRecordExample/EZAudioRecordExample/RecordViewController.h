@@ -28,13 +28,16 @@
 // Import EZAudio header
 #import "EZAudio.h"
 
+// Import AVFoundation to play the file (will save EZAudioFile and EZOutput for separate example)
+#import <AVFoundation/AVFoundation.h>
+
 // By default this will record a file to /Users/YOUR_USERNAME/Documents/test.caf
 #define kAudioFilePath [NSString stringWithFormat:@"%@%@",NSHomeDirectory(),@"/Documents/test.caf"]
 
 /**
  We will allow this view controller to act as an EZMicrophoneDelegate. This is how we listen for the microphone callback.
  */
-@interface RecordViewController : NSViewController <EZMicrophoneDelegate>
+@interface RecordViewController : NSViewController <EZMicrophoneDelegate,AVAudioPlayerDelegate>
 
 /**
  Use a OpenGL based plot to visualize the data coming in
@@ -57,6 +60,11 @@
 @property (nonatomic,strong) EZRecorder *recorder;
 
 #pragma mark - Actions
+/**
+ Stops the recorder and starts playing whatever has been recorded.
+ */
+-(IBAction)playFile:(id)sender;
+
 /**
  Toggles the microphone on and off. When the microphone is on it will send its delegate (aka this view controller) the audio data in various ways (check out the EZMicrophoneDelegate documentation for more details);
  */

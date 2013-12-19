@@ -15,8 +15,76 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IfI-AX-Mxa" customClass="EZAudioPlotGL">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="V4v-rc-ou0">
+                                        <rect key="frame" x="635" y="974" width="113" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <segments>
+                                            <segment title="Buffer"/>
+                                            <segment title="Rolling"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="changePlotType:" destination="BYZ-38-t0r" eventType="valueChanged" id="Gar-Fq-3Ct"/>
+                                        </connections>
+                                    </segmentedControl>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dEw-zi-hw0">
+                                        <rect key="frame" x="20" y="943" width="728" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xt0-OL-u2c">
+                                        <rect key="frame" x="20" y="974" width="30" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Play">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="play:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1V6-g2-0vG"/>
+                                        </connections>
+                                    </button>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BeD-bR-Pie">
+                                        <rect key="frame" x="18" y="902" width="732" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="seekToFrame:" destination="BYZ-38-t0r" eventType="valueChanged" id="FLM-Zv-iCG"/>
+                                        </connections>
+                                    </slider>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="V4v-rc-ou0" secondAttribute="bottom" constant="21" id="2OX-ym-8rb"/>
+                                    <constraint firstAttribute="trailing" secondItem="V4v-rc-ou0" secondAttribute="trailing" constant="20" id="2k1-WE-mad"/>
+                                    <constraint firstItem="V4v-rc-ou0" firstAttribute="top" secondItem="dEw-zi-hw0" secondAttribute="bottom" constant="10" id="4Dm-f1-hVC"/>
+                                    <constraint firstItem="dEw-zi-hw0" firstAttribute="top" secondItem="BeD-bR-Pie" secondAttribute="bottom" constant="8" id="8eR-tY-zbU"/>
+                                    <constraint firstItem="BeD-bR-Pie" firstAttribute="leading" secondItem="IfI-AX-Mxa" secondAttribute="leading" constant="20" id="USg-gd-N1o"/>
+                                    <constraint firstAttribute="trailing" secondItem="BeD-bR-Pie" secondAttribute="trailing" constant="20" id="ZWC-YN-Bod"/>
+                                    <constraint firstItem="xt0-OL-u2c" firstAttribute="leading" secondItem="IfI-AX-Mxa" secondAttribute="leading" constant="20" id="kMA-uY-yt9"/>
+                                    <constraint firstAttribute="trailing" secondItem="dEw-zi-hw0" secondAttribute="trailing" constant="20" id="nAI-3T-La6"/>
+                                    <constraint firstAttribute="bottom" secondItem="xt0-OL-u2c" secondAttribute="bottom" constant="20" id="rkU-j7-Ud0"/>
+                                    <constraint firstItem="dEw-zi-hw0" firstAttribute="leading" secondItem="IfI-AX-Mxa" secondAttribute="leading" constant="20" id="vUv-3d-NJ2"/>
+                                    <constraint firstItem="xt0-OL-u2c" firstAttribute="top" secondItem="dEw-zi-hw0" secondAttribute="bottom" constant="10" id="wz8-bv-vFP"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="IfI-AX-Mxa" secondAttribute="trailing" id="0uO-Ml-VnN"/>
+                            <constraint firstAttribute="bottom" secondItem="IfI-AX-Mxa" secondAttribute="bottom" id="D5n-3z-VGt"/>
+                            <constraint firstItem="IfI-AX-Mxa" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="K35-CT-vej"/>
+                            <constraint firstItem="IfI-AX-Mxa" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="VJz-7E-nDX"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="audioPlot" destination="IfI-AX-Mxa" id="Mit-Lw-6eO"/>
+                        <outlet property="filePathLabel" destination="dEw-zi-hw0" id="Uir-R0-Wum"/>
+                        <outlet property="framePositionSlider" destination="BeD-bR-Pie" id="7Fl-k0-tre"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
