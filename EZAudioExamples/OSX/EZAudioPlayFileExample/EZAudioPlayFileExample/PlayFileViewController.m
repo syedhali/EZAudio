@@ -183,9 +183,9 @@
   if( [EZOutput sharedOutput].isPlaying ){
     dispatch_async(dispatch_get_main_queue(), ^{
       if( self.audioPlot.plotType     == EZPlotTypeBuffer &&
-         self.audioPlot.shouldFill   == YES              &&
-         self.audioPlot.shouldMirror == YES ){
-        self.audioPlot.shouldFill = NO;
+         self.audioPlot.shouldFill    == YES              &&
+         self.audioPlot.shouldMirror  == YES ){
+        self.audioPlot.shouldFill   = NO;
         self.audioPlot.shouldMirror = NO;
       }
       [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
