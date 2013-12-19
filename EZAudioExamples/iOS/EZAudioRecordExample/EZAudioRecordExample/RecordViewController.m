@@ -168,7 +168,6 @@ withNumberOfChannels:(UInt32)numberOfChannels {
   
   // We can initialize the recorder with this ASBD
   self.recorder = [EZRecorder recorderWithDestinationURL:[self testFilePathURL]
-                                       destinationFormat:[EZRecorder defaultDestinationFormat]
                                          andSourceFormat:audioStreamBasicDescription];
   
 }
