@@ -28,9 +28,9 @@
    Customizing the audio plot's look
    */
   // Background color
-  self.audioPlot.backgroundColor = [UIColor colorWithRed: 0.993 green: 0.881 blue: 0.751 alpha: 1];
+  self.audioPlot.backgroundColor = [UIColor colorWithRed: 0.169 green: 0.643 blue: 0.675 alpha: 1];
   // Waveform color
-  self.audioPlot.color           = [UIColor colorWithRed: 0.219 green: 0.234 blue: 0.29 alpha: 1];
+  self.audioPlot.color           = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
   // Plot type
   self.audioPlot.plotType        = EZPlotTypeBuffer;
   // Fill
