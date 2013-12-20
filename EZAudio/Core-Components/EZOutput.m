@@ -43,38 +43,49 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
                                      UInt32                      inNumberFrames,
                                      AudioBufferList             *ioData){
   EZOutput *output = (__bridge EZOutput*)inRefCon;
-  
-  UInt32 bufferSize;
-  AudioBufferList *bufferList = [output.outputDataSource output:output
-                                      needsBufferListWithFrames:inNumberFrames
-                                                 withBufferSize:&bufferSize];
-  
-  BOOL isInterleaved = ioData->mNumberBuffers == 1;
-  
-  if( !isInterleaved ){
-    Float32 *left  = (Float32*)ioData->mBuffers[0].mData;
-    Float32 *right = (Float32*)ioData->mBuffers[1].mData;
-    for(int i = 0; i < inNumberFrames; i++ ){
-      if( bufferList ){
-        Float32 *interleaved = (Float32*)bufferList->mBuffers[0].mData;
-        left[i]  = interleaved[i];
-        right[i] = interleaved[i];
-      }
-      else {
-        left[i]  = 0.0f;
-        right[i] = 0.0f;
+  // Manual override
+  if( [output.outputDataSource respondsToSelector:@selector(output:callbackWithActionFlags:inTimeStamp:inBusNumber:inNumberFrames:ioData:)] ){
+    [output.outputDataSource output:output
+            callbackWithActionFlags:ioActionFlags
+                        inTimeStamp:inTimeStamp
+                        inBusNumber:inBusNumber
+                     inNumberFrames:inNumberFrames
+                             ioData:ioData];
+  }
+  // Provided an AudioBufferList (defaults to silence)
+  else {
+    UInt32 bufferSize;
+    AudioBufferList *bufferList = [output.outputDataSource output:output
+                                        needsBufferListWithFrames:inNumberFrames
+                                                   withBufferSize:&bufferSize];
+    // Interleaved
+    if( !(ioData->mNumberBuffers == 1) ){
+      Float32 *left  = (Float32*)ioData->mBuffers[0].mData;
+      Float32 *right = (Float32*)ioData->mBuffers[1].mData;
+      for(int i = 0; i < inNumberFrames; i++ ){
+        if( bufferList ){
+          Float32 *interleaved = (Float32*)bufferList->mBuffers[0].mData;
+          left[i]  = interleaved[i];
+          right[i] = interleaved[i];
+        }
+        else {
+          left[i]  = 0.0f;
+          right[i] = 0.0f;
+        }
       }
     }
-  }
-  else {
+    // Non-interleaved
+    else {
       memcpy(ioData,
              bufferList,
              sizeof(AudioBufferList)+(bufferList->mNumberBuffers-1)*sizeof(AudioBuffer));
+    }
+    if( bufferList ){
+      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0ul),^{
+        [EZAudio freeBufferList:bufferList];
+      });
+    }
   }
-  
-  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0ul),^{
-    [EZAudio freeBufferList:bufferList];
-  });
   
   return noErr;
 }

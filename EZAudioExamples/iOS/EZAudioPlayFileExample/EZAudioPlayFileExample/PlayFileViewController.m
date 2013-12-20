@@ -139,7 +139,6 @@
   self.framePositionSlider.maximumValue = (float)self.audioFile.totalFrames;
 
   // Plot the whole waveform
-  // Plot the whole waveform
   self.audioPlot.plotType        = EZPlotTypeBuffer;
   self.audioPlot.shouldFill      = YES;
   self.audioPlot.shouldMirror    = YES;
