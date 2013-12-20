@@ -1,8 +1,8 @@
 //
 //  AppDelegate.m
-//  EZAudioRecordExample
+//  EZAudioPassThroughExample
 //
-//  Created by Syed Haris Ali on 12/15/13.
+//  Created by Syed Haris Ali on 12/20/13.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
 //
 
@@ -14,7 +14,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-
   // Override point for customization after application launch.
   
   // Remember to configure your audio session
@@ -28,7 +27,7 @@
   if( err ){
     NSLog(@"There was an error sending the audio to the speakers");
   }
-
+  
   return YES;
 }
 							
