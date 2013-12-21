@@ -22,6 +22,8 @@
 		94057018185E5EAF00EB94BA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94057016185E5EAF00EB94BA /* InfoPlist.strings */; };
 		9405701A185E5EAF00EB94BA /* EZAudioOpenGLWaveformExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94057019185E5EAF00EB94BA /* EZAudioOpenGLWaveformExampleTests.m */; };
 		94057050185E636100EB94BA /* OpenGLWaveformViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405704F185E636100EB94BA /* OpenGLWaveformViewController.m */; };
+		9417A6CB18658FC900D9D37B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A6CA18658FC900D9D37B /* AudioToolbox.framework */; };
+		9417A6CD18658FCD00D9D37B /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A6CC18658FCD00D9D37B /* GLKit.framework */; };
 		944D08DA18604AE50076EF7A /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D08C218604AE50076EF7A /* AEFloatConverter.m */; };
 		944D08DB18604AE50076EF7A /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 944D08C318604AE50076EF7A /* TPCircularBuffer.c */; };
 		944D08DC18604AE50076EF7A /* EZAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D08C718604AE50076EF7A /* EZAudioFile.m */; };
@@ -67,6 +69,8 @@
 		94057019185E5EAF00EB94BA /* EZAudioOpenGLWaveformExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZAudioOpenGLWaveformExampleTests.m; sourceTree = "<group>"; };
 		9405704E185E636100EB94BA /* OpenGLWaveformViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLWaveformViewController.h; sourceTree = "<group>"; };
 		9405704F185E636100EB94BA /* OpenGLWaveformViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenGLWaveformViewController.m; sourceTree = "<group>"; };
+		9417A6CA18658FC900D9D37B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		9417A6CC18658FCD00D9D37B /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		944D08C118604AE50076EF7A /* AEFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEFloatConverter.h; sourceTree = "<group>"; };
 		944D08C218604AE50076EF7A /* AEFloatConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEFloatConverter.m; sourceTree = "<group>"; };
 		944D08C318604AE50076EF7A /* TPCircularBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = TPCircularBuffer.c; sourceTree = "<group>"; };
@@ -97,6 +101,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9417A6CD18658FCD00D9D37B /* GLKit.framework in Frameworks */,
+				9417A6CB18658FC900D9D37B /* AudioToolbox.framework in Frameworks */,
 				94056FEE185E5EAF00EB94BA /* CoreGraphics.framework in Frameworks */,
 				94056FF0185E5EAF00EB94BA /* UIKit.framework in Frameworks */,
 				94056FEC185E5EAF00EB94BA /* Foundation.framework in Frameworks */,
@@ -138,6 +144,8 @@
 		94056FEA185E5EAF00EB94BA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9417A6CC18658FCD00D9D37B /* GLKit.framework */,
+				9417A6CA18658FC900D9D37B /* AudioToolbox.framework */,
 				94056FEB185E5EAF00EB94BA /* Foundation.framework */,
 				94056FED185E5EAF00EB94BA /* CoreGraphics.framework */,
 				94056FEF185E5EAF00EB94BA /* UIKit.framework */,

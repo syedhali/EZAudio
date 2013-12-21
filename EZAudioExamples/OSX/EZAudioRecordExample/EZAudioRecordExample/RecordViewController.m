@@ -174,6 +174,7 @@ withNumberOfChannels:(UInt32)numberOfChannels {
   
 }
 
+// Append the microphone data coming as a AudioBufferList with the specified buffer size to the recorder
 -(void)microphone:(EZMicrophone *)microphone
     hasBufferList:(AudioBufferList *)bufferList
    withBufferSize:(UInt32)bufferSize

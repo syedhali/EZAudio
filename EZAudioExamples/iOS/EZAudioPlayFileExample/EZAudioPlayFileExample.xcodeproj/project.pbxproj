@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9417A6C718658FB500D9D37B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A6C618658FB500D9D37B /* AudioToolbox.framework */; };
+		9417A6C918658FC000D9D37B /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A6C818658FC000D9D37B /* GLKit.framework */; };
 		944D03DD186038A60076EF7A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 944D03DC186038A60076EF7A /* Foundation.framework */; };
 		944D03DF186038A60076EF7A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 944D03DE186038A60076EF7A /* CoreGraphics.framework */; };
 		944D03E1186038A60076EF7A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 944D03E0186038A60076EF7A /* UIKit.framework */; };
@@ -47,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9417A6C618658FB500D9D37B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		9417A6C818658FC000D9D37B /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		944D03D9186038A60076EF7A /* EZAudioPlayFileExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EZAudioPlayFileExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		944D03DC186038A60076EF7A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		944D03DE186038A60076EF7A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -97,6 +101,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9417A6C918658FC000D9D37B /* GLKit.framework in Frameworks */,
+				9417A6C718658FB500D9D37B /* AudioToolbox.framework in Frameworks */,
 				944D03DF186038A60076EF7A /* CoreGraphics.framework in Frameworks */,
 				944D03E1186038A60076EF7A /* UIKit.framework in Frameworks */,
 				944D03DD186038A60076EF7A /* Foundation.framework in Frameworks */,
@@ -138,6 +144,8 @@
 		944D03DB186038A60076EF7A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9417A6C818658FC000D9D37B /* GLKit.framework */,
+				9417A6C618658FB500D9D37B /* AudioToolbox.framework */,
 				944D03DC186038A60076EF7A /* Foundation.framework */,
 				944D03DE186038A60076EF7A /* CoreGraphics.framework */,
 				944D03E0186038A60076EF7A /* UIKit.framework */,
