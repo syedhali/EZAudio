@@ -3,11 +3,34 @@
 #EZAudio
 A simple, intuitive audio framework for iOS and OSX.
 
+##Features
+**Awesome Components**
+- `EZMicrophone`
+- `EZRecorder`
+- `EZAudioFile`
+- `EZOutput` - 
+- `EZAudioPlot` - A CoreGraphics-based Audio Plot capable of visualizing any float array as a buffer or rolling plot
+- `EZAudioPlotGL` - An OpenGL-based, GPU-accelerated Audio Plot capable of visualizing any float array as a buffer or rolling plot
+The components above were designed to allow you to immediately get your hands dirty with audio. These components simply plug into each other and build on top of the high-performance, low-latency AudioUnits API and give you an easy to use API written in Objective-C instead of pure C.
+- Get Microphone Data (As float arrays AND AudioBufferList for easy output)
+- Easily Read/Seek Through Audio Files
+- Easy, Flexible Playback From Any Component
+- Easily Record Anything and Display Waveforms
+- Beautiful Real-Time Audio Waveform Plots (Buffer and Rolling Plots)
+
+**Cross Platform**
+
+`EZAudio` was designed to work transparently across all iOS and OSX devices. This means one universal API whether you're building for Mac or iOS. For instance, an `EZAudioPlot` knows that it will subclass a UIView for iOS or an NSView for OSX and the `EZMicrophone` knows to build on top of the RemoteIO AudioUnit for iOS, but defaults to the system defaults for input and output for OSX.
+
+**Examples & Docs**
+
+Within the Github repository you'll find plenty of examples to get you up to speed using each component and plugging them into each other. With just a few lines of code you'll be recording from the microphone, generating audio waveforms, and playing audio files like a boss. See the full Getting Started guide for an interactive look into each of components.
+
 ##Getting Started
-To see the full project page, interactive getting started guide, and documentation go here:
+*To see the full project page, interactive Getting Started guide, and Documentation go here:*
 http://syedharisali.com/projects/EZAudio/getting-started
 
-To begin using EZAudio you must first make sure you have the proper build requirements and frameworks. Below you'll find explanations of each component and code snippets to show how to use each to perform common tasks like getting microphone data, updating audio waveform plots, reading/seeking through audio files, and performing playback.
+To begin using `EZAudio` you must first make sure you have the proper build requirements and frameworks. Below you'll find explanations of each component and code snippets to show how to use each to perform common tasks like getting microphone data, updating audio waveform plots, reading/seeking through audio files, and performing playback.
 
 ###Build Requirements
 **iOS**
@@ -73,7 +96,7 @@ There is a `getWaveformDataWithCompletionBlock:` method to allow you to easily a
 
 ####Reading From An Audio File
 
-Reading audio data from a file requires you to create an AudioBufferList to hold the data. The EZAudio utility function, audioBufferList, provides a convenient way to get an allocated AudioBufferList to use. There is also a utility function, freeBufferList:, to use to free (or release) the AudioBufferList when you are done using that audio data.
+Reading audio data from a file requires you to create an AudioBufferList to hold the data. The `EZAudio` utility function, `audioBufferList`, provides a convenient way to get an allocated AudioBufferList to use. There is also a utility function, `freeBufferList:`, to use to free (or release) the AudioBufferList when you are done using that audio data.
 
 **Note: You have to free the AudioBufferList, even in ARC.**
 ```objectivec
