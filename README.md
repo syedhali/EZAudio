@@ -41,7 +41,7 @@ An OpenGL-based, GPU-accelerated audio waveform plot capable of visualizing any 
 
 ##Examples & Docs
 
-Within this repo you'll find the examples for iOS and OSX to get you up to speed using each component and plugging them into each other. With just a few lines of code you'll be recording from the microphone, generating audio waveforms, and playing audio files like a boss. See the full Getting Started guide for an interactive look into each of components.
+Within this repo you'll find the examples for iOS and OSX to get you up to speed using each component and plugging them into each other. With just a few lines of code you'll be recording from the microphone, generating audio waveforms, and playing audio files like a boss. See the full Getting Started guide for an interactive look into each of components. Documentation will be hosted very soon on Cocoadocs!
 
 **_EZAudioCoreGraphicsWaveformExample_** 
 
