@@ -96,9 +96,9 @@ When a read occurs the EZAudioFileDelegate receives two events.
 An event notifying the delegate of the read audio data as float arrays:
 ```objectivec
 // The EZAudioFile method `readFrames:audioBufferList:bufferSize:eof:` triggers an event notifying the delegate of the read audio data as float arrays
--(void) audioFile:(EZAudioFile *)audioFile
-        readAudio:(float **)buffer
-withBufferSize:(UInt32)bufferSize
+-(void)     audioFile:(EZAudioFile *)audioFile
+            readAudio:(float **)buffer
+       withBufferSize:(UInt32)bufferSize
  withNumberOfChannels:(UInt32)numberOfChannels {
   // The audio data from the read as a float buffer. You can feed this into an audio plot!
   dispatch_async(dispatch_get_main_queue(), ^{
@@ -200,10 +200,10 @@ or the AudioBufferList representation:
     - Playback via the EZOutput
     
  */
--(void)   microphone:(EZMicrophone *)microphone
-       hasBufferList:(AudioBufferList *)bufferList
-withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
+-(void)    microphone:(EZMicrophone *)microphone
+        hasBufferList:(AudioBufferList *)bufferList
+       withBufferSize:(UInt32)bufferSize
+ withNumberOfChannels:(UInt32)numberOfChannels {
     // Getting audio data as an AudioBufferList that can be directly fed into the EZRecorder or EZOutput. Say whattt...
 }
 ```
@@ -230,12 +230,12 @@ self.microphone.microphoneOn = YES;
 Provides flexible playback to the default output device by asking the `EZOutputDataSource` for audio data to play. Doesn't care where the buffers come from (microphone, audio file, streaming audio, etc). The `EZOutputDataSource` has three functions that can provide audio data for the output callback. You should implement only **ONE** of these functions:
 ```objectivec
 // Full override of the audio callback 
--(void)          output:(EZOutput*)output
-callbackWithActionFlags:(AudioUnitRenderActionFlags*)ioActionFlags
-            inTimeStamp:(const AudioTimeStamp*)inTimeStamp
-            inBusNumber:(UInt32)inBusNumber
-inNumberFrames:(UInt32)inNumberFrames
-                 ioData:(AudioBufferList*)ioData;
+-(void)           output:(EZOutput*)output
+ callbackWithActionFlags:(AudioUnitRenderActionFlags*)ioActionFlags
+             inTimeStamp:(const AudioTimeStamp*)inTimeStamp
+             inBusNumber:(UInt32)inBusNumber
+          inNumberFrames:(UInt32)inNumberFrames
+                  ioData:(AudioBufferList*)ioData;
                  
 // Provides the audio callback with a circular buffer holding the audio data
 -(TPCircularBuffer*)outputShouldUseCircularBuffer:(EZOutput *)output;
@@ -315,10 +315,10 @@ Another method is to provide a circular buffer via Michael Tyson's (who, btw is 
 TPCircularBuffer circularBuffer;
 ...
 // Using an EZMicrophone, append the AudioBufferList from the microphone callback to the global circular buffer
--(void)microphone:(EZMicrophone *)microphone
-    hasBufferList:(AudioBufferList *)bufferList
-withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
+-(void)    microphone:(EZMicrophone *)microphone
+        hasBufferList:(AudioBufferList *)bufferList
+       withBufferSize:(UInt32)bufferSize
+ withNumberOfChannels:(UInt32)numberOfChannels {
   /**
    Append the audio data to a circular buffer
    */
@@ -375,10 +375,10 @@ self.recorder = [EZRecorder recorderWithDestinationURL:[NSURL fileURLWithPath:@"
 Once you've initialized your `EZRecorder` you can append data by passing in an AudioBufferList and its buffer size like so:
 ```objectivec
 // Append the microphone data coming as a AudioBufferList with the specified buffer size to the recorder
--(void)microphone:(EZMicrophone *)microphone
-    hasBufferList:(AudioBufferList *)bufferList
-withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
+-(void)    microphone:(EZMicrophone *)microphone
+        hasBufferList:(AudioBufferList *)bufferList
+       withBufferSize:(UInt32)bufferSize
+ withNumberOfChannels:(UInt32)numberOfChannels {
   // Getting audio data as a buffer list that can be directly fed into the EZRecorder. This is happening on the audio thread - any UI updating needs a GCD main queue block.
   if( self.isRecording ){
     [self.recorder appendDataFromBufferList:bufferList
@@ -441,7 +441,7 @@ All plots have only one update function, `updateBuffer:withBufferSize:`, which e
 -(void)    microphone:(EZMicrophone *)microphone
      hasAudioReceived:(float **)buffer
        withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
+ withNumberOfChannels:(UInt32)numberOfChannels {
   /** 
    Update the audio plot using the float array provided by the microphone:
      buffer[0] = left channel
@@ -504,7 +504,7 @@ All plots have only one update function, `updateBuffer:withBufferSize:`, which e
 -(void)    microphone:(EZMicrophone *)microphone
      hasAudioReceived:(float **)buffer
        withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
+ withNumberOfChannels:(UInt32)numberOfChannels {
   /** 
    Update the audio plot using the float array provided by the microphone:
      buffer[0] = left channel
