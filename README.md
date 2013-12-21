@@ -390,61 +390,53 @@ withNumberOfChannels:(UInt32)numberOfChannels {
 ###Interface Components
 EZAudio currently offers two drop in audio waveform components that help simplify the process of visualizing audio.
 
-EZAudioPlot
+###EZAudioPlot
 Provides an audio waveform plot that uses CoreGraphics to perform the drawing. On iOS this is a subclass of UIView while on OSX this is a subclass of NSView. Best used on OSX as the drawing falls on the CPU and needs to redisplay after every audio data update, but useful in iOS apps for displaying full, static waveforms.
 
-Relevant Example Projects
+*Relevant Example Projects*
+- EZAudioCoreGraphicsWaveformExample (iOS)
+- EZAudioCoreGraphicsWaveformExample (OSX)
 
-EZAudioCoreGraphicsWaveformExample (iOS)
-EZAudioCoreGraphicsWaveformExample (OSX)
-Creating An Audio Plot
+####Creating An Audio Plot
 
-You can create an audio plot in the interface builder by dragging in a UIView on iOS or an NSView on OSX onto your content area. Then change the custom class of the UIView/NSView to EZAudioPlot.
-
+You can create an audio plot in the interface builder by dragging in a UIView on iOS or an NSView on OSX onto your content area. Then change the custom class of the UIView/NSView to `EZAudioPlot`.
+See full Getting Started page for how to: http://syedharisali.com/projects/EZAudio/getting-started
 
 Alternatively, you can could create the audio plot programmatically
 
+```objectivec
 // Programmatically create an audio plot
 EZAudioPlot *audioPlot = [[EZAudioPlot alloc] initWithFrame:self.view.frame];
 [self.view addSubview:audioPlot];
-Customizing The Audio Plot
+```
+
+####Customizing The Audio Plot
 
 All plots offer the ability to change the background color, waveform color, plot type (buffer or rolling), toggle between filled and stroked, and toggle between mirrored and unmirrored (about the x-axis). For iOS colors are of the type UIColor while on OSX colors are of the type NSColor.
 
+```objectivec
 // Background color (use UIColor for iOS)
 audioPlot.backgroundColor = [NSColor colorWithCalibratedRed:0.816 
                                                       green:0.349 
                                                        blue:0.255 
                                                       alpha:1];
-// Waveform color (use UIColor for iOS)oReceived:(float **)buffer
-       withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
-  /** 
-   Update the audio plot using the float array provided by the microphone:
-     buffer[0] = left channel
-     buffer[1] = right channel
-   Note: Audio updates happen asynchronously so we need to make sure
-         sure to update the plot on the main thread
-   */
-  dispatch_async(dispatch_get_main_queue(),^{
-    [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
-  });
-}
-
-audioPlot.color           = [NSColor colorWithCalibratedRed:1.000 
-                                                      green:1.000 
-                                                       blue:1.000
-                                                      alpha:1];
+// Waveform color (use UIColor for iOS)
+audioPlot.color = [NSColor colorWithCalibratedRed:1.000 
+                                            green:1.000 
+                                             blue:1.000
+                                            alpha:1];
 // Plot type
-audioPlot.plotType        = EZPlotTypeBuffer;
+audioPlot.plotType     = EZPlotTypeBuffer;
 // Fill
-audioPlot.shouldFill      = YES;
+audioPlot.shouldFill   = YES;
 // Mirror
-audioPlot.shouldMirror    = YES;
-Updating The Audio Plot
+audioPlot.shouldMirror = YES;
+```
 
-All plots have only one update function, updateBuffer:withBufferSize:, which expects a float array and its length.
+####Updating The Audio Plot
 
+All plots have only one update function, `updateBuffer:withBufferSize:`, which expects a float array and its length.
+```objectivec
 // The microphone component provides audio data to its delegate as an array of float buffer arrays.
 -(void)    microphone:(EZMicrophone *)microphone
      hasAudioReceived:(float **)buffer
@@ -461,47 +453,53 @@ withNumberOfChannels:(UInt32)numberOfChannels {
     [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
   });
 }
-EZAudioPlotGL
+```
+
+###EZAudioPlotGL
 Provides an audio waveform plot that uses OpenGL to perform the drawing. The API this class are exactly the same as those for the EZAudioPlot above. On iOS this is a subclass of the EZPlot and uses an embedded GLKViewController to perform the OpenGL drawing while on OSX this is a subclass of the NSOpenGLView. In most cases this is the plot you want to use, it's GPU-accelerated, has a low memory footprint, and performs amazingly on all devices.
 
-Relevant Example Projects
+*Relevant Example Projects*
+- EZAudioOpenGLWaveformExample (iOS)
+- EZAudioOpenGLWaveformExample (OSX)
 
-EZAudioOpenGLWaveformExample (iOS)
-EZAudioOpenGLWaveformExample (OSX)
-Creating An OpenGL Audio Plot
+####Creating An OpenGL Audio Plot
 
 You can create an audio plot in the interface builder by dragging in a UIView on iOS or an NSOpenGLView on OSX onto your content area. Then change the custom class of the UIView/NSView to EZAudioPlot.
+See full Getting Started page for how to: http://syedharisali.com/projects/EZAudio/getting-started
 
-
-Alternatively, you can could create the audio plot programmatically
-
+Alternatively, you can could create the `EZAudioPlotGL` programmatically
+```objectivec
 // Programmatically create an audio plot
 EZAudioPlotGL *audioPlotGL = [[EZAudioPlotGL alloc] initWithFrame:self.view.frame];
 [self.view addSubview:audioPlotGL];
-Customizing The OpenGL Audio Plot
+```
+
+####Customizing The OpenGL Audio Plot
 
 All plots offer the ability to change the background color, waveform color, plot type (buffer or rolling), toggle between filled and stroked, and toggle between mirrored and unmirrored (about the x-axis). For iOS colors are of the type UIColor while on OSX colors are of the type NSColor.
-
+```objectivec
 // Background color (use UIColor for iOS)
 audioPlotGL.backgroundColor = [NSColor colorWithCalibratedRed:0.816 
                                                         green:0.349 
                                                          blue:0.255 
                                                         alpha:1];
 // Waveform color (use UIColor for iOS)
-audioPlotGL.color           = [NSColor colorWithCalibratedRed:1.000 
-                                                        green:1.000 
-                                                         blue:1.000
-                                                        alpha:1];
+audioPlotGL.color = [NSColor colorWithCalibratedRed:1.000 
+                                              green:1.000 
+                                               blue:1.000
+                                              alpha:1];
 // Plot type
-audioPlotGL.plotType        = EZPlotTypeBuffer;
+audioPlotGL.plotType     = EZPlotTypeBuffer;
 // Fill
-audioPlotGL.shouldFill      = YES;
+audioPlotGL.shouldFill   = YES;
 // Mirror
-audioPlotGL.shouldMirror    = YES;
-Updating The OpenGL Audio Plot
+audioPlotGL.shouldMirror = YES;
+```
 
-All plots have only one update function, updateBuffer:withBufferSize:, which expects a float array and its length.
+####Updating The OpenGL Audio Plot
 
+All plots have only one update function, `updateBuffer:withBufferSize:`, which expects a float array and its length.
+```objectivec
 // The microphone component provides audio data to its delegate as an array of float buffer arrays.
 -(void)    microphone:(EZMicrophone *)microphone
      hasAudioReceived:(float **)buffer
@@ -518,3 +516,4 @@ withNumberOfChannels:(UInt32)numberOfChannels {
     [self.audioPlotGL updateBuffer:buffer[0] withBufferSize:bufferSize];
   });
 }
+```
