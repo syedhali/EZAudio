@@ -9,7 +9,7 @@ http://syedharisali.com/projects/EZAudio/getting-started
 ##Features
 **Awesome Components**
 
-I've designed six core components to allow you to immediately get your hands dirty with audio for recording, playback, and visualizations (which typically need a float array of the audio data). These components simply plug into each other and build on top of the high-performance, low-latency AudioUnits API and give you an easy to use API written in Objective-C instead of pure C.
+I've designed six core components to allow you to immediately get your hands dirty with audio data for recording, playback, and visualizations (which typically just need a float array representing the audio data). These components simply plug into each other and build on top of the high-performance, low-latency AudioUnits API and give you an easy to use API written in Objective-C instead of pure C.
 - `EZMicrophone` - A microphone class that provides audio data from the microphone input with one line of code.
 - `EZRecorder` - A recorder class that provides a quick and easy way to write audio files from any datasource
 - `EZAudioFile` - An audio file class that reads/seeks through audio files and provides useful delegate callbacks. 
