@@ -581,3 +581,8 @@ All plots have only one update function, `updateBuffer:withBufferSize:`, which e
   });
 }
 ```
+
+##Contact
+Syed Haris Ali
+www.syedharisali.com
+syedhali07[at]gmail.com
