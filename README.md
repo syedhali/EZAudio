@@ -3,6 +3,9 @@
 #EZAudio
 A simple, intuitive audio framework for iOS and OSX.
 
+*The Official EZAudio Page:*
+http://syedharisali.com/projects/EZAudio/getting-started
+
 ##Features
 **Awesome Components**
 
@@ -18,16 +21,33 @@ I've designed six core components to allow you to immediately get your hands dir
 
 `EZAudio` was designed to work transparently across all iOS and OSX devices. This means one universal API whether you're building for Mac or iOS. For instance, under the hood an `EZAudioPlot` knows that it will subclass a UIView for iOS or an NSView for OSX and the `EZMicrophone` knows to build on top of the RemoteIO AudioUnit for iOS, but defaults to the system defaults for input and output for OSX.
 
-**Examples & Docs**
+##Examples & Docs
 
 Within this repo you'll find plenty of examples to get you up to speed using each component and plugging them into each other. With just a few lines of code you'll be recording from the microphone, generating audio waveforms, and playing audio files like a boss. See the full Getting Started guide for an interactive look into each of components.
 
-- `EZAudioCoreGraphicsWaveformExample` - Shows how to use the EZMicrophone and EZAudioPlot to visualize the audio data from the microphone in real-time. The waveform can be displayed as a buffer or a rolling waveform plot (traditional waveform look). 
-- `EZAudioOpenGLWaveformExample` - Shows how to use the EZMicrophone and EZAudioPlotGL to visualize the audio data from the microphone in real-time. The drawing is using OpenGL so it is much faster and like the first example can display a buffer or rolling waveform.
-- `EZAudioPlayFileExample` - Shows how to use the EZAudioFile, EZAudioPlotGL, and EZOutput to play and seek through an audio file while displaying its waveform as a buffer or a rolling waveform plot.
-- `EZAudioRecordWaveformExample` - Shows how to use the EZMicrophone, EZRecorder, and EZAudioPlotGL to record the audio from the microphone input to a file while displaying the audio waveform of the incoming data. You can then playback the newly recorded audio file using AVFoundation and keep adding more audio data to the tail of the file.
-- `EZAudioWaveformFromFileExample` - Shows how to use the EZAudioFile and EZAudioPlot to display the audio waveform an entire audio file. 
-- `EZAudioPassThroughExample` - Shows how to use the EZMicrophone, EZOutput, and the EZAudioPlotGL to pass the microphone input to the output for playback while displaying the audio waveform (as a buffer or rolling plot) in real-time. 
+**_EZAudioCoreGraphicsWaveformExample_** 
+
+Shows how to use the `EZMicrophone` and `EZAudioPlot` to visualize the audio data from the microphone in real-time. The waveform can be displayed as a buffer or a rolling waveform plot (traditional waveform look). 
+
+**_EZAudioOpenGLWaveformExample_**
+
+Shows how to use the `EZMicrophone` and `EZAudioPlotGL` to visualize the audio data from the microphone in real-time. The drawing is using OpenGL so it is much faster and like the first example can display a buffer or rolling waveform.
+
+**_EZAudioPlayFileExample_**
+
+Shows how to use the `EZAudioFile`, `EZOutput`, and `EZAudioPlotGL` to playback, pause, and seek through an audio file while displaying its waveform as a buffer or a rolling waveform plot.
+
+**_EZAudioRecordWaveformExample_**
+
+Shows how to use the `EZMicrophone`, `EZRecorder`, and `EZAudioPlotGL` to record the audio from the microphone input to a file while displaying the audio waveform of the incoming data. You can then playback the newly recorded audio file using AVFoundation and keep adding more audio data to the tail of the file.
+
+**_EZAudioWaveformFromFileExample_**
+
+Shows how to use the `EZAudioFile` and `EZAudioPlot` to display the audio waveform an entire audio file. 
+
+**_EZAudioPassThroughExample_**
+
+Shows how to use the `EZMicrophone`, `EZOutput`, and the `EZAudioPlotGL` to pass the microphone input to the output for playback while displaying the audio waveform (as a buffer or rolling plot) in real-time. 
 
 ##Getting Started
 *To see the full project page, interactive Getting Started guide, and Documentation go here:*
