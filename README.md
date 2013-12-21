@@ -582,7 +582,10 @@ All plots have only one update function, `updateBuffer:withBufferSize:`, which e
 }
 ```
 
-##Contact
+##License
+EZAudio is available under the MIT license. See the LICENSE file for more info.
+
+##Contact & Contributers
 Syed Haris Ali<br>
 www.syedharisali.com<br>
 syedhali07[at]gmail.com
