@@ -149,7 +149,7 @@ withNumberOfChannels:(UInt32)numberOfChannels {
 
 #pragma mark - EZOutputDataSource
 -(TPCircularBuffer *)outputShouldUseCircularBuffer:(EZOutput *)output {
-  return &_circularBuffer;
+  return [EZMicrophone sharedMicrophone].microphoneOn ? &_circularBuffer : nil;
 }
 
 #pragma mark - Cleanup

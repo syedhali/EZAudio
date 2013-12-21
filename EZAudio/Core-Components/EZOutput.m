@@ -42,6 +42,7 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
                                      UInt32                      inBusNumber,
                                      UInt32                      inNumberFrames,
                                      AudioBufferList             *ioData){
+  
   EZOutput *output = (__bridge EZOutput*)inRefCon;
   // Manual override
   if( [output.outputDataSource respondsToSelector:@selector(output:callbackWithActionFlags:inTimeStamp:inBusNumber:inNumberFrames:ioData:)] ){
@@ -55,7 +56,15 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
   else if( [output.outputDataSource respondsToSelector:@selector(outputShouldUseCircularBuffer:)] ){
     
     TPCircularBuffer *circularBuffer = [output.outputDataSource outputShouldUseCircularBuffer:output];
-    if( !circularBuffer ) return noErr;
+    if( !circularBuffer ){
+      Float32 *left  = (Float32*)ioData->mBuffers[0].mData;
+      Float32 *right = (Float32*)ioData->mBuffers[1].mData;
+      for(int i = 0; i < inNumberFrames; i++ ){
+        left[  i ] = 0.0f;
+        right[ i ] = 0.0f;
+      }
+      return noErr;
+    };
     
     /**
      Thank you Michael Tyson (A Tasty Pixel) for writing the TPCircularBuffer, you are amazing!
@@ -83,7 +92,15 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
     AudioBufferList *bufferList = [output.outputDataSource output:output
                                         needsBufferListWithFrames:inNumberFrames
                                                    withBufferSize:&bufferSize];
-    if( !bufferList ) return noErr;
+    if( !bufferList ){
+      Float32 *left  = (Float32*)ioData->mBuffers[0].mData;
+      Float32 *right = (Float32*)ioData->mBuffers[1].mData;
+      for(int i = 0; i < inNumberFrames; i++ ){
+        left[  i ] = 0.0f;
+        right[ i ] = 0.0f;
+      }
+      return noErr;
+    };
     
     // Interleaved
     if( !(ioData->mNumberBuffers == 1) ){
