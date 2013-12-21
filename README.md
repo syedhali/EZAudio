@@ -583,6 +583,6 @@ All plots have only one update function, `updateBuffer:withBufferSize:`, which e
 ```
 
 ##Contact
-Syed Haris Ali
-www.syedharisali.com
+Syed Haris Ali<br>
+www.syedharisali.com<br>
 syedhali07[at]gmail.com
