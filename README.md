@@ -10,20 +10,20 @@ http://syedharisali.com/projects/EZAudio/getting-started
 To begin using EZAudio you must first make sure you have the proper build requirements and frameworks. Below you'll find explanations of each component and code snippets to show how to use each to perform common tasks like getting microphone data, updating audio waveform plots, reading/seeking through audio files, and performing playback.
 
 ###Build Requirements
-iOS
+**iOS**
 - 6.0+
 
 
-OSX
+**OSX**
 - 10.8+
 
 ###Frameworks
-iOS
+**iOS**
 - AudioToolbox
 - GLKit
 
 
-OSX
+**OSX**
 - AudioToolbox
 - AudioUnit
 - CoreAudio
@@ -35,19 +35,19 @@ OSX
 See full Getting Started guide: http://syedharisali.com/projects/EZAudio/getting-started
 
 ##Core Components
-EZAudio currently offers four components that encompass a wide range of audio functionality. In addition to the functional aspects of these components such as pulling audio data, reading/writing from files, and performing playback they also take special care to hook into the interface components to allow developers to display visual feedback (see the Interface Components below).
+`EZAudio` currently offers four components that encompass a wide range of audio functionality. In addition to the functional aspects of these components such as pulling audio data, reading/writing from files, and performing playback they also take special care to hook into the interface components to allow developers to display visual feedback (see the Interface Components below).
 
 ###EZAudioFile
 Provides simple read/seek operations, pulls waveform amplitude data, and provides delegate callbacks to listen for any action occuring on the audio file.
 
-*Relevant Example Projects*
+**_Relevant Example Projects_**
 - EZAudioPlayFileExample (iOS)
 - EZAudioPlayFileExample (OSX)
 - EZAudioWaveformFromFileExample (iOS)
 - EZAudioWaveformFromFileExample (OSX)
 
 ####Opening An Audio File
-To open an audio file create a new instance of the EZAudioFile class.
+To open an audio file create a new instance of the `EZAudioFile` class.
 ```objectivec
 // Declare the EZAudioFile as a strong property
 @property (nonatomic,strong) EZAudioFile *audioFile;
@@ -91,7 +91,7 @@ BOOL            eof;        // Read function will populate this value
 [EZAudio freeBufferList:bufferList];
 ```
 
-When a read occurs the EZAudioFileDelegate receives two events.
+When a read occurs the `EZAudioFileDelegate` receives two events.
 
 An event notifying the delegate of the read audio data as float arrays:
 ```objectivec
@@ -107,7 +107,7 @@ An event notifying the delegate of the read audio data as float arrays:
   });
 }
 ```
-and an event notifying the delegate of the new frame position within the audio file:
+and an event notifying the delegate of the new frame position within the `EZAudioFile`:
 ```objectivec
 // The EZAudioFile method `readFrames:audioBufferList:bufferSize:eof:` triggers an event notifying the delegate of the new frame position within the file.
 -(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition {
@@ -138,7 +138,7 @@ When a seek occurs the `EZAudioFileDelegate` receives the seek event:
 ###EZMicrophone
 Provides access to the default device microphone in one line of code and provides delegate callbacks to receive the audio data as an AudioBufferList and float arrays.
 
-*Relevant Example Projects*
+**_Relevant Example Projects_**
 - EZAudioCoreGraphicsWaveformExample (iOS)
 - EZAudioCoreGraphicsWaveformExample (OSX)
 - EZAudioOpenGLWaveformExample (iOS)
@@ -148,7 +148,7 @@ Provides access to the default device microphone in one line of code and provide
 
 ####Creating A Microphone
 
-Create an EZMicrophone instance by declaring a property and initializing it like so:
+Create an `EZMicrophone` instance by declaring a property and initializing it like so:
 
 ```objectivec
 // Declare the EZMicrophone as a strong property
@@ -159,7 +159,7 @@ Create an EZMicrophone instance by declaring a property and initializing it like
 // Initialize the microphone instance and assign it a delegate to receive the audio data callbacks
 self.microphone = [EZMicrophone microphoneWithDelegate:self];
 ```
-Alternatively, you could also use the shared microphone instance and just assign it a delegate.
+Alternatively, you could also use the shared `EZMicrophone` instance and just assign its `EZMicrophoneDelegate`.
 ```objectivec
 // Assign a delegate to the shared instance of the microphone to receive the audio data callbacks
 [EZMicrophone sharedMicrophone].microphoneDelegate = self;
@@ -173,7 +173,7 @@ To tell the microphone to start fetching audio use the `startFetchingAudio` func
 // Starts fetching audio from the default device microphone and sends data to EZMicrophoneDelegate
 [self.microphone startFetchingAudio];
 ```
-Once the microphone has started it will send the `EZMicrophoneDelegate` the audio back in a few ways.
+Once the `EZMicrophone` has started it will send the `EZMicrophoneDelegate` the audio back in a few ways.
 An array of float arrays:
 ```objectivec
 /**
@@ -246,7 +246,7 @@ Provides flexible playback to the default output device by asking the `EZOutputD
              withBufferSize:(UInt32*)bufferSize;
 ```
 
-*Relevant Example Projects*
+**_Relevant Example Projects_**
 - EZAudioPlayFileExample (iOS)
 - EZAudioPlayFileExample (OSX)
 - EZAudioPassThroughExample (iOS)
@@ -254,7 +254,7 @@ Provides flexible playback to the default output device by asking the `EZOutputD
 
 ####Creating An Output
 
-Create an ouput by declaring a property and initializing it like so:
+Create an `EZOutput` by declaring a property and initializing it like so:
 
 ```objectivec
 // Declare the EZOutput as a strong property
@@ -262,10 +262,10 @@ Create an ouput by declaring a property and initializing it like so:
 
 ...
 
-// Initialize the output instance and assign it a delegate to provide the output audio data
+// Initialize the EZOutput instance and assign it a delegate to provide the output audio data
 self.output = [EZOutput outputWithDataSource:self];
 ```
-Alternatively, you could also use the shared output instance and just assign it a delegate. This is the preferred way to use the output (usually just have one per app).
+Alternatively, you could also use the shared output instance and just assign it an `EZOutputDataSource`. This is the preferred way to use the `EZOutput` (usually just have one per app).
 ```objectivec
 // Assign a delegate to the shared instance of the output to provide the output audio data
 [EZOutput sharedOutput].outputDataSource = self;
@@ -339,7 +339,7 @@ And the last method is to completely override the output callback method and pop
  callbackWithActionFlags:(AudioUnitRenderActionFlags *)ioActionFlags
              inTimeStamp:(const AudioTimeStamp *)inTimeStamp
              inBusNumber:(UInt32)inBusNumber
- inNumberFrames:(UInt32)inNumberFrames
+          inNumberFrames:(UInt32)inNumberFrames
                   ioData:(AudioBufferList *)ioData {
  // Fill the ioData with your audio data from anywhere
 }
@@ -353,7 +353,7 @@ Provides a way to record any audio source to an audio file. This hooks into the 
 
 ####Creating A Recorder
 
-To create an `EZRecorder` you must start with an AudioStreamBasicDescription, which is just a CoreAudio structure representing the audio format of a file. The EZMicrophone and EZAudioFile both provide the AudioStreamBasicDescription as properties (for the `EZAudioFile` use the clientFormat property) that you can use when initializing the recorder.
+To create an `EZRecorder` you must start with an AudioStreamBasicDescription, which is just a CoreAudio structure representing the audio format of a file. The `EZMicrophone` and `EZAudioFile` both provide the AudioStreamBasicDescription as properties (for the `EZAudioFile` use the clientFormat property) that you can use when initializing the `EZRecorder`.
 
 ```objectivec
 // Declare the EZRecorder as a strong property
@@ -388,7 +388,7 @@ Once you've initialized your `EZRecorder` you can append data by passing in an A
 ```
 
 ###Interface Components
-EZAudio currently offers two drop in audio waveform components that help simplify the process of visualizing audio.
+`EZAudio` currently offers two drop in audio waveform components that help simplify the process of visualizing audio.
 
 ###EZAudioPlot
 Provides an audio waveform plot that uses CoreGraphics to perform the drawing. On iOS this is a subclass of UIView while on OSX this is a subclass of NSView. Best used on OSX as the drawing falls on the CPU and needs to redisplay after every audio data update, but useful in iOS apps for displaying full, static waveforms.
@@ -464,7 +464,7 @@ Provides an audio waveform plot that uses OpenGL to perform the drawing. The API
 
 ####Creating An OpenGL Audio Plot
 
-You can create an audio plot in the interface builder by dragging in a UIView on iOS or an NSOpenGLView on OSX onto your content area. Then change the custom class of the UIView/NSView to EZAudioPlot.
+You can create an audio plot in the interface builder by dragging in a UIView on iOS or an NSOpenGLView on OSX onto your content area. Then change the custom class of the UIView/NSView to `EZAudioPlot`.
 See full Getting Started page for how to: http://syedharisali.com/projects/EZAudio/getting-started
 
 Alternatively, you can could create the `EZAudioPlotGL` programmatically
