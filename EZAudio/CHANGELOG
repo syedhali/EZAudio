@@ -25,3 +25,6 @@ THE SOFTWARE.
 ==========================================================================================
 
 0.0.1
+Initial release. 
+Components include: EZAudioFile, EZAudioPlot, EZAudioPlotGL, EZMicrophone, EZOutput, and EZRecorder. 
+Provided 6 example projects: CoreGraphicsWaveform, OpenGLWaveform, WaveformFromFile, PassThrough, Record, and PlayFile.
