@@ -26,7 +26,8 @@
 #import "PlayFileViewController.h"
 
 @interface PlayFileViewController ()
-
+@property (nonatomic,weak) IBOutlet NSSegmentedControl *plotSegmentControl;
+@property (nonatomic,weak) IBOutlet NSButton *playButton;
 @end
 
 @implementation PlayFileViewController
@@ -119,6 +120,10 @@
     if( self.eof ){
       [self.audioFile seekToFrame:0];
     }
+    if( self.audioPlot.plotType   == EZPlotTypeBuffer &&
+        self.audioPlot.shouldFill == YES              ){
+      self.audioPlot.plotType = EZPlotTypeRolling;
+    }
     [EZOutput sharedOutput].outputDataSource = self;
     [[EZOutput sharedOutput] startPlayback];
   }
@@ -167,12 +172,16 @@
   self.filePathLabel.stringValue    = filePathURL.lastPathComponent;
   self.framePositionSlider.minValue = 0.0f;
   self.framePositionSlider.maxValue = (double)self.audioFile.totalFrames;
+  self.playButton.state             = NSOffState;
+  self.plotSegmentControl.selectedSegment = 1;
 
   // Plot the whole waveform
   self.audioPlot.plotType        = EZPlotTypeBuffer;
   self.audioPlot.shouldFill      = YES;
   self.audioPlot.shouldMirror    = YES;
   [self.audioFile getWaveformDataWithCompletionBlock:^(float *waveformData, UInt32 length) {
+    self.audioPlot.shouldFill      = YES;
+    self.audioPlot.shouldMirror    = YES;
     [self.audioPlot updateBuffer:waveformData withBufferSize:length];
   }];
   

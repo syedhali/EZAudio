@@ -295,10 +295,8 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
 
 -(void)stopPlayback {
   if( _isPlaying ){
-    NSLog(@"Attempting to stop output unit");
     [EZAudio checkResult:AudioOutputUnitStop(_outputUnit)
                operation:"Failed to stop output unit"];
-    NSLog(@"Finished execution of output unit stop");
     _isPlaying = NO;
   }
 }
