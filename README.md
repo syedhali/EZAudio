@@ -41,7 +41,6 @@ EZAudio currently offers four components that encompass a wide range of audio fu
 Provides simple read/seek operations, pulls waveform amplitude data, and provides delegate callbacks to listen for any action occuring on the audio file.
 
 *Relevant Example Projects*
-
 - EZAudioPlayFileExample (iOS)
 - EZAudioPlayFileExample (OSX)
 - EZAudioWaveformFromFileExample (iOS)
@@ -92,8 +91,10 @@ BOOL            eof;        // Read function will populate this value
 [EZAudio freeBufferList:bufferList];
 ```
 
-When a read occurs the EZAudioFileDelegate receives two events:
+When a read occurs the EZAudioFileDelegate receives two events.
 
+An event notifying the delegate of the read audio data as float arrays:
+```objectivec
 // The EZAudioFile method `readFrames:audioBufferList:bufferSize:eof:` triggers an event notifying the delegate of the read audio data as float arrays
 -(void) audioFile:(EZAudioFile *)audioFile
         readAudio:(float **)buffer
@@ -105,43 +106,51 @@ withBufferSize:(UInt32)bufferSize
     [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
   });
 }
+```
+and an event notifying the delegate of the new frame position within the audio file:
+```objectivec
 // The EZAudioFile method `readFrames:audioBufferList:bufferSize:eof:` triggers an event notifying the delegate of the new frame position within the file.
 -(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition {
   dispatch_async(dispatch_get_main_queue(), ^{
     // Move that slider to this new position!
   });
 }
-Seeking Through An Audio File
+```
 
-You can seek very easily through an audio file using the EZAudioFile's seekToFrame: method. The EZAudioFile provides a totalFrames method to provide you the total amount of frames in an audio file so you can calculate a proper offset.
+####Seeking Through An Audio File
 
+You can seek very easily through an audio file using the `EZAudioFile`'s seekToFrame: method. The `EZAudioFile` provides a `totalFrames` method to provide you the total amount of frames in an audio file so you can calculate a proper offset.
+```objectivec
 // Get the total number of frames for the audio file
 SInt64 totalFrames = [self.audioFile totalFrames];
 // Seeks halfway through the audio file
 [self.audioFile seekToFrame:(totalFrames/2)];
-When a seek occurs the EZAudioFileDelegate receives the seek event:
-
+```
+When a seek occurs the `EZAudioFileDelegate` receives the seek event:
+```objectivec
 // The EZAudioFile method `seekToFrame:` triggers an event notifying the delegate of the new frame position within the file.
 -(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition {
   dispatch_async(dispatch_get_main_queue(), ^{
     // Move that slider to this new position!
   });
 }
-EZMicrophone
+```
+###EZMicrophone
 Provides access to the default device microphone in one line of code and provides delegate callbacks to receive the audio data as an AudioBufferList and float arrays.
 
-Relevant Example Projects
+*Relevant Example Projects*
+- EZAudioCoreGraphicsWaveformExample (iOS)
+- EZAudioCoreGraphicsWaveformExample (OSX)
+- EZAudioOpenGLWaveformExample (iOS)
+- EZAudioOpenGLWaveformExample (OSX)
+- EZAudioRecordExample (iOS)
+- EZAudioRecordExample (OSX)
 
-EZAudioCoreGraphicsWaveformExample (iOS)
-EZAudioCoreGraphicsWaveformExample (OSX)
-EZAudioOpenGLWaveformExample (iOS)
-EZAudioOpenGLWaveformExample (OSX)
-EZAudioRecordExample (iOS)
-EZAudioRecordExample (OSX)
-Creating A Microphone
+####Creating A Microphone
 
-Create a microphone by declaring a property and initializing it like so:
+Create an EZMicrophone instance by declaring a property and initializing it like so:
 
+```objectivec
 // Declare the EZMicrophone as a strong property
 @property (nonatomic,strong) EZMicrophone *microphone;
 
@@ -149,20 +158,24 @@ Create a microphone by declaring a property and initializing it like so:
 
 // Initialize the microphone instance and assign it a delegate to receive the audio data callbacks
 self.microphone = [EZMicrophone microphoneWithDelegate:self];
+```
 Alternatively, you could also use the shared microphone instance and just assign it a delegate.
-
+```objectivec
 // Assign a delegate to the shared instance of the microphone to receive the audio data callbacks
 [EZMicrophone sharedMicrophone].microphoneDelegate = self;
-Getting Microphone Data
+```
 
-To tell the microphone to start fetching audio use the startFetchingAudio function.
+####Getting Microphone Data
 
+To tell the microphone to start fetching audio use the `startFetchingAudio` function.
+
+```objectivec
 // Starts fetching audio from the default device microphone and sends data to EZMicrophoneDelegate
 [self.microphone startFetchingAudio];
-Once the microphone has started it will send the EZMicrophoneDelegate the audio back in a few ways.
-
+```
+Once the microphone has started it will send the `EZMicrophoneDelegate` the audio back in a few ways.
 An array of float arrays:
-
+```objectivec
 /**
  The microphone data represented as float arrays useful for:
     - Creating real-time waveforms using EZAudioPlot or EZAudioPlotGL
@@ -178,8 +191,9 @@ withNumberOfChannels:(UInt32)numberOfChannels {
     [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
   });
 }
+```
 or the AudioBufferList representation:
-
+```objectivec
 /**
  The microphone data represented as CoreAudio's AudioBufferList useful for:
     - Appending data to an audio file via the EZRecorder
@@ -192,25 +206,29 @@ withBufferSize:(UInt32)bufferSize
 withNumberOfChannels:(UInt32)numberOfChannels {
     // Getting audio data as an AudioBufferList that can be directly fed into the EZRecorder or EZOutput. Say whattt...
 }
-Pausing/Resuming The Microphone
+```
+####Pausing/Resuming The Microphone
 
 Pause or resume fetching audio at any time like so:
-
+```objectivec
 // Stop fetching audio
 [self.microphone stopFetchingAudio];
 
 // Resume fetching audio
 [self.microphone startFetchingAudio];
-Alternatively, you could also toggle the microphoneOn property (safe to use with Cocoa Bindings)
-
+```
+Alternatively, you could also toggle the `microphoneOn` property (safe to use with Cocoa Bindings)
+```objectivec
 // Stop fetching audio
 self.microphone.microphoneOn = NO;
 
 // Start fetching audio
 self.microphone.microphoneOn = YES;
-EZOutput
-Provides flexible playback to the default output device by asking the EZOutputDataSource for audio data to play. Doesn't care where the buffers come from (microphone, audio file, streaming audio, etc). The EZOutputDataSource has three functions that can provide audio data for the output callback. You should implement only ONE of these functions:
+```
 
+###EZOutput
+Provides flexible playback to the default output device by asking the `EZOutputDataSource` for audio data to play. Doesn't care where the buffers come from (microphone, audio file, streaming audio, etc). The `EZOutputDataSource` has three functions that can provide audio data for the output callback. You should implement only **ONE** of these functions:
+```objectivec
 // Full override of the audio callback 
 -(void)          output:(EZOutput*)output
 callbackWithActionFlags:(AudioUnitRenderActionFlags*)ioActionFlags
@@ -226,16 +244,19 @@ inNumberFrames:(UInt32)inNumberFrames
 -(AudioBufferList*)  output:(EZOutput*)output
   needsBufferListWithFrames:(UInt32)frames
              withBufferSize:(UInt32*)bufferSize;
-Relevant Example Projects
+```
 
-EZAudioPlayFileExample (iOS)
-EZAudioPlayFileExample (OSX)
-EZAudioPassThroughExample (iOS)
-EZAudioPassThroughExample (OSX)
-Creating An Output
+*Relevant Example Projects*
+- EZAudioPlayFileExample (iOS)
+- EZAudioPlayFileExample (OSX)
+- EZAudioPassThroughExample (iOS)
+- EZAudioPassThroughExample (OSX)
+
+####Creating An Output
 
 Create an ouput by declaring a property and initializing it like so:
 
+```objectivec
 // Declare the EZOutput as a strong property
 @property (nonatomic,strong) EZOutput *output;
 
@@ -243,14 +264,16 @@ Create an ouput by declaring a property and initializing it like so:
 
 // Initialize the output instance and assign it a delegate to provide the output audio data
 self.output = [EZOutput outputWithDataSource:self];
+```
 Alternatively, you could also use the shared output instance and just assign it a delegate. This is the preferred way to use the output (usually just have one per app).
-
+```objectivec
 // Assign a delegate to the shared instance of the output to provide the output audio data
 [EZOutput sharedOutput].outputDataSource = self;
-Playback Using An AudioBufferList
+```
+####Playback Using An AudioBufferList
 
-One method to play back audio is to provide an AudioBufferList (for instance, reading from an EZAudioFile):
-
+One method to play back audio is to provide an AudioBufferList (for instance, reading from an `EZAudioFile`):
+```objectivec
 // Use the AudioBufferList datasource method to read from an EZAudioFile
 -(AudioBufferList *)output:(EZOutput *)output
  needsBufferListWithFrames:(UInt32)frames
@@ -283,10 +306,11 @@ One method to play back audio is to provide an AudioBufferList (for instance, re
  }
   return nil;
 }
-Playback Using A Circular Buffer
+```
+####Playback Using A Circular Buffer
 
-Another method is to provide a circular buffer via Michael Tyson's (who is a serious boss with iOS audio) TPCircularBuffer containing the data (for instance, passing the microphone input to the output for a basic passthrough):
-
+Another method is to provide a circular buffer via Michael Tyson's (who, btw is a serious badass and also wrote the Amazing Audio Engine for iOS) TPCircularBuffer containing the data. For instance, for passing the microphone input to the output for a basic passthrough:
+```objectivec
 // Declare circular buffer as global
 TPCircularBuffer circularBuffer;
 ...
@@ -305,10 +329,11 @@ withNumberOfChannels:(UInt32)numberOfChannels {
 -(TPCircularBuffer *)outputShouldUseCircularBuffer:(EZOutput *)output {
   return &circularBuffer;
 }
-Playback By Manual Override
+```
+####Playback By Manual Override
 
 And the last method is to completely override the output callback method and populate the AudioBufferList however you can imagine:
-
+```objectivec
 // Completely override the output callback function
 -(void)           output:(EZOutput *)output
  callbackWithActionFlags:(AudioUnitRenderActionFlags *)ioActionFlags
@@ -318,17 +343,19 @@ And the last method is to completely override the output callback method and pop
                   ioData:(AudioBufferList *)ioData {
  // Fill the ioData with your audio data from anywhere
 }
-EZRecorder
+```
+###EZRecorder
 Provides a way to record any audio source to an audio file. This hooks into the other components quite nicely to do something like plot the audio waveform while recording to give visual feedback as to what is happening.
 
-Relevant Example Projects
+*Relevant Example Projects*
+- EZAudioRecordExample (iOS)
+- EZAudioRecordExample (OSX)
 
-EZAudioRecordExample (iOS)
-EZAudioRecordExample (OSX)
-Creating A Recorder
+####Creating A Recorder
 
-To create an EZRecorder you must start with an AudioStreamBasicDescription, which is just a CoreAudio structure representing the audio format of a file. The EZMicrophone and EZAudioFile both provide the AudioStreamBasicDescription as properties (for the EZAudioFile use the clientFormat property) that you can use when initializing the recorder.
+To create an `EZRecorder` you must start with an AudioStreamBasicDescription, which is just a CoreAudio structure representing the audio format of a file. The EZMicrophone and EZAudioFile both provide the AudioStreamBasicDescription as properties (for the `EZAudioFile` use the clientFormat property) that you can use when initializing the recorder.
 
+```objectivec
 // Declare the EZRecorder as a strong property
 @property (nonatomic,strong) EZRecorder *recorder;
 
@@ -341,10 +368,12 @@ self.recorder = [EZRecorder recorderWithDestinationURL:[NSURL fileURLWithPath:@"
 // Here's how we would initialize the recorder for an EZAudioFile instance
 self.recorder = [EZRecorder recorderWithDestinationURL:[NSURL fileURLWithPath:@"path/to/file.caf"]
                                        andSourceFormat:audioFile.clientFormat];
-Recording Some Audio
+```
 
-Once you've initialized your EZRecorder you can append data by passing in an AudioBufferList and its buffer size like so:
+##Recording Some Audio
 
+Once you've initialized your `EZRecorder` you can append data by passing in an AudioBufferList and its buffer size like so:
+```objectivec
 // Append the microphone data coming as a AudioBufferList with the specified buffer size to the recorder
 -(void)microphone:(EZMicrophone *)microphone
     hasBufferList:(AudioBufferList *)bufferList
@@ -356,7 +385,9 @@ withNumberOfChannels:(UInt32)numberOfChannels {
                              withBufferSize:bufferSize];
   } 
 }
-Interface Components
+```
+
+###Interface Components
 EZAudio currently offers two drop in audio waveform components that help simplify the process of visualizing audio.
 
 EZAudioPlot
