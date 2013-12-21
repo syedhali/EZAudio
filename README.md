@@ -5,26 +5,29 @@ A simple, intuitive audio framework for iOS and OSX.
 
 ##Features
 **Awesome Components**
-- `EZMicrophone`
-- `EZRecorder`
-- `EZAudioFile`
-- `EZOutput` - 
-- `EZAudioPlot` - A CoreGraphics-based Audio Plot capable of visualizing any float array as a buffer or rolling plot
-- `EZAudioPlotGL` - An OpenGL-based, GPU-accelerated Audio Plot capable of visualizing any float array as a buffer or rolling plot
-The components above were designed to allow you to immediately get your hands dirty with audio. These components simply plug into each other and build on top of the high-performance, low-latency AudioUnits API and give you an easy to use API written in Objective-C instead of pure C.
-- Get Microphone Data (As float arrays AND AudioBufferList for easy output)
-- Easily Read/Seek Through Audio Files
-- Easy, Flexible Playback From Any Component
-- Easily Record Anything and Display Waveforms
-- Beautiful Real-Time Audio Waveform Plots (Buffer and Rolling Plots)
+
+I've designed six core components to allow you to immediately get your hands dirty with audio for recording, playback, and visualizations (which typically need a float array of the audio data). These components simply plug into each other and build on top of the high-performance, low-latency AudioUnits API and give you an easy to use API written in Objective-C instead of pure C.
+- `EZMicrophone` - A microphone class that provides audio data from the microphone input with one line of code.
+- `EZRecorder` - A recorder class that provides a quick and easy way to write audio files from any datasource
+- `EZAudioFile` - An audio file class that reads/seeks through audio files and provides useful delegate callbacks. 
+- `EZOutput` - An output class that will playback any audio it is provided by its datasource. 
+- `EZAudioPlot` - A CoreGraphics-based audio waveform plot capable of visualizing any float array as a buffer or rolling plot
+- `EZAudioPlotGL` - An OpenGL-based, GPU-accelerated audio waveform plot capable of visualizing any float array as a buffer or rolling plot.
 
 **Cross Platform**
 
-`EZAudio` was designed to work transparently across all iOS and OSX devices. This means one universal API whether you're building for Mac or iOS. For instance, an `EZAudioPlot` knows that it will subclass a UIView for iOS or an NSView for OSX and the `EZMicrophone` knows to build on top of the RemoteIO AudioUnit for iOS, but defaults to the system defaults for input and output for OSX.
+`EZAudio` was designed to work transparently across all iOS and OSX devices. This means one universal API whether you're building for Mac or iOS. For instance, under the hood an `EZAudioPlot` knows that it will subclass a UIView for iOS or an NSView for OSX and the `EZMicrophone` knows to build on top of the RemoteIO AudioUnit for iOS, but defaults to the system defaults for input and output for OSX.
 
 **Examples & Docs**
 
-Within the Github repository you'll find plenty of examples to get you up to speed using each component and plugging them into each other. With just a few lines of code you'll be recording from the microphone, generating audio waveforms, and playing audio files like a boss. See the full Getting Started guide for an interactive look into each of components.
+Within this repo you'll find plenty of examples to get you up to speed using each component and plugging them into each other. With just a few lines of code you'll be recording from the microphone, generating audio waveforms, and playing audio files like a boss. See the full Getting Started guide for an interactive look into each of components.
+
+- `EZAudioCoreGraphicsWaveformExample` - Shows how to use the EZMicrophone and EZAudioPlot to visualize the audio data from the microphone in real-time. The waveform can be displayed as a buffer or a rolling waveform plot (traditional waveform look). 
+- `EZAudioOpenGLWaveformExample` - Shows how to use the EZMicrophone and EZAudioPlotGL to visualize the audio data from the microphone in real-time. The drawing is using OpenGL so it is much faster and like the first example can display a buffer or rolling waveform.
+- `EZAudioPlayFileExample` - Shows how to use the EZAudioFile, EZAudioPlotGL, and EZOutput to play and seek through an audio file while displaying its waveform as a buffer or a rolling waveform plot.
+- `EZAudioRecordWaveformExample` - Shows how to use the EZMicrophone, EZRecorder, and EZAudioPlotGL to record the audio from the microphone input to a file while displaying the audio waveform of the incoming data. You can then playback the newly recorded audio file using AVFoundation and keep adding more audio data to the tail of the file.
+- `EZAudioWaveformFromFileExample` - Shows how to use the EZAudioFile and EZAudioPlot to display the audio waveform an entire audio file. 
+- `EZAudioPassThroughExample` - Shows how to use the EZMicrophone, EZOutput, and the EZAudioPlotGL to pass the microphone input to the output for playback while displaying the audio waveform (as a buffer or rolling plot) in real-time. 
 
 ##Getting Started
 *To see the full project page, interactive Getting Started guide, and Documentation go here:*
@@ -61,7 +64,7 @@ See full Getting Started guide: http://syedharisali.com/projects/EZAudio/getting
 `EZAudio` currently offers four components that encompass a wide range of audio functionality. In addition to the functional aspects of these components such as pulling audio data, reading/writing from files, and performing playback they also take special care to hook into the interface components to allow developers to display visual feedback (see the Interface Components below).
 
 ###EZAudioFile
-Provides simple read/seek operations, pulls waveform amplitude data, and provides delegate callbacks to listen for any action occuring on the audio file.
+Provides simple read/seek operations, pulls waveform amplitude data, and provides the `EZAudioFileDelegate` to notify of any read/seek action occuring on the `EZAudioFile`.
 
 **_Relevant Example Projects_**
 - EZAudioPlayFileExample (iOS)
