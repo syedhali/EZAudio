@@ -210,12 +210,9 @@
     
     // Reached the end of the file
     if( self.eof ){
-      
       // Here's what you do to loop the file
       [self.audioFile seekToFrame:0];
       self.eof = NO;
-      
-      return nil;
     }
     
     // Allocate a buffer list to hold the file's data
@@ -230,16 +227,12 @@
     // Reached the end of the file on the last read
     if( eof ){
       [EZAudio freeBufferList:bufferList];
-      [self.audioFile seekToFrame:0];
       return nil;
     }
     return bufferList;
+    
   }
   return nil;
-}
-
--(AudioStreamBasicDescription)outputHasAudioStreamBasicDescription:(EZOutput *)output {
-  return self.audioFile.clientFormat;
 }
 
 #pragma mark - NSOpenSavePanelDelegate

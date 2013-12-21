@@ -52,12 +52,39 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
                      inNumberFrames:inNumberFrames
                              ioData:ioData];
   }
+  else if( [output.outputDataSource respondsToSelector:@selector(outputShouldUseCircularBuffer:)] ){
+    
+    TPCircularBuffer *circularBuffer = [output.outputDataSource outputShouldUseCircularBuffer:output];
+    if( !circularBuffer ) return noErr;
+    
+    /**
+     Thank you Michael Tyson (A Tasty Pixel) for writing the TPCircularBuffer, you are amazing!
+     */
+    
+    // Get the desired amount of bytes to copy
+    int32_t bytesToCopy = ioData->mBuffers[0].mDataByteSize;
+    AudioSampleType *targetBuffer = (AudioSampleType*)ioData->mBuffers[0].mData;
+    
+    // Get the available bytes in the circular buffer
+    int32_t availableBytes;
+    AudioSampleType *buffer = TPCircularBufferTail(circularBuffer,&availableBytes);
+    
+    // Ideally we'd have all the bytes to be copied, but compare it against the available bytes (get min)
+    int32_t amount = MIN(bytesToCopy,availableBytes);
+    memcpy(targetBuffer,buffer,amount);
+    
+    // Consume those bytes ( this will internally push the head of the circular buffer )
+    TPCircularBufferConsume(circularBuffer,amount);
+    
+  }
   // Provided an AudioBufferList (defaults to silence)
   else {
     UInt32 bufferSize;
     AudioBufferList *bufferList = [output.outputDataSource output:output
                                         needsBufferListWithFrames:inNumberFrames
                                                    withBufferSize:&bufferSize];
+    if( !bufferList ) return noErr;
+    
     // Interleaved
     if( !(ioData->mNumberBuffers == 1) ){
       Float32 *left  = (Float32*)ioData->mBuffers[0].mData;
@@ -69,8 +96,8 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
           right[i] = interleaved[i];
         }
         else {
-          left[i]  = 0.0f;
-          right[i] = 0.0f;
+          left[  i ] = 0.0f;
+          right[ i ] = 0.0f;
         }
       }
     }

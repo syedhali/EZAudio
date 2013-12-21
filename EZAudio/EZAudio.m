@@ -113,4 +113,20 @@
   return sqrtf( sum / bufferSize );
 }
 
+#pragma mark - TPCircularBuffer Utility
++(void)circularBuffer:(TPCircularBuffer *)circularBuffer withSize:(int)size {
+  TPCircularBufferInit(circularBuffer,size);
+}
+
++(void)appendDataToCircularBuffer:(TPCircularBuffer*)circularBuffer
+              fromAudioBufferList:(AudioBufferList*)audioBufferList {
+  TPCircularBufferProduceBytes(circularBuffer,
+                               audioBufferList->mBuffers[0].mData,
+                               audioBufferList->mBuffers[0].mDataByteSize);
+}
+
++(void)freeCircularBuffer:(TPCircularBuffer *)circularBuffer {
+  TPCircularBufferClear(circularBuffer);
+}
+
 @end

@@ -19,6 +19,7 @@
 -(id)init {
   self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil];
   if(self){
+    [self initializeView];
   }
   return self;
 }
@@ -26,6 +27,7 @@
 -(id)initWithCoder:(NSCoder *)aDecoder {
   self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil];
   if(self){
+    [self initializeView];
   }
   return self;
 }
@@ -33,8 +35,17 @@
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
   self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil];
   if(self){
+    [self initializeView];
   }
   return self;
+}
+
+-(void)initializeView {
+  /**
+   Initialize the circular buffer
+   */
+  [EZAudio circularBuffer:&_circularBuffer
+                 withSize:1024];
 }
 
 #pragma mark - Customize the Audio Plot
@@ -49,11 +60,6 @@
   self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
   // Plot type
   self.audioPlot.plotType        = EZPlotTypeBuffer;
-  
-  /**
-   Initialize the circular buffer
-   */
-  TPCircularBufferInit(&_circularBuffer,1024);
   
   /*
    Start the microphone
@@ -129,6 +135,7 @@ withNumberOfChannels:(UInt32)numberOfChannels {
   });
 }
 
+// Append the AudioBufferList from the microphone callback to a global circular buffer
 -(void)microphone:(EZMicrophone *)microphone
     hasBufferList:(AudioBufferList *)bufferList
    withBufferSize:(UInt32)bufferSize
@@ -136,44 +143,18 @@ withNumberOfChannels:(UInt32)numberOfChannels {
   /**
    Append the audio data to a circular buffer
    */
-  TPCircularBufferProduceBytes(&_circularBuffer,
-                               bufferList->mBuffers[0].mData,
-                               bufferList->mBuffers[0].mDataByteSize);
+  [EZAudio appendDataToCircularBuffer:&_circularBuffer
+                  fromAudioBufferList:bufferList];
 }
 
-#pragma mark - EZOutputDelegate
--(void)output:(EZOutput *)output
-callbackWithActionFlags:(AudioUnitRenderActionFlags *)ioActionFlags
-  inTimeStamp:(const AudioTimeStamp *)inTimeStamp
-  inBusNumber:(UInt32)inBusNumber
-inNumberFrames:(UInt32)inNumberFrames
-       ioData:(AudioBufferList *)ioData {
-  
-  /**
-   Below is how you could pass the data to the output using the circular buffer.
-   Thank you Michael Tyson (A Tasty Pixel) for writing the TPCircularBuffer, you are amazing!
-   */
-  
-  // Get the desired amount of bytes to copy
-  int32_t bytesToCopy = ioData->mBuffers[0].mDataByteSize;
-  AudioSampleType *targetBuffer = (AudioSampleType*)ioData->mBuffers[0].mData;
-  
-  // Get the available bytes in the circular buffer
-  int32_t availableBytes;
-  AudioSampleType *buffer = TPCircularBufferTail(&_circularBuffer,&availableBytes);
-  
-  // Ideally we'd have all the bytes to be copied, but compare it against the available bytes (get min)
-  int32_t amount = MIN(bytesToCopy,availableBytes);
-  memcpy(targetBuffer,buffer,amount);
-  
-  // Consume those bytes ( this will internally push the head of the circular buffer )
-  TPCircularBufferConsume(&_circularBuffer,amount);
-  
+#pragma mark - EZOutputDataSource
+-(TPCircularBuffer *)outputShouldUseCircularBuffer:(EZOutput *)output {
+  return &_circularBuffer;
 }
 
 #pragma mark - Cleanup
 -(void)dealloc {
-  TPCircularBufferClear(&_circularBuffer);
+  [EZAudio freeCircularBuffer:&_circularBuffer];
 }
 
 @end

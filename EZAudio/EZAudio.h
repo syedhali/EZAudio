@@ -86,19 +86,6 @@
                               numberOfChannels:(UInt32)nChannels
                                    interleaved:(BOOL)interleaved;
 
-#pragma mark - OSStatus Utility
-///-----------------------------------------------------------
-/// @name OSStatus Utility
-///-----------------------------------------------------------
-
-/**
- Basic check result function useful for checking each step of the audio setup process
- @param result    The OSStatus representing the result of an operation
- @param operation A string (const char, not NSString) describing the operation taking place (will print if fails)
- */
-+(void)checkResult:(OSStatus)result
-         operation:(const char*)operation;
-
 #pragma mark - Math Utilities
 ///-----------------------------------------------------------
 /// @name Math Utilities
@@ -127,5 +114,45 @@
  */
 +(float)RMS:(float*)buffer
      length:(int)bufferSize;
+
+#pragma mark - OSStatus Utility
+///-----------------------------------------------------------
+/// @name OSStatus Utility
+///-----------------------------------------------------------
+
+/**
+ Basic check result function useful for checking each step of the audio setup process
+ @param result    The OSStatus representing the result of an operation
+ @param operation A string (const char, not NSString) describing the operation taking place (will print if fails)
+ */
++(void)checkResult:(OSStatus)result
+         operation:(const char*)operation;
+
+#pragma mark - TPCircularBuffer Utility
+///-----------------------------------------------------------
+/// @name TPCircularBuffer Utility
+///-----------------------------------------------------------
+
+/**
+ Appends the data from the audio buffer list to the circular buffer
+ @param circularBuffer  Pointer to the instance of the TPCircularBuffer to add the audio data to
+ @param audioBufferList Pointer to the instance of the AudioBufferList with the audio data
+ */
++(void)appendDataToCircularBuffer:(TPCircularBuffer*)circularBuffer
+              fromAudioBufferList:(AudioBufferList*)audioBufferList;
+
+/**
+ Initializes the circular buffer (just a wrapper around the C method)
+ *  @param circularBuffer Pointer to an instance of the TPCircularBuffer
+ *  @param size           The length of the TPCircularBuffer (usually 1024)
+ */
++(void)circularBuffer:(TPCircularBuffer*)circularBuffer
+             withSize:(int)size;
+
+/**
+ Frees a circular buffer
+ @param circularBuffer Pointer to the circular buffer to clear
+ */
++(void)freeCircularBuffer:(TPCircularBuffer*)circularBuffer;
 
 @end

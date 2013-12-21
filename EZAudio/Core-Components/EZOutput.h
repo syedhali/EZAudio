@@ -29,10 +29,16 @@
 #elif TARGET_OS_MAC
 #import <AudioUnit/AudioUnit.h>
 #endif
+
+#import "TPCircularBuffer.h"
+
 @class EZOutput;
 
 /**
- The EZOutputDataSource (required for the EZOutput) specifies a receiver to provide audio data when the EZOutput is started.
+ The EZOutputDataSource (required for the EZOutput) specifies a receiver to provide audio data when the EZOutput is started. Only ONE datasource method is expected to be implemented and priority is given as such:
+   1.) `output:callbackWithActionFlags:inTimeStamp:inBusNumber:inNumberFrames:ioData:`
+   2.) `outputShouldUseCircularBuffer:`
+   3.) `output:needsBufferListWithFrames:withBufferSize:`
  */
 @protocol EZOutputDataSource <NSObject>
 
@@ -41,7 +47,15 @@
 /// @name Pulling The Audio Data
 ///-----------------------------------------------------------
 
-// Manual override, will not call `output:needsBufferListWithFrames:withBufferSize:`
+/**
+ Provides complete override of the output callback function. The delegate is expected to
+ @param output         The instance of the EZOutput that asked for the data
+ @param ioActionFlags  AudioUnitRenderActionFlags provided by the output callback
+ @param inTimeStamp    AudioTimeStamp reference provided by the output callback
+ @param inBusNumber    UInt32 representing the bus number provided by the output callback
+ @param inNumberFrames UInt32 representing the number of frames provided by the output callback
+ @param ioData         AudioBufferList pointer representing the audio data that will be used for output provided by the output callback (fill this!)
+ */
 -(void)output:(EZOutput*)output
 callbackWithActionFlags:(AudioUnitRenderActionFlags*)ioActionFlags
   inTimeStamp:(const AudioTimeStamp*)inTimeStamp
@@ -50,9 +64,16 @@ inNumberFrames:(UInt32)inNumberFrames
        ioData:(AudioBufferList*)ioData;
 
 /**
+ Provides output using a circular
+ @param output The instance of the EZOutput that asked for the data
+ @return The EZOutputDataSource's TPCircularBuffer structure holding the audio data in a circular buffer
+ */
+-(TPCircularBuffer*)outputShouldUseCircularBuffer:(EZOutput *)output;
+
+/**
  Alternate way to provide output with data anytime the EZOutput needs audio data to play. This function expects you to allocate a chunk of memory for an AudioBufferList (see EZAudio function `audioBufferList`) and will try to free it on a seperate thread (see EZAudio function `freeBufferList:`) when it is done to prevent leaking since this is expected to be the end of the road for the audio signal. If the EZOutputDataSource receives a nil or NULL AudioBufferList then the EZOutput component will output silence.
- @param output     The instance of the EZOutput that asked for the data.
- @param frames     The amount of frames as a UInt32 that output will need to properly fill its output buffer.
+ @param output The instance of the EZOutput that asked for the data.
+ @param frames The amount of frames as a UInt32 that output will need to properly fill its output buffer.
  @param bufferSize The pointer to the bufferSize the dataSource is expected to set. For instance, if the bufferSize ended up being 512 you'd say *bufferSize = 512.
  @return A pointer to the AudioBufferList structure holding the audio data. If nil or NULL, will output silence.
  */
