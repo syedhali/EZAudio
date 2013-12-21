@@ -9,13 +9,13 @@ http://syedharisali.com/projects/EZAudio/getting-started
 ##Features
 **Awesome Components**
 
-I've designed six core components to allow you to immediately get your hands dirty with audio data for recording, playback, and visualizations (which typically just need a float array representing the audio data). These components simply plug into each other and build on top of the high-performance, low-latency AudioUnits API and give you an easy to use API written in Objective-C instead of pure C.
+I've designed six core components to allow you to immediately get your hands dirty recording, playing, and visualizing audio data. These components simply plug into each other and build on top of the high-performance, low-latency AudioUnits API and give you an easy to use API written in Objective-C instead of pure C.
 
-EZMicrophone
+[EZMicrophone](#EZMicrophone)
 
-A microphone class that provides audio data from the microphone input with one line of code.
+A microphone class that provides its delegate audio data from the default device microphone with one line of code.
 
-`EZRecorder`
+[EZRecorder](#EZRecorder)
 
 A recorder class that provides a quick and easy way to write audio files from any datasource.
 
@@ -23,15 +23,15 @@ A recorder class that provides a quick and easy way to write audio files from an
 
 An audio file class that reads/seeks through audio files and provides useful delegate callbacks. 
 
-`EZOutput`
+[EZOutput](#EZOutput)
 
 An output class that will playback any audio it is provided by its datasource. 
 
-`EZAudioPlot`
+[EZAudioPlot](#EZAudioPlot)
 
 A CoreGraphics-based audio waveform plot capable of visualizing any float array as a buffer or rolling plot.
 
-`EZAudioPlotGL`
+[EZAudioPlotGL](#EZAudioPlotGL)
 
 An OpenGL-based, GPU-accelerated audio waveform plot capable of visualizing any float array as a buffer or rolling plot.
 
@@ -199,7 +199,7 @@ When a seek occurs the `EZAudioFileDelegate` receives the seek event:
   });
 }
 ```
-###EZMicrophone
+###<a name="EZMicrophone"></a>EZMicrophone
 Provides access to the default device microphone in one line of code and provides delegate callbacks to receive the audio data as an AudioBufferList and float arrays.
 
 **_Relevant Example Projects_**
@@ -290,7 +290,7 @@ self.microphone.microphoneOn = NO;
 self.microphone.microphoneOn = YES;
 ```
 
-###EZOutput
+###<a name="EZOutput"></a>EZOutput
 Provides flexible playback to the default output device by asking the `EZOutputDataSource` for audio data to play. Doesn't care where the buffers come from (microphone, audio file, streaming audio, etc). The `EZOutputDataSource` has three functions that can provide audio data for the output callback. You should implement only **ONE** of these functions:
 ```objectivec
 // Full override of the audio callback 
@@ -408,7 +408,7 @@ And the last method is to completely override the output callback method and pop
  // Fill the ioData with your audio data from anywhere
 }
 ```
-###EZRecorder
+###<a name="EZRecorder"></a>EZRecorder
 Provides a way to record any audio source to an audio file. This hooks into the other components quite nicely to do something like plot the audio waveform while recording to give visual feedback as to what is happening.
 
 *Relevant Example Projects*
@@ -454,7 +454,7 @@ Once you've initialized your `EZRecorder` you can append data by passing in an A
 ###Interface Components
 `EZAudio` currently offers two drop in audio waveform components that help simplify the process of visualizing audio.
 
-###EZAudioPlot
+###<a name="EZAudioPlot"></a>EZAudioPlot
 Provides an audio waveform plot that uses CoreGraphics to perform the drawing. On iOS this is a subclass of UIView while on OSX this is a subclass of NSView. Best used on OSX as the drawing falls on the CPU and needs to redisplay after every audio data update, but useful in iOS apps for displaying full, static waveforms.
 
 *Relevant Example Projects*
@@ -519,7 +519,7 @@ All plots have only one update function, `updateBuffer:withBufferSize:`, which e
 }
 ```
 
-###EZAudioPlotGL
+###<a name="EZAudioPlotGL"></a>EZAudioPlotGL
 Provides an audio waveform plot that uses OpenGL to perform the drawing. The API this class are exactly the same as those for the EZAudioPlot above. On iOS this is a subclass of the EZPlot and uses an embedded GLKViewController to perform the OpenGL drawing while on OSX this is a subclass of the NSOpenGLView. In most cases this is the plot you want to use, it's GPU-accelerated, has a low memory footprint, and performs amazingly on all devices.
 
 *Relevant Example Projects*
