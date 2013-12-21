@@ -10,12 +10,30 @@ http://syedharisali.com/projects/EZAudio/getting-started
 **Awesome Components**
 
 I've designed six core components to allow you to immediately get your hands dirty with audio data for recording, playback, and visualizations (which typically just need a float array representing the audio data). These components simply plug into each other and build on top of the high-performance, low-latency AudioUnits API and give you an easy to use API written in Objective-C instead of pure C.
-- `EZMicrophone` - A microphone class that provides audio data from the microphone input with one line of code.
-- `EZRecorder` - A recorder class that provides a quick and easy way to write audio files from any datasource
-- `EZAudioFile` - An audio file class that reads/seeks through audio files and provides useful delegate callbacks. 
-- `EZOutput` - An output class that will playback any audio it is provided by its datasource. 
-- `EZAudioPlot` - A CoreGraphics-based audio waveform plot capable of visualizing any float array as a buffer or rolling plot
-- `EZAudioPlotGL` - An OpenGL-based, GPU-accelerated audio waveform plot capable of visualizing any float array as a buffer or rolling plot.
+
+EZMicrophone
+
+A microphone class that provides audio data from the microphone input with one line of code.
+
+`EZRecorder`
+
+A recorder class that provides a quick and easy way to write audio files from any datasource.
+
+[EZAudioFile](#EZAudioFile)
+
+An audio file class that reads/seeks through audio files and provides useful delegate callbacks. 
+
+`EZOutput`
+
+An output class that will playback any audio it is provided by its datasource. 
+
+`EZAudioPlot`
+
+A CoreGraphics-based audio waveform plot capable of visualizing any float array as a buffer or rolling plot.
+
+`EZAudioPlotGL`
+
+An OpenGL-based, GPU-accelerated audio waveform plot capable of visualizing any float array as a buffer or rolling plot.
 
 **Cross Platform**
 
@@ -23,7 +41,7 @@ I've designed six core components to allow you to immediately get your hands dir
 
 ##Examples & Docs
 
-Within this repo you'll find plenty of examples to get you up to speed using each component and plugging them into each other. With just a few lines of code you'll be recording from the microphone, generating audio waveforms, and playing audio files like a boss. See the full Getting Started guide for an interactive look into each of components.
+Within this repo you'll find the examples for iOS and OSX to get you up to speed using each component and plugging them into each other. With just a few lines of code you'll be recording from the microphone, generating audio waveforms, and playing audio files like a boss. See the full Getting Started guide for an interactive look into each of components.
 
 **_EZAudioCoreGraphicsWaveformExample_** 
 
@@ -83,7 +101,7 @@ See full Getting Started guide: http://syedharisali.com/projects/EZAudio/getting
 ##Core Components
 `EZAudio` currently offers four components that encompass a wide range of audio functionality. In addition to the functional aspects of these components such as pulling audio data, reading/writing from files, and performing playback they also take special care to hook into the interface components to allow developers to display visual feedback (see the Interface Components below).
 
-###EZAudioFile
+###<a name="EZAudioFile"></a>EZAudioFile
 Provides simple read/seek operations, pulls waveform amplitude data, and provides the `EZAudioFileDelegate` to notify of any read/seek action occuring on the `EZAudioFile`.
 
 **_Relevant Example Projects_**
