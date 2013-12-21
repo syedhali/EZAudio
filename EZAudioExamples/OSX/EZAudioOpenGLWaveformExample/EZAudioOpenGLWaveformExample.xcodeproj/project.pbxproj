@@ -37,7 +37,6 @@
 		944D04B5186049C20076EF7A /* EZAudioPlotGL.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D04A7186049C20076EF7A /* EZAudioPlotGL.m */; };
 		944D04B6186049C20076EF7A /* EZAudioPlotGLKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D04A9186049C20076EF7A /* EZAudioPlotGLKViewController.m */; };
 		944D04B7186049C20076EF7A /* EZPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D04AB186049C20076EF7A /* EZPlot.m */; };
-		944D04B8186049C20076EF7A /* simple-drum-beat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 944D04AC186049C20076EF7A /* simple-drum-beat.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,7 +100,6 @@
 		944D04A9186049C20076EF7A /* EZAudioPlotGLKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EZAudioPlotGLKViewController.m; sourceTree = "<group>"; };
 		944D04AA186049C20076EF7A /* EZPlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPlot.h; sourceTree = "<group>"; };
 		944D04AB186049C20076EF7A /* EZPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPlot.m; sourceTree = "<group>"; };
-		944D04AC186049C20076EF7A /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "simple-drum-beat.wav"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -230,7 +228,6 @@
 				944D04A1186049C20076EF7A /* EZAudio.h */,
 				944D04A2186049C20076EF7A /* EZAudio.m */,
 				944D04A3186049C20076EF7A /* Interface-Components */,
-				944D04AC186049C20076EF7A /* simple-drum-beat.wav */,
 			);
 			name = EZAudio;
 			path = ../../../../EZAudio;
@@ -355,7 +352,6 @@
 			files = (
 				94056DA1185BB0BC00EB94BA /* InfoPlist.strings in Resources */,
 				94056DAF185BB0BC00EB94BA /* Images.xcassets in Resources */,
-				944D04B8186049C20076EF7A /* simple-drum-beat.wav in Resources */,
 				94056DA7185BB0BC00EB94BA /* Credits.rtf in Resources */,
 				94056DCE185BB0D600EB94BA /* OpenGLWaveformViewController.xib in Resources */,
 				94056DAD185BB0BC00EB94BA /* MainMenu.xib in Resources */,

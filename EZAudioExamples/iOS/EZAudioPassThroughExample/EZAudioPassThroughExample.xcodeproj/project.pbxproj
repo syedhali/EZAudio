@@ -33,7 +33,6 @@
 		9417A6741864D55100D9D37B /* EZAudioPlotGL.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A6661864D55100D9D37B /* EZAudioPlotGL.m */; };
 		9417A6751864D55100D9D37B /* EZAudioPlotGLKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A6681864D55100D9D37B /* EZAudioPlotGLKViewController.m */; };
 		9417A6761864D55100D9D37B /* EZPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A66A1864D55100D9D37B /* EZPlot.m */; };
-		9417A6771864D55100D9D37B /* simple-drum-beat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9417A66B1864D55100D9D37B /* simple-drum-beat.wav */; };
 		9417A6BD18658F8800D9D37B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A6BC18658F8800D9D37B /* AudioToolbox.framework */; };
 		9417A6BF18658F8D00D9D37B /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A6BE18658F8D00D9D37B /* GLKit.framework */; };
 		9417A6C518658FAA00D9D37B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A6C418658FAA00D9D37B /* AVFoundation.framework */; };
@@ -92,7 +91,6 @@
 		9417A6681864D55100D9D37B /* EZAudioPlotGLKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudioPlotGLKViewController.m; sourceTree = "<group>"; };
 		9417A6691864D55100D9D37B /* EZPlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPlot.h; sourceTree = "<group>"; };
 		9417A66A1864D55100D9D37B /* EZPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPlot.m; sourceTree = "<group>"; };
-		9417A66B1864D55100D9D37B /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "simple-drum-beat.wav"; sourceTree = "<group>"; };
 		9417A6BC18658F8800D9D37B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9417A6BE18658F8D00D9D37B /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		9417A6C418658FAA00D9D37B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -211,7 +209,6 @@
 				9417A6601864D55100D9D37B /* EZAudio.h */,
 				9417A6611864D55100D9D37B /* EZAudio.m */,
 				9417A6621864D55100D9D37B /* Interface-Components */,
-				9417A66B1864D55100D9D37B /* simple-drum-beat.wav */,
 			);
 			name = EZAudio;
 			path = ../../../../EZAudio;
@@ -334,7 +331,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9417A6771864D55100D9D37B /* simple-drum-beat.wav in Resources */,
 				9417A6241864D4DC00D9D37B /* Main_iPad.storyboard in Resources */,
 				9417A6291864D4DC00D9D37B /* Images.xcassets in Resources */,
 				9417A6211864D4DC00D9D37B /* Main_iPhone.storyboard in Resources */,

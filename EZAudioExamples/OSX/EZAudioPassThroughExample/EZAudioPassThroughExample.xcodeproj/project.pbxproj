@@ -29,7 +29,6 @@
 		941D720E1864C47C007D52D8 /* EZAudioPlotGL.m in Sources */ = {isa = PBXBuildFile; fileRef = 941D72001864C47C007D52D8 /* EZAudioPlotGL.m */; };
 		941D720F1864C47C007D52D8 /* EZAudioPlotGLKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 941D72021864C47C007D52D8 /* EZAudioPlotGLKViewController.m */; };
 		941D72101864C47C007D52D8 /* EZPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 941D72041864C47C007D52D8 /* EZPlot.m */; };
-		941D72111864C47C007D52D8 /* simple-drum-beat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 941D72051864C47C007D52D8 /* simple-drum-beat.wav */; };
 		941D72151864C4A0007D52D8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 941D72121864C4A0007D52D8 /* AudioToolbox.framework */; };
 		941D72161864C4A0007D52D8 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 941D72131864C4A0007D52D8 /* AudioUnit.framework */; };
 		941D72171864C4A0007D52D8 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 941D72141864C4A0007D52D8 /* CoreAudio.framework */; };
@@ -92,7 +91,6 @@
 		941D72021864C47C007D52D8 /* EZAudioPlotGLKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudioPlotGLKViewController.m; sourceTree = "<group>"; };
 		941D72031864C47C007D52D8 /* EZPlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPlot.h; sourceTree = "<group>"; };
 		941D72041864C47C007D52D8 /* EZPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPlot.m; sourceTree = "<group>"; };
-		941D72051864C47C007D52D8 /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "simple-drum-beat.wav"; sourceTree = "<group>"; };
 		941D72121864C4A0007D52D8 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		941D72131864C4A0007D52D8 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		941D72141864C4A0007D52D8 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -230,7 +228,6 @@
 				941D71FA1864C47C007D52D8 /* EZAudio.h */,
 				941D71FB1864C47C007D52D8 /* EZAudio.m */,
 				941D71FC1864C47C007D52D8 /* Interface-Components */,
-				941D72051864C47C007D52D8 /* simple-drum-beat.wav */,
 			);
 			name = EZAudio;
 			path = ../../../../EZAudio;
@@ -353,7 +350,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				941D72111864C47C007D52D8 /* simple-drum-beat.wav in Resources */,
 				941D72221864C4D7007D52D8 /* PassThroughViewController.xib in Resources */,
 				941D71C21864C457007D52D8 /* InfoPlist.strings in Resources */,
 				941D71D01864C457007D52D8 /* Images.xcassets in Resources */,

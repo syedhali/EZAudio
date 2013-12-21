@@ -35,7 +35,6 @@
 		944D08BB18604ADC0076EF7A /* EZAudioPlotGL.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D08AD18604ADC0076EF7A /* EZAudioPlotGL.m */; };
 		944D08BC18604ADC0076EF7A /* EZAudioPlotGLKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D08AF18604ADC0076EF7A /* EZAudioPlotGLKViewController.m */; };
 		944D08BD18604ADC0076EF7A /* EZPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D08B118604ADC0076EF7A /* EZPlot.m */; };
-		944D08BE18604ADC0076EF7A /* simple-drum-beat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 944D08B218604ADC0076EF7A /* simple-drum-beat.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,7 +92,6 @@
 		944D08AF18604ADC0076EF7A /* EZAudioPlotGLKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EZAudioPlotGLKViewController.m; sourceTree = "<group>"; };
 		944D08B018604ADC0076EF7A /* EZPlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPlot.h; sourceTree = "<group>"; };
 		944D08B118604ADC0076EF7A /* EZPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPlot.m; sourceTree = "<group>"; };
-		944D08B218604ADC0076EF7A /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "simple-drum-beat.wav"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,7 +205,6 @@
 				944D08A718604ADC0076EF7A /* EZAudio.h */,
 				944D08A818604ADC0076EF7A /* EZAudio.m */,
 				944D08A918604ADC0076EF7A /* Interface-Components */,
-				944D08B218604ADC0076EF7A /* simple-drum-beat.wav */,
 			);
 			name = EZAudio;
 			path = ../../../../EZAudio;
@@ -330,7 +327,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				944D08BE18604ADC0076EF7A /* simple-drum-beat.wav in Resources */,
 				94056F94185E593500EB94BA /* Main_iPad.storyboard in Resources */,
 				94056F99185E593500EB94BA /* Images.xcassets in Resources */,
 				94056F91185E593500EB94BA /* Main_iPhone.storyboard in Resources */,

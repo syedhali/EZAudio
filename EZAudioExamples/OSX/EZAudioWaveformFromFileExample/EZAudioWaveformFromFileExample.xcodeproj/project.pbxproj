@@ -26,6 +26,7 @@
 		94056EE8185BCDBF00EB94BA /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056EE5185BCDBF00EB94BA /* AudioUnit.framework */; };
 		94056EE9185BCDBF00EB94BA /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056EE6185BCDBF00EB94BA /* CoreAudio.framework */; };
 		94056EEB185BCDC500EB94BA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056EEA185BCDC500EB94BA /* QuartzCore.framework */; };
+		9417A6D31865927500D9D37B /* simple-drum-beat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9417A6D21865927500D9D37B /* simple-drum-beat.wav */; };
 		944D088C18604A590076EF7A /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D087418604A590076EF7A /* AEFloatConverter.m */; };
 		944D088D18604A590076EF7A /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 944D087518604A590076EF7A /* TPCircularBuffer.c */; };
 		944D088E18604A590076EF7A /* EZAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D087918604A590076EF7A /* EZAudioFile.m */; };
@@ -37,7 +38,6 @@
 		944D089418604A590076EF7A /* EZAudioPlotGL.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D088618604A590076EF7A /* EZAudioPlotGL.m */; };
 		944D089518604A590076EF7A /* EZAudioPlotGLKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D088818604A590076EF7A /* EZAudioPlotGLKViewController.m */; };
 		944D089618604A590076EF7A /* EZPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D088A18604A590076EF7A /* EZPlot.m */; };
-		944D089718604A590076EF7A /* simple-drum-beat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 944D088B18604A590076EF7A /* simple-drum-beat.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +79,7 @@
 		94056EE5185BCDBF00EB94BA /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		94056EE6185BCDBF00EB94BA /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		94056EEA185BCDC500EB94BA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		9417A6D21865927500D9D37B /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "simple-drum-beat.wav"; path = "../../../simple-drum-beat.wav"; sourceTree = "<group>"; };
 		944D087318604A590076EF7A /* AEFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEFloatConverter.h; sourceTree = "<group>"; };
 		944D087418604A590076EF7A /* AEFloatConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEFloatConverter.m; sourceTree = "<group>"; };
 		944D087518604A590076EF7A /* TPCircularBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = TPCircularBuffer.c; sourceTree = "<group>"; };
@@ -101,7 +102,6 @@
 		944D088818604A590076EF7A /* EZAudioPlotGLKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EZAudioPlotGLKViewController.m; sourceTree = "<group>"; };
 		944D088918604A590076EF7A /* EZPlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPlot.h; sourceTree = "<group>"; };
 		944D088A18604A590076EF7A /* EZPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPlot.m; sourceTree = "<group>"; };
-		944D088B18604A590076EF7A /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "simple-drum-beat.wav"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,6 +182,7 @@
 				944D087118604A590076EF7A /* EZAudio */,
 				94056E94185BCBC000EB94BA /* AppDelegate.h */,
 				94056E95185BCBC000EB94BA /* AppDelegate.m */,
+				9417A6D21865927500D9D37B /* simple-drum-beat.wav */,
 				94056EDB185BCC0100EB94BA /* WaveformFromFileViewController.h */,
 				94056EDC185BCC0200EB94BA /* WaveformFromFileViewController.m */,
 				94056EDD185BCC0200EB94BA /* WaveformFromFileViewController.xib */,
@@ -230,7 +231,6 @@
 				944D088018604A590076EF7A /* EZAudio.h */,
 				944D088118604A590076EF7A /* EZAudio.m */,
 				944D088218604A590076EF7A /* Interface-Components */,
-				944D088B18604A590076EF7A /* simple-drum-beat.wav */,
 			);
 			name = EZAudio;
 			path = ../../../../EZAudio;
@@ -355,7 +355,7 @@
 			files = (
 				94056E8D185BCBC000EB94BA /* InfoPlist.strings in Resources */,
 				94056E9B185BCBC000EB94BA /* Images.xcassets in Resources */,
-				944D089718604A590076EF7A /* simple-drum-beat.wav in Resources */,
+				9417A6D31865927500D9D37B /* simple-drum-beat.wav in Resources */,
 				94056EDF185BCC0200EB94BA /* WaveformFromFileViewController.xib in Resources */,
 				94056E93185BCBC000EB94BA /* Credits.rtf in Resources */,
 				94056E99185BCBC000EB94BA /* MainMenu.xib in Resources */,

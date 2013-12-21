@@ -38,7 +38,6 @@
 		944D07BD186049E80076EF7A /* EZAudioPlotGL.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D06AB186049E70076EF7A /* EZAudioPlotGL.m */; };
 		944D07BE186049E80076EF7A /* EZAudioPlotGLKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D06AD186049E70076EF7A /* EZAudioPlotGLKViewController.m */; };
 		944D07BF186049E80076EF7A /* EZPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D06AF186049E70076EF7A /* EZPlot.m */; };
-		944D07C0186049E80076EF7A /* simple-drum-beat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 944D06B0186049E70076EF7A /* simple-drum-beat.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,7 +102,6 @@
 		944D06AD186049E70076EF7A /* EZAudioPlotGLKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EZAudioPlotGLKViewController.m; sourceTree = "<group>"; };
 		944D06AE186049E70076EF7A /* EZPlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPlot.h; sourceTree = "<group>"; };
 		944D06AF186049E70076EF7A /* EZPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPlot.m; sourceTree = "<group>"; };
-		944D06B0186049E70076EF7A /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "simple-drum-beat.wav"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,7 +232,6 @@
 				944D06A5186049E70076EF7A /* EZAudio.h */,
 				944D06A6186049E70076EF7A /* EZAudio.m */,
 				944D06A7186049E70076EF7A /* Interface-Components */,
-				944D06B0186049E70076EF7A /* simple-drum-beat.wav */,
 			);
 			name = EZAudio;
 			path = ../../../../EZAudio;
@@ -359,7 +356,6 @@
 			files = (
 				94056E17185BB3D800EB94BA /* InfoPlist.strings in Resources */,
 				94056E75185BB44200EB94BA /* RecordViewController.xib in Resources */,
-				944D07C0186049E80076EF7A /* simple-drum-beat.wav in Resources */,
 				94056E25185BB3D800EB94BA /* Images.xcassets in Resources */,
 				94056E1D185BB3D800EB94BA /* Credits.rtf in Resources */,
 				94056E23185BB3D800EB94BA /* MainMenu.xib in Resources */,
