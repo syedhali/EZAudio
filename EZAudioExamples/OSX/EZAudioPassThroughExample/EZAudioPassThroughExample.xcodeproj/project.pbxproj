@@ -241,8 +241,8 @@
 			children = (
 				941D71ED1864C47C007D52D8 /* AEFloatConverter.h */,
 				941D71EE1864C47C007D52D8 /* AEFloatConverter.m */,
-				941D71EF1864C47C007D52D8 /* TPCircularBuffer.c */,
 				941D71F01864C47C007D52D8 /* TPCircularBuffer.h */,
+				941D71EF1864C47C007D52D8 /* TPCircularBuffer.c */,
 			);
 			path = "3rd-Party-Components";
 			sourceTree = "<group>";
