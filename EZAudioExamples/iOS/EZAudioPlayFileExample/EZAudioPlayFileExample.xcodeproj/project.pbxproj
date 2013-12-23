@@ -10,6 +10,19 @@
 		9417A6C718658FB500D9D37B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A6C618658FB500D9D37B /* AudioToolbox.framework */; };
 		9417A6C918658FC000D9D37B /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A6C818658FC000D9D37B /* GLKit.framework */; };
 		9417A6D1186591CA00D9D37B /* simple-drum-beat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9417A6D0186591CA00D9D37B /* simple-drum-beat.wav */; };
+		9417A8281867DDF600D9D37B /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A8101867DDF600D9D37B /* AEFloatConverter.m */; };
+		9417A8291867DDF600D9D37B /* EZAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A8121867DDF600D9D37B /* EZAudio.m */; };
+		9417A82A1867DDF600D9D37B /* EZAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A8141867DDF600D9D37B /* EZAudioFile.m */; };
+		9417A82B1867DDF600D9D37B /* EZAudioPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A8161867DDF600D9D37B /* EZAudioPlot.m */; };
+		9417A82C1867DDF600D9D37B /* EZAudioPlotGL.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A8181867DDF600D9D37B /* EZAudioPlotGL.m */; };
+		9417A82D1867DDF600D9D37B /* EZAudioPlotGLKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A81A1867DDF600D9D37B /* EZAudioPlotGLKViewController.m */; };
+		9417A82E1867DDF600D9D37B /* EZMicrophone.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A81C1867DDF600D9D37B /* EZMicrophone.m */; };
+		9417A82F1867DDF600D9D37B /* EZOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A81E1867DDF600D9D37B /* EZOutput.m */; };
+		9417A8301867DDF600D9D37B /* EZPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A8201867DDF600D9D37B /* EZPlot.m */; };
+		9417A8311867DDF600D9D37B /* EZRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A8221867DDF600D9D37B /* EZRecorder.m */; };
+		9417A8321867DDF600D9D37B /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 9417A8231867DDF600D9D37B /* TPCircularBuffer.c */; };
+		9417A8331867DDF600D9D37B /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 9417A8261867DDF600D9D37B /* CHANGELOG */; };
+		9417A8341867DDF600D9D37B /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 9417A8271867DDF600D9D37B /* VERSION */; };
 		944D03DD186038A60076EF7A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 944D03DC186038A60076EF7A /* Foundation.framework */; };
 		944D03DF186038A60076EF7A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 944D03DE186038A60076EF7A /* CoreGraphics.framework */; };
 		944D03E1186038A60076EF7A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 944D03E0186038A60076EF7A /* UIKit.framework */; };
@@ -25,17 +38,6 @@
 		944D0409186038A60076EF7A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 944D0407186038A60076EF7A /* InfoPlist.strings */; };
 		944D040B186038A60076EF7A /* EZAudioPlayFileExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D040A186038A60076EF7A /* EZAudioPlayFileExampleTests.m */; };
 		944D043D1860398B0076EF7A /* PlayFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D043C1860398A0076EF7A /* PlayFileViewController.m */; };
-		944D094F18604CD90076EF7A /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D093718604CD80076EF7A /* AEFloatConverter.m */; };
-		944D095018604CD90076EF7A /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 944D093818604CD80076EF7A /* TPCircularBuffer.c */; };
-		944D095118604CD90076EF7A /* EZAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D093C18604CD80076EF7A /* EZAudioFile.m */; };
-		944D095218604CD90076EF7A /* EZMicrophone.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D093E18604CD80076EF7A /* EZMicrophone.m */; };
-		944D095318604CD90076EF7A /* EZOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D094018604CD80076EF7A /* EZOutput.m */; };
-		944D095418604CD90076EF7A /* EZRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D094218604CD80076EF7A /* EZRecorder.m */; };
-		944D095518604CD90076EF7A /* EZAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D094418604CD80076EF7A /* EZAudio.m */; };
-		944D095618604CD90076EF7A /* EZAudioPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D094718604CD80076EF7A /* EZAudioPlot.m */; };
-		944D095718604CD90076EF7A /* EZAudioPlotGL.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D094918604CD80076EF7A /* EZAudioPlotGL.m */; };
-		944D095818604CD90076EF7A /* EZAudioPlotGLKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D094B18604CD80076EF7A /* EZAudioPlotGLKViewController.m */; };
-		944D095918604CD90076EF7A /* EZPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D094D18604CD90076EF7A /* EZPlot.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,30 @@
 		9417A6C618658FB500D9D37B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9417A6C818658FC000D9D37B /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		9417A6D0186591CA00D9D37B /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "simple-drum-beat.wav"; path = "../../../simple-drum-beat.wav"; sourceTree = "<group>"; };
+		9417A80F1867DDF600D9D37B /* AEFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEFloatConverter.h; sourceTree = "<group>"; };
+		9417A8101867DDF600D9D37B /* AEFloatConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEFloatConverter.m; sourceTree = "<group>"; };
+		9417A8111867DDF600D9D37B /* EZAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudio.h; sourceTree = "<group>"; };
+		9417A8121867DDF600D9D37B /* EZAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudio.m; sourceTree = "<group>"; };
+		9417A8131867DDF600D9D37B /* EZAudioFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioFile.h; sourceTree = "<group>"; };
+		9417A8141867DDF600D9D37B /* EZAudioFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudioFile.m; sourceTree = "<group>"; };
+		9417A8151867DDF600D9D37B /* EZAudioPlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioPlot.h; sourceTree = "<group>"; };
+		9417A8161867DDF600D9D37B /* EZAudioPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudioPlot.m; sourceTree = "<group>"; };
+		9417A8171867DDF600D9D37B /* EZAudioPlotGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioPlotGL.h; sourceTree = "<group>"; };
+		9417A8181867DDF600D9D37B /* EZAudioPlotGL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudioPlotGL.m; sourceTree = "<group>"; };
+		9417A8191867DDF600D9D37B /* EZAudioPlotGLKViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioPlotGLKViewController.h; sourceTree = "<group>"; };
+		9417A81A1867DDF600D9D37B /* EZAudioPlotGLKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudioPlotGLKViewController.m; sourceTree = "<group>"; };
+		9417A81B1867DDF600D9D37B /* EZMicrophone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZMicrophone.h; sourceTree = "<group>"; };
+		9417A81C1867DDF600D9D37B /* EZMicrophone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZMicrophone.m; sourceTree = "<group>"; };
+		9417A81D1867DDF600D9D37B /* EZOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZOutput.h; sourceTree = "<group>"; };
+		9417A81E1867DDF600D9D37B /* EZOutput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZOutput.m; sourceTree = "<group>"; };
+		9417A81F1867DDF600D9D37B /* EZPlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPlot.h; sourceTree = "<group>"; };
+		9417A8201867DDF600D9D37B /* EZPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPlot.m; sourceTree = "<group>"; };
+		9417A8211867DDF600D9D37B /* EZRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZRecorder.h; sourceTree = "<group>"; };
+		9417A8221867DDF600D9D37B /* EZRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZRecorder.m; sourceTree = "<group>"; };
+		9417A8231867DDF600D9D37B /* TPCircularBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = TPCircularBuffer.c; sourceTree = "<group>"; };
+		9417A8241867DDF600D9D37B /* TPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPCircularBuffer.h; sourceTree = "<group>"; };
+		9417A8261867DDF600D9D37B /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
+		9417A8271867DDF600D9D37B /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
 		944D03D9186038A60076EF7A /* EZAudioPlayFileExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EZAudioPlayFileExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		944D03DC186038A60076EF7A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		944D03DE186038A60076EF7A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -72,28 +98,6 @@
 		944D040A186038A60076EF7A /* EZAudioPlayFileExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZAudioPlayFileExampleTests.m; sourceTree = "<group>"; };
 		944D043B1860398A0076EF7A /* PlayFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayFileViewController.h; sourceTree = "<group>"; };
 		944D043C1860398A0076EF7A /* PlayFileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayFileViewController.m; sourceTree = "<group>"; };
-		944D093618604CD80076EF7A /* AEFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEFloatConverter.h; sourceTree = "<group>"; };
-		944D093718604CD80076EF7A /* AEFloatConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEFloatConverter.m; sourceTree = "<group>"; };
-		944D093818604CD80076EF7A /* TPCircularBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = TPCircularBuffer.c; sourceTree = "<group>"; };
-		944D093918604CD80076EF7A /* TPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPCircularBuffer.h; sourceTree = "<group>"; };
-		944D093B18604CD80076EF7A /* EZAudioFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EZAudioFile.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		944D093C18604CD80076EF7A /* EZAudioFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EZAudioFile.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		944D093D18604CD80076EF7A /* EZMicrophone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EZMicrophone.h; sourceTree = "<group>"; };
-		944D093E18604CD80076EF7A /* EZMicrophone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZMicrophone.m; sourceTree = "<group>"; };
-		944D093F18604CD80076EF7A /* EZOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZOutput.h; sourceTree = "<group>"; };
-		944D094018604CD80076EF7A /* EZOutput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZOutput.m; sourceTree = "<group>"; };
-		944D094118604CD80076EF7A /* EZRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZRecorder.h; sourceTree = "<group>"; };
-		944D094218604CD80076EF7A /* EZRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZRecorder.m; sourceTree = "<group>"; };
-		944D094318604CD80076EF7A /* EZAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EZAudio.h; sourceTree = "<group>"; };
-		944D094418604CD80076EF7A /* EZAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EZAudio.m; sourceTree = "<group>"; };
-		944D094618604CD80076EF7A /* EZAudioPlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EZAudioPlot.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		944D094718604CD80076EF7A /* EZAudioPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EZAudioPlot.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		944D094818604CD80076EF7A /* EZAudioPlotGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EZAudioPlotGL.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		944D094918604CD80076EF7A /* EZAudioPlotGL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EZAudioPlotGL.m; sourceTree = "<group>"; };
-		944D094A18604CD80076EF7A /* EZAudioPlotGLKViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EZAudioPlotGLKViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		944D094B18604CD80076EF7A /* EZAudioPlotGLKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EZAudioPlotGLKViewController.m; sourceTree = "<group>"; };
-		944D094C18604CD80076EF7A /* EZPlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPlot.h; sourceTree = "<group>"; };
-		944D094D18604CD90076EF7A /* EZPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPlot.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +126,46 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9417A80E1867DDF600D9D37B /* EZAudio */ = {
+			isa = PBXGroup;
+			children = (
+				9417A80F1867DDF600D9D37B /* AEFloatConverter.h */,
+				9417A8101867DDF600D9D37B /* AEFloatConverter.m */,
+				9417A8111867DDF600D9D37B /* EZAudio.h */,
+				9417A8121867DDF600D9D37B /* EZAudio.m */,
+				9417A8131867DDF600D9D37B /* EZAudioFile.h */,
+				9417A8141867DDF600D9D37B /* EZAudioFile.m */,
+				9417A8151867DDF600D9D37B /* EZAudioPlot.h */,
+				9417A8161867DDF600D9D37B /* EZAudioPlot.m */,
+				9417A8171867DDF600D9D37B /* EZAudioPlotGL.h */,
+				9417A8181867DDF600D9D37B /* EZAudioPlotGL.m */,
+				9417A8191867DDF600D9D37B /* EZAudioPlotGLKViewController.h */,
+				9417A81A1867DDF600D9D37B /* EZAudioPlotGLKViewController.m */,
+				9417A81B1867DDF600D9D37B /* EZMicrophone.h */,
+				9417A81C1867DDF600D9D37B /* EZMicrophone.m */,
+				9417A81D1867DDF600D9D37B /* EZOutput.h */,
+				9417A81E1867DDF600D9D37B /* EZOutput.m */,
+				9417A81F1867DDF600D9D37B /* EZPlot.h */,
+				9417A8201867DDF600D9D37B /* EZPlot.m */,
+				9417A8211867DDF600D9D37B /* EZRecorder.h */,
+				9417A8221867DDF600D9D37B /* EZRecorder.m */,
+				9417A8231867DDF600D9D37B /* TPCircularBuffer.c */,
+				9417A8241867DDF600D9D37B /* TPCircularBuffer.h */,
+				9417A8251867DDF600D9D37B /* VERSION */,
+			);
+			name = EZAudio;
+			path = ../../../../EZAudio;
+			sourceTree = "<group>";
+		};
+		9417A8251867DDF600D9D37B /* VERSION */ = {
+			isa = PBXGroup;
+			children = (
+				9417A8261867DDF600D9D37B /* CHANGELOG */,
+				9417A8271867DDF600D9D37B /* VERSION */,
+			);
+			path = VERSION;
+			sourceTree = "<group>";
+		};
 		944D03D0186038A60076EF7A = {
 			isa = PBXGroup;
 			children = (
@@ -157,7 +201,7 @@
 		944D03E2186038A60076EF7A /* EZAudioPlayFileExample */ = {
 			isa = PBXGroup;
 			children = (
-				944D093418604CD80076EF7A /* EZAudio */,
+				9417A80E1867DDF600D9D37B /* EZAudio */,
 				944D03EB186038A60076EF7A /* AppDelegate.h */,
 				944D03EC186038A60076EF7A /* AppDelegate.m */,
 				944D03EE186038A60076EF7A /* Main_iPhone.storyboard */,
@@ -198,60 +242,6 @@
 				944D0407186038A60076EF7A /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		944D093418604CD80076EF7A /* EZAudio */ = {
-			isa = PBXGroup;
-			children = (
-				944D093518604CD80076EF7A /* 3rd-Party-Components */,
-				944D093A18604CD80076EF7A /* Core-Components */,
-				944D094318604CD80076EF7A /* EZAudio.h */,
-				944D094418604CD80076EF7A /* EZAudio.m */,
-				944D094518604CD80076EF7A /* Interface-Components */,
-			);
-			name = EZAudio;
-			path = ../../../../EZAudio;
-			sourceTree = "<group>";
-		};
-		944D093518604CD80076EF7A /* 3rd-Party-Components */ = {
-			isa = PBXGroup;
-			children = (
-				944D093618604CD80076EF7A /* AEFloatConverter.h */,
-				944D093718604CD80076EF7A /* AEFloatConverter.m */,
-				944D093818604CD80076EF7A /* TPCircularBuffer.c */,
-				944D093918604CD80076EF7A /* TPCircularBuffer.h */,
-			);
-			path = "3rd-Party-Components";
-			sourceTree = "<group>";
-		};
-		944D093A18604CD80076EF7A /* Core-Components */ = {
-			isa = PBXGroup;
-			children = (
-				944D093B18604CD80076EF7A /* EZAudioFile.h */,
-				944D093C18604CD80076EF7A /* EZAudioFile.m */,
-				944D093D18604CD80076EF7A /* EZMicrophone.h */,
-				944D093E18604CD80076EF7A /* EZMicrophone.m */,
-				944D093F18604CD80076EF7A /* EZOutput.h */,
-				944D094018604CD80076EF7A /* EZOutput.m */,
-				944D094118604CD80076EF7A /* EZRecorder.h */,
-				944D094218604CD80076EF7A /* EZRecorder.m */,
-			);
-			path = "Core-Components";
-			sourceTree = "<group>";
-		};
-		944D094518604CD80076EF7A /* Interface-Components */ = {
-			isa = PBXGroup;
-			children = (
-				944D094618604CD80076EF7A /* EZAudioPlot.h */,
-				944D094718604CD80076EF7A /* EZAudioPlot.m */,
-				944D094818604CD80076EF7A /* EZAudioPlotGL.h */,
-				944D094918604CD80076EF7A /* EZAudioPlotGL.m */,
-				944D094A18604CD80076EF7A /* EZAudioPlotGLKViewController.h */,
-				944D094B18604CD80076EF7A /* EZAudioPlotGLKViewController.m */,
-				944D094C18604CD80076EF7A /* EZPlot.h */,
-				944D094D18604CD90076EF7A /* EZPlot.m */,
-			);
-			path = "Interface-Components";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -331,10 +321,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				9417A6D1186591CA00D9D37B /* simple-drum-beat.wav in Resources */,
+				9417A8341867DDF600D9D37B /* VERSION in Resources */,
 				944D03F3186038A60076EF7A /* Main_iPad.storyboard in Resources */,
 				944D03F8186038A60076EF7A /* Images.xcassets in Resources */,
 				944D03F0186038A60076EF7A /* Main_iPhone.storyboard in Resources */,
 				944D03E7186038A60076EF7A /* InfoPlist.strings in Resources */,
+				9417A8331867DDF600D9D37B /* CHANGELOG in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,20 +345,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				944D095418604CD90076EF7A /* EZRecorder.m in Sources */,
+				9417A8321867DDF600D9D37B /* TPCircularBuffer.c in Sources */,
+				9417A82F1867DDF600D9D37B /* EZOutput.m in Sources */,
+				9417A82D1867DDF600D9D37B /* EZAudioPlotGLKViewController.m in Sources */,
 				944D03ED186038A60076EF7A /* AppDelegate.m in Sources */,
-				944D094F18604CD90076EF7A /* AEFloatConverter.m in Sources */,
-				944D095918604CD90076EF7A /* EZPlot.m in Sources */,
+				9417A8281867DDF600D9D37B /* AEFloatConverter.m in Sources */,
 				944D043D1860398B0076EF7A /* PlayFileViewController.m in Sources */,
-				944D095118604CD90076EF7A /* EZAudioFile.m in Sources */,
-				944D095718604CD90076EF7A /* EZAudioPlotGL.m in Sources */,
-				944D095618604CD90076EF7A /* EZAudioPlot.m in Sources */,
-				944D095218604CD90076EF7A /* EZMicrophone.m in Sources */,
-				944D095318604CD90076EF7A /* EZOutput.m in Sources */,
-				944D095018604CD90076EF7A /* TPCircularBuffer.c in Sources */,
+				9417A82B1867DDF600D9D37B /* EZAudioPlot.m in Sources */,
+				9417A82A1867DDF600D9D37B /* EZAudioFile.m in Sources */,
+				9417A82C1867DDF600D9D37B /* EZAudioPlotGL.m in Sources */,
 				944D03E9186038A60076EF7A /* main.m in Sources */,
-				944D095518604CD90076EF7A /* EZAudio.m in Sources */,
-				944D095818604CD90076EF7A /* EZAudioPlotGLKViewController.m in Sources */,
+				9417A8301867DDF600D9D37B /* EZPlot.m in Sources */,
+				9417A82E1867DDF600D9D37B /* EZMicrophone.m in Sources */,
+				9417A8311867DDF600D9D37B /* EZRecorder.m in Sources */,
+				9417A8291867DDF600D9D37B /* EZAudio.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

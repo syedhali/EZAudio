@@ -25,7 +25,7 @@
 
 #import "EZOutput.h"
 
-#import "../EZAudio.h"
+#import "EZAudio.h"
 
 @interface EZOutput (){
   BOOL      _isPlaying;

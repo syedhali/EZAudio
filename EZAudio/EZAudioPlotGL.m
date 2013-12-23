@@ -25,7 +25,7 @@
 
 #import "EZAudioPlotGL.h"
 
-#import "../EZAudio.h"
+#import "EZAudio.h"
 
 #if TARGET_OS_IPHONE
   #import "EZAudioPlotGLKViewController.h"

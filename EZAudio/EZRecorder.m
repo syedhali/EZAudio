@@ -25,7 +25,7 @@
 
 #import "EZRecorder.h"
 
-#import "../EZAudio.h"
+#import "EZAudio.h"
 
 @interface EZRecorder (){
   AudioConverterRef           _audioConverter;

@@ -25,7 +25,7 @@
 
 #import "EZAudioPlot.h"
 
-#import "../EZAudio.h"
+#import "EZAudio.h"
 
 #define kCircularBufferSizeTemp 512
 

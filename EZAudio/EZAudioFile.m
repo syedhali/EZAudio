@@ -25,7 +25,7 @@
 
 #import "EZAudioFile.h"
 
-#import "../EZAudio.h"
+#import "EZAudio.h"
 
 @interface EZAudioFile (){
   

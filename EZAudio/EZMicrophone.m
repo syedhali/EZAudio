@@ -30,7 +30,7 @@
 #include <CoreServices/CoreServices.h>
 #endif
 
-#import "../EZAudio.h"
+#import "EZAudio.h"
 
 @interface EZMicrophone (){
   /// Internal
