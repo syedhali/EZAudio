@@ -7,6 +7,8 @@ A simple, intuitive audio framework for iOS and OSX.
 http://syedharisali.com/projects/EZAudio/getting-started
 
 ##Features
+![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/EZAudioSummary.png "EZAudioFeatures")
+
 **Awesome Components**
 
 I've designed six core components to allow you to immediately get your hands dirty recording, playing, and visualizing audio data. These components simply plug into each other and build on top of the high-performance, low-latency AudioUnits API and give you an easy to use API written in Objective-C instead of pure C.
