@@ -27,3 +27,6 @@ THE SOFTWARE.
 Initial release. 
 Components include: EZAudioFile, EZAudioPlot, EZAudioPlotGL, EZMicrophone, EZOutput, and EZRecorder. 
 Provided 6 example projects: CoreGraphicsWaveform, OpenGLWaveform, WaveformFromFile, PassThrough, Record, and PlayFile.
+
+0.0.2
+Fix for Cocoapod spec. Forgot to include files with .c extension.
