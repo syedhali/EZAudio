@@ -43,7 +43,9 @@ An OpenGL-based, GPU-accelerated audio waveform plot capable of visualizing any 
 
 ##Examples & Docs
 
-Within this repo you'll find the examples for iOS and OSX to get you up to speed using each component and plugging them into each other. With just a few lines of code you'll be recording from the microphone, generating audio waveforms, and playing audio files like a boss. See the full Getting Started guide for an interactive look into each of components. Documentation will be hosted very soon on Cocoadocs!
+Within this repo you'll find the examples for iOS and OSX to get you up to speed using each component and plugging them into each other. With just a few lines of code you'll be recording from the microphone, generating audio waveforms, and playing audio files like a boss. See the full Getting Started guide for an interactive look into each of components.
+
+### Example Projects
 
 **_EZAudioCoreGraphicsWaveformExample_** 
 
@@ -68,6 +70,10 @@ Shows how to use the `EZAudioFile` and `EZAudioPlot` to display the audio wavefo
 **_EZAudioPassThroughExample_**
 
 Shows how to use the `EZMicrophone`, `EZOutput`, and the `EZAudioPlotGL` to pass the microphone input to the output for playback while displaying the audio waveform (as a buffer or rolling plot) in real-time. 
+
+### Documentation
+The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/0.0.2/
+<br>You can also generate the docset yourself using appledocs by running the appledocs on the EZAudio source folder.
 
 ##Getting Started
 *To see the full project page, interactive Getting Started guide, and Documentation go here:*
