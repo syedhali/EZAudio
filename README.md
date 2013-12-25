@@ -600,3 +600,8 @@ EZAudio is available under the MIT license. See the LICENSE file for more info.
 Syed Haris Ali<br>
 www.syedharisali.com<br>
 syedhali07[at]gmail.com
+
+##Acknowledgements
+
+- <a href="http://atastypixel.com/blog/">Michael Tyson</a> for creating the <a href="http://atastypixel.com/blog/a-simple-fast-circular-buffer-implementation-for-audio-processing/">TPCircularBuffer</a> and the <a href="http://theamazingaudioengine.com/">Amazing Audio Engine</a>'s `AEFloatConverter`.
+- Chris Adamson and Kevin Avila for writing the amazing book <a href="http://www.amazon.com/Learning-Core-Audio-Hands-On-Programming/dp/0321636848">Learning Core Audio</a>
