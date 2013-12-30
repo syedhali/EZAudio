@@ -43,7 +43,9 @@ An OpenGL-based, GPU-accelerated audio waveform plot capable of visualizing any 
 
 ##Examples & Docs
 
-Within this repo you'll find the examples for iOS and OSX to get you up to speed using each component and plugging them into each other. With just a few lines of code you'll be recording from the microphone, generating audio waveforms, and playing audio files like a boss. See the full Getting Started guide for an interactive look into each of components. Documentation will be hosted very soon on Cocoadocs!
+Within this repo you'll find the examples for iOS and OSX to get you up to speed using each component and plugging them into each other. With just a few lines of code you'll be recording from the microphone, generating audio waveforms, and playing audio files like a boss. See the full Getting Started guide for an interactive look into each of components.
+
+### Example Projects
 
 **_EZAudioCoreGraphicsWaveformExample_** 
 
@@ -68,6 +70,10 @@ Shows how to use the `EZAudioFile` and `EZAudioPlot` to display the audio wavefo
 **_EZAudioPassThroughExample_**
 
 Shows how to use the `EZMicrophone`, `EZOutput`, and the `EZAudioPlotGL` to pass the microphone input to the output for playback while displaying the audio waveform (as a buffer or rolling plot) in real-time. 
+
+### Documentation
+The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/0.0.2/
+<br>You can also generate the docset yourself using appledocs by running the appledocs on the EZAudio source folder.
 
 ##Getting Started
 *To see the full project page, interactive Getting Started guide, and Documentation go here:*
@@ -98,7 +104,16 @@ To begin using `EZAudio` you must first make sure you have the proper build requ
 - GLKit
 
 ###Adding To Project
-See full Getting Started guide: http://syedharisali.com/projects/EZAudio/getting-started
+You can add EZAudio to your project in a few ways: <br><br>1.) The easiest way to use EZAudio is via <a href="http://cocoapods.org/", target="_blank">Cocoapods</a>. Simply add EZAudio to your <a href="http://guides.cocoapods.org/using/the-podfile.html", target="_blank">Podfile</a> like so:
+
+`
+pod 'EZAudio', '~> 0.0.2'
+`
+
+2.) Alternatively, you could clone or fork this repo and just drag and drop the source into your project. 
+
+*For more information see main project page:*
+http://syedharisali.com/projects/EZAudio/getting-started
 
 ##Core Components
 `EZAudio` currently offers four components that encompass a wide range of audio functionality. In addition to the functional aspects of these components such as pulling audio data, reading/writing from files, and performing playback they also take special care to hook into the interface components to allow developers to display visual feedback (see the Interface Components below).
@@ -530,7 +545,7 @@ Provides an audio waveform plot that uses OpenGL to perform the drawing. The API
 
 ####Creating An OpenGL Audio Plot
 
-You can create an audio plot in the interface builder by dragging in a UIView on iOS or an NSOpenGLView on OSX onto your content area. Then change the custom class of the UIView/NSView to `EZAudioPlot`.
+You can create an audio plot in the interface builder by dragging in a UIView on iOS or an NSOpenGLView on OSX onto your content area. Then change the custom class of the UIView/NSView to `EZAudioPlotGL`.
 See full Getting Started page for how to: http://syedharisali.com/projects/EZAudio/getting-started
 
 Alternatively, you can could create the `EZAudioPlotGL` programmatically
@@ -591,3 +606,8 @@ EZAudio is available under the MIT license. See the LICENSE file for more info.
 Syed Haris Ali<br>
 www.syedharisali.com<br>
 syedhali07[at]gmail.com
+
+##Acknowledgements
+EZAudio could not have been created without the invaluable help of:
+- <a href="http://atastypixel.com/blog/">Michael Tyson</a> for creating the <a href="http://atastypixel.com/blog/a-simple-fast-circular-buffer-implementation-for-audio-processing/">TPCircularBuffer</a> and the <a href="http://theamazingaudioengine.com/">Amazing Audio Engine</a>'s `AEFloatConverter`.
+- Chris Adamson and Kevin Avila for writing the amazing book <a href="http://www.amazon.com/Learning-Core-Audio-Hands-On-Programming/dp/0321636848">Learning Core Audio</a>
