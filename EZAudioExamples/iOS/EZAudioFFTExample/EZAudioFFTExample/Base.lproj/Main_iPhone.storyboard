@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController id="vXZ-lx-hvc" customClass="FFTViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="SDG-bW-D9N"/>
+                        <viewControllerLayoutGuide type="bottom" id="Ghx-UD-SsY"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0IN-AU-L5p" customClass="EZAudioPlotGL">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="284"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="284" id="evV-xs-Een"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tRL-re-aMl" customClass="EZAudioPlot">
+                                <rect key="frame" x="0.0" y="284" width="320" height="284"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" priority="86" constant="284" id="G4S-hR-Wmj"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="tRL-re-aMl" secondAttribute="bottom" id="6Xx-qX-MTy"/>
+                            <constraint firstItem="0IN-AU-L5p" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="83g-qr-GsR"/>
+                            <constraint firstAttribute="trailing" secondItem="tRL-re-aMl" secondAttribute="trailing" id="eTI-rb-OrM"/>
+                            <constraint firstAttribute="trailing" secondItem="0IN-AU-L5p" secondAttribute="trailing" id="iL0-3u-CeX"/>
+                            <constraint firstItem="0IN-AU-L5p" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="j4O-TP-2Vf"/>
+                            <constraint firstItem="tRL-re-aMl" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="jtj-vj-fPm"/>
+                            <constraint firstItem="tRL-re-aMl" firstAttribute="top" secondItem="0IN-AU-L5p" secondAttribute="bottom" id="pZY-xg-Sb9"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="audioPlotFreq" destination="tRL-re-aMl" id="s8q-c6-u9E"/>
+                        <outlet property="audioPlotTime" destination="0IN-AU-L5p" id="tej-Kb-ycI"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>
