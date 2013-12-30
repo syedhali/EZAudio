@@ -71,6 +71,12 @@ Shows how to use the `EZAudioFile` and `EZAudioPlot` to display the audio wavefo
 
 Shows how to use the `EZMicrophone`, `EZOutput`, and the `EZAudioPlotGL` to pass the microphone input to the output for playback while displaying the audio waveform (as a buffer or rolling plot) in real-time. 
 
+**_EZAudioFFTExample_**
+
+Shows how to calculate the real-time FFT of the audio data coming from the `EZMicrophone` and the Accelerate framework. The audio data is plotted using the `EZAudioPlotGL` for the time domain plot and the `EZAudioPlot` for the frequency domain plot. 
+
+![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/fftMacExample.png)
+
 ### Documentation
 The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/0.0.2/
 <br>You can also generate the docset yourself using appledocs by running the appledocs on the EZAudio source folder.
