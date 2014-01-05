@@ -45,9 +45,6 @@
   // History buffer
   UInt32 _historyIndex;
   float  _historyBuffer[kEZAudioPlotHistoryBufferSize];
-  
-  // BgColor
-  CGFloat _bgcolor[4];
 }
 @end
 
@@ -236,6 +233,8 @@
 
 #pragma mark - Drawing
 -(void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
+  glClear(GL_COLOR_BUFFER_BIT);
+  
   if( _hasBufferPlotData || _hasRollingPlotData ){
     // Prepare the effect for drawing
     [self.baseEffect prepareToDraw];
@@ -257,10 +256,6 @@
         break;
         
     }
-  }
-  else {
-  	glClearColor((GLclampf)_bgcolor[0],(GLclampf)_bgcolor[1],(GLclampf)_bgcolor[2],(GLclampf)_bgcolor[4]);
-	glClear(GL_COLOR_BUFFER_BIT);
   }
 }
 
@@ -341,12 +336,6 @@
                     alpha:&alpha];
   // Set them on the context
   glClearColor((GLclampf)red,(GLclampf)green,(GLclampf)blue,(GLclampf)alpha);
-  
-  //save color
-  _bgcolor[0] = red;
-  _bgcolor[1] = green;
-  _bgcolor[2] = blue;
-  _bgcolor[3] = alpha;
 }
 
 -(void)_refreshWithColor:(UIColor*)color {
