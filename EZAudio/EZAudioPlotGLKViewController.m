@@ -45,7 +45,6 @@
   // History buffer
   UInt32 _historyIndex;
   float  _historyBuffer[kEZAudioPlotHistoryBufferSize];
-  
 }
 @end
 
@@ -234,12 +233,12 @@
 
 #pragma mark - Drawing
 -(void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
+  // Clear the context
+  glClear(GL_COLOR_BUFFER_BIT);
+  
   if( _hasBufferPlotData || _hasRollingPlotData ){
     // Prepare the effect for drawing
     [self.baseEffect prepareToDraw];
-    
-    // Clear the context
-    glClear(GL_COLOR_BUFFER_BIT);
     
     // Plot either a buffer plot or a rolling plot
     switch(_plotType) {
