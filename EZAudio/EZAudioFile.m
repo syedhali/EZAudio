@@ -291,10 +291,10 @@
     free(_waveformData);
     _waveformData = NULL;
   }
-  if( _floatBuffers ){
-    free(_floatBuffers);
-    _floatBuffers = NULL;
-  }
+//  if( _floatBuffers ){
+//    free(_floatBuffers);
+//    _floatBuffers = NULL;
+//  }
   _frameIndex = 0;
   _waveformFrameRate = 0;
   _waveformTotalBuffers = 0;

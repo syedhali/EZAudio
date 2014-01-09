@@ -648,8 +648,7 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   else if( drawingType == EZAudioPlotGLDrawTypeTriangleStrip ) {
     // graph size = 2 * buffer size to draw triangles and fill regions properly
     for(int i = 0; i < graphSize; i+=2){
-      int bufferIndex = (int)[EZAudio
-                              MAP:i
+      int bufferIndex = (int)[EZAudio MAP:i
                               leftMin:0
                               leftMax:graphSize
                               rightMin:0
