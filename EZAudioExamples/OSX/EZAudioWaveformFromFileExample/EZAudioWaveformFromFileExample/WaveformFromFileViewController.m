@@ -110,7 +110,7 @@
   // Plot the whole waveform
   self.audioPlot.plotType        = EZPlotTypeBuffer;
   self.audioPlot.shouldFill      = YES;
-  self.audioPlot.shouldMirror    = YES;
+  self.audioPlot.shouldMirror    = YES;  
   [self.audioFile getWaveformDataWithCompletionBlock:^(float *waveformData, UInt32 length) {
     [self.audioPlot updateBuffer:waveformData withBufferSize:length];
   }];

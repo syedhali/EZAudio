@@ -119,15 +119,16 @@
   _totalDuration = _totalFrames / _fileFormat.mSampleRate;
   
   // Set the client format on the stream
+  UInt32 mChannelsPerFrame = _fileFormat.mChannelsPerFrame;
   _clientFormat.mBitsPerChannel   = 8 * sizeof(AudioUnitSampleType);
-  _clientFormat.mBytesPerFrame    = sizeof(AudioUnitSampleType);
-  _clientFormat.mBytesPerPacket   = sizeof(AudioUnitSampleType);
-  _clientFormat.mChannelsPerFrame = 1;
-  _clientFormat.mFormatFlags      = kAudioFormatFlagsCanonical | kAudioFormatFlagIsNonInterleaved;
+  _clientFormat.mBytesPerFrame    = mChannelsPerFrame * sizeof(AudioUnitSampleType);
+  _clientFormat.mBytesPerPacket   = mChannelsPerFrame * sizeof(AudioUnitSampleType);
+  _clientFormat.mChannelsPerFrame = mChannelsPerFrame;
+  _clientFormat.mFormatFlags      = kAudioFormatFlagIsPacked|kAudioFormatFlagIsFloat;
   _clientFormat.mFormatID         = kAudioFormatLinearPCM;
   _clientFormat.mFramesPerPacket  = 1;
 	_clientFormat.mSampleRate       = _fileFormat.mSampleRate;
-  
+    
   [EZAudio checkResult:ExtAudioFileSetProperty(_audioFile,
                                                kExtAudioFileProperty_ClientDataFormat,
                                                sizeof (AudioStreamBasicDescription),
@@ -154,8 +155,8 @@
     UInt32 outputBufferSize = 32 * frames; // 32 KB
     audioBufferList->mNumberBuffers = 1;
     audioBufferList->mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
-    audioBufferList->mBuffers[0].mDataByteSize = outputBufferSize;
-    audioBufferList->mBuffers[0].mData = (AudioUnitSampleType*)malloc(sizeof(AudioUnitSampleType*)*outputBufferSize);
+    audioBufferList->mBuffers[0].mDataByteSize = _clientFormat.mChannelsPerFrame*outputBufferSize;
+    audioBufferList->mBuffers[0].mData = (AudioUnitSampleType*)malloc(_clientFormat.mChannelsPerFrame*sizeof(AudioUnitSampleType*)*outputBufferSize);
     [EZAudio checkResult:ExtAudioFileRead(_audioFile,
                                           &frames,
                                           audioBufferList)
@@ -218,8 +219,8 @@
       UInt32 outputBufferSize = 32 * _waveformFrameRate; // 32 KB
       bufferList->mNumberBuffers = 1;
       bufferList->mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
-      bufferList->mBuffers[0].mDataByteSize = outputBufferSize;
-      bufferList->mBuffers[0].mData = (AudioUnitSampleType*)malloc(sizeof(AudioUnitSampleType*)*outputBufferSize);
+      bufferList->mBuffers[0].mDataByteSize = _clientFormat.mChannelsPerFrame*outputBufferSize;
+      bufferList->mBuffers[0].mData = (AudioUnitSampleType*)malloc(_clientFormat.mChannelsPerFrame*sizeof(AudioUnitSampleType*)*outputBufferSize);
       
       // Read in the specified number of frames
       [EZAudio checkResult:ExtAudioFileRead(_audioFile,

@@ -451,7 +451,7 @@ static OSStatus inputCallback(void                          *inRefCon,
   
   // Get the stream format description from the newly created input unit and assign it to the output of the input unit
   propertySize = sizeof(AudioStreamBasicDescription);
-  [EZAudio checkResult:AudioUnitGetProperty( microphone->microphoneInput,
+  [EZAudio checkResult:AudioUnitGetProperty(microphone->microphoneInput,
                                             kAudioUnitProperty_StreamFormat,
                                             kAudioUnitScope_Output,
                                             inputBus,
@@ -461,7 +461,7 @@ static OSStatus inputCallback(void                          *inRefCon,
   
   // Assign the same stream format description from the output of the input unit and pull the sample rate
   AudioStreamBasicDescription deviceFormat;
-  [EZAudio checkResult:AudioUnitGetProperty( microphone->microphoneInput,
+  [EZAudio checkResult:AudioUnitGetProperty(microphone->microphoneInput,
                                             kAudioUnitProperty_StreamFormat,
                                             kAudioUnitScope_Input,
                                             inputBus,
@@ -472,7 +472,7 @@ static OSStatus inputCallback(void                          *inRefCon,
   microphone->streamFormat.mBitsPerChannel   = 8 * sizeof(AudioUnitSampleType);
   microphone->streamFormat.mBytesPerFrame    = sizeof(AudioUnitSampleType);
   microphone->streamFormat.mBytesPerPacket   = sizeof(AudioUnitSampleType);
-  microphone->streamFormat.mChannelsPerFrame = 2;
+  microphone->streamFormat.mChannelsPerFrame = 1;
   microphone->streamFormat.mFormatFlags      = kAudioFormatFlagsCanonical | kAudioFormatFlagIsNonInterleaved;
   microphone->streamFormat.mFormatID         = kAudioFormatLinearPCM;
   microphone->streamFormat.mFramesPerPacket  = 1;

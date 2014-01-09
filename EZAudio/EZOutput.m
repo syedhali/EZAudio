@@ -57,8 +57,8 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
     
     TPCircularBuffer *circularBuffer = [output.outputDataSource outputShouldUseCircularBuffer:output];
     if( !circularBuffer ){
-      Float32 *left  = (Float32*)ioData->mBuffers[0].mData;
-      Float32 *right = (Float32*)ioData->mBuffers[1].mData;
+      AudioUnitSampleType *left  = (AudioUnitSampleType*)ioData->mBuffers[0].mData;
+      AudioUnitSampleType *right = (AudioUnitSampleType*)ioData->mBuffers[1].mData;
       for(int i = 0; i < inNumberFrames; i++ ){
         left[  i ] = 0.0f;
         right[ i ] = 0.0f;
@@ -93,24 +93,23 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
                                         needsBufferListWithFrames:inNumberFrames
                                                    withBufferSize:&bufferSize];
     if( !bufferList ){
-      Float32 *left  = (Float32*)ioData->mBuffers[0].mData;
-      Float32 *right = (Float32*)ioData->mBuffers[1].mData;
+      AudioUnitSampleType *left  = (AudioUnitSampleType*)ioData->mBuffers[0].mData;
+      AudioUnitSampleType *right = (AudioUnitSampleType*)ioData->mBuffers[1].mData;
       for(int i = 0; i < inNumberFrames; i++ ){
         left[  i ] = 0.0f;
         right[ i ] = 0.0f;
       }
       return noErr;
     };
-    
     // Interleaved
     if( !(ioData->mNumberBuffers == 1) ){
-      Float32 *left  = (Float32*)ioData->mBuffers[0].mData;
-      Float32 *right = (Float32*)ioData->mBuffers[1].mData;
+      AudioUnitSampleType *left        = (AudioUnitSampleType*)ioData->mBuffers[0].mData;
+      AudioUnitSampleType *right       = (AudioUnitSampleType*)ioData->mBuffers[1].mData;
+      AudioUnitSampleType *interleaved = (AudioUnitSampleType*)bufferList->mBuffers[0].mData;
       for(int i = 0; i < inNumberFrames; i++ ){
         if( bufferList ){
-          Float32 *interleaved = (Float32*)bufferList->mBuffers[0].mData;
-          left[i]  = interleaved[i];
-          right[i] = interleaved[i];
+          *left++  = *interleaved++;
+          *right++ = *interleaved++;
         }
         else {
           left[  i ] = 0.0f;
@@ -206,14 +205,14 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
              operation:"Could not get hardware sample rate"];
 #endif
   
-  // Setup an ASBD in canonical format
+  // Setup an ASBD
   AudioStreamBasicDescription asbd;
-  memset(&asbd, 0, sizeof(asbd));
+  UInt32 mChannelsPerFrame = 2;
   asbd.mBitsPerChannel   = 8 * sizeof(AudioUnitSampleType);
-  asbd.mBytesPerFrame    = sizeof(AudioUnitSampleType);
-  asbd.mBytesPerPacket   = sizeof(AudioUnitSampleType);
-  asbd.mChannelsPerFrame = 2;
-  asbd.mFormatFlags      = kAudioFormatFlagsCanonical | kAudioFormatFlagIsNonInterleaved;
+  asbd.mBytesPerFrame    = mChannelsPerFrame * sizeof(AudioUnitSampleType);
+  asbd.mBytesPerPacket   = mChannelsPerFrame * sizeof(AudioUnitSampleType);
+  asbd.mChannelsPerFrame = mChannelsPerFrame;
+  asbd.mFormatFlags      = kAudioFormatFlagIsPacked|kAudioFormatFlagIsFloat;
   asbd.mFormatID         = kAudioFormatLinearPCM;
   asbd.mFramesPerPacket  = 1;
 	asbd.mSampleRate       = hardwareSampleRate;

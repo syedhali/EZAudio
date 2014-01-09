@@ -50,7 +50,6 @@
 #pragma mark - Initialize View Controller Here
 -(void)initializeViewController {
   // Create an instance of the microphone and tell it to use this view controller instance as the delegate
-  self.microphone = [EZMicrophone microphoneWithDelegate:self];
 }
 
 #pragma mark - Customize the Audio Plot
