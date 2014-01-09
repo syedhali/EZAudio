@@ -93,12 +93,6 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
                                         needsBufferListWithFrames:inNumberFrames
                                                    withBufferSize:&bufferSize];
     if( !bufferList ){
-      AudioUnitSampleType *left  = (AudioUnitSampleType*)ioData->mBuffers[0].mData;
-      AudioUnitSampleType *right = (AudioUnitSampleType*)ioData->mBuffers[1].mData;
-      for(int i = 0; i < inNumberFrames; i++ ){
-        left[  i ] = 0.0f;
-        right[ i ] = 0.0f;
-      }
       return noErr;
     };
     // Interleaved

@@ -231,11 +231,8 @@
       eof = _waveformFrameRate == 0;
       _frameIndex += _waveformFrameRate;
       
-      // Convert to floats
-      AEFloatConverterToFloat(_floatConverter,bufferList,_floatBuffers,_waveformFrameRate);
-      
       // Calculate RMS of each buffer
-      float rms = [EZAudio RMS:_floatBuffers[0]
+      float rms = [EZAudio RMS:bufferList->mBuffers[0].mData
                         length:bufferSize];
       _waveformData[i] = rms;
       
@@ -292,7 +289,15 @@
 -(void)dealloc {
   if( _waveformData ){
     free(_waveformData);
+    _waveformData = NULL;
   }
+  if( _floatBuffers ){
+    free(_floatBuffers);
+    _floatBuffers = NULL;
+  }
+  _frameIndex = 0;
+  _waveformFrameRate = 0;
+  _waveformTotalBuffers = 0;
   [EZAudio checkResult:ExtAudioFileDispose(_audioFile)
              operation:"Failed to dispose of extended audio file."];
 }
