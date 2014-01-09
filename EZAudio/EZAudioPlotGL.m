@@ -109,7 +109,7 @@
 #if TARGET_OS_IPHONE
   // Initialize the subview controller
   _glViewController = [[EZAudioPlotGLKViewController alloc] init];
-  _glViewController.view.frame = self.frame;
+  _glViewController.view.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
   [self insertSubview:self.glViewController.view atIndex:0];
 #elif TARGET_OS_MAC
 #endif
