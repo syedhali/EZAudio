@@ -106,6 +106,16 @@ inNumberFrames:(UInt32)inNumberFrames
  */
 -(id)initWithDataSource:(id<EZOutputDataSource>)dataSource;
 
+/**
+ Creates a new instance of the EZOutput and allows the caller to specify an EZOutputDataSource.
+ @param dataSource The EZOutputDataSource that will be used to pull the audio data for the output callback.
+ @param audioStreamBasicDescription The AudioStreamBasicDescription of the EZOutput.
+ @warning AudioStreamBasicDescriptions that are invalid will cause the EZOutput to fail to initialize
+ @return A newly created instance of the EZOutput class.
+ */
+-(id)         initWithDataSource:(id<EZOutputDataSource>)dataSource
+ withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
+
 #pragma mark - Class Initializers
 ///-----------------------------------------------------------
 /// @name Class Initializers
@@ -117,6 +127,16 @@ inNumberFrames:(UInt32)inNumberFrames
  @return A newly created instance of the EZOutput class.
  */
 +(EZOutput*)outputWithDataSource:(id<EZOutputDataSource>)dataSource;
+
+/**
+ Class method to create a new instance of the EZOutput and allows the caller to specify an EZOutputDataSource.
+ @param dataSource The EZOutputDataSource that will be used to pull the audio data for the output callback.
+ @param audioStreamBasicDescription The AudioStreamBasicDescription of the EZOutput.
+ @warning AudioStreamBasicDescriptions that are invalid will cause the EZOutput to fail to initialize
+ @return A newly created instance of the EZOutput class.
+ */
++(EZOutput*)outputWithDataSource:(id<EZOutputDataSource>)dataSource
+ withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
 
 #pragma mark - Singleton
 ///-----------------------------------------------------------
@@ -154,5 +174,17 @@ inNumberFrames:(UInt32)inNumberFrames
  @return YES if the EZOutput is pulling audio data to the output device, NO if it is stopped
  */
 -(BOOL)isPlaying;
+
+#pragma mark - Setters
+///-----------------------------------------------------------
+/// @name Customizing The Output Format
+///-----------------------------------------------------------
+
+/**
+ Sets the AudioStreamBasicDescription on the output.
+ @warning Do not set this during playback.
+ @param asbd The new AudioStreamBasicDescription to use in place of the current audio format description.
+ */
+-(void)setAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd;
 
 @end

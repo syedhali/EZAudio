@@ -28,8 +28,10 @@
 #import "EZAudio.h"
 
 @interface EZOutput (){
-  BOOL      _isPlaying;
-  AudioUnit _outputUnit;
+  BOOL                        _customASBD;
+  BOOL                        _isPlaying;
+  AudioStreamBasicDescription _outputASBD;
+  AudioUnit                   _outputUnit;
 }
 @end
 
@@ -103,11 +105,11 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
       for(int i = 0; i < inNumberFrames; i++ ){
         if( bufferList ){
           *left++  = *interleaved++;
-          *right++ = *interleaved++;
+          *right++ =  *interleaved++;
         }
         else {
-          left[  i ] = 0.0f;
-          right[ i ] = 0.0f;
+          *left++  = 0.0f;
+          *right++ = 0.0f;
         }
       }
     }
@@ -145,6 +147,18 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
   return self;
 }
 
+-(id)         initWithDataSource:(id<EZOutputDataSource>)dataSource
+ withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription {
+  self = [super init];
+  if(self){
+    _customASBD = YES;
+    _outputASBD = audioStreamBasicDescription;
+    self.outputDataSource = dataSource;
+    [self _configureOutput];
+  }
+  return self;
+}
+
 #pragma mark - Class Initializers
 +(EZOutput*)outputWithDataSource:(id<EZOutputDataSource>)dataSource {
   return [[EZOutput alloc] initWithDataSource:dataSource];
@@ -167,11 +181,11 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
   
   //
   AudioComponentDescription outputcd;
-  outputcd.componentFlags = 0;
-  outputcd.componentFlagsMask = 0;
+  outputcd.componentFlags        = 0;
+  outputcd.componentFlagsMask    = 0;
   outputcd.componentManufacturer = kAudioUnitManufacturer_Apple;
-  outputcd.componentSubType = kAudioUnitSubType_RemoteIO;
-  outputcd.componentType = kAudioUnitType_Output;
+  outputcd.componentSubType      = kAudioUnitSubType_RemoteIO;
+  outputcd.componentType         = kAudioUnitType_Output;
   
   //
   AudioComponent comp = AudioComponentFindNext(NULL,&outputcd);
@@ -179,8 +193,8 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
              operation:"Failed to get output unit"];
   
   // Setup the output unit for playback
-  UInt32 oneFlag = 1;
-  AudioUnitElement bus0 = 0;
+  UInt32           oneFlag = 1;
+  AudioUnitElement bus0    = 0;
   [EZAudio checkResult:AudioUnitSetProperty(_outputUnit,
                                             kAudioOutputUnitProperty_EnableIO,
                                             kAudioUnitScope_Output,
@@ -199,25 +213,18 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
              operation:"Could not get hardware sample rate"];
 #endif
   
-  // Setup an ASBD
-  AudioStreamBasicDescription asbd;
-  UInt32 mChannelsPerFrame = 2;
-  asbd.mBitsPerChannel   = 8 * sizeof(AudioUnitSampleType);
-  asbd.mBytesPerFrame    = mChannelsPerFrame * sizeof(AudioUnitSampleType);
-  asbd.mBytesPerPacket   = mChannelsPerFrame * sizeof(AudioUnitSampleType);
-  asbd.mChannelsPerFrame = mChannelsPerFrame;
-  asbd.mFormatFlags      = kAudioFormatFlagIsPacked|kAudioFormatFlagIsFloat;
-  asbd.mFormatID         = kAudioFormatLinearPCM;
-  asbd.mFramesPerPacket  = 1;
-	asbd.mSampleRate       = hardwareSampleRate;
+  // Setup an ASBD in canonical format by default
+  if( !_customASBD ){
+    _outputASBD = [EZAudio stereoCanonicalNonInterleavedFormatWithSampleRate:hardwareSampleRate];
+  }
   
   // Set the format for output
   [EZAudio checkResult:AudioUnitSetProperty(_outputUnit,
                                             kAudioUnitProperty_StreamFormat,
                                             kAudioUnitScope_Input,
                                             bus0,
-                                            &asbd,
-                                            sizeof(asbd))
+                                            &_outputASBD,
+                                            sizeof(_outputASBD))
              operation:"Couldn't set the ASBD for input scope/bos 0"];
   
   //
@@ -255,9 +262,22 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
   }
   [EZAudio checkResult:AudioComponentInstanceNew(comp,&_outputUnit)
              operation:"Failed to open component for output unit"];
-  
-  
 
+  
+  // Setup an ASBD in canonical format by default
+  if( !_customASBD ){
+    _outputASBD = [EZAudio stereoCanonicalNonInterleavedFormatWithSampleRate:44100];
+  }
+  
+  // Set the format for output
+  [EZAudio checkResult:AudioUnitSetProperty(_outputUnit,
+                                            kAudioUnitProperty_StreamFormat,
+                                            kAudioUnitScope_Input,
+                                            0,
+                                            &_outputASBD,
+                                            sizeof(_outputASBD))
+             operation:"Couldn't set the ASBD for input scope/bos 0"];
+  
   //
   AURenderCallbackStruct input;
   input.inputProc = OutputRenderCallback;
@@ -297,6 +317,26 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
 #pragma mark - Getters
 -(BOOL)isPlaying {
   return _isPlaying;
+}
+
+#pragma mark - Setters
+-(void)setAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd {
+  if( self.isPlaying ){
+    NSAssert(self.isPlaying,@"Cannot set the AudioStreamBasicDescription while output is performing playback");
+    return;
+  }
+  else {
+    _customASBD = YES;
+    _outputASBD = asbd;
+    // Set the format for output
+    [EZAudio checkResult:AudioUnitSetProperty(_outputUnit,
+                                              kAudioUnitProperty_StreamFormat,
+                                              kAudioUnitScope_Input,
+                                              0,
+                                              &_outputASBD,
+                                              sizeof(_outputASBD))
+               operation:"Couldn't set the ASBD for input scope/bos 0"];
+  }
 }
 
 -(void)dealloc {

@@ -44,6 +44,64 @@
 }
 
 #pragma mark - AudioStreamBasicDescription Utility
+/// AudioStreamFormatDescription Helpers
+
++(AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)sampleRate {
+  AudioStreamBasicDescription asbd;
+  UInt32 byteSize = sizeof(AudioUnitSampleType);
+  asbd.mBitsPerChannel   = 8 * byteSize;
+  asbd.mBytesPerFrame    = byteSize;
+  asbd.mBytesPerPacket   = byteSize;
+  asbd.mChannelsPerFrame = 1;
+  asbd.mFormatFlags      = kAudioFormatFlagIsPacked|kAudioFormatFlagIsFloat;
+  asbd.mFormatID         = kAudioFormatLinearPCM;
+  asbd.mFramesPerPacket  = 1;
+  asbd.mSampleRate       = sampleRate;
+  return asbd;
+}
+
++(AudioStreamBasicDescription)monoCanonicalFormatWithSampleRate:(float)sampleRate {
+  AudioStreamBasicDescription asbd;
+  UInt32 byteSize = sizeof(AudioUnitSampleType);
+  asbd.mBitsPerChannel   = 8 * byteSize;
+  asbd.mBytesPerFrame    = byteSize;
+  asbd.mBytesPerPacket   = byteSize;
+  asbd.mChannelsPerFrame = 1;
+  asbd.mFormatFlags      = kAudioFormatFlagsCanonical|kAudioFormatFlagIsNonInterleaved;
+  asbd.mFormatID         = kAudioFormatLinearPCM;
+  asbd.mFramesPerPacket  = 1;
+  asbd.mSampleRate       = sampleRate;
+  return asbd;
+}
+
++(AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)sampleRate {
+  AudioStreamBasicDescription asbd;
+  UInt32 byteSize = sizeof(AudioUnitSampleType);
+  asbd.mBitsPerChannel   = 8 * byteSize;
+  asbd.mBytesPerFrame    = byteSize;
+  asbd.mBytesPerPacket   = byteSize;
+  asbd.mChannelsPerFrame = 2;
+  asbd.mFormatFlags      = kAudioFormatFlagsCanonical|kAudioFormatFlagIsNonInterleaved;
+  asbd.mFormatID         = kAudioFormatLinearPCM;
+  asbd.mFramesPerPacket  = 1;
+  asbd.mSampleRate       = sampleRate;
+  return asbd;
+}
+
++(AudioStreamBasicDescription)stereoFloatInterleavedFormatWithSampleRate:(float)sampleRate {
+  AudioStreamBasicDescription asbd;
+  UInt32 byteSize = sizeof(AudioUnitSampleType);
+  asbd.mBitsPerChannel   = 8 * byteSize;
+  asbd.mBytesPerFrame    = 2 * byteSize;
+  asbd.mBytesPerPacket   = 2 * byteSize;
+  asbd.mChannelsPerFrame = 2;
+  asbd.mFormatFlags      = kAudioFormatFlagIsPacked|kAudioFormatFlagIsFloat;
+  asbd.mFormatID         = kAudioFormatLinearPCM;
+  asbd.mFramesPerPacket  = 1;
+  asbd.mSampleRate       = sampleRate;
+  return asbd;
+}
+
 +(void)printASBD:(AudioStreamBasicDescription)asbd {
   char formatIDString[5];
   UInt32 formatID = CFSwapInt32HostToBig(asbd.mFormatID);
@@ -94,6 +152,35 @@
 }
 
 #pragma mark - Math Utility
++(void)appendBufferAndShift:(float*)buffer
+             withBufferSize:(int)bufferLength
+            toScrollHistory:(float*)scrollHistory
+      withScrollHistorySize:(int)scrollHistoryLength {
+  NSAssert(scrollHistoryLength>=bufferLength,@"Scroll history array length must be greater buffer length");
+  NSAssert(scrollHistoryLength>0,@"Scroll history array length must be greater than 0");
+  NSAssert(bufferLength>0,@"Buffer array length must be greater than 0");
+  int    shiftLength    = scrollHistoryLength - bufferLength;
+  size_t floatByteSize  = sizeof(float);
+  size_t shiftByteSize  = shiftLength  * floatByteSize;
+  size_t bufferByteSize = bufferLength * floatByteSize;
+  memmove(&scrollHistory[0],
+          &scrollHistory[bufferLength],
+          shiftByteSize);
+  memmove(&scrollHistory[shiftLength],
+          &buffer[0],
+          bufferByteSize);
+}
+
++(void)    appendValue:(float)value
+       toScrollHistory:(float*)scrollHistory
+ withScrollHistorySize:(int)scrollHistoryLength {
+  float val[1]; val[0] = value;
+  [self appendBufferAndShift:val
+              withBufferSize:1
+             toScrollHistory:scrollHistory
+       withScrollHistorySize:scrollHistoryLength];
+}
+
 +(float)MAP:(float)value
     leftMin:(float)leftMin
     leftMax:(float)leftMax
@@ -113,6 +200,40 @@
   return sqrtf( sum / bufferSize );
 }
 
+#pragma mark - Plot Utility
++(void)updateScrollHistory:(float **)scrollHistory
+                withLength:(int)scrollHistoryLength
+                   atIndex:(int*)index
+                withBuffer:(float *)buffer
+            withBufferSize:(int)bufferSize
+      isResolutionChanging:(BOOL*)isChanging {
+  
+  //
+  size_t floatByteSize = sizeof(float);
+
+  //
+  if( *scrollHistory == NULL ){
+    // Create the history buffer
+    *scrollHistory = (float*)calloc(kEZAudioPlotMaxHistoryBufferLength,floatByteSize);
+  }
+
+  //
+  if( !*isChanging ){
+    float rms = [EZAudio RMS:buffer length:bufferSize];
+    if( *index < scrollHistoryLength ){
+      float *hist = *scrollHistory;
+      hist[*index] = rms;
+      (*index)++;
+    }
+    else {
+      [EZAudio appendValue:rms
+           toScrollHistory:*scrollHistory
+     withScrollHistorySize:scrollHistoryLength];
+    }
+  }
+  
+}
+
 #pragma mark - TPCircularBuffer Utility
 +(void)circularBuffer:(TPCircularBuffer *)circularBuffer withSize:(int)size {
   TPCircularBufferInit(circularBuffer,size);
@@ -127,6 +248,7 @@
 
 +(void)freeCircularBuffer:(TPCircularBuffer *)circularBuffer {
   TPCircularBufferClear(circularBuffer);
+  TPCircularBufferCleanup(circularBuffer);
 }
 
 @end

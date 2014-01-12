@@ -34,6 +34,7 @@
 
 @interface EZMicrophone (){
   /// Internal
+  BOOL _customASBD;
   BOOL _isConfigured;
   BOOL _isFetching;
   
@@ -67,7 +68,6 @@ static OSStatus inputCallback(void                          *inRefCon,
                               UInt32                        inBusNumber,
                               UInt32                        inNumberFrames,
                               AudioBufferList               *ioData ) {
-
   EZMicrophone *microphone = (__bridge EZMicrophone*)inRefCon;
   OSStatus      result      = noErr;
 #if TARGET_OS_IPHONE
@@ -140,12 +140,30 @@ static OSStatus inputCallback(void                          *inRefCon,
 }
 
 -(EZMicrophone *)initWithMicrophoneDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate
+            withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription {
+  self = [self initWithMicrophoneDelegate:microphoneDelegate];
+  if(self){
+    _customASBD  = YES;
+    streamFormat = audioStreamBasicDescription;
+  }
+  return self;
+}
+
+-(EZMicrophone *)initWithMicrophoneDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate
                            startsImmediately:(BOOL)startsImmediately {
   self = [self initWithMicrophoneDelegate:microphoneDelegate];
   if(self){
-    if(startsImmediately){
-      [self startFetchingAudio];
-    }
+    startsImmediately ? [self startFetchingAudio] : -1;
+  }
+  return self;
+}
+
+-(EZMicrophone *)initWithMicrophoneDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate
+            withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription
+                          startsImmediately:(BOOL)startsImmediately {
+  self = [self initWithMicrophoneDelegate:microphoneDelegate withAudioStreamBasicDescription:audioStreamBasicDescription];
+  if(self){
+    startsImmediately ? [self startFetchingAudio] : -1;
   }
   return self;
 }
@@ -156,9 +174,23 @@ static OSStatus inputCallback(void                          *inRefCon,
 }
 
 +(EZMicrophone *)microphoneWithDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate
+        withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription {
+  return [[EZMicrophone alloc] initWithMicrophoneDelegate:microphoneDelegate
+                          withAudioStreamBasicDescription:audioStreamBasicDescription];
+}
+
++(EZMicrophone *)microphoneWithDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate
                        startsImmediately:(BOOL)startsImmediately {
   return [[EZMicrophone alloc] initWithMicrophoneDelegate:microphoneDelegate
                                          startsImmediately:startsImmediately];
+}
+
++(EZMicrophone *)microphoneWithDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate
+        withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription
+                      startsImmediately:(BOOL)startsImmediately {
+  return [[EZMicrophone alloc] initWithMicrophoneDelegate:microphoneDelegate
+                          withAudioStreamBasicDescription:audioStreamBasicDescription
+                                        startsImmediately:startsImmediately];
 }
 
 #pragma mark - Singleton
@@ -273,14 +305,12 @@ static OSStatus inputCallback(void                          *inRefCon,
 #endif
   
   // Set the stream format
-  microphone->streamFormat.mBitsPerChannel   = 8 * sizeof(AudioUnitSampleType);
-  microphone->streamFormat.mBytesPerFrame    = sizeof(AudioUnitSampleType);
-  microphone->streamFormat.mBytesPerPacket   = sizeof(AudioUnitSampleType);
-  microphone->streamFormat.mChannelsPerFrame = 2;
-  microphone->streamFormat.mFormatFlags      = kAudioFormatFlagsCanonical | kAudioFormatFlagIsNonInterleaved;
-  microphone->streamFormat.mFormatID         = kAudioFormatLinearPCM;
-  microphone->streamFormat.mFramesPerPacket  = 1;
-	microphone->streamFormat.mSampleRate       = hardwareSampleRate;
+  if( !_customASBD ){
+    microphone->streamFormat = [EZAudio stereoCanonicalNonInterleavedFormatWithSampleRate:hardwareSampleRate];
+  }
+  else {
+    microphone->streamFormat.mSampleRate = hardwareSampleRate;
+  }
   
   // Get the buffer duration (approximate for simulator, real device will have it's preferred value set)
   Float32 bufferDuration = 0.0232;
@@ -450,33 +480,34 @@ static OSStatus inputCallback(void                          *inRefCon,
              operation:"Couldn't set default device on I/O unit"];
   
   // Get the stream format description from the newly created input unit and assign it to the output of the input unit
+  AudioStreamBasicDescription inputScopeFormat;
   propertySize = sizeof(AudioStreamBasicDescription);
   [EZAudio checkResult:AudioUnitGetProperty(microphone->microphoneInput,
                                             kAudioUnitProperty_StreamFormat,
                                             kAudioUnitScope_Output,
                                             inputBus,
-                                            &microphone->streamFormat,
+                                            &inputScopeFormat,
                                             &propertySize)
              operation:"Couldn't get ASBD from input unit (1)"];
   
   // Assign the same stream format description from the output of the input unit and pull the sample rate
-  AudioStreamBasicDescription deviceFormat;
+  AudioStreamBasicDescription outputScopeFormat;
   [EZAudio checkResult:AudioUnitGetProperty(microphone->microphoneInput,
                                             kAudioUnitProperty_StreamFormat,
                                             kAudioUnitScope_Input,
                                             inputBus,
-                                            &deviceFormat,
+                                            &outputScopeFormat,
                                             &propertySize)
              operation:"Couldn't get ASBD from input unit (2)"];
   
-  microphone->streamFormat.mBitsPerChannel   = 8 * sizeof(AudioUnitSampleType);
-  microphone->streamFormat.mBytesPerFrame    = sizeof(AudioUnitSampleType);
-  microphone->streamFormat.mBytesPerPacket   = sizeof(AudioUnitSampleType);
-  microphone->streamFormat.mChannelsPerFrame = 1;
-  microphone->streamFormat.mFormatFlags      = kAudioFormatFlagsCanonical | kAudioFormatFlagIsNonInterleaved;
-  microphone->streamFormat.mFormatID         = kAudioFormatLinearPCM;
-  microphone->streamFormat.mFramesPerPacket  = 1;
-	microphone->streamFormat.mSampleRate       = deviceFormat.mSampleRate;
+  if( !_customASBD ){
+    microphone->streamFormat = [EZAudio stereoCanonicalNonInterleavedFormatWithSampleRate:outputScopeFormat.mSampleRate];
+  }
+  else {
+    microphone->streamFormat.mSampleRate = outputScopeFormat.mSampleRate;
+  }
+  
+  [EZAudio printASBD:microphone->streamFormat];
   
   // Readjust property size for ASBD and set the value on the input unit
   propertySize = sizeof(AudioStreamBasicDescription);
@@ -507,7 +538,7 @@ static OSStatus inputCallback(void                          *inRefCon,
                                             &propertySize)
              operation:"Could not get buffer frame size from input unit"];
   
-  UInt32 bufferSizeBytes = bufferSizeFrames * sizeof(Float32);
+  UInt32 bufferSizeBytes = bufferSizeFrames * sizeof(AudioUnitSampleType);
   
   // Create the audio buffer list and pre-malloc the buffers in the list
   propertySize = offsetof( AudioBufferList, mBuffers[0] ) + ( sizeof( AudioBuffer ) * microphone->streamFormat.mChannelsPerFrame );

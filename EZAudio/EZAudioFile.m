@@ -119,15 +119,16 @@
   _totalDuration = _totalFrames / _fileFormat.mSampleRate;
   
   // Set the client format on the stream
-  UInt32 mChannelsPerFrame = _fileFormat.mChannelsPerFrame;
-  _clientFormat.mBitsPerChannel   = 8 * sizeof(AudioUnitSampleType);
-  _clientFormat.mBytesPerFrame    = mChannelsPerFrame * sizeof(AudioUnitSampleType);
-  _clientFormat.mBytesPerPacket   = mChannelsPerFrame * sizeof(AudioUnitSampleType);
-  _clientFormat.mChannelsPerFrame = mChannelsPerFrame;
-  _clientFormat.mFormatFlags      = kAudioFormatFlagIsPacked|kAudioFormatFlagIsFloat;
-  _clientFormat.mFormatID         = kAudioFormatLinearPCM;
-  _clientFormat.mFramesPerPacket  = 1;
-	_clientFormat.mSampleRate       = _fileFormat.mSampleRate;
+  switch (_fileFormat.mChannelsPerFrame) {
+    case 1:
+      _clientFormat = [EZAudio monoFloatFormatWithSampleRate:_fileFormat.mSampleRate];
+      break;
+    case 2:
+      _clientFormat = [EZAudio stereoFloatInterleavedFormatWithSampleRate:_fileFormat.mSampleRate];
+      break;
+    default:
+      break;
+  }
     
   [EZAudio checkResult:ExtAudioFileSetProperty(_audioFile,
                                                kExtAudioFileProperty_ClientDataFormat,

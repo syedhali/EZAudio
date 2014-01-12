@@ -57,6 +57,11 @@
   // History buffer
   UInt32 _historyIndex;
   float  _historyBuffer[kEZAudioPlotHistoryBufferSize];
+  
+  // Copied buffer data
+  float *_copiedBuffer;
+  UInt32 _copiedBufferSize;
+  
 }
 @property (nonatomic,assign,readonly) EZAudioPlotGLDrawType drawingType;
 @property (nonatomic,strong) GLKBaseEffect *baseEffect;
@@ -105,15 +110,14 @@
 
 #pragma mark - Initialize Properties Here
 -(void)initializeView {
-  
 #if TARGET_OS_IPHONE
   // Initialize the subview controller
   _glViewController = [[EZAudioPlotGLKViewController alloc] init];
   _glViewController.view.frame = self.bounds;
   [self insertSubview:self.glViewController.view atIndex:0];
 #elif TARGET_OS_MAC
+  _copiedBuffer = NULL;
 #endif
-  
   // Set the default properties
   self.gain       = 1.0;
   self.plotType   = EZPlotTypeBuffer;
@@ -124,7 +128,6 @@
 #endif
   self.shouldFill   = NO;
   self.shouldMirror = NO;
-  
 }
 
 #pragma mark - Setters
@@ -199,15 +202,23 @@
   [self.glViewController updateBuffer:buffer
                        withBufferSize:bufferSize];
 #elif TARGET_OS_MAC
+  if( _copiedBuffer == NULL ){
+    _copiedBuffer = (float*)malloc(bufferSize*sizeof(float));
+  }
+  _copiedBufferSize = bufferSize;
+  // Copy the buffer
+  memcpy(_copiedBuffer,
+         buffer,
+         bufferSize*sizeof(float));
   // Draw based on plot type
   switch(_plotType) {
     case EZPlotTypeBuffer:
-      [self _updateBufferPlotBufferWithAudioReceived:buffer
-                                      withBufferSize:bufferSize];
+      [self _updateBufferPlotBufferWithAudioReceived:_copiedBuffer
+                                      withBufferSize:_copiedBufferSize];
       break;
     case EZPlotTypeRolling:
-      [self _updateRollingPlotBufferWithAudioReceived:buffer
-                                       withBufferSize:bufferSize];
+      [self _updateRollingPlotBufferWithAudioReceived:_copiedBuffer
+                                       withBufferSize:_copiedBufferSize];
       break;
     default:
       break;
@@ -486,16 +497,18 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   // Draw frame
   glClear(GL_COLOR_BUFFER_BIT);
   
-  // Plot either a buffer plot or a rolling plot
-  switch(_plotType) {
-    case EZPlotTypeBuffer:
-      [self _drawBufferPlot];
-      break;
-    case EZPlotTypeRolling:
-      [self _drawRollingPlot];
-      break;
-    default:
-      break;
+  if( _hasBufferPlotData || _hasRollingPlotData ){  
+    // Plot either a buffer plot or a rolling plot
+    switch(_plotType) {
+      case EZPlotTypeBuffer:
+        [self _drawBufferPlot];
+        break;
+      case EZPlotTypeRolling:
+        [self _drawRollingPlot];
+        break;
+      default:
+        break;
+    }
   }
 
   // Flush and unlock
@@ -623,6 +636,10 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   // when it encounters something that has been release
 	CVDisplayLinkStop(_displayLink);
 	CVDisplayLinkRelease(_displayLink);
+  
+  if( _copiedBuffer != NULL ){
+    free( _copiedBuffer );
+  }
 }
 #endif
 

@@ -67,6 +67,38 @@
 
 #pragma mark - AudioStreamBasicDescription Utilties
 ///-----------------------------------------------------------
+/// @name Creating An AudioStreamBasicDescription
+///-----------------------------------------------------------
+
+/**
+
+ @param sampleRate The desired sample rate for the AudioStreamBasicDescription
+ @return A new AudioStreamBasicDescription with the specified format.
+ */
++(AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)sampleRate;
+
+/**
+ 
+ @param sampleRate The desired sample rate for the AudioStreamBasicDescription
+ @return A new AudioStreamBasicDescription with the specified format.
+ */
++(AudioStreamBasicDescription)monoCanonicalFormatWithSampleRate:(float)sampleRate;
+
+/**
+ 
+ @param sampleRate The desired sample rate for the AudioStreamBasicDescription
+ @return A new AudioStreamBasicDescription with the specified format.
+ */
++(AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)sampleRate;
+
+/**
+ 
+ @param sampleRate The desired sample rate for the AudioStreamBasicDescription
+ @return A new AudioStreamBasicDescription with the specified format.
+ */
++(AudioStreamBasicDescription)stereoFloatInterleavedFormatWithSampleRate:(float)sampleRate;
+
+///-----------------------------------------------------------
 /// @name AudioStreamBasicDescription Utilities
 ///-----------------------------------------------------------
 
@@ -90,6 +122,28 @@
 ///-----------------------------------------------------------
 /// @name Math Utilities
 ///-----------------------------------------------------------
+
+/**
+ Appends an array of values to a history buffer and performs an internal shift to add the values to the tail and removes the same number of values from the head.
+ @param buffer              A float array of values to append to the tail of the history buffer
+ @param bufferLength        The length of the float array being appended to the history buffer
+ @param scrollHistory       The target history buffer in which to append the values
+ @param scrollHistoryLength The length of the target history buffer
+ */
++(void)appendBufferAndShift:(float*)buffer
+             withBufferSize:(int)bufferLength
+            toScrollHistory:(float*)scrollHistory
+      withScrollHistorySize:(int)scrollHistoryLength;
+
+/**
+ Appends a value to a history buffer and performs an internal shift to add the value to the tail and remove the 0th value.
+ @param value               The float value to append to the history array
+ @param scrollHistory       The target history buffer in which to append the values
+ @param scrollHistoryLength The length of the target history buffer
+ */
++(void)    appendValue:(float)value
+       toScrollHistory:(float*)scrollHistory
+ withScrollHistorySize:(int)scrollHistoryLength;
 
 /**
  Maps a value from one coordinate system into another one. Takes in the current value to map, the minimum and maximum values of the first coordinate system, and the minimum and maximum values of the second coordinate system and calculates the mapped value in the second coordinate system's constraints.
@@ -127,6 +181,18 @@
  */
 +(void)checkResult:(OSStatus)result
          operation:(const char*)operation;
+
+#pragma mark - Plot Utility
+///-----------------------------------------------------------
+/// @name Plot Utility
+///-----------------------------------------------------------
+
++(void)updateScrollHistory:(float**)scrollHistory
+                withLength:(int)scrollHistoryLength
+                   atIndex:(int*)index
+                withBuffer:(float*)buffer
+            withBufferSize:(int)bufferSize
+      isResolutionChanging:(BOOL*)isChanging;
 
 #pragma mark - TPCircularBuffer Utility
 ///-----------------------------------------------------------
