@@ -112,9 +112,6 @@
   self.audioPlot.shouldFill      = YES;
   self.audioPlot.shouldMirror    = YES;  
   [self.audioFile getWaveformDataWithCompletionBlock:^(float *waveformData, UInt32 length) {
-    for( int i = 0; i < length; i++ ){
-      NSLog(@"waveform point ( %f, %f )",(float)i,waveformData[i]);
-    }
     [self.audioPlot updateBuffer:waveformData withBufferSize:length];
   }];
   
