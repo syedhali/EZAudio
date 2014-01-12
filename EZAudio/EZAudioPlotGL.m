@@ -54,9 +54,12 @@
   UInt32 _bufferPlotGraphSize;
   UInt32 _rollingPlotGraphSize;
   
-  // History buffer
-  UInt32 _historyIndex;
-  float  _historyBuffer[kEZAudioPlotHistoryBufferSize];
+  // Rolling History
+  BOOL    _setMaxLength;
+  float   *_scrollHistory;
+  int     _scrollHistoryIndex;
+  UInt32  _scrollHistoryLength;
+  BOOL    _changingHistorySize;
   
   // Copied buffer data
   float *_copiedBuffer;
@@ -125,6 +128,8 @@
   self.backgroundColor = [UIColor colorWithRed:0.796 green:0.749 blue:0.663 alpha:1];
   self.color = [UIColor colorWithRed:0.481 green:0.548 blue:0.637 alpha:1];
 #elif TARGET_OS_MAC
+  _scrollHistory       = NULL;
+  _scrollHistoryLength = kEZAudioPlotDefaultHistoryBufferLength;
 #endif
   self.shouldFill   = NO;
   self.shouldMirror = NO;
@@ -441,34 +446,34 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   // If starting with a VBO of half of our max size make sure we initialize it to anticipate
   // a filled graph (which needs 2 * bufferSize) to allocate its resources properly
   if( !_hasRollingPlotData && _drawingType == EZAudioPlotGLDrawTypeLineStrip ){
-    EZAudioPlotGLPoint maxGraph[2*kEZAudioPlotHistoryBufferSize];
+    EZAudioPlotGLPoint maxGraph[2*kEZAudioPlotMaxHistoryBufferLength];
     glBufferData(GL_ARRAY_BUFFER, sizeof(maxGraph), maxGraph, GL_STREAM_DRAW );
     _hasRollingPlotData = YES;
   }
   
   // Setup the plot
   _rollingPlotGraphSize = [EZAudioPlotGL graphSizeForDrawingType:_drawingType
-                                                   withBufferSize:kEZAudioPlotHistoryBufferSize];
+                                                   withBufferSize:_scrollHistoryLength];
   
   // Fill the graph with data
   EZAudioPlotGLPoint graph[_rollingPlotGraphSize];
+
   
-  // Update the history buffer
-  _historyBuffer[_historyIndex] = [EZAudio RMS:buffer length:bufferSize];
-  if( _historyIndex == kEZAudioPlotHistoryBufferSize - 1 ){
-    _historyIndex = 0;
-    for(int i = 0; i < kEZAudioPlotHistoryBufferSize; i++) _historyBuffer[i] = 0.0f;
-  }
-  else {
-    _historyIndex++;
-  }
+  
+  // Update the scroll history datasource
+  [EZAudio updateScrollHistory:&_scrollHistory
+                    withLength:_scrollHistoryLength
+                       atIndex:&_scrollHistoryIndex
+                    withBuffer:buffer
+                withBufferSize:bufferSize
+          isResolutionChanging:&_changingHistorySize];
   
   // Fill in graph data
   [EZAudioPlotGL fillGraph:graph
               withGraphSize:_rollingPlotGraphSize
              forDrawingType:_drawingType
-                 withBuffer:_historyBuffer
-             withBufferSize:kEZAudioPlotHistoryBufferSize
+                 withBuffer:_scrollHistory
+             withBufferSize:_scrollHistoryLength
                    withGain:self.gain];
   
   // Update the drawing

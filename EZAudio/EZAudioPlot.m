@@ -27,11 +27,16 @@
 
 #import "EZAudio.h"
 
-#define kCircularBufferSizeTemp 512
-
 @interface EZAudioPlot () {
-  BOOL             _hasData;
-  TPCircularBuffer _historyBuffer;
+//  BOOL             _hasData;
+//  TPCircularBuffer _historyBuffer;
+
+  // Rolling History
+  BOOL    _setMaxLength;
+  float   *_scrollHistory;
+  int     _scrollHistoryIndex;
+  UInt32  _scrollHistoryLength;
+  BOOL    _changingHistorySize;
   
   CGPoint *_sampleData;
   UInt32  _sampleLength;
@@ -87,6 +92,8 @@
   self.plotType        = EZPlotTypeRolling;
   self.shouldMirror    = NO;
   self.shouldFill      = NO;
+  _scrollHistory       = NULL;
+  _scrollHistoryLength = kEZAudioPlotDefaultHistoryBufferLength;
 }
   
 #pragma mark - Setters
@@ -139,7 +146,7 @@
   _sampleLength = length;
   
   for(int i = 0; i < length; i++) {
-    the_sampleData[i] = i == 0 || i == length - 1 ? 0 : the_sampleData[i];
+    the_sampleData[i] = i == 0 ? 0 : the_sampleData[i];
     _sampleData[i]    = CGPointMake(i,the_sampleData[i] * _gain);
   }
     
@@ -150,39 +157,18 @@
 -(void)updateBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize {
   if( _plotType == EZPlotTypeRolling ){
     
-    // Initialize the circular buffer
-    !_hasData ? TPCircularBufferInit(&_historyBuffer,kCircularBufferSizeTemp) : 0;
-    _hasData = YES;
-    
-    // Initialize
-    _sampleLength = bufferSize;
-    
-    // Copy into the circular buffer
-    float rmsValue = [EZAudio RMS:buffer length:bufferSize];
-    float snapshot[1];
-    snapshot[0] = rmsValue;
-    //  self.rmsLabel.text = [NSString stringWithFormat:@"RMS: %.4f",rmsValue];
-    BOOL result = TPCircularBufferProduceBytes(&_historyBuffer,
-                                               snapshot,
-                                               sizeof(snapshot));
-    if(result){
-      // Populate the graph
-      int32_t availableBytes;
-      float *cBuf = TPCircularBufferTail(&_historyBuffer,&availableBytes);
-      for(int i = 0; i < kCircularBufferSizeTemp; i++) {
-        if( availableBytes == kCircularBufferSizeTemp*sizeof(float) ){
-          cBuf[i] = 0.0f;
-        }
-      }
-      [self _setSampleData:cBuf
-                    length:kCircularBufferSizeTemp];
-      if( availableBytes == kCircularBufferSizeTemp*sizeof(float) ){
-        TPCircularBufferConsume(&_historyBuffer,kCircularBufferSizeTemp*sizeof(float));
-      }
-    }
-    else {
-      NSLog(@"Failed to copy bytes to circular buffer 1");
-    }
+    // Update the scroll history datasource
+    [EZAudio updateScrollHistory:&_scrollHistory
+                      withLength:_scrollHistoryLength
+                         atIndex:&_scrollHistoryIndex
+                      withBuffer:buffer
+                  withBufferSize:bufferSize
+            isResolutionChanging:&_changingHistorySize];
+
+    // 
+    [self _setSampleData:_scrollHistory
+                  length:(!_setMaxLength?kEZAudioPlotMaxHistoryBufferLength:_scrollHistoryLength)];
+    _setMaxLength = YES;
     
   }
   else if( _plotType == EZPlotTypeBuffer ){
@@ -228,12 +214,14 @@
 #endif
     
     if(_sampleLength > 0) {
+      
+      _sampleData[_sampleLength-1] = CGPointMake(_sampleLength-1,0.0f);
+      
       CGMutablePathRef halfPath = CGPathCreateMutable();
       CGPathAddLines(halfPath,
                      NULL,
                      _sampleData,
                      _sampleLength);
-      
       CGMutablePathRef path = CGPathCreateMutable();
       
       double xscale = (frame.size.width) / (float)_sampleLength;

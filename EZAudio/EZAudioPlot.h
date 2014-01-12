@@ -28,10 +28,9 @@
 
 @class EZAudio;
 
-/**
- The default since of the rolling audio plot. TODO: In future release make this real-time adjustable.
- */
-#define kEZAudioPlotHistoryBufferSize 1024
+#define kEZAudioPlotMaxHistoryBufferLength (8192)
+
+#define kEZAudioPlotDefaultHistoryBufferLength (1024)
 
 /**
  `EZAudioPlot`, a subclass of `EZPlot`, is a cross-platform (iOS and OSX) class that plots an audio waveform using Core Graphics. 
