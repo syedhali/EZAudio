@@ -87,6 +87,7 @@
   vDSP_hamm_window(window, bufferSize, 0);
   // Window the samples
   vDSP_vmul(data, 1, window, 1, data, 1, bufferSize);
+  free(window);
   
   // Define complex buffer
   _A.realp = (float *) malloc(nOver2*sizeof(float));
