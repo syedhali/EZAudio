@@ -30,3 +30,7 @@ Provided 6 example projects: CoreGraphicsWaveform, OpenGLWaveform, WaveformFromF
 
 0.0.2
 Fix for Cocoapod spec. Forgot to include files with .c extension.
+
+0.0.3 
+Changing EZAudioPlot and EZAudioPlotGL to scroll for the EZPlotTypeRolling instead of wiping the screen clean when hitting the end
+Allowed EZMicrophone, EZOutput to have custom AudioStreamBasicDescription
