@@ -164,6 +164,11 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
   return [[EZOutput alloc] initWithDataSource:dataSource];
 }
 
++(EZOutput *)outputWithDataSource:(id<EZOutputDataSource>)dataSource
+  withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription {
+  return [[EZOutput alloc] initWithDataSource:dataSource withAudioStreamBasicDescription:audioStreamBasicDescription];
+}
+
 #pragma mark - Singleton
 +(EZOutput*)sharedOutput {
   static EZOutput *_sharedOutput = nil;
