@@ -167,14 +167,17 @@
   // Stop playback
   [[EZOutput sharedOutput] stopPlayback];
   
-  self.audioFile                    = [EZAudioFile audioFileWithURL:filePathURL andDelegate:self];
-  self.eof                          = NO;
-  self.filePathLabel.stringValue    = filePathURL.lastPathComponent;
-  self.framePositionSlider.minValue = 0.0f;
-  self.framePositionSlider.maxValue = (double)self.audioFile.totalFrames;
-  self.playButton.state             = NSOffState;
+  self.audioFile                          = [EZAudioFile audioFileWithURL:filePathURL andDelegate:self];
+  self.eof                                = NO;
+  self.filePathLabel.stringValue          = filePathURL.lastPathComponent;
+  self.framePositionSlider.minValue       = 0.0f;
+  self.framePositionSlider.maxValue       = (double)self.audioFile.totalFrames;
+  self.playButton.state                   = NSOffState;
   self.plotSegmentControl.selectedSegment = 1;
 
+  // Set the client format from the EZAudioFile on the output
+  [[EZOutput sharedOutput] setAudioStreamBasicDescription:self.audioFile.clientFormat];
+  
   // Plot the whole waveform
   self.audioPlot.plotType        = EZPlotTypeBuffer;
   self.audioPlot.shouldFill      = YES;
