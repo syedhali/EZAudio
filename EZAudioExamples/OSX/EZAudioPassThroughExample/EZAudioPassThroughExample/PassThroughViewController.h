@@ -38,6 +38,11 @@
  */
 @property (nonatomic,weak) IBOutlet EZAudioPlotGL *audioPlot;
 
+/**
+ The Microphone
+ */
+@property (nonatomic,strong) EZMicrophone *microphone;
+
 #pragma mark - Actions
 /**
  Switches the plot drawing type between a buffer plot (visualizes the current stream of audio data from the update function) or a rolling plot (visualizes the audio data over time, this is the classic waveform look)

@@ -31,6 +31,8 @@
 @end
 
 @implementation PassThroughViewController
+@synthesize audioPlot;
+@synthesize microphone;
 
 #pragma mark - Initialization
 -(id)init {
@@ -61,8 +63,7 @@
   /**
    Initialize the circular buffer
    */
-  [EZAudio circularBuffer:&_circularBuffer
-                 withSize:1024];
+  [EZAudio circularBuffer:&_circularBuffer withSize:2048];
 }
 
 #pragma mark - Customize the Audio Plot
@@ -87,6 +88,7 @@
   /**
    Start the output
    */
+  [[EZOutput sharedOutput] setAudioStreamBasicDescription:[EZMicrophone sharedMicrophone].audioStreamBasicDescription];
   [EZOutput sharedOutput].outputDataSource = self;
   [[EZOutput sharedOutput] startPlayback];
   
