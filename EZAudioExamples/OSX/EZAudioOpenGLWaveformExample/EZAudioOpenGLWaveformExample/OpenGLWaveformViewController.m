@@ -151,7 +151,7 @@ withNumberOfChannels:(UInt32)numberOfChannels {
 -(void)microphone:(EZMicrophone *)microphone hasAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription {
   // The AudioStreamBasicDescription of the microphone stream. This is useful when configuring the EZRecorder or telling another component what audio format type to expect.
   // Here's a print function to allow you to inspect it a little easier
-  [EZAudio printASBD:audioStreamBasicDescription];
+//  [EZAudio printASBD:audioStreamBasicDescription];
 }
 
 -(void)microphone:(EZMicrophone *)microphone
