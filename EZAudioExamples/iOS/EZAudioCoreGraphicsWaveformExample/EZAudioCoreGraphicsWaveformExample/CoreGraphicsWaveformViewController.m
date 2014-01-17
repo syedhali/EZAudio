@@ -8,7 +8,9 @@
 
 #import "CoreGraphicsWaveformViewController.h"
 
-@interface CoreGraphicsWaveformViewController ()
+@interface CoreGraphicsWaveformViewController (){
+  float scale;
+}
 #pragma mark - UI Extras
 @property (nonatomic,weak) IBOutlet UILabel *microphoneTextLabel;
 @end
@@ -60,6 +62,10 @@
    */
   [self.microphone startFetchingAudio];
   self.microphoneTextLabel.text = @"Microphone On";
+  
+}
+
+-(void)pinch:(UIPinchGestureRecognizer*)pinch {
   
 }
 
