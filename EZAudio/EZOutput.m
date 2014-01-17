@@ -81,7 +81,8 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
     
     // Get the desired amount of bytes to copy
     int32_t bytesToCopy = ioData->mBuffers[0].mDataByteSize;
-    AudioSampleType *targetBuffer = (AudioSampleType*)ioData->mBuffers[0].mData;
+    AudioSampleType *left = (AudioSampleType*)ioData->mBuffers[0].mData;
+    AudioSampleType *right = (AudioSampleType*)ioData->mBuffers[1].mData;
     
     // Get the available bytes in the circular buffer
     int32_t availableBytes;
@@ -89,7 +90,8 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
     
     // Ideally we'd have all the bytes to be copied, but compare it against the available bytes (get min)
     int32_t amount = MIN(bytesToCopy,availableBytes);
-    memcpy(targetBuffer,buffer,amount);
+    memcpy(left,buffer,amount);
+    memcpy(right,buffer,amount);
     
     // Consume those bytes ( this will internally push the head of the circular buffer )
     TPCircularBufferConsume(circularBuffer,amount);
