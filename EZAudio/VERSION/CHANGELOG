@@ -33,4 +33,9 @@ Fix for Cocoapod spec. Forgot to include files with .c extension.
 
 0.0.3 
 Changing EZAudioPlot and EZAudioPlotGL to scroll for the EZPlotTypeRolling instead of wiping the screen clean when hitting the end
-Allowed EZMicrophone, EZOutput to have custom AudioStreamBasicDescription
+Allowed EZMicrophone EZOutput to have custom AudioStreamBasicDescription setters
+Fixed bug in EZAudioFile's getWaveformData function where it was not exiting after sending back cached waveform data (rereading from the audio file)
+Added stereo support for EZMicrophone, EZAudioFile, EZRecorder, and EZOutput
+Added more memory cleanup for EZAudioFile
+Added adjustable rolling length for EZAudioPlot and EZAudioPlotGL so those rolling graphs can now range from 128 to 8192 whereas before it was fixed at 1024
+Added adjustable resolution for waveform data coming from the EZAudioFile so output from the getWaveformDataWithCompletionBlock: function can literally be of any size. Try 128 for a low resolution waveform or 8192 for a much higher resolution waveform.
