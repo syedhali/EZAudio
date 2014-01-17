@@ -27,6 +27,13 @@
 
 #import "EZAudio.h"
 
+/// Buses
+static const AudioUnitScope   kEZAudioMicrophoneOutputBus   = 0;
+
+/// Flags
+static const UInt32           kEZAudioMicrophoneEnableFlag  = 1;
+static const UInt32           kEZAudioMicrophoneDisableFlag = 0;
+
 @interface EZOutput (){
   BOOL                        _customASBD;
   BOOL                        _isPlaying;
@@ -179,7 +186,49 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
   return _sharedOutput;
 }
 
-#pragma mark - Private Configuration
+#pragma mark - Audio Component Initialization
+-(AudioComponentDescription)_getOutputAudioComponentDescription {
+ // Create an output component description for default output device
+  AudioComponentDescription outputComponentDescription;
+  outputComponentDescription.componentFlags        = 0;
+  outputComponentDescription.componentFlagsMask    = 0;
+  outputComponentDescription.componentManufacturer = kAudioUnitManufacturer_Apple;
+  #if TARGET_OS_IPHONE
+    outputComponentDescription.componentSubType      = kAudioUnitSubType_RemoteIO;
+  #elif TARGET_OS_MAC
+    outputComponentDescription.componentSubType      = kAudioUnitSubType_DefaultOutput;
+  #endif
+  outputComponentDescription.componentType         = kAudioUnitType_Output;
+  return outputComponentDescription;
+}
+
+-(AudioComponent)_getOutputComponentWithAudioComponentDescription:(AudioComponentDescription)outputComponentDescription {
+  // Try and find the component
+  AudioComponent outputComponent = AudioComponentFindNext( NULL , &outputComponentDescription );
+  NSAssert(outputComponent,@"Couldn't get input component unit!");
+  return outputComponent;
+}
+
+-(void)_createNewInstanceForOutputComponent:(AudioComponent)outputComponent {
+  //
+  [EZAudio checkResult:AudioComponentInstanceNew( outputComponent, &_outputUnit )
+             operation:"Failed to open component for output unit"];
+}
+
+#pragma mark - Configure The Output Unit
+
+//-(void)_configureOutput {
+//  
+//  // Get component description for output
+//  AudioComponentDescription outputComponentDescription = [self _getOutputAudioComponentDescription];
+//  
+//  // Get the output component
+//  AudioComponent outputComponent = [self _getOutputComponentWithAudioComponentDescription:outputComponentDescription];
+//  
+//  // Create a new instance of the component and store it for internal use
+//  [self _createNewInstanceForOutputComponent:outputComponent];
+//  
+//}
 
 #if TARGET_OS_IPHONE
 -(void)_configureOutput {
@@ -328,7 +377,6 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
 -(void)setAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd {
   if( self.isPlaying ){
     NSAssert(self.isPlaying,@"Cannot set the AudioStreamBasicDescription while output is performing playback");
-    return;
   }
   else {
     _customASBD = YES;

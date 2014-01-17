@@ -32,6 +32,18 @@
 
 #import "EZAudio.h"
 
+/// Buses
+static const AudioUnitScope kEZAudioMicrophoneInputBus  = 1;
+static const AudioUnitScope kEZAudioMicrophoneOutputBus = 0;
+
+/// Flags
+#if TARGET_OS_IPHONE
+static const UInt32 kEZAudioMicrophoneDisableFlag = 1;
+#elif TARGET_OS_MAC
+static const UInt32 kEZAudioMicrophoneDisableFlag = 0;
+#endif
+static const UInt32 kEZAudioMicrophoneEnableFlag  = 1;
+
 @interface EZMicrophone (){
   /// Internal
   BOOL _customASBD;
@@ -39,21 +51,26 @@
   BOOL _isFetching;
   
   /// Stream Description
-  AEFloatConverter *converter;
+  AEFloatConverter            *converter;
   AudioStreamBasicDescription streamFormat;
   
   /// Audio Graph and Input/Output Units
-  AUGraph   graph;
   AudioUnit microphoneInput;
-  AudioUnit outputUnit;
   
   /// Audio Buffers
   float           **floatBuffers;
   AudioBufferList *microphoneInputBuffer;
   
-  /// Sample Time Offsets
-  Float64 firstInputSampleTime;
-  Float64 inToOutSampleTimeOffset;
+  /// Device Parameters
+  Float64 _deviceSampleRate;
+  Float32 _deviceBufferDuration;
+  UInt32  _deviceBufferFrameSize;
+  
+#if TARGET_OS_IPHONE
+#elif TARGET_OS_MAC
+  Float64 inputScopeSampleRate;
+#endif
+  
 }
 @end
 
@@ -70,23 +87,13 @@ static OSStatus inputCallback(void                          *inRefCon,
                               AudioBufferList               *ioData ) {
   EZMicrophone *microphone = (__bridge EZMicrophone*)inRefCon;
   OSStatus      result      = noErr;
-#if TARGET_OS_IPHONE
   // Render audio into buffer
-  result = AudioUnitRender(microphone->microphoneInput,
-                           ioActionFlags,
-                           inTimeStamp,
-                           1,
-                           inNumberFrames,
-                           microphone->microphoneInputBuffer);
-#elif TARGET_OS_MAC
-  // Retrive the captured samples from the input
   result = AudioUnitRender(microphone->microphoneInput,
                            ioActionFlags,
                            inTimeStamp,
                            inBusNumber,
                            inNumberFrames,
                            microphone->microphoneInputBuffer);
-#endif
   if( !result ){
     // Notify delegate (OF-style)
     @autoreleasepool {
@@ -248,216 +255,142 @@ static OSStatus inputCallback(void                          *inRefCon,
   }
 }
 
-#if TARGET_OS_IPHONE
--(void)_createInputUnit {
-  
-  // Create localized copy of self
-  EZMicrophone *microphone = (EZMicrophone*)self;
-  
-  AudioComponentDescription inputComponentDescription = {
-    .componentType         = kAudioUnitType_Output,
-    .componentSubType      = kAudioUnitSubType_RemoteIO,
-    .componentManufacturer = kAudioUnitManufacturer_Apple,
-    .componentFlags        = 0,
-    .componentFlagsMask    = 0
-  };
-  
-  // Try and find the component
-  AudioComponent inputComponent = AudioComponentFindNext( NULL , &inputComponentDescription );
-  if( inputComponent == NULL ){
-    NSLog(@"Couldn't get input component unit!");
-    return;
-  }
-  
-  // Create a new instance of the component and store it for internal use
-  [EZAudio checkResult:AudioComponentInstanceNew(inputComponent,
-                                                  &microphone->microphoneInput)
-             operation:"Couldn't open component for microphone input unit."];
-  
-  // Enable I/O on microphone input unit
-  UInt32         disableFlag = 1; UInt32         enableFlag = 1;
-  AudioUnitScope outputBus   = 0; AudioUnitScope inputBus   = 1;
-  [EZAudio checkResult:AudioUnitSetProperty(microphone->microphoneInput,
-                                            kAudioOutputUnitProperty_EnableIO,
-                                            kAudioUnitScope_Input,
-                                            inputBus,
-                                            &enableFlag,
-                                            sizeof(enableFlag))
-             operation:"Couldn't enable input on the remote i/o unit"];
-  
-  // Could set the output if we wanted to play out the mic's buffer
-  [EZAudio checkResult:AudioUnitSetProperty(microphone->microphoneInput,
-                                            kAudioOutputUnitProperty_EnableIO,
-                                            kAudioUnitScope_Output,
-                                            outputBus,
-                                            &disableFlag,
-                                            sizeof(disableFlag))
-             operation:"Couldn't enable input on the remote i/o unit"];
-  
-  // Get the hardware sample rate
-  Float64 hardwareSampleRate = 44100;
-#if !(TARGET_IPHONE_SIMULATOR)
-  UInt32 propSize = sizeof(hardwareSampleRate);
-  [EZAudio checkResult:AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate,
-                                               &propSize,
-                                               &hardwareSampleRate)
-             operation:"Could not get hardware sample rate"];
-#endif
-  
-  // Set the stream format
-  if( !_customASBD ){
-    microphone->streamFormat = [EZAudio stereoCanonicalNonInterleavedFormatWithSampleRate:hardwareSampleRate];
+-(void)setAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd {
+  if( self.microphoneOn ){
+    NSAssert(self.microphoneOn,@"Cannot set the AudioStreamBasicDescription while microphone is fetching audio");
   }
   else {
-    microphone->streamFormat.mSampleRate = hardwareSampleRate;
-  }
+    _customASBD = YES;
+    streamFormat = asbd;
+    [self _configureStreamFormatWithSampleRate:_deviceSampleRate];
+  }  
+}
+
+#pragma mark - Configure The Input Unit
+
+-(void)_createInputUnit {
   
-  // Get the buffer duration (approximate for simulator, real device will have it's preferred value set)
-  Float32 bufferDuration = 0.0232;
-  UInt32 propertySize = sizeof(bufferDuration);
-#if !(TARGET_IPHONE_SIMULATOR)
-  [EZAudio checkResult:AudioSessionSetProperty(kAudioSessionProperty_PreferredHardwareIOBufferDuration,
-                                               sizeof(propertySize),
-                                               &bufferDuration)
-             operation:"Couldn't set the preferred buffer duration"];
-  // Get the preferred buffer size
-  [EZAudio checkResult:AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareIOBufferDuration,
-                                               &propertySize,
-                                               &bufferDuration)
-             operation:"Could not get preferred buffer size"];
-#endif
+  // Get component description for input
+  AudioComponentDescription inputComponentDescription = [self _getInputAudioComponentDescription];
+  
+  // Get the input component
+  AudioComponent inputComponent = [self _getInputComponentWithAudioComponentDescription:inputComponentDescription];
+  
+  // Create a new instance of the component and store it for internal use
+  [self _createNewInstanceForInputComponent:inputComponent];
+  
+  // Enable Input Scope
+  [self _enableInputScope];
+  
+  // Disable Output Scope
+  [self _disableOutputScope];
+  
+  // Get the default device if we need to (OSX only, iOS uses RemoteIO)
+  #if TARGET_OS_IPHONE
+    // Do nothing (using RemoteIO)
+  #elif TARGET_OS_MAC
+    [self _configureDefaultDevice];
+  #endif
+  
+  // Configure device and pull hardware specific sampling rate (default = 44.1 kHz)
+  _deviceSampleRate = [self _configureDeviceSampleRateWithDefault:44100.0];
+  
+  // Configure device and pull hardware specific buffer duration (default = 0.0232)
+  _deviceBufferDuration = [self _configureDeviceBufferDurationWithDefault:0.0232];
+  
+  // Configure the stream format with the hardware sample rate
+  [self _configureStreamFormatWithSampleRate:_deviceSampleRate];
+  
+  // Notify delegate the audio stream basic description was successfully created
+  [self _notifyDelegateOfStreamFormat];
+  
+  // Get buffer frame size
+  _deviceBufferFrameSize = [self _getBufferFrameSize];
   
   // Create the audio buffer list and pre-malloc the buffers in the list
-  propertySize = offsetof( AudioBufferList, mBuffers[0] ) + ( sizeof( AudioBuffer ) * microphone->streamFormat.mChannelsPerFrame );
-  microphone->microphoneInputBuffer = (AudioBufferList*)malloc(propertySize);
+  [self _configureAudioBufferListWithFrameSize:_deviceBufferFrameSize];
   
-  // Get the maximum number of frames
-  UInt32 bufferSizeFrames;
-  
-  propertySize = sizeof(UInt32);
-  [EZAudio checkResult:AudioUnitGetProperty(microphone->microphoneInput,
-                                            kAudioUnitProperty_MaximumFramesPerSlice,
-                                            kAudioUnitScope_Global,
-                                            outputBus,
-                                            &bufferSizeFrames,
-                                            &propertySize)
-             operation:"Failed to get maximum number of frames"];
-  
-  microphone->microphoneInputBuffer->mNumberBuffers = microphone->streamFormat.mChannelsPerFrame;
-  UInt32 bufferSizeBytes = bufferSizeFrames * microphone->streamFormat.mBytesPerFrame;
-  for( UInt32 i = 0; i < microphone->microphoneInputBuffer->mNumberBuffers; i++ ){
-    microphone->microphoneInputBuffer->mBuffers[i].mNumberChannels = 1;
-    microphone->microphoneInputBuffer->mBuffers[i].mDataByteSize   = bufferSizeBytes;
-    microphone->microphoneInputBuffer->mBuffers[i].mData           = malloc(bufferSizeBytes);
-  }
-  
-  // Setup the converter, but do a lazy set for the float buffer
-  microphone->converter    = [[AEFloatConverter alloc] initWithSourceFormat:microphone->streamFormat];
-  microphone->floatBuffers = (float**)malloc(sizeof(float*)*microphone->streamFormat.mChannelsPerFrame);
-  for ( int i=0; i<microphone->streamFormat.mChannelsPerFrame; i++ ) {
-    microphone->floatBuffers[i] = (float*)malloc(bufferSizeBytes);
-    assert(microphone->floatBuffers[i]);
-  }
-  
-  // Set the stream format for output on the microphone's input scope
-  [EZAudio checkResult:AudioUnitSetProperty(microphone->microphoneInput,
-                                            kAudioUnitProperty_StreamFormat,
-                                            kAudioUnitScope_Input,
-                                            outputBus,
-                                            &microphone->streamFormat,
-                                            sizeof(microphone->streamFormat))
-             operation:"Could not set microphone's stream format bus 0"];
-  
-  // Set the stream format for the input on the microphone's output scope
-  [EZAudio checkResult:AudioUnitSetProperty(microphone->microphoneInput,
-                                            kAudioUnitProperty_StreamFormat,
-                                            kAudioUnitScope_Output,
-                                            inputBus,
-                                            &microphone->streamFormat,
-                                            sizeof(microphone->streamFormat))
-             operation:"Could not set microphone's stream format bus 1"];
-
-  // Notify delegate the audio stream basic description was successfully created
-  if( microphone.microphoneDelegate ){
-    if( [microphone.microphoneDelegate respondsToSelector:@selector(microphone:hasAudioStreamBasicDescription:) ] ){
-      [microphone.microphoneDelegate microphone:microphone
-                 hasAudioStreamBasicDescription:microphone->streamFormat];
-    }
-  }
+  // Set the float converter's stream format
+  [self _configureFloatConverterWithFrameSize:_deviceBufferFrameSize];
   
   // Setup input callback
-  AURenderCallbackStruct microphoneCallbackStruct;
-  microphoneCallbackStruct.inputProc       = inputCallback;
-  microphoneCallbackStruct.inputProcRefCon = (__bridge void *)microphone;
-  [EZAudio checkResult:AudioUnitSetProperty(microphone->microphoneInput,
-                                            kAudioOutputUnitProperty_SetInputCallback,
-                                            kAudioUnitScope_Global,
-                                            inputBus,
-                                            &microphoneCallbackStruct,
-                                            sizeof(microphoneCallbackStruct))
-             operation:"Couldn't set input callback"];
+  [self _configureInputCallback];
   
-  // Disable buffer allocation for the recorder (optional - do this if we want to pass in our own)
-  [EZAudio checkResult:AudioUnitSetProperty(microphone->microphoneInput,
-                                            kAudioUnitProperty_ShouldAllocateBuffer,
-                                            kAudioUnitScope_Output,
-                                            inputBus,
-                                            &disableFlag,
-                                            sizeof(disableFlag))
-             operation:"Could not disable audio unit allocating its own buffers"];
+  // Disable buffer allocation (optional - do this if we want to pass in our own)
+  [self _disableCallbackBufferAllocation];
   
   // Initialize the audio unit
-  [EZAudio checkResult:AudioUnitInitialize( microphone->microphoneInput )
+  [EZAudio checkResult:AudioUnitInitialize( microphoneInput )
              operation:"Couldn't initialize the input unit"];
   
 }
-#elif TARGET_OS_MAC
--(void)_createInputUnit {
+
+#pragma mark - Audio Component Initialization
+-(AudioComponentDescription)_getInputAudioComponentDescription {
   
-  // Create localized copy of self
-  EZMicrophone *microphone = (EZMicrophone*)self;
-  
-  // Create component description for input HAL
-  AudioComponentDescription inputComponentDescription = {0};
+  // Create an input component description for mic input
+  AudioComponentDescription inputComponentDescription;
   inputComponentDescription.componentType             = kAudioUnitType_Output;
-  inputComponentDescription.componentSubType          = kAudioUnitSubType_HALOutput;
   inputComponentDescription.componentManufacturer     = kAudioUnitManufacturer_Apple;
+  inputComponentDescription.componentFlags            = 0;
+  inputComponentDescription.componentFlagsMask        = 0;
+  #if TARGET_OS_IPHONE
+    inputComponentDescription.componentSubType          = kAudioUnitSubType_RemoteIO;
+  #elif TARGET_OS_MAC
+    inputComponentDescription.componentSubType          = kAudioUnitSubType_HALOutput;
+  #endif
+  
+  // Return the successfully created input component description
+  return inputComponentDescription;
+  
+}
+
+-(AudioComponent)_getInputComponentWithAudioComponentDescription:(AudioComponentDescription)audioComponentDescription {
   
   // Try and find the component
-  AudioComponent inputComponent = AudioComponentFindNext( NULL , &inputComponentDescription );
-  if( inputComponent == NULL ){
-    NSLog(@"Couldn't get input component unit!");
-    return;
-  }
+  AudioComponent inputComponent = AudioComponentFindNext( NULL , &audioComponentDescription );
+  NSAssert(inputComponent,@"Couldn't get input component unit!");
+  return inputComponent;
   
-  // Create a new instance of the component and store it for internal use
-  [EZAudio checkResult:AudioComponentInstanceNew(inputComponent,
-                                                 &microphone->microphoneInput )
+}
+
+-(void)_createNewInstanceForInputComponent:(AudioComponent)audioComponent {
+  
+  [EZAudio checkResult:AudioComponentInstanceNew(audioComponent,
+                                                 &microphoneInput )
              operation:"Couldn't open component for microphone input unit."];
   
-  // Enable I/O on microphone input unit
-  UInt32         disableFlag = 0; UInt32         enableFlag = 1;
-  AudioUnitScope outputBus   = 0; AudioUnitScope inputBus   = 1;
-  // Input Scope
-  [EZAudio checkResult:AudioUnitSetProperty( microphone->microphoneInput,
-                                            kAudioOutputUnitProperty_EnableIO,
-                                            kAudioUnitScope_Input,
-                                            inputBus,
-                                            &enableFlag,
-                                            sizeof(enableFlag))
-             operation:"Couldn't enable input on I/O unit."];
-  // Output Scope
-  [EZAudio checkResult:AudioUnitSetProperty( microphone->microphoneInput,
+}
+
+#pragma mark - Input/Output Scope Initialization
+-(void)_disableOutputScope {
+  [EZAudio checkResult:AudioUnitSetProperty(microphoneInput,
                                             kAudioOutputUnitProperty_EnableIO,
                                             kAudioUnitScope_Output,
-                                            outputBus,
-                                            &disableFlag,
-                                            sizeof(enableFlag))
+                                            kEZAudioMicrophoneOutputBus,
+                                            &kEZAudioMicrophoneDisableFlag,
+                                            sizeof(kEZAudioMicrophoneDisableFlag))
              operation:"Couldn't disable output on I/O unit."];
-  
+}
+
+-(void)_enableInputScope {
+  [EZAudio checkResult:AudioUnitSetProperty(microphoneInput,
+                                            kAudioOutputUnitProperty_EnableIO,
+                                            kAudioUnitScope_Input,
+                                            kEZAudioMicrophoneInputBus,
+                                            &kEZAudioMicrophoneEnableFlag,
+                                            sizeof(kEZAudioMicrophoneEnableFlag))
+             operation:"Couldn't enable input on I/O unit."];
+}
+
+#pragma mark - Pull Default Device (OSX)
+#if TARGET_OS_IPHONE
+  // Not needed, using RemoteIO
+#elif TARGET_OS_MAC
+-(void)_configureDefaultDevice {
   // Get the default audio input device (pulls an abstract type from system preferences)
-  AudioDeviceID              defaultDevice         = kAudioObjectUnknown;
-  UInt32                     propertySize          = sizeof(defaultDevice);
+  AudioDeviceID defaultDevice = kAudioObjectUnknown;
+  UInt32 propSize = sizeof(defaultDevice);
   AudioObjectPropertyAddress defaultDeviceProperty;
   defaultDeviceProperty.mSelector                  = kAudioHardwarePropertyDefaultInputDevice;
   defaultDeviceProperty.mScope                     = kAudioObjectPropertyScopeGlobal;
@@ -466,118 +399,199 @@ static OSStatus inputCallback(void                          *inRefCon,
                                                   &defaultDeviceProperty,
                                                   0,
                                                   NULL,
-                                                  &propertySize,
+                                                  &propSize,
                                                   &defaultDevice)
              operation:"Couldn't get default input device"];
   
   // Set the default device on the microphone input unit
-  [EZAudio checkResult:AudioUnitSetProperty(microphone->microphoneInput,
+  propSize = sizeof(defaultDevice);
+  [EZAudio checkResult:AudioUnitSetProperty(microphoneInput,
                                             kAudioOutputUnitProperty_CurrentDevice,
                                             kAudioUnitScope_Global,
-                                            outputBus,
+                                            kEZAudioMicrophoneOutputBus,
                                             &defaultDevice,
-                                            sizeof(defaultDevice))
+                                            propSize)
              operation:"Couldn't set default device on I/O unit"];
   
   // Get the stream format description from the newly created input unit and assign it to the output of the input unit
   AudioStreamBasicDescription inputScopeFormat;
-  propertySize = sizeof(AudioStreamBasicDescription);
-  [EZAudio checkResult:AudioUnitGetProperty(microphone->microphoneInput,
+  propSize = sizeof(AudioStreamBasicDescription);
+  [EZAudio checkResult:AudioUnitGetProperty(microphoneInput,
                                             kAudioUnitProperty_StreamFormat,
                                             kAudioUnitScope_Output,
-                                            inputBus,
+                                            kEZAudioMicrophoneInputBus,
                                             &inputScopeFormat,
-                                            &propertySize)
+                                            &propSize)
              operation:"Couldn't get ASBD from input unit (1)"];
   
   // Assign the same stream format description from the output of the input unit and pull the sample rate
   AudioStreamBasicDescription outputScopeFormat;
-  [EZAudio checkResult:AudioUnitGetProperty(microphone->microphoneInput,
+  propSize = sizeof(AudioStreamBasicDescription);
+  [EZAudio checkResult:AudioUnitGetProperty(microphoneInput,
                                             kAudioUnitProperty_StreamFormat,
                                             kAudioUnitScope_Input,
-                                            inputBus,
+                                            kEZAudioMicrophoneInputBus,
                                             &outputScopeFormat,
-                                            &propertySize)
+                                            &propSize)
              operation:"Couldn't get ASBD from input unit (2)"];
   
-  if( !_customASBD ){
-    microphone->streamFormat = [EZAudio stereoCanonicalNonInterleavedFormatWithSampleRate:outputScopeFormat.mSampleRate];
-  }
-  else {
-    microphone->streamFormat.mSampleRate = outputScopeFormat.mSampleRate;
-  }
-  
-  [EZAudio printASBD:microphone->streamFormat];
-  
-  // Readjust property size for ASBD and set the value on the input unit
-  propertySize = sizeof(AudioStreamBasicDescription);
-  [EZAudio checkResult:AudioUnitSetProperty(microphone->microphoneInput,
-                                            kAudioUnitProperty_StreamFormat,
-                                            kAudioUnitScope_Output,
-                                            inputBus,
-                                            &microphone->streamFormat,
-                                            propertySize)
-             operation:"Couldn't set ASBD on input unit"];
-  
-  // Notify delegate the audio stream basic description was successfully created
-  if( microphone.microphoneDelegate ){
-    if( [microphone.microphoneDelegate respondsToSelector:@selector(microphone:hasAudioStreamBasicDescription:) ] ){
-      [microphone.microphoneDelegate microphone:microphone
-                 hasAudioStreamBasicDescription:microphone->streamFormat];
-    }
-  }
-  
-  // Setup the audio buffers to capture the input audio
-  UInt32 bufferSizeFrames = 0;
-  propertySize = sizeof(UInt32);
-  [EZAudio checkResult:AudioUnitGetProperty(microphone->microphoneInput,
-                                            kAudioDevicePropertyBufferFrameSize,
-                                            kAudioUnitScope_Global,
-                                            outputBus,
-                                            &bufferSizeFrames,
-                                            &propertySize)
-             operation:"Could not get buffer frame size from input unit"];
-  
-  UInt32 bufferSizeBytes = bufferSizeFrames * sizeof(AudioUnitSampleType);
-  
-  // Create the audio buffer list and pre-malloc the buffers in the list
-  propertySize = offsetof( AudioBufferList, mBuffers[0] ) + ( sizeof( AudioBuffer ) * microphone->streamFormat.mChannelsPerFrame );
-  microphone->microphoneInputBuffer                 = (AudioBufferList*)malloc(propertySize);
-  microphone->microphoneInputBuffer->mNumberBuffers = microphone->streamFormat.mChannelsPerFrame;
-  for( UInt32 i = 0; i < microphone->microphoneInputBuffer->mNumberBuffers; i++ ){
-    microphone->microphoneInputBuffer->mBuffers[i].mNumberChannels = 1;
-    microphone->microphoneInputBuffer->mBuffers[i].mDataByteSize   = bufferSizeBytes;
-    microphone->microphoneInputBuffer->mBuffers[i].mData           = malloc(bufferSizeBytes);
-  }
-  
-  // Set the convert's stream format
-  microphone->converter    = [[AEFloatConverter alloc] initWithSourceFormat:microphone->streamFormat];
-  microphone->floatBuffers = (float**)malloc(sizeof(float*)*microphone->streamFormat.mChannelsPerFrame);
-  assert(microphone->floatBuffers);
-  for ( int i=0; i<microphone->streamFormat.mChannelsPerFrame; i++ ) {
-    microphone->floatBuffers[i] = (float*)malloc(bufferSizeBytes);
-    assert(microphone->floatBuffers[i]);
-  }
-  
-  // Setup input callback
-  AURenderCallbackStruct microphoneCallbackStruct;
-  microphoneCallbackStruct.inputProc       = inputCallback;
-  microphoneCallbackStruct.inputProcRefCon = (__bridge void *)microphone;
-  [EZAudio checkResult:AudioUnitSetProperty( microphone->microphoneInput,
-                                            kAudioOutputUnitProperty_SetInputCallback,
-                                            kAudioUnitScope_Global,
-                                            0,
-                                            &microphoneCallbackStruct,
-                                            sizeof(microphoneCallbackStruct))
-             operation:"Couldn't set input callback"];
-  
-  // Initialize the audio unit
-  [EZAudio checkResult:AudioUnitInitialize( microphone->microphoneInput )
-             operation:"Couldn't initialize the input unit"];
-  microphone->firstInputSampleTime    = -1;
-  microphone->inToOutSampleTimeOffset = -1;
+  // Store the input scope's sample rate
+  inputScopeSampleRate = inputScopeFormat.mSampleRate;
   
 }
 #endif
+
+#pragma mark - Pull Sample Rate
+-(Float64)_configureDeviceSampleRateWithDefault:(float)defaultSampleRate {
+  Float64 hardwareSampleRate = defaultSampleRate;
+  #if TARGET_OS_IPHONE
+    // Use approximations for simulator and pull from real device if connected
+    #if !(TARGET_IPHONE_SIMULATOR)
+    // Sample Rate
+    UInt32 propSize = sizeof(Float64);
+    [EZAudio checkResult:AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate,
+                                                 &propSize,
+                                                 &hardwareSampleRate)
+               operation:"Could not get hardware sample rate from device"];
+    #endif
+  #elif TARGET_OS_MAC
+    hardwareSampleRate = inputScopeSampleRate;
+  #endif
+  return hardwareSampleRate;
+}
+
+#pragma mark - Pull Buffer Duration
+-(Float32)_configureDeviceBufferDurationWithDefault:(float)defaultBufferDuration {
+  Float32 bufferDuration = defaultBufferDuration; // Type 1/43 by default
+  #if TARGET_OS_IPHONE
+  // Use approximations for simulator and pull from real device if connected
+    #if !(TARGET_IPHONE_SIMULATOR)
+      UInt32 propSize = sizeof(Float32);
+      [EZAudio checkResult:AudioSessionSetProperty(kAudioSessionProperty_PreferredHardwareIOBufferDuration,
+                                                 propSize,
+                                                 &bufferDuration)
+               operation:"Couldn't set the preferred buffer duration from device"];
+      // Buffer Size
+      propSize = sizeof(bufferDuration);
+      [EZAudio checkResult:AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareIOBufferDuration,
+                                                 &propSize,
+                                                 &bufferDuration)
+               operation:"Could not get preferred buffer size from device"];
+    #endif
+  #elif TARGET_OS_MAC
+  
+  #endif
+  return bufferDuration;
+}
+
+#pragma mark - Pull Buffer Frame Size
+-(UInt32)_getBufferFrameSize {
+  UInt32 bufferFrameSize;
+  UInt32 propSize = sizeof(bufferFrameSize);
+  [EZAudio checkResult:AudioUnitGetProperty(microphoneInput,
+                                            #if TARGET_OS_IPHONE
+                                              kAudioUnitProperty_MaximumFramesPerSlice,
+                                            #elif TARGET_OS_MAC
+                                              kAudioDevicePropertyBufferFrameSize,
+                                            #endif
+                                            kAudioUnitScope_Global,
+                                            kEZAudioMicrophoneOutputBus,
+                                            &bufferFrameSize,
+                                            &propSize)
+             operation:"Failed to get buffer frame size"];
+  return bufferFrameSize;
+}
+
+#pragma mark - Stream Format Initialization
+-(void)_configureStreamFormatWithSampleRate:(Float64)sampleRate {
+  // Set the stream format
+  if( !_customASBD ){
+    streamFormat = [EZAudio stereoCanonicalNonInterleavedFormatWithSampleRate:sampleRate];
+  }
+  else {
+    streamFormat.mSampleRate = sampleRate;
+  }
+  UInt32 propSize = sizeof(streamFormat);
+  // Set the stream format for output on the microphone's input scope
+  [EZAudio checkResult:AudioUnitSetProperty(microphoneInput,
+                                            kAudioUnitProperty_StreamFormat,
+                                            kAudioUnitScope_Input,
+                                            kEZAudioMicrophoneOutputBus,
+                                            &streamFormat,
+                                            propSize)
+             operation:"Could not set microphone's stream format bus 0"];
+  
+  // Set the stream format for the input on the microphone's output scope
+  [EZAudio checkResult:AudioUnitSetProperty(microphoneInput,
+                                            kAudioUnitProperty_StreamFormat,
+                                            kAudioUnitScope_Output,
+                                            kEZAudioMicrophoneInputBus,
+                                            &streamFormat,
+                                            propSize)
+             operation:"Could not set microphone's stream format bus 1"];
+}
+
+-(void)_notifyDelegateOfStreamFormat {
+  if( _microphoneDelegate ){
+    if( [_microphoneDelegate respondsToSelector:@selector(microphone:hasAudioStreamBasicDescription:) ] ){
+      [_microphoneDelegate microphone:self
+       hasAudioStreamBasicDescription:streamFormat];
+    }
+  }
+}
+
+#pragma mark - AudioBufferList Initialization
+-(void)_configureAudioBufferListWithFrameSize:(UInt32)bufferFrameSize {
+  UInt32 bufferSizeBytes = bufferFrameSize * streamFormat.mBytesPerFrame;
+  UInt32 propSize = offsetof( AudioBufferList, mBuffers[0] ) + ( sizeof( AudioBuffer ) *streamFormat.mChannelsPerFrame );
+  microphoneInputBuffer                 = (AudioBufferList*)malloc(propSize);
+  microphoneInputBuffer->mNumberBuffers = streamFormat.mChannelsPerFrame;
+  for( UInt32 i = 0; i < microphoneInputBuffer->mNumberBuffers; i++ ){
+    microphoneInputBuffer->mBuffers[i].mNumberChannels = 1;
+    microphoneInputBuffer->mBuffers[i].mDataByteSize   = bufferSizeBytes;
+    microphoneInputBuffer->mBuffers[i].mData           = malloc(bufferSizeBytes);
+  }
+}
+
+#pragma mark - Float Converter Initialization
+-(void)_configureFloatConverterWithFrameSize:(UInt32)bufferFrameSize {
+  UInt32 bufferSizeBytes = bufferFrameSize * streamFormat.mBytesPerFrame;
+  converter              = [[AEFloatConverter alloc] initWithSourceFormat:streamFormat];
+  floatBuffers           = (float**)malloc(sizeof(float*)*streamFormat.mChannelsPerFrame);
+  assert(floatBuffers);
+  for ( int i=0; i<streamFormat.mChannelsPerFrame; i++ ) {
+    floatBuffers[i] = (float*)malloc(bufferSizeBytes);
+    assert(floatBuffers[i]);
+  }
+}
+
+#pragma mark - Input Callback Initialization
+-(void)_configureInputCallback {
+  AURenderCallbackStruct microphoneCallbackStruct;
+  microphoneCallbackStruct.inputProc       = inputCallback;
+  microphoneCallbackStruct.inputProcRefCon = (__bridge void *)self;
+  [EZAudio checkResult:AudioUnitSetProperty(microphoneInput,
+                                            kAudioOutputUnitProperty_SetInputCallback,
+                                            kAudioUnitScope_Global,
+                                            // output bus for mac
+                                            #if TARGET_OS_IPHONE
+                                              kEZAudioMicrophoneInputBus,
+                                            #elif TARGET_OS_MAC
+                                              kEZAudioMicrophoneOutputBus,
+                                            #endif
+                                            &microphoneCallbackStruct,
+                                            sizeof(microphoneCallbackStruct))
+             operation:"Couldn't set input callback"];
+}
+
+-(void)_disableCallbackBufferAllocation {
+  [EZAudio checkResult:AudioUnitSetProperty(microphoneInput,
+                                            kAudioUnitProperty_ShouldAllocateBuffer,
+                                            kAudioUnitScope_Output,
+                                            kEZAudioMicrophoneInputBus,
+                                            &kEZAudioMicrophoneDisableFlag,
+                                            sizeof(kEZAudioMicrophoneDisableFlag))
+             operation:"Could not disable audio unit allocating its own buffers"];
+}
 
 @end

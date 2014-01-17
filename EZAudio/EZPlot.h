@@ -95,6 +95,7 @@ typedef NS_ENUM(NSInteger,EZPlotType){
 ///-----------------------------------------------------------
 /// @name Updating The Plot
 ///-----------------------------------------------------------
+
 /**
  Updates the plot with the new buffer data and tells the view to redraw itself. Caller will provide a float array with the values they expect to see on the y-axis. The plot will internally handle mapping the x-axis and y-axis to the current view port, any interpolation for fills effects, and mirroring.
  @param buffer     A float array of values to map to the y-axis.

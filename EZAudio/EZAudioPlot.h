@@ -47,4 +47,16 @@
  */
 @interface EZAudioPlot : EZPlot
 
+#pragma mark - Adjust Resolution
+///-----------------------------------------------------------
+/// @name Adjusting The Resolution
+///-----------------------------------------------------------
+
+/**
+ Sets the length of the rolling history display. Can grow or shrink the display up to the maximum size specified by the kEZAudioPlotMaxHistoryBufferLength macro. Will return the actual set value, which will be either the given value if smaller than the kEZAudioPlotMaxHistoryBufferLength or kEZAudioPlotMaxHistoryBufferLength if a larger value is attempted to be set. 
+ @param  historyLength The new length of the rolling history buffer.
+ @return The new value equal to the historyLength or the kEZAudioPlotMaxHistoryBufferLength.
+ */
+-(int)setRollingHistoryLength:(int)historyLength;
+
 @end
