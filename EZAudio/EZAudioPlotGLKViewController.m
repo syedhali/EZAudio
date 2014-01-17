@@ -126,6 +126,27 @@
   
 }
 
+#pragma mark - Adjust Resolution
+-(int)setRollingHistoryLength:(int)historyLength {
+  historyLength = MIN(historyLength,kEZAudioPlotMaxHistoryBufferLength);
+  size_t floatByteSize = sizeof(float);
+  _changingHistorySize = YES;
+  if( _scrollHistoryLength != historyLength ){
+    _scrollHistoryLength = historyLength;
+  }
+  _scrollHistory = realloc(_scrollHistory,_scrollHistoryLength*floatByteSize);
+  if( _scrollHistoryIndex < _scrollHistoryLength ){
+    memset(&_scrollHistory[_scrollHistoryIndex],
+           0,
+           (_scrollHistoryLength-_scrollHistoryIndex)*floatByteSize);
+  }
+  else {
+    _scrollHistoryIndex = _scrollHistoryLength;
+  }
+  _changingHistorySize = NO;
+  return historyLength;
+}
+
 #pragma mark - Get Samples
 -(void)updateBuffer:(float *)buffer
      withBufferSize:(UInt32)bufferSize {

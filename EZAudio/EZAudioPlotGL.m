@@ -648,6 +648,32 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
 }
 #endif
 
+#pragma mark - Adjust Resolution
+-(int)setRollingHistoryLength:(int)historyLength {
+#if TARGET_OS_IPHONE
+  return [self.glViewController setRollingHistoryLength:historyLength];
+#elif TARGET_OS_MAC
+  historyLength = MIN(historyLength,kEZAudioPlotMaxHistoryBufferLength);
+  size_t floatByteSize = sizeof(float);
+  _changingHistorySize = YES;
+  if( _scrollHistoryLength != historyLength ){
+    _scrollHistoryLength = historyLength;
+  }
+  _scrollHistory = realloc(_scrollHistory,_scrollHistoryLength*floatByteSize);
+  if( _scrollHistoryIndex < _scrollHistoryLength ){
+    memset(&_scrollHistory[_scrollHistoryIndex],
+           0,
+           (_scrollHistoryLength-_scrollHistoryIndex)*floatByteSize);
+  }
+  else {
+    _scrollHistoryIndex = _scrollHistoryLength;
+  }
+  _changingHistorySize = NO;
+  return historyLength;
+#endif
+  return kEZAudioPlotDefaultHistoryBufferLength;
+}
+
 #pragma mark - Graph Methods
 +(void)fillGraph:(EZAudioPlotGLPoint*)graph
    withGraphSize:(UInt32)graphSize
