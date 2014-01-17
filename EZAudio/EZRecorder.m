@@ -66,14 +66,7 @@ typedef struct {
 
 #pragma mark - Class Format Helper
 +(AudioStreamBasicDescription)defaultDestinationFormat {
-  AudioStreamBasicDescription destinationFormat;
-  destinationFormat.mFormatID = kAudioFormatLinearPCM;
-  destinationFormat.mChannelsPerFrame = 1;
-  destinationFormat.mBitsPerChannel = 16;
-  destinationFormat.mBytesPerPacket = destinationFormat.mBytesPerFrame = 2 * destinationFormat.mChannelsPerFrame;
-  destinationFormat.mFramesPerPacket = 1;
-  destinationFormat.mFormatFlags = kLinearPCMFormatFlagIsPacked | kLinearPCMFormatFlagIsSignedInteger; // little-endian
-  destinationFormat.mSampleRate = 44100.0;
+  AudioStreamBasicDescription destinationFormat = [EZAudio stereoFloatInterleavedFormatWithSampleRate:44100.0];
   return destinationFormat;
 }
 
@@ -82,16 +75,24 @@ typedef struct {
 }
 
 #pragma mark - Private Configuation
+-(void)_configureRecorderForExistingFile {
+  
+}
+
+-(void)_configureRecorderForNewFile {
+  
+}
+
 -(void)_configureRecorder {
   
   // Create the extended audio file
   [EZAudio checkResult:ExtAudioFileCreateWithURL(_destinationFileURL,
-                                               kAudioFileCAFType,
-                                               &_destinationFormat,
-                                               NULL,
-                                               kAudioFileFlags_EraseFile,
-                                               &_destinationFile)
-           operation:"Failed to create ExtendedAudioFile reference"];
+                                              kAudioFileCAFType,
+                                              &_destinationFormat,
+                                              NULL,
+                                              kAudioFileFlags_EraseFile,
+                                              &_destinationFile)
+             operation:"Could not open audio file"];
   
   // Set the client format
   _clientFormat = _destinationFormat;
@@ -112,7 +113,7 @@ typedef struct {
              operation:"Failed to initialize with ExtAudioFileWriteAsync"];
   
   // Setup the audio converter
-  [EZAudio checkResult:AudioConverterNew(&_sourceFormat, &_clientFormat, &_audioConverter)
+  [EZAudio checkResult:AudioConverterNew(&_sourceFormat, &_destinationFormat, &_audioConverter)
              operation:"Failed to create new audio converter"];
   
 }
@@ -126,18 +127,19 @@ typedef struct {
   AudioBufferList *convertedData = [EZAudio audioBufferList];
   convertedData->mNumberBuffers = 1;
   convertedData->mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
-  convertedData->mBuffers[0].mDataByteSize   = outputBufferSize;
-  convertedData->mBuffers[0].mData           = (UInt8*)malloc(sizeof(UInt8)*outputBufferSize);
+  convertedData->mBuffers[0].mDataByteSize   = outputBufferSize*_clientFormat.mChannelsPerFrame;
+  convertedData->mBuffers[0].mData           = (AudioUnitSampleType*)malloc(sizeof(AudioUnitSampleType)*outputBufferSize*_clientFormat.mChannelsPerFrame);
   
   [EZAudio checkResult:AudioConverterFillComplexBuffer(_audioConverter,
                                                        complexInputDataProc,
                                                        &(EZRecorderConverterStruct){ .sourceBuffer = bufferList },
                                                        &bufferSize,
                                                        convertedData,
-                                                       NULL) operation:"Failed while converting buffers"];
+                                                       NULL)
+             operation:"Failed while converting buffers"];
   
   // Write the destination audio buffer list into t
-  [EZAudio checkResult:ExtAudioFileWriteAsync(_destinationFile, bufferSize, convertedData)
+  [EZAudio checkResult:ExtAudioFileWriteAsync(_destinationFile,bufferSize,convertedData)
              operation:"Failed to write audio data to file"];
   
   // Free resources
@@ -158,7 +160,7 @@ static OSStatus complexInputDataProc(AudioConverterRef             inAudioConver
 
   memcpy(ioData,
          recorderStruct->sourceBuffer,
-         sizeof(AudioBufferList) + (recorderStruct->sourceBuffer->mNumberBuffers-1)*sizeof(AudioBuffer));
+         sizeof(AudioBufferList)+(recorderStruct->sourceBuffer->mNumberBuffers-1)*sizeof(AudioBuffer));
   recorderStruct->sourceBuffer = NULL;
   
   return noErr;
