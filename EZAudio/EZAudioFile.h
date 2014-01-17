@@ -76,6 +76,11 @@ typedef void (^WaveformDataCompletionBlock)(float *waveformData, UInt32 length);
  */
 @property (nonatomic,assign) id<EZAudioFileDelegate> audioFileDelegate;
 
+/**
+ The resolution of the waveform data. This value specifies how the recommendedDrawingFrameRate chooses itself. A low value like 128 will render a waveform containing 128 points representing a low resolution waveform while a high value like 4096 will render a high quality waveform. Higher resolutions provide more detail, but take more work to render in the audio waveform plots (EZAudioPlot or EZAudioPlotGL) while lower resolutions providel less detail, but work better for displaying many at a time (like in a UITableView)
+ */
+@property (nonatomic,assign) UInt32 waveformResolution;
+
 #pragma mark - Initializers
 ///-----------------------------------------------------------
 /// @name Initializers
@@ -191,10 +196,22 @@ typedef void (^WaveformDataCompletionBlock)(float *waveformData, UInt32 length);
  */
 -(SInt64)totalFrames;
 
+/**
+ Provides the NSURL for the audio file.
+ @return An NSURL representing the path of the EZAudioFile instance.
+ */
+-(NSURL*)url;
+
 #pragma mark - Helpers
 ///-----------------------------------------------------------
 /// @name Manipulating The Audio Data
 ///-----------------------------------------------------------
+
+/**
+ Tells the caller whether the EZAudioFile has cached waveform data that was loaded via the getWaveformDataWithCompletionBlock: function.
+ *  @return A BOOL indicating whether there is cached waveform data
+ */
+-(BOOL)hasLoadedAudioData;
 
 /**
  Asynchronously pulls the waveform amplitude data into a float array for the receiver.

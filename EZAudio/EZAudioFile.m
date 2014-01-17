@@ -27,6 +27,8 @@
 
 #import "EZAudio.h"
 
+#define kEZAudioFileWaveformDefaultResolution (1024)
+
 @interface EZAudioFile (){
   
   // Reading from the audio file
@@ -50,6 +52,7 @@
 
 @implementation EZAudioFile
 @synthesize audioFileDelegate = _audioFileDelegate;
+@synthesize waveformResolution = _waveformResolution;
 
 #pragma mark - Initializers
 -(EZAudioFile*)initWithURL:(NSURL*)url {
@@ -108,7 +111,6 @@
   UInt32 size = sizeof(_fileFormat);
   [EZAudio checkResult:ExtAudioFileGetProperty(_audioFile,kExtAudioFileProperty_FileDataFormat, &size, &_fileFormat)
              operation:"Failed to get audio stream basic description of input file"];
-  [EZAudio printASBD:_fileFormat];
   
   // Try pulling the total frame size
   size = sizeof(_totalFrames);
@@ -143,6 +145,12 @@
   for ( int i=0; i< _clientFormat.mChannelsPerFrame; i++ ) {
     _floatBuffers[i] = (float*)malloc(outputBufferSize);
   }
+  
+  // There's no waveform data yet
+  _waveformData = NULL;
+  
+  // Set the default resolution for the waveform data
+  _waveformResolution = kEZAudioFileWaveformDefaultResolution;
   
 }
 
@@ -193,21 +201,26 @@
 }
 
 #pragma mark - Getters
+-(BOOL)hasLoadedAudioData {
+  return _waveformData != NULL;
+}
+
 -(void)getWaveformDataWithCompletionBlock:(WaveformDataCompletionBlock)waveformDataCompletionBlock {
   
   SInt64 currentFramePosition = _frameIndex;
   
-  if( _waveformData ){
+  if( _waveformData != NULL ){
     
     waveformDataCompletionBlock( _waveformData, _waveformTotalBuffers );
+    return;
     
   }
   
+  _waveformFrameRate    = [self recommendedDrawingFrameRate];
+  _waveformTotalBuffers = [self minBuffersWithFrameRate:_waveformFrameRate];
+  _waveformData         = (float*)malloc(sizeof(float)*_waveformTotalBuffers);
+  
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0ul), ^{
-      
-    _waveformFrameRate    = [self recommendedDrawingFrameRate];
-    _waveformTotalBuffers = [self minBuffersWithFrameRate:_waveformFrameRate];
-    _waveformData         = (float*)malloc(sizeof(float)*_waveformTotalBuffers);
     
     for( int i = 0; i < _waveformTotalBuffers; i++ ){
       
@@ -276,6 +289,21 @@
   return _totalFrames;
 }
 
+-(NSURL *)url {
+  return (__bridge NSURL*)_sourceURL;
+}
+
+#pragma mark - Setters
+-(void)setWaveformResolution:(UInt32)waveformResolution {
+  if( _waveformResolution != waveformResolution ){
+    _waveformResolution = waveformResolution;
+    if( _waveformData ){
+      free(_waveformData);
+      _waveformData = NULL;
+    }
+  }
+}
+
 #pragma mark - Helpers
 -(UInt32)minBuffersWithFrameRate:(UInt32)frameRate {
   frameRate = frameRate > 0 ? frameRate : 1;
@@ -283,7 +311,7 @@
 }
 
 -(UInt32)recommendedDrawingFrameRate {
-  return (UInt32) _totalFrames / 2057 - 1;
+  return (UInt32) _totalFrames / _waveformResolution - 1;
 }
 
 #pragma mark - Cleanup
