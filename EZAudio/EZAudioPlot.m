@@ -92,6 +92,7 @@
   self.plotType        = EZPlotTypeRolling;
   self.shouldMirror    = NO;
   self.shouldFill      = NO;
+  _sampleData          = NULL;
   _scrollHistory       = NULL;
   _scrollHistoryLength = kEZAudioPlotDefaultHistoryBufferLength;
 }
@@ -290,7 +291,9 @@
 }
     
 -(void)dealloc {
-  free(_sampleData);
+  if( _sampleData ){
+    free(_sampleData);
+  }
 }
 
 @end
