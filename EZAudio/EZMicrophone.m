@@ -95,30 +95,28 @@ static OSStatus inputCallback(void                          *inRefCon,
                            inNumberFrames,
                            microphone->microphoneInputBuffer);
   if( !result ){
-    // Notify delegate (OF-style)
-    @autoreleasepool {
-      // Audio Received (float array)
-      if( microphone.microphoneDelegate ){
-        // THIS IS NOT OCCURING ON THE MAIN THREAD
-        if( [microphone.microphoneDelegate respondsToSelector:@selector(microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:)] ){
-          AEFloatConverterToFloat(microphone->converter,
-                                  microphone->microphoneInputBuffer,
-                                  microphone->floatBuffers,
-                                  inNumberFrames);
-        }
+    // ----- Notify delegate (OF-style) -----
+    // Audio Received (float array)
+    if( microphone.microphoneDelegate ){
+      // THIS IS NOT OCCURING ON THE MAIN THREAD
+      if( [microphone.microphoneDelegate respondsToSelector:@selector(microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:)] ){
+        AEFloatConverterToFloat(microphone->converter,
+                                microphone->microphoneInputBuffer,
+                                microphone->floatBuffers,
+                                inNumberFrames);
+      }
+      [microphone.microphoneDelegate microphone:microphone
+                               hasAudioReceived:microphone->floatBuffers
+                                 withBufferSize:inNumberFrames
+                           withNumberOfChannels:microphone->streamFormat.mChannelsPerFrame];
+    }
+    // Audio Received (buffer list)
+    if( microphone.microphoneDelegate ){
+      if( [microphone.microphoneDelegate respondsToSelector:@selector(microphone:hasBufferList:withBufferSize:withNumberOfChannels:)] ){
         [microphone.microphoneDelegate microphone:microphone
-                                 hasAudioReceived:microphone->floatBuffers
+                                    hasBufferList:microphone->microphoneInputBuffer
                                    withBufferSize:inNumberFrames
                              withNumberOfChannels:microphone->streamFormat.mChannelsPerFrame];
-      }
-      // Audio Received (buffer list)
-      if( microphone.microphoneDelegate ){
-        if( [microphone.microphoneDelegate respondsToSelector:@selector(microphone:hasBufferList:withBufferSize:withNumberOfChannels:)] ){
-          [microphone.microphoneDelegate microphone:microphone
-                                      hasBufferList:microphone->microphoneInputBuffer
-                                     withBufferSize:inNumberFrames
-                               withNumberOfChannels:microphone->streamFormat.mChannelsPerFrame];
-        }
       }
     }
   }
@@ -547,7 +545,7 @@ static OSStatus inputCallback(void                          *inRefCon,
   microphoneInputBuffer                 = (AudioBufferList*)malloc(propSize);
   microphoneInputBuffer->mNumberBuffers = streamFormat.mChannelsPerFrame;
   for( UInt32 i = 0; i < microphoneInputBuffer->mNumberBuffers; i++ ){
-    microphoneInputBuffer->mBuffers[i].mNumberChannels = 1;
+    microphoneInputBuffer->mBuffers[i].mNumberChannels = streamFormat.mChannelsPerFrame;
     microphoneInputBuffer->mBuffers[i].mDataByteSize   = bufferSizeBytes;
     microphoneInputBuffer->mBuffers[i].mData           = malloc(bufferSizeBytes);
   }
