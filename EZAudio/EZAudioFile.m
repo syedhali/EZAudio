@@ -159,13 +159,15 @@
   audioBufferList:(AudioBufferList *)audioBufferList
        bufferSize:(UInt32 *)bufferSize
               eof:(BOOL *)eof {
-  @autoreleasepool {
+//  @autoreleasepool {
     // Setup the buffers
+  if( !audioBufferList->mNumberBuffers ){
     UInt32 outputBufferSize = 32 * frames; // 32 KB
     audioBufferList->mNumberBuffers = 1;
     audioBufferList->mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
     audioBufferList->mBuffers[0].mDataByteSize = _clientFormat.mChannelsPerFrame*outputBufferSize;
-    audioBufferList->mBuffers[0].mData = (AudioUnitSampleType*)malloc(_clientFormat.mChannelsPerFrame*sizeof(AudioUnitSampleType*)*outputBufferSize);
+    audioBufferList->mBuffers[0].mData = (AudioUnitSampleType*)malloc(_clientFormat.mChannelsPerFrame*sizeof(AudioUnitSampleType)*outputBufferSize);
+  }
     [EZAudio checkResult:ExtAudioFileRead(_audioFile,
                                           &frames,
                                           audioBufferList)
@@ -186,7 +188,7 @@
                      withNumberOfChannels:_clientFormat.mChannelsPerFrame];
       }
     }
-  }
+//  }
 }
 
 -(void)seekToFrame:(SInt64)frame {
@@ -327,8 +329,10 @@
   _frameIndex = 0;
   _waveformFrameRate = 0;
   _waveformTotalBuffers = 0;
-  [EZAudio checkResult:ExtAudioFileDispose(_audioFile)
-             operation:"Failed to dispose of extended audio file."];
+  if( _audioFile ){
+    [EZAudio checkResult:ExtAudioFileDispose(_audioFile)
+               operation:"Failed to dispose of extended audio file."];
+  }
 }
 
 @end
