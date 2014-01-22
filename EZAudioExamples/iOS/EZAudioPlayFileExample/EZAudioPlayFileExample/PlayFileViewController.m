@@ -13,6 +13,8 @@
   UInt32 _waveformDrawingIndex;
   UInt32 _waveformFrameRate;
   UInt32 _waveformTotalBuffers;
+  
+  AudioBufferList *_fileBufferList;
 }
 @end
 
@@ -66,6 +68,11 @@
    Try opening the sample file
    */
   [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
+ 
+  /**
+   Initialize the AudioBufferList that will hold the file's data (we're essentially streaming only chunks of the file at a time to keep a low memory footprint.
+   */
+  _fileBufferList = [EZAudio audioBufferList];
   
 }
 
@@ -156,8 +163,8 @@
        readAudio:(float **)buffer
   withBufferSize:(UInt32)bufferSize
 withNumberOfChannels:(UInt32)numberOfChannels {
-  if( [EZOutput sharedOutput].isPlaying ){
-    dispatch_async(dispatch_get_main_queue(), ^{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    if( [EZOutput sharedOutput].isPlaying ){
       if( self.audioPlot.plotType     == EZPlotTypeBuffer &&
          self.audioPlot.shouldFill    == YES              &&
          self.audioPlot.shouldMirror  == YES ){
@@ -165,8 +172,8 @@ withNumberOfChannels:(UInt32)numberOfChannels {
         self.audioPlot.shouldMirror = NO;
       }
       [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
-    });
-  }
+    }
+  });
 }
 
 -(void)audioFile:(EZAudioFile *)audioFile
@@ -189,23 +196,25 @@ withNumberOfChannels:(UInt32)numberOfChannels {
       // Here's what you do to loop the file
       [self.audioFile seekToFrame:0];
       self.eof = NO;
+      _fileBufferList = [EZAudio audioBufferList];
+       return nil;
     }
     
     // Allocate a buffer list to hold the file's data
-    AudioBufferList *bufferList = [EZAudio audioBufferList];
     BOOL eof;
     [self.audioFile readFrames:frames
-               audioBufferList:bufferList
+               audioBufferList:_fileBufferList
                     bufferSize:bufferSize
                            eof:&eof];
     self.eof = eof;
     
     // Reached the end of the file on the last read
     if( eof ){
-      [EZAudio freeBufferList:bufferList];
+      [EZAudio freeBufferList:_fileBufferList];
       return nil;
     }
-    return bufferList;
+    
+    return _fileBufferList;
     
   }
   return nil;
@@ -213,6 +222,10 @@ withNumberOfChannels:(UInt32)numberOfChannels {
 
 -(AudioStreamBasicDescription)outputHasAudioStreamBasicDescription:(EZOutput *)output {
   return self.audioFile.clientFormat;
+}
+
+-(void)dealloc {
+  [EZAudio freeBufferList:_fileBufferList];
 }
 
 @end

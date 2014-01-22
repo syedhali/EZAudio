@@ -38,6 +38,7 @@
 		944D0409186038A60076EF7A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 944D0407186038A60076EF7A /* InfoPlist.strings */; };
 		944D040B186038A60076EF7A /* EZAudioPlayFileExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D040A186038A60076EF7A /* EZAudioPlayFileExampleTests.m */; };
 		944D043D1860398B0076EF7A /* PlayFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D043C1860398A0076EF7A /* PlayFileViewController.m */; };
+		94BE6F86188F55CC00841D98 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BE6F85188F55CC00841D98 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +99,7 @@
 		944D040A186038A60076EF7A /* EZAudioPlayFileExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZAudioPlayFileExampleTests.m; sourceTree = "<group>"; };
 		944D043B1860398A0076EF7A /* PlayFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayFileViewController.h; sourceTree = "<group>"; };
 		944D043C1860398A0076EF7A /* PlayFileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayFileViewController.m; sourceTree = "<group>"; };
+		94BE6F85188F55CC00841D98 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94BE6F86188F55CC00841D98 /* AVFoundation.framework in Frameworks */,
 				9417A6C918658FC000D9D37B /* GLKit.framework in Frameworks */,
 				9417A6C718658FB500D9D37B /* AudioToolbox.framework in Frameworks */,
 				944D03DF186038A60076EF7A /* CoreGraphics.framework in Frameworks */,
@@ -188,6 +191,7 @@
 		944D03DB186038A60076EF7A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				94BE6F85188F55CC00841D98 /* AVFoundation.framework */,
 				9417A6C818658FC000D9D37B /* GLKit.framework */,
 				9417A6C618658FB500D9D37B /* AudioToolbox.framework */,
 				944D03DC186038A60076EF7A /* Foundation.framework */,

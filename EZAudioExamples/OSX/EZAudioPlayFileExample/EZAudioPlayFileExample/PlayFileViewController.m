@@ -25,7 +25,9 @@
 
 #import "PlayFileViewController.h"
 
-@interface PlayFileViewController ()
+@interface PlayFileViewController (){
+  AudioBufferList *_fileBufferList;
+}
 @property (nonatomic,weak) IBOutlet NSSegmentedControl *plotSegmentControl;
 @property (nonatomic,weak) IBOutlet NSButton *playButton;
 @end
@@ -86,6 +88,11 @@
    Try opening the sample file
    */
   [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
+ 
+  /**
+   Initialize the AudioBufferList that will hold the file's data (we're essentially streaming only chunks of the file at a time to keep a low memory footprint.
+   */
+  _fileBufferList = [EZAudio audioBufferList];
   
 }
 
@@ -225,23 +232,25 @@
       // Here's what you do to loop the file
       [self.audioFile seekToFrame:0];
       self.eof = NO;
+      _fileBufferList = [EZAudio audioBufferList];
+      return nil;
     }
     
     // Allocate a buffer list to hold the file's data
-    AudioBufferList *bufferList = [EZAudio audioBufferList];
     BOOL eof;
     [self.audioFile readFrames:frames
-               audioBufferList:bufferList
+               audioBufferList:_fileBufferList
                     bufferSize:bufferSize
                            eof:&eof];
     self.eof = eof;
     
     // Reached the end of the file on the last read
     if( eof ){
-      [EZAudio freeBufferList:bufferList];
+      [EZAudio freeBufferList:_fileBufferList];
       return nil;
     }
-    return bufferList;
+    
+    return _fileBufferList;
     
   }
   return nil;
@@ -267,6 +276,10 @@
     }
   }
   return NO;
+}
+
+-(void)dealloc {
+  [EZAudio freeBufferList:_fileBufferList];
 }
 
 @end
