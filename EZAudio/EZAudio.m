@@ -34,13 +34,16 @@
 
 +(void)freeBufferList:(AudioBufferList *)bufferList {
   if( bufferList ){
-    for( int i = 0; i < bufferList->mNumberBuffers; i++ ){
-      if( bufferList->mBuffers[i].mData ){
-        free(bufferList->mBuffers[i].mData);
+    if( bufferList->mNumberBuffers ){
+      for( int i = 0; i < bufferList->mNumberBuffers; i++ ){
+        if( bufferList->mBuffers[i].mData ){
+          free(bufferList->mBuffers[i].mData);
+        }
       }
     }
     free(bufferList);
   }
+  bufferList = NULL;
 }
 
 #pragma mark - AudioStreamBasicDescription Utility
