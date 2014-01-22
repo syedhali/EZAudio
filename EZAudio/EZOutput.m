@@ -52,6 +52,8 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
                                      UInt32                      inNumberFrames,
                                      AudioBufferList             *ioData){
   
+//  NSLog(@"output something");
+  
   EZOutput *output = (__bridge EZOutput*)inRefCon;
   // Manual override
   if( [output.outputDataSource respondsToSelector:@selector(output:callbackWithActionFlags:inTimeStamp:inBusNumber:inNumberFrames:ioData:)] ){
@@ -81,7 +83,7 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
     
     // Get the desired amount of bytes to copy
     int32_t bytesToCopy = ioData->mBuffers[0].mDataByteSize;
-    AudioSampleType *left = (AudioSampleType*)ioData->mBuffers[0].mData;
+    AudioSampleType *left  = (AudioSampleType*)ioData->mBuffers[0].mData;
     AudioSampleType *right = (AudioSampleType*)ioData->mBuffers[1].mData;
     
     // Get the available bytes in the circular buffer
@@ -90,8 +92,8 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
     
     // Ideally we'd have all the bytes to be copied, but compare it against the available bytes (get min)
     int32_t amount = MIN(bytesToCopy,availableBytes);
-    memcpy(left,buffer,amount);
-    memcpy(right,buffer,amount);
+    memcpy( left,  buffer, amount );
+    memcpy( right, buffer, amount );
     
     // Consume those bytes ( this will internally push the head of the circular buffer )
     TPCircularBufferConsume(circularBuffer,amount);
@@ -103,9 +105,6 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
     AudioBufferList *bufferList = [output.outputDataSource output:output
                                         needsBufferListWithFrames:inNumberFrames
                                                    withBufferSize:&bufferSize];
-    if( !bufferList ){
-      return noErr;
-    };
     // Interleaved
     if( !(ioData->mNumberBuffers == 1) ){
       AudioUnitSampleType *left        = (AudioUnitSampleType*)ioData->mBuffers[0].mData;
@@ -114,7 +113,7 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
       for(int i = 0; i < inNumberFrames; i++ ){
         if( bufferList ){
           *left++  = *interleaved++;
-          *right++ =  *interleaved++;
+          *right++ = *interleaved++;
         }
         else {
           *left++  = 0.0f;
@@ -124,14 +123,19 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
     }
     // Non-interleaved
     else {
-      memcpy(ioData,
-             bufferList,
-             sizeof(AudioBufferList)+(bufferList->mNumberBuffers-1)*sizeof(AudioBuffer));
-    }
-    if( bufferList ){
-      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0ul),^{
-        [EZAudio freeBufferList:bufferList];
-      });
+      if( bufferList ){
+//        NSLog(@"should be outputting some real sound");
+        memcpy(ioData,
+               bufferList,
+               sizeof(AudioBufferList)+(bufferList->mNumberBuffers-1)*sizeof(AudioBuffer));
+      }
+      else {
+//        NSLog(@"should be outputting silence");
+        AudioUnitSampleType *buffer = (AudioUnitSampleType*)ioData->mBuffers[0].mData;
+        for( int i = 0; i < inNumberFrames; i++ ){
+          *buffer++ = 0.0f;
+        }
+      }
     }
   }
   
