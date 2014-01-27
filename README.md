@@ -78,7 +78,7 @@ Shows how to calculate the real-time FFT of the audio data coming from the `EZMi
 ![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/fftMacExample.png)
 
 ### Documentation
-The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/0.0.2/
+The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/0.0.3/
 <br>You can also generate the docset yourself using appledocs by running the appledocs on the EZAudio source folder.
 
 ##Getting Started
