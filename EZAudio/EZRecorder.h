@@ -81,6 +81,16 @@
  */
 +(NSString*)defaultDestinationFormatExtension;
 
+#pragma mark - Getters
+///-----------------------------------------------------------
+/// @name Getting The Recorder's Properties
+///-----------------------------------------------------------
+/**
+ Provides the file path that's currently being used by the recorder.
+ @return  The NSURL representing the file path of the audio file path being used for recording.
+ */
+-(NSURL*)url;
+
 #pragma mark - Events
 ///-----------------------------------------------------------
 /// @name Appending Data To The Audio File
@@ -93,5 +103,14 @@
  */
 -(void)appendDataFromBufferList:(AudioBufferList*)bufferList
                  withBufferSize:(UInt32)bufferSize;
+
+///-----------------------------------------------------------
+/// @name Closing The Audio File
+///-----------------------------------------------------------
+
+/**
+ Finishes writes to the audio file and closes it.
+ */
+-(void)closeAudioFile;
 
 @end

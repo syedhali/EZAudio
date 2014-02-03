@@ -64,6 +64,11 @@ typedef struct {
                                     andSourceFormat:sourceFormat];
 }
 
+#pragma mark - Getters
+-(NSURL *)url {
+  return (__bridge NSURL *)(_destinationFileURL);
+}
+
 #pragma mark - Class Format Helper
 +(AudioStreamBasicDescription)defaultDestinationFormat {
   AudioStreamBasicDescription destinationFormat = [EZAudio stereoFloatInterleavedFormatWithSampleRate:44100.0];
@@ -101,6 +106,7 @@ typedef struct {
                                     numberOfChannels:_destinationFormat.mChannelsPerFrame
                                          interleaved:YES];
   }
+  
   UInt32 propertySize = sizeof(_clientFormat);
   [EZAudio checkResult:ExtAudioFileSetProperty(_destinationFile,
                                                kExtAudioFileProperty_ClientDataFormat,
@@ -113,7 +119,7 @@ typedef struct {
              operation:"Failed to initialize with ExtAudioFileWriteAsync"];
   
   // Setup the audio converter
-  [EZAudio checkResult:AudioConverterNew(&_sourceFormat, &_destinationFormat, &_audioConverter)
+  [EZAudio checkResult:AudioConverterNew(&_sourceFormat, &_clientFormat, &_audioConverter)
              operation:"Failed to create new audio converter"];
   
 }
@@ -147,6 +153,15 @@ typedef struct {
   
 }
 
+-(void)closeAudioFile {
+  if( _destinationFile ){
+    [EZAudio checkResult:ExtAudioFileDispose(_destinationFile)
+               operation:"Failed to close audio file for recorder"];
+    _destinationFile = NULL;
+  }
+}
+
+#pragma mark - Converter Processing
 static OSStatus complexInputDataProc(AudioConverterRef             inAudioConverter,
                                      UInt32                        *ioNumberDataPackets,
                                      AudioBufferList               *ioData,
@@ -168,10 +183,16 @@ static OSStatus complexInputDataProc(AudioConverterRef             inAudioConver
 
 #pragma mark - Cleanup
 -(void)dealloc {
-  [EZAudio checkResult:AudioConverterDispose(_audioConverter)
-             operation:"Failed to dispose audio converter in recorder"];
-  [EZAudio checkResult:ExtAudioFileDispose(_destinationFile)
-             operation:"Failed to dispose extended audio file in recorder"];
+  if( _audioConverter )
+  {
+    [EZAudio checkResult:AudioConverterDispose(_audioConverter)
+               operation:"Failed to dispose audio converter in recorder"];
+  }
+  if( _destinationFile )
+  {
+    [EZAudio checkResult:ExtAudioFileDispose(_destinationFile)
+               operation:"Failed to dispose extended audio file in recorder"];
+  }
 }
 
 @end
