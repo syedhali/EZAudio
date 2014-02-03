@@ -6,6 +6,9 @@ A simple, intuitive audio framework for iOS and OSX.
 *The Official EZAudio Page:*
 http://syedharisali.com/projects/EZAudio/getting-started
 
+## Update
+Thank you everyone for using EZAudio! Just an update - I'm working on a 1.0.0 production version of EZAudio that will contain a bunch of improvements in the API, feature an EZAudioPlayer, and hooks for the DOUAudioStreamer for visualizing remote streaming audio. To make the next version of EZAudio even better I encourage you all to email me your feedback, feature requests, and experiences using the framework. Thanks!
+
 ##Features
 ![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/EZAudioSummary.png "EZAudioFeatures")
 
@@ -78,7 +81,7 @@ Shows how to calculate the real-time FFT of the audio data coming from the `EZMi
 ![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/fftMacExample.png)
 
 ### Documentation
-The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/0.0.2/
+The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/0.0.3/
 <br>You can also generate the docset yourself using appledocs by running the appledocs on the EZAudio source folder.
 
 ##Getting Started
@@ -113,7 +116,7 @@ To begin using `EZAudio` you must first make sure you have the proper build requ
 You can add EZAudio to your project in a few ways: <br><br>1.) The easiest way to use EZAudio is via <a href="http://cocoapods.org/", target="_blank">Cocoapods</a>. Simply add EZAudio to your <a href="http://guides.cocoapods.org/using/the-podfile.html", target="_blank">Podfile</a> like so:
 
 `
-pod 'EZAudio', '~> 0.0.2'
+pod 'EZAudio', '~> 0.0.3'
 `
 
 2.) Alternatively, you could clone or fork this repo and just drag and drop the source into your project. 
