@@ -128,9 +128,9 @@
 
 #pragma mark - Adjust Resolution
 -(int)setRollingHistoryLength:(int)historyLength {
+  _changingHistorySize = YES;
   historyLength = MIN(historyLength,kEZAudioPlotMaxHistoryBufferLength);
   size_t floatByteSize = sizeof(float);
-  _changingHistorySize = YES;
   if( _scrollHistoryLength != historyLength ){
     _scrollHistoryLength = historyLength;
   }
@@ -143,8 +143,66 @@
   else {
     _scrollHistoryIndex = _scrollHistoryLength;
   }
+  [self _updateRollingPlotDisplay];
   _changingHistorySize = NO;
   return historyLength;
+}
+
+-(int)rollingHistoryLength {
+  return _scrollHistoryLength;
+}
+
+#pragma mark - Clearing
+-(void)clear
+{
+  _scrollHistoryIndex = 0;
+  [self _clearBufferPlot];
+  [self _clearRollingPlot];
+}
+
+-(void)_clearBufferPlot
+{
+  if( _hasBufferPlotData )
+  {
+    float empty[_bufferPlotGraphSize];
+    memset( empty, 0.0f, sizeof(float) );
+    [self _updateBufferPlotBufferWithAudioReceived:empty
+                                    withBufferSize:_bufferPlotGraphSize];
+  }
+}
+
+-(void)_clearRollingPlot
+{
+  if( _hasRollingPlotData )
+  {
+    float              empty[_rollingPlotGraphSize];
+    EZAudioPlotGLPoint graph[_rollingPlotGraphSize];
+    // Figure out better way to do this
+    for(int i = 0; i < _rollingPlotGraphSize; i++ )
+    {
+      empty[i] = 0.0f;
+    }
+    for(int i = 0; i < _scrollHistoryLength; i++)
+    {
+      _scrollHistory[i] = 0.0f;
+    }
+    // Update the scroll history datasource
+    [EZAudio updateScrollHistory:&_scrollHistory
+                      withLength:_scrollHistoryLength
+                         atIndex:&_scrollHistoryIndex
+                      withBuffer:empty
+                  withBufferSize:_rollingPlotGraphSize
+            isResolutionChanging:&_changingHistorySize];
+    // Fill in graph data
+    [EZAudioPlotGL fillGraph:graph
+               withGraphSize:_rollingPlotGraphSize
+              forDrawingType:_drawingType
+                  withBuffer:_scrollHistory
+              withBufferSize:_scrollHistoryLength
+                    withGain:self.gain];
+    // Update the drawing
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(graph), graph);
+  }
 }
 
 #pragma mark - Get Samples
@@ -214,11 +272,13 @@
   
   glBindBuffer(GL_ARRAY_BUFFER, _rollingPlotVBO);
   
+  
+  
   // If starting with a VBO of half of our max size make sure we initialize it to anticipate
   // a filled graph (which needs 2 * bufferSize) to allocate its resources properly
-  if( !_hasRollingPlotData && _drawingType == EZAudioPlotGLDrawTypeLineStrip ){
+  if( !_hasRollingPlotData ){
     EZAudioPlotGLPoint maxGraph[2*kEZAudioPlotMaxHistoryBufferLength];
-    glBufferData(GL_ARRAY_BUFFER, sizeof(maxGraph), maxGraph, GL_STREAM_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, sizeof(maxGraph), maxGraph, GL_STREAM_DRAW );
     _hasRollingPlotData = YES;
   }
   
@@ -228,8 +288,6 @@
   
   // Fill the graph with data
   EZAudioPlotGLPoint graph[_rollingPlotGraphSize];
-  
-  
   
   // Update the scroll history datasource
   [EZAudio updateScrollHistory:&_scrollHistory
@@ -256,6 +314,27 @@
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(graph), graph);
   }
   
+}
+
+-(void)_updateRollingPlotDisplay {
+  // Setup the plot
+  _rollingPlotGraphSize = [EZAudioPlotGL graphSizeForDrawingType:_drawingType
+                                                  withBufferSize:_scrollHistoryLength];
+  
+  // Fill the graph with data
+  EZAudioPlotGLPoint graph[_rollingPlotGraphSize];
+  // Fill in graph data
+  [EZAudioPlotGL fillGraph:graph
+             withGraphSize:_rollingPlotGraphSize
+            forDrawingType:_drawingType
+                withBuffer:_scrollHistory
+            withBufferSize:_scrollHistoryLength
+                  withGain:self.gain];
+  
+  // Update the drawing
+  if( _hasRollingPlotData ){
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(graph), graph);
+  }
 }
 
 #pragma mark - Drawing

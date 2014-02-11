@@ -289,6 +289,10 @@
   _changingHistorySize = NO;
   return historyLength;
 }
+
+-(int)rollingHistoryLength {
+  return _scrollHistoryLength;
+}
     
 -(void)dealloc {
   if( _sampleData ){

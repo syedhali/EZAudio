@@ -59,4 +59,10 @@
  */
 -(int)setRollingHistoryLength:(int)historyLength;
 
+/**
+ Provides the length of the rolling history buffer
+ *  @return An int representing the length of the rolling history buffer
+ */
+-(int)rollingHistoryLength;
+
 @end

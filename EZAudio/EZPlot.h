@@ -91,6 +91,16 @@ typedef NS_ENUM(NSInteger,EZPlotType){
  */
 @property (nonatomic,assign,setter=setShouldMirror:) BOOL shouldMirror;
 
+#pragma mark - Clearing
+///-----------------------------------------------------------
+/// @name Clearing The Plot
+///-----------------------------------------------------------
+
+/**
+ Clears all data from the audio plot (includes both EZPlotTypeBuffer and EZPlotTypeRolling)
+ */
+-(void)clear;
+
 #pragma mark - Get Samples
 ///-----------------------------------------------------------
 /// @name Updating The Plot

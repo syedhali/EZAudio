@@ -91,13 +91,41 @@ typedef struct {
 -(void)_configureRecorder {
   
   // Create the extended audio file
-  [EZAudio checkResult:ExtAudioFileCreateWithURL(_destinationFileURL,
+  OSStatus result = ExtAudioFileCreateWithURL(_destinationFileURL,
                                               kAudioFileCAFType,
                                               &_destinationFormat,
                                               NULL,
-                                              kAudioFileFlags_EraseFile,
-                                              &_destinationFile)
-             operation:"Could not open audio file"];
+                                              0,
+                                              &_destinationFile);
+//  [EZAudio checkResult:ExtAudioFileCreateWithURL(_destinationFileURL,
+//                                              kAudioFileCAFType,
+//                                              &_destinationFormat,
+//                                              NULL,
+//                                              kAudioFileFlags_EraseFile,
+//                                              &_destinationFile)
+//             operation:"Could not open audio file"];
+
+  if( result != noErr )
+  {
+    
+    NSLog(@"Opening an existing audio file");
+    
+    // Open the existing audio file for writing
+    AudioFileID audioFileID;
+
+    [EZAudio checkResult:AudioFileOpenURL(_destinationFileURL,
+                                          kAudioFileWritePermission|kAudioFileReadPermission,
+                                          kAudioFileCAFType,
+                                          &audioFileID)
+               operation:"Failed to open existing audio file"];
+    
+    // Wrap the audio file with an extended audio file reference
+    [EZAudio checkResult:ExtAudioFileWrapAudioFileID(audioFileID,
+                                                     true,
+                                                     &_destinationFile)
+               operation:"Failed to wrap audio file reference with extended audio file"];
+    
+  }
   
   // Set the client format
   _clientFormat = _destinationFormat;

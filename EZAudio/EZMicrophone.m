@@ -132,14 +132,31 @@ static OSStatus inputCallback(void                          *inRefCon,
     // We're not fetching anything yet
     _isConfigured = NO;
     _isFetching   = NO;
+    if( !_isConfigured ){
+      // Create the input audio graph
+      [self _createInputUnit];
+      // We're configured meow
+      _isConfigured = YES;
+    }
   }
   return self;
 }
 
 -(EZMicrophone *)initWithMicrophoneDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate {
-  self = [self init];
+  self = [super init];
   if(self){
     self.microphoneDelegate = microphoneDelegate;
+    // Clear the float buffer
+    floatBuffers = NULL;
+    // We're not fetching anything yet
+    _isConfigured = NO;
+    _isFetching   = NO;
+    if( !_isConfigured ){
+      // Create the input audio graph
+      [self _createInputUnit];
+      // We're configured meow
+      _isConfigured = YES;
+    }
   }
   return self;
 }
@@ -211,12 +228,6 @@ static OSStatus inputCallback(void                          *inRefCon,
 #pragma mark - Events
 -(void)startFetchingAudio {
   if( !_isFetching ){
-    if( !_isConfigured ){
-      // Create the input audio graph
-      [self _createInputUnit];
-      // We're configured meow
-      _isConfigured = YES;
-    }
     // Start fetching input
     [EZAudio checkResult:AudioOutputUnitStart(self->microphoneInput)
                operation:"Microphone failed to start fetching audio"];
@@ -530,6 +541,7 @@ static OSStatus inputCallback(void                          *inRefCon,
 }
 
 -(void)_notifyDelegateOfStreamFormat {
+  NSLog(@"should notify of stream format");
   if( _microphoneDelegate ){
     if( [_microphoneDelegate respondsToSelector:@selector(microphone:hasAudioStreamBasicDescription:) ] ){
       [_microphoneDelegate microphone:self

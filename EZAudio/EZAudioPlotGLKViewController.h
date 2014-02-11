@@ -92,6 +92,22 @@
  */
 -(int)setRollingHistoryLength:(int)historyLength;
 
+/**
+ Provides the length of the rolling history buffer
+ *  @return An int representing the length of the rolling history buffer
+ */
+-(int)rollingHistoryLength;
+
+#pragma mark - Clearing
+///-----------------------------------------------------------
+/// @name Clearing The Plot
+///-----------------------------------------------------------
+
+/**
+ Clears all data from the audio plot (includes both EZPlotTypeBuffer and EZPlotTypeRolling)
+ */
+-(void)clear;
+
 #pragma mark - Get Samples
 ///-----------------------------------------------------------
 /// @name Updating The Plot

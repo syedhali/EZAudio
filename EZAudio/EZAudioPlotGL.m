@@ -445,7 +445,7 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   
   // If starting with a VBO of half of our max size make sure we initialize it to anticipate
   // a filled graph (which needs 2 * bufferSize) to allocate its resources properly
-  if( !_hasRollingPlotData && _drawingType == EZAudioPlotGLDrawTypeLineStrip ){
+  if( !_hasRollingPlotData ){
     EZAudioPlotGLPoint maxGraph[2*kEZAudioPlotMaxHistoryBufferLength];
     glBufferData(GL_ARRAY_BUFFER, sizeof(maxGraph), maxGraph, GL_STREAM_DRAW );
     _hasRollingPlotData = YES;
@@ -651,7 +651,8 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
 #pragma mark - Adjust Resolution
 -(int)setRollingHistoryLength:(int)historyLength {
 #if TARGET_OS_IPHONE
-  return [self.glViewController setRollingHistoryLength:historyLength];
+  int result = [self.glViewController setRollingHistoryLength:historyLength];
+  return result;
 #elif TARGET_OS_MAC
   historyLength = MIN(historyLength,kEZAudioPlotMaxHistoryBufferLength);
   size_t floatByteSize = sizeof(float);
@@ -672,6 +673,22 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   return historyLength;
 #endif
   return kEZAudioPlotDefaultHistoryBufferLength;
+}
+
+-(int)rollingHistoryLength {
+#if TARGET_OS_IPHONE
+  return self.glViewController.rollingHistoryLength;
+#elif TARGET_OS_MAC
+  return _scrollHistoryLength;
+#endif
+}
+
+#pragma mark - Clearing
+-(void)clear {
+#if TARGET_OS_IPHONE
+  [self.glViewController clear];
+#elif TARGET_OS_MAC
+#endif
 }
 
 #pragma mark - Graph Methods

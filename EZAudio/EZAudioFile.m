@@ -161,13 +161,18 @@
               eof:(BOOL *)eof {
 //  @autoreleasepool {
     // Setup the buffers
-  if( !audioBufferList->mNumberBuffers ){
+//  if( !audioBufferList->mNumberBuffers ){
+#warning MEMORY_LEAK!!! Need a better solution
+  if( audioBufferList->mNumberBuffers != 1 )
+  {
     UInt32 outputBufferSize = 32 * frames; // 32 KB
     audioBufferList->mNumberBuffers = 1;
     audioBufferList->mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
     audioBufferList->mBuffers[0].mDataByteSize = _clientFormat.mChannelsPerFrame*outputBufferSize;
     audioBufferList->mBuffers[0].mData = (AudioUnitSampleType*)malloc(_clientFormat.mChannelsPerFrame*sizeof(AudioUnitSampleType)*outputBufferSize);
   }
+//  }
+  
     [EZAudio checkResult:ExtAudioFileRead(_audioFile,
                                           &frames,
                                           audioBufferList)
@@ -212,15 +217,18 @@
   SInt64 currentFramePosition = _frameIndex;
   
   if( _waveformData != NULL ){
-    
     waveformDataCompletionBlock( _waveformData, _waveformTotalBuffers );
     return;
-    
   }
   
   _waveformFrameRate    = [self recommendedDrawingFrameRate];
   _waveformTotalBuffers = [self minBuffersWithFrameRate:_waveformFrameRate];
   _waveformData         = (float*)malloc(sizeof(float)*_waveformTotalBuffers);
+  
+  if( self.totalFrames == 0 ){
+    waveformDataCompletionBlock( _waveformData, _waveformTotalBuffers );
+    return;
+  }
   
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0ul), ^{
     
@@ -331,7 +339,7 @@
   _waveformTotalBuffers = 0;
   if( _audioFile ){
     [EZAudio checkResult:ExtAudioFileDispose(_audioFile)
-               operation:"Failed to dispose of extended audio file."];
+               operation:"Failed to dispose of audio file"];
   }
 }
 
