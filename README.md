@@ -331,9 +331,9 @@ Provides flexible playback to the default output device by asking the `EZOutputD
 -(TPCircularBuffer*)outputShouldUseCircularBuffer:(EZOutput *)output;
 
 // Provides the audio callback with a buffer list, number of frames, and buffer size to use
--(AudioBufferList*)  output:(EZOutput*)output
-  needsBufferListWithFrames:(UInt32)frames
-             withBufferSize:(UInt32*)bufferSize;
+-(void)             output:(EZOutput *)output
+ shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
+        withNumberOfFrames:(UInt32)frames;
 ```
 
 **_Relevant Example Projects_**
@@ -365,36 +365,22 @@ Alternatively, you could also use the shared output instance and just assign it 
 One method to play back audio is to provide an AudioBufferList (for instance, reading from an `EZAudioFile`):
 ```objectivec
 // Use the AudioBufferList datasource method to read from an EZAudioFile
--(AudioBufferList *)output:(EZOutput *)output
- needsBufferListWithFrames:(UInt32)frames
-            withBufferSize:(UInt32 *)bufferSize {
- if( self.audioFile ){
- 
-    // Reached the end of the file
-    if( self.eof ){
-      // Here's what you do to loop the file
-      [self.audioFile seekToFrame:0];
-      self.eof = NO;
-    }
-    
-    // Allocate a buffer list to hold the file's data
-    AudioBufferList *bufferList = [EZAudio audioBufferList];
-    BOOL eof;
+-(void)             output:(EZOutput *)output
+ shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
+        withNumberOfFrames:(UInt32)frames
+{
+  if( self.audioFile )
+  {
+    UInt32 bufferSize;
     [self.audioFile readFrames:frames
-               audioBufferList:bufferList
-                    bufferSize:bufferSize
-                           eof:&eof];
-    self.eof = eof;
-    
-    // Reached the end of the file on the last read
-    if( eof ){
-      [EZAudio freeBufferList:bufferList];
-      return nil;
+               audioBufferList:audioBufferList
+                    bufferSize:&bufferSize
+                           eof:&_eof];
+    if( _eof )
+    {
+      [self seekToFrame:0];
     }
-    return bufferList;
-    
- }
-  return nil;
+  }
 }
 ```
 ####Playback Using A Circular Buffer
