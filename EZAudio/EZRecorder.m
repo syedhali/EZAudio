@@ -157,12 +157,9 @@ typedef struct {
                  withBufferSize:(UInt32)bufferSize {
   
   // Setup output buffers
-  UInt32 outputBufferSize = 32 * 1024; // 32 KB
-  AudioBufferList *convertedData = [EZAudio audioBufferList];
-  convertedData->mNumberBuffers = 1;
-  convertedData->mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
-  convertedData->mBuffers[0].mDataByteSize   = outputBufferSize*_clientFormat.mChannelsPerFrame;
-  convertedData->mBuffers[0].mData           = (AudioUnitSampleType*)malloc(sizeof(AudioUnitSampleType)*outputBufferSize*_clientFormat.mChannelsPerFrame);
+  AudioBufferList *convertedData = [EZAudio audioBufferListWithNumberOfFrames:bufferSize
+                                                             numberOfChannels:_clientFormat.mChannelsPerFrame
+                                                                  interleaved:!(_clientFormat.mFormatFlags & kAudioFormatFlagIsNonInterleaved)];
   
   [EZAudio checkResult:AudioConverterFillComplexBuffer(_audioConverter,
                                                        complexInputDataProc,
