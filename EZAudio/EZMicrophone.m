@@ -541,7 +541,6 @@ static OSStatus inputCallback(void                          *inRefCon,
 }
 
 -(void)_notifyDelegateOfStreamFormat {
-  NSLog(@"should notify of stream format");
   if( _microphoneDelegate ){
     if( [_microphoneDelegate respondsToSelector:@selector(microphone:hasAudioStreamBasicDescription:) ] ){
       [_microphoneDelegate microphone:self
