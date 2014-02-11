@@ -100,43 +100,10 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
     
   }
   // Provided an AudioBufferList (defaults to silence)
-  else {
-    UInt32 bufferSize;
-    AudioBufferList *bufferList = [output.outputDataSource output:output
-                                        needsBufferListWithFrames:inNumberFrames
-                                                   withBufferSize:&bufferSize];
-    // Interleaved
-    if( !(ioData->mNumberBuffers == 1) ){
-      AudioUnitSampleType *left        = (AudioUnitSampleType*)ioData->mBuffers[0].mData;
-      AudioUnitSampleType *right       = (AudioUnitSampleType*)ioData->mBuffers[1].mData;
-      AudioUnitSampleType *interleaved = (AudioUnitSampleType*)bufferList->mBuffers[0].mData;
-      for(int i = 0; i < inNumberFrames; i++ ){
-        if( bufferList ){
-          *left++  = *interleaved++;
-          *right++ = *interleaved++;
-        }
-        else {
-          *left++  = 0.0f;
-          *right++ = 0.0f;
-        }
-      }
-    }
-    // Non-interleaved
-    else {
-      if( bufferList ){
-//        NSLog(@"should be outputting some real sound");
-        memcpy(ioData,
-               bufferList,
-               sizeof(AudioBufferList)+(bufferList->mNumberBuffers-1)*sizeof(AudioBuffer));
-      }
-      else {
-//        NSLog(@"should be outputting silence");
-        AudioUnitSampleType *buffer = (AudioUnitSampleType*)ioData->mBuffers[0].mData;
-        for( int i = 0; i < inNumberFrames; i++ ){
-          *buffer++ = 0.0f;
-        }
-      }
-    }
+  else if( [output.outputDataSource respondsToSelector:@selector(output:shouldFillAudioBufferList:withNumberOfFrames:)] ) {
+    [output.outputDataSource output:output
+          shouldFillAudioBufferList:ioData
+                 withNumberOfFrames:inNumberFrames];
   }
   
   return noErr;
