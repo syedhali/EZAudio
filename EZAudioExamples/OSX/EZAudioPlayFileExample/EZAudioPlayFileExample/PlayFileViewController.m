@@ -25,9 +25,7 @@
 
 #import "PlayFileViewController.h"
 
-@interface PlayFileViewController (){
-  AudioBufferList *_fileBufferList;
-}
+@interface PlayFileViewController ()
 @property (nonatomic,weak) IBOutlet NSSegmentedControl *plotSegmentControl;
 @property (nonatomic,weak) IBOutlet NSButton *playButton;
 @end
@@ -88,11 +86,6 @@
    Try opening the sample file
    */
   [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
- 
-  /**
-   Initialize the AudioBufferList that will hold the file's data (we're essentially streaming only chunks of the file at a time to keep a low memory footprint.
-   */
-  _fileBufferList = [EZAudio audioBufferList];
   
 }
 
@@ -222,38 +215,20 @@
 }
 
 #pragma mark - EZOutputDataSource
--(AudioBufferList *)output:(EZOutput *)output
- needsBufferListWithFrames:(UInt32)frames
-            withBufferSize:(UInt32 *)bufferSize {
-  if( self.audioFile ){
-    
-    // Reached the end of the file
-    if( self.eof ){
-      // Here's what you do to loop the file
-      [self.audioFile seekToFrame:0];
-      self.eof = NO;
-      _fileBufferList = [EZAudio audioBufferList];
-      return nil;
-    }
-    
-    // Allocate a buffer list to hold the file's data
-    BOOL eof;
+-(void)output:(EZOutput *)output shouldFillAudioBufferList:(AudioBufferList *)audioBufferList withNumberOfFrames:(UInt32)frames
+{
+  if( self.audioFile )
+  {
+    UInt32 bufferSize;
     [self.audioFile readFrames:frames
-               audioBufferList:_fileBufferList
-                    bufferSize:bufferSize
-                           eof:&eof];
-    self.eof = eof;
-    
-    // Reached the end of the file on the last read
-    if( eof ){
-      [EZAudio freeBufferList:_fileBufferList];
-      return nil;
+               audioBufferList:audioBufferList
+                    bufferSize:&bufferSize
+                           eof:&_eof];
+    if( _eof )
+    {
+      [self seekToFrame:0];
     }
-    
-    return _fileBufferList;
-    
   }
-  return nil;
 }
 
 #pragma mark - NSOpenSavePanelDelegate
@@ -276,10 +251,6 @@
     }
   }
   return NO;
-}
-
--(void)dealloc {
-  [EZAudio freeBufferList:_fileBufferList];
 }
 
 @end
