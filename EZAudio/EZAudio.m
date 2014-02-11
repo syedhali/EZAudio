@@ -28,15 +28,32 @@
 @implementation EZAudio
 
 #pragma mark - AudioBufferList Utility
-+(AudioBufferList *)audioBufferList {
-  return (AudioBufferList*)malloc(sizeof(AudioBufferList));
++(AudioBufferList *)audioBufferListWithNumberOfFrames:(UInt32)frames
+                                     numberOfChannels:(UInt32)channels
+                                          interleaved:(BOOL)interleaved
+{
+  AudioBufferList *audioBufferList = (AudioBufferList*)malloc(sizeof(AudioBufferList));
+  UInt32 outputBufferSize = 32 * frames; // 32 KB
+  audioBufferList->mNumberBuffers = interleaved ? 1 : channels;
+  for( int i = 0; i < audioBufferList->mNumberBuffers; i++ )
+  {
+    audioBufferList->mBuffers[i].mNumberChannels = channels;
+    audioBufferList->mBuffers[i].mDataByteSize = channels * outputBufferSize;
+    audioBufferList->mBuffers[i].mData = (AudioUnitSampleType*)malloc(channels * sizeof(AudioUnitSampleType) *outputBufferSize);
+  }
+  return audioBufferList;
 }
 
-+(void)freeBufferList:(AudioBufferList *)bufferList {
-  if( bufferList ){
-    if( bufferList->mNumberBuffers ){
-      for( int i = 0; i < bufferList->mNumberBuffers; i++ ){
-        if( bufferList->mBuffers[i].mData ){
++(void)freeBufferList:(AudioBufferList *)bufferList
+{
+  if( bufferList )
+  {
+    if( bufferList->mNumberBuffers )
+    {
+      for( int i = 0; i < bufferList->mNumberBuffers; i++ )
+      {
+        if( bufferList->mBuffers[i].mData )
+        {
           free(bufferList->mBuffers[i].mData);
         }
       }
@@ -47,9 +64,10 @@
 }
 
 #pragma mark - AudioStreamBasicDescription Utility
-/// AudioStreamFormatDescription Helpers
+/// AudioasbdDescription Helpers
 
-+(AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)sampleRate {
++(AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)sampleRate
+{
   AudioStreamBasicDescription asbd;
   UInt32 byteSize = sizeof(AudioUnitSampleType);
   asbd.mBitsPerChannel   = 8 * byteSize;
@@ -63,7 +81,8 @@
   return asbd;
 }
 
-+(AudioStreamBasicDescription)monoCanonicalFormatWithSampleRate:(float)sampleRate {
++(AudioStreamBasicDescription)monoCanonicalFormatWithSampleRate:(float)sampleRate
+{
   AudioStreamBasicDescription asbd;
   UInt32 byteSize = sizeof(AudioUnitSampleType);
   asbd.mBitsPerChannel   = 8 * byteSize;
@@ -77,7 +96,8 @@
   return asbd;
 }
 
-+(AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)sampleRate {
++(AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)sampleRate
+{
   AudioStreamBasicDescription asbd;
   UInt32 byteSize = sizeof(AudioUnitSampleType);
   asbd.mBitsPerChannel   = 8 * byteSize;
@@ -91,12 +111,28 @@
   return asbd;
 }
 
-+(AudioStreamBasicDescription)stereoFloatInterleavedFormatWithSampleRate:(float)sampleRate {
++(AudioStreamBasicDescription)stereoFloatInterleavedFormatWithSampleRate:(float)sampleRate
+{
   AudioStreamBasicDescription asbd;
-  UInt32 byteSize = sizeof(AudioUnitSampleType);
-  asbd.mBitsPerChannel   = 8 * byteSize;
-  asbd.mBytesPerFrame    = 2 * byteSize;
-  asbd.mBytesPerPacket   = 2 * byteSize;
+  UInt32 floatByteSize   = sizeof(float);
+  asbd.mChannelsPerFrame = 2;
+  asbd.mBitsPerChannel   = 8 * floatByteSize;
+  asbd.mBytesPerFrame    = asbd.mChannelsPerFrame * floatByteSize;
+  asbd.mBytesPerPacket   = asbd.mChannelsPerFrame * floatByteSize;
+  asbd.mFormatFlags      = kAudioFormatFlagIsPacked|kAudioFormatFlagIsFloat;
+  asbd.mFormatID         = kAudioFormatLinearPCM;
+  asbd.mFramesPerPacket  = 1;
+  asbd.mSampleRate       = sampleRate;
+  return asbd;
+}
+
++(AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sampleRate
+{
+  AudioStreamBasicDescription asbd;
+  UInt32 floatByteSize   = sizeof(float);
+  asbd.mBitsPerChannel   = 8 * floatByteSize;
+  asbd.mBytesPerFrame    = floatByteSize;
+  asbd.mBytesPerPacket   = floatByteSize;
   asbd.mChannelsPerFrame = 2;
   asbd.mFormatFlags      = kAudioFormatFlagIsPacked|kAudioFormatFlagIsFloat;
   asbd.mFormatID         = kAudioFormatLinearPCM;
@@ -201,6 +237,11 @@
   for(int i = 0; i < bufferSize; i++)
     sum += buffer[i] * buffer[i];
   return sqrtf( sum / bufferSize );
+}
+
++(float)SGN:(float)value
+{
+  return value < 0 ? -1.0f : ( value > 0 ? 1.0f : 0.0f );
 }
 
 #pragma mark - Plot Utility

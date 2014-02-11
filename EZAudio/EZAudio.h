@@ -55,9 +55,14 @@
 
 /**
  Allocates an AudioBufferList structure. Make sure to call freeBufferList when done using AudioBufferList or it will leak.
+ @param frames The number of frames that will be stored within each audio buffer
+ @param channels The number of channels (e.g. 2 for stereo, 1 for mono, etc.)
+ @param interleaved Whether the samples will be interleaved (if not it will be assumed to be non-interleaved and each channel will have an AudioBuffer allocated)
  @return An AudioBufferList struct that has been allocated in memory
  */
-+(AudioBufferList*)audioBufferList;
++(AudioBufferList *)audioBufferListWithNumberOfFrames:(UInt32)frames
+                                     numberOfChannels:(UInt32)channels
+                                          interleaved:(BOOL)interleaved;
 
 /**
  Deallocates an AudioBufferList structure from memory.
@@ -97,6 +102,13 @@
  @return A new AudioStreamBasicDescription with the specified format.
  */
 +(AudioStreamBasicDescription)stereoFloatInterleavedFormatWithSampleRate:(float)sampleRate;
+
+/**
+ 
+ @param sampleRate The desired sample rate for the AudioStreamBasicDescription
+ @return A new AudioStreamBasicDescription with the specified format.
+ */
++(AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sameRate;
 
 ///-----------------------------------------------------------
 /// @name AudioStreamBasicDescription Utilities
@@ -168,6 +180,16 @@
  */
 +(float)RMS:(float*)buffer
      length:(int)bufferSize;
+
+/**
+ Calculate the sign function sgn(x) =
+ {  -1 , x < 0,
+ {   0 , x = 0,
+ {   1 , x > 0
+ @param value The float value for which to use as x
+ @return The float sign value
+ */
++(float)SGN:(float)value;
 
 #pragma mark - OSStatus Utility
 ///-----------------------------------------------------------
