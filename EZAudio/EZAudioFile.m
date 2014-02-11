@@ -162,16 +162,16 @@
 //  @autoreleasepool {
     // Setup the buffers
 //  if( !audioBufferList->mNumberBuffers ){
-#warning MEMORY_LEAK!!! Need a better solution
-  if( audioBufferList->mNumberBuffers != 1 )
-  {
-    UInt32 outputBufferSize = 32 * frames; // 32 KB
-    audioBufferList->mNumberBuffers = 1;
-    audioBufferList->mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
-    audioBufferList->mBuffers[0].mDataByteSize = _clientFormat.mChannelsPerFrame*outputBufferSize;
-    audioBufferList->mBuffers[0].mData = (AudioUnitSampleType*)malloc(_clientFormat.mChannelsPerFrame*sizeof(AudioUnitSampleType)*outputBufferSize);
-  }
+//#warning MEMORY_LEAK!!! Need a better solution
+//  if( audioBufferList->mNumberBuffers != 1 )
+//  {
+//    UInt32 outputBufferSize = 32 * frames; // 32 KB
+//    audioBufferList->mNumberBuffers = 1;
+//    audioBufferList->mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
+//    audioBufferList->mBuffers[0].mDataByteSize = _clientFormat.mChannelsPerFrame*outputBufferSize;
+//    audioBufferList->mBuffers[0].mData = (AudioUnitSampleType*)malloc(_clientFormat.mChannelsPerFrame*sizeof(AudioUnitSampleType)*outputBufferSize);
 //  }
+////  }
   
     [EZAudio checkResult:ExtAudioFileRead(_audioFile,
                                           &frames,
@@ -235,16 +235,11 @@
     for( int i = 0; i < _waveformTotalBuffers; i++ ){
       
       // Take a snapshot of each buffer through the audio file to form the waveform
-      AudioBufferList *bufferList = [EZAudio audioBufferList];
-      UInt32          bufferSize;
-      BOOL            eof;
-      
-      // Setup the buffers
-      UInt32 outputBufferSize = 32 * _waveformFrameRate; // 32 KB
-      bufferList->mNumberBuffers = 1;
-      bufferList->mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
-      bufferList->mBuffers[0].mDataByteSize = _clientFormat.mChannelsPerFrame*outputBufferSize;
-      bufferList->mBuffers[0].mData = (AudioUnitSampleType*)malloc(_clientFormat.mChannelsPerFrame*sizeof(AudioUnitSampleType*)*outputBufferSize);
+      AudioBufferList *bufferList = [EZAudio audioBufferListWithNumberOfFrames:1024
+                                                              numberOfChannels:_clientFormat.mChannelsPerFrame
+                                                                   interleaved:YES];
+      UInt32 bufferSize;
+      BOOL eof;
       
       // Read in the specified number of frames
       [EZAudio checkResult:ExtAudioFileRead(_audioFile,
