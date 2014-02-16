@@ -38,6 +38,7 @@
 		9417A9CD1871E96300D9D37B /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 9417A9C01871E96300D9D37B /* VERSION */; };
 		9417A9D01871E97D00D9D37B /* FFTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A9CF1871E97D00D9D37B /* FFTViewController.m */; };
 		9417A9D21871EA5900D9D37B /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A9D11871EA5900D9D37B /* Accelerate.framework */; };
+		94FBB77918B156B8007CAE45 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FBB77818B156B8007CAE45 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +99,7 @@
 		9417A9CE1871E97D00D9D37B /* FFTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFTViewController.h; sourceTree = "<group>"; };
 		9417A9CF1871E97D00D9D37B /* FFTViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFTViewController.m; sourceTree = "<group>"; };
 		9417A9D11871EA5900D9D37B /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		94FBB77818B156B8007CAE45 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94FBB77918B156B8007CAE45 /* AVFoundation.framework in Frameworks */,
 				9417A9D21871EA5900D9D37B /* Accelerate.framework in Frameworks */,
 				9417A9A61871E8A100D9D37B /* GLKit.framework in Frameworks */,
 				9417A9A41871E89500D9D37B /* AudioToolbox.framework in Frameworks */,
@@ -149,6 +152,7 @@
 		9417A96A1871E88300D9D37B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				94FBB77818B156B8007CAE45 /* AVFoundation.framework */,
 				9417A9D11871EA5900D9D37B /* Accelerate.framework */,
 				9417A9A51871E8A100D9D37B /* GLKit.framework */,
 				9417A9A31871E89500D9D37B /* AudioToolbox.framework */,
@@ -577,6 +581,7 @@
 				9417A99F1871E88300D9D37B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9417A9A01871E88300D9D37B /* Build configuration list for PBXNativeTarget "EZAudioFFTExampleTests" */ = {
 			isa = XCConfigurationList;
@@ -585,6 +590,7 @@
 				9417A9A21871E88300D9D37B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

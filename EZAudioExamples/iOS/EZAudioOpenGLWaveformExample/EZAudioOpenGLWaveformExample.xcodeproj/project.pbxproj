@@ -37,6 +37,7 @@
 		9417A80B1867DDE300D9D37B /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 9417A7FC1867DDE300D9D37B /* TPCircularBuffer.c */; };
 		9417A80C1867DDE300D9D37B /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 9417A7FF1867DDE300D9D37B /* CHANGELOG */; };
 		9417A80D1867DDE300D9D37B /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 9417A8001867DDE300D9D37B /* VERSION */; };
+		94FBB77518B15698007CAE45 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FBB77418B15698007CAE45 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 		9417A7FD1867DDE300D9D37B /* TPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPCircularBuffer.h; sourceTree = "<group>"; };
 		9417A7FF1867DDE300D9D37B /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		9417A8001867DDE300D9D37B /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
+		94FBB77418B15698007CAE45 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94FBB77518B15698007CAE45 /* AVFoundation.framework in Frameworks */,
 				9417A6CD18658FCD00D9D37B /* GLKit.framework in Frameworks */,
 				9417A6CB18658FC900D9D37B /* AudioToolbox.framework in Frameworks */,
 				94056FEE185E5EAF00EB94BA /* CoreGraphics.framework in Frameworks */,
@@ -146,6 +149,7 @@
 		94056FEA185E5EAF00EB94BA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				94FBB77418B15698007CAE45 /* AVFoundation.framework */,
 				9417A6CC18658FCD00D9D37B /* GLKit.framework */,
 				9417A6CA18658FC900D9D37B /* AudioToolbox.framework */,
 				94056FEB185E5EAF00EB94BA /* Foundation.framework */,
