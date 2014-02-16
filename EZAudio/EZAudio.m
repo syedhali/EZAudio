@@ -134,7 +134,7 @@
   asbd.mBytesPerFrame    = floatByteSize;
   asbd.mBytesPerPacket   = floatByteSize;
   asbd.mChannelsPerFrame = 2;
-  asbd.mFormatFlags      = kAudioFormatFlagIsPacked|kAudioFormatFlagIsFloat;
+  asbd.mFormatFlags      = kAudioFormatFlagIsFloat|kAudioFormatFlagIsNonInterleaved;
   asbd.mFormatID         = kAudioFormatLinearPCM;
   asbd.mFramesPerPacket  = 1;
   asbd.mSampleRate       = sampleRate;

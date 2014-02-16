@@ -100,7 +100,15 @@
   [super viewDidLoad];
   
   // Setup the context
-  self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+  if( ![EAGLContext currentContext] )
+  {
+    self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+  }
+  else
+  {
+    self.context = [EAGLContext currentContext];
+  }
+  
   if (!self.context) {
     NSLog(@"Failed to create ES context");
   }
@@ -265,6 +273,8 @@
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(graph), graph);
   }
   
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  
 }
 
 -(void)_updateRollingPlotBufferWithAudioReceived:(float*)buffer
@@ -313,6 +323,8 @@
   else {
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(graph), graph);
   }
+  
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
   
 }
 
@@ -386,6 +398,9 @@
       glPopMatrix();
     }
     
+    
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    
   }
 }
 
@@ -411,6 +426,8 @@
       glDrawArrays(_drawingType, 0, _rollingPlotGraphSize);
       glPopMatrix();
     }
+    
+    glBindBuffer(GL_ARRAY_BUFFER,0);
     
   }
 }

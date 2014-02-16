@@ -108,8 +108,6 @@ typedef struct {
   if( result != noErr )
   {
     
-    NSLog(@"Opening an existing audio file");
-    
     // Open the existing audio file for writing
     AudioFileID audioFileID;
 

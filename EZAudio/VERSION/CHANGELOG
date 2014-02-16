@@ -40,3 +40,9 @@ Added more memory cleanup for EZAudioFile
 Added adjustable rolling length for EZAudioPlot and EZAudioPlotGL so those rolling graphs can now range from 128 to 8192 whereas before it was fixed at 1024
 Added adjustable resolution for waveform data coming from the EZAudioFile so output from the getWaveformDataWithCompletionBlock: function can literally be of any size. Try 128 for a low resolution waveform or 8192 for a much higher resolution waveform.
 Added quick fix for EZOutput to properly route stereo data coming from a circular buffer datasource. Next version (0.0.4) needs to add EZConverter to allow quick conversions between non-interleaved and interleaved formats.
+
+0.0.4
+Added ‘closeAudioFile’ to EZRecorder to properly dispose of internal audio file prior to trying to reload it using the EZAudioFile.
+Added ‘clear’ to audio plots to allow clearing both buffer and rolling plots.
+Added new EZOutputDataSource method that provides pre-allocated AudioBufferList to fill instead of caller allocating and disposing on AudioBufferList. Much less errors.
+
