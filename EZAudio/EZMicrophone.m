@@ -104,11 +104,11 @@ static OSStatus inputCallback(void                          *inRefCon,
                                 microphone->microphoneInputBuffer,
                                 microphone->floatBuffers,
                                 inNumberFrames);
+        [microphone.microphoneDelegate microphone:microphone
+                                 hasAudioReceived:microphone->floatBuffers
+                                   withBufferSize:inNumberFrames
+                             withNumberOfChannels:microphone->streamFormat.mChannelsPerFrame];
       }
-      [microphone.microphoneDelegate microphone:microphone
-                               hasAudioReceived:microphone->floatBuffers
-                                 withBufferSize:inNumberFrames
-                           withNumberOfChannels:microphone->streamFormat.mChannelsPerFrame];
     }
     // Audio Received (buffer list)
     if( microphone.microphoneDelegate ){
