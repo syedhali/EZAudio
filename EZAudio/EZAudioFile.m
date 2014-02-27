@@ -235,7 +235,7 @@
     for( int i = 0; i < _waveformTotalBuffers; i++ ){
       
       // Take a snapshot of each buffer through the audio file to form the waveform
-      AudioBufferList *bufferList = [EZAudio audioBufferListWithNumberOfFrames:1024
+      AudioBufferList *bufferList = [EZAudio audioBufferListWithNumberOfFrames:_waveformFrameRate
                                                               numberOfChannels:_clientFormat.mChannelsPerFrame
                                                                    interleaved:YES];
       UInt32 bufferSize;
