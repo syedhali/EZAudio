@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/syedhali/EZAudio.git", :tag => "0.0.3" }
   s.source_files  = 'EZAudio/*.{h,m,c}'
   s.exclude_files = 'EZAudio/VERSION'
-  s.ios.frameworks = 'AudioToolbox','GLKit'
+  s.ios.frameworks = 'AudioToolbox','AVFoundation','GLKit'
   s.osx.frameworks = 'AudioToolbox','AudioUnit','CoreAudio','QuartzCore','OpenGL','GLKit'
   s.requires_arc = true;
 end

@@ -26,16 +26,14 @@
 #import <Foundation/Foundation.h>
 #import "TargetConditionals.h"
 
+#import "EZAudio.h"
+
 #if TARGET_OS_IPHONE
   #import <AVFoundation/AVFoundation.h>
 #elif TARGET_OS_MAC
 #endif
 
 @class EZAudioPlayer;
-
-/**
- The EZAudioFileDelegate provides event callbacks for the EZAudioFile object. These type of events are triggered by reads and seeks on the file and gives feedback such as the audio data read as a float array for visualizations and the new seek position for UI updating.
- */
 
 /**
  The EZAudioPlayerDelegate provides event callbacks for the EZAudioPlayer. These type of events are triggered by changes in the EZAudioPlayer's state and allow someone implementing the EZAudioPlayer to more easily update their user interface. Events are triggered anytime the EZAudioPlayer resumes/pauses playback, reaches the end of the file, reads audio data and converts it to float data visualizations (using the EZAudioFile), and updates its cursor position within the audio file during playback (use this for the play position on a slider on the user interface).
@@ -142,7 +140,7 @@
 /**
  Initializes the EZAudioPlayer with an NSURL instance representing the file path of the audio file and a caller to assign as the EZAudioPlayerDelegate on instantiation.
  @param url The NSURL instance representing the file path of the audio file.
- *  @param audioPlayerDelegate <#audioPlayerDelegate description#>
+ @param audioPlayerDelegate The receiver that will act as the EZAudioPlayerDelegate. Set to nil if it should have no delegate or use the initWithEZAudioFile: function instead.
  @return The newly created instance of the EZAudioPlayer
  */
 -(EZAudioPlayer*)initWithURL:(NSURL*)url
