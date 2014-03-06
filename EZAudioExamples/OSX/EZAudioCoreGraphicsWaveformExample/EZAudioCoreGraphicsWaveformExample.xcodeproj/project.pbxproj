@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		94F8DF4A18C84203005C4CBD /* Generate Documentation */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 94F8DF4D18C84204005C4CBD /* Build configuration list for PBXAggregateTarget "Generate Documentation" */;
+			buildPhases = (
+				94F8DF4E18C8420C005C4CBD /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "Generate Documentation";
+			productName = "Generate Documentation";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		94056D88185B97E300EB94BA /* CoreGraphicsWaveformViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94056D86185B97E300EB94BA /* CoreGraphicsWaveformViewController.m */; };
 		94056D89185B97E300EB94BA /* CoreGraphicsWaveformViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94056D87185B97E300EB94BA /* CoreGraphicsWaveformViewController.xib */; };
@@ -331,6 +345,7 @@
 			targets = (
 				94373020185B931C00F315F0 /* EZAudioCoreGraphicsWaveformExample */,
 				94373041185B931C00F315F0 /* EZAudioCoreGraphicsWaveformExampleTests */,
+				94F8DF4A18C84203005C4CBD /* Generate Documentation */,
 			);
 		};
 /* End PBXProject section */
@@ -359,6 +374,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		94F8DF4E18C8420C005C4CBD /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/appledoc \\\n--project-name \"EZAudio\" \\\n--project-company \"Syed Haris Ali\" \\\n--company-id \"com.sha\" \\\n--output documentation \\\n--create-docset \\\n--install-docset \\\n--create-html \\\n--exit-threshold 2 \\\n--no-repeat-first-par \\\n/../EZAudio";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9437301D185B931C00F315F0 /* Sources */ = {
@@ -570,6 +601,20 @@
 			};
 			name = Release;
 		};
+		94F8DF4B18C84204005C4CBD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		94F8DF4C18C84204005C4CBD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -599,6 +644,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		94F8DF4D18C84204005C4CBD /* Build configuration list for PBXAggregateTarget "Generate Documentation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				94F8DF4B18C84204005C4CBD /* Debug */,
+				94F8DF4C18C84204005C4CBD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

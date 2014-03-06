@@ -45,3 +45,4 @@ Added quick fix for EZOutput to properly route stereo data coming from a circula
 Added ‘closeAudioFile’ to EZRecorder to properly dispose of internal audio file prior to trying to reload it using the EZAudioFile.
 Added new EZOutputDataSource method that provides pre-allocated AudioBufferList to fill instead of caller allocating and disposing on AudioBufferList. Much less errors.
 Added EZAudioPlayer for playback and visualization of local audio files (no network streaming yet).
+Merged bug fixes from community for EZAudio file. 
