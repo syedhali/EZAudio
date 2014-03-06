@@ -312,11 +312,13 @@
 #pragma mark - Helpers
 -(UInt32)minBuffersWithFrameRate:(UInt32)frameRate {
   frameRate = frameRate > 0 ? frameRate : 1;
-  return (UInt32) _totalFrames / frameRate + 1;
+  UInt32 val = (UInt32) _totalFrames / frameRate + 1;
+  return MAX(1, val);
 }
 
 -(UInt32)recommendedDrawingFrameRate {
-  return (UInt32) _totalFrames / _waveformResolution - 1;
+  UInt32 val = (UInt32) _totalFrames / _waveformResolution - 1;
+  return MAX(1, val);
 }
 
 #pragma mark - Cleanup
