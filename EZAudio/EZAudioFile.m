@@ -116,6 +116,7 @@
   size = sizeof(_totalFrames);
   [EZAudio checkResult:ExtAudioFileGetProperty(_audioFile,kExtAudioFileProperty_FileLengthFrames, &size, &_totalFrames)
              operation:"Failed to get total frames of input file"];
+  _totalFrames = MAX(1, _totalFrames);
   
   // Total duration
   _totalDuration = _totalFrames / _fileFormat.mSampleRate;
@@ -140,7 +141,9 @@
   
   // Allocate the float buffers
   _floatConverter = [[AEFloatConverter alloc] initWithSourceFormat:_clientFormat];
-  _floatBuffers   = (float**)malloc( sizeof(float*) * _clientFormat.mChannelsPerFrame );
+  size_t sizeToAllocate = sizeof(float*) * _clientFormat.mChannelsPerFrame;
+  sizeToAllocate = MAX(8, sizeToAllocate);
+  _floatBuffers   = (float**)malloc( sizeToAllocate );
   UInt32 outputBufferSize = 32 * 1024; // 32 KB
   for ( int i=0; i< _clientFormat.mChannelsPerFrame; i++ ) {
     _floatBuffers[i] = (float*)malloc(outputBufferSize);
@@ -235,7 +238,7 @@
     for( int i = 0; i < _waveformTotalBuffers; i++ ){
       
       // Take a snapshot of each buffer through the audio file to form the waveform
-      AudioBufferList *bufferList = [EZAudio audioBufferListWithNumberOfFrames:1024
+      AudioBufferList *bufferList = [EZAudio audioBufferListWithNumberOfFrames:_waveformFrameRate
                                                               numberOfChannels:_clientFormat.mChannelsPerFrame
                                                                    interleaved:YES];
       UInt32 bufferSize;
@@ -247,6 +250,7 @@
                                             bufferList)
                  operation:"Failed to read audio data from audio file"];
       bufferSize = bufferList->mBuffers[0].mDataByteSize/sizeof(AudioUnitSampleType);
+      bufferSize = MAX(1, bufferSize);
       eof = _waveformFrameRate == 0;
       _frameIndex += _waveformFrameRate;
       
@@ -317,7 +321,12 @@
 }
 
 -(UInt32)recommendedDrawingFrameRate {
-  UInt32 val = (UInt32) _totalFrames / _waveformResolution - 1;
+  UInt32 val = 1;
+  if(_waveformResolution > 0){
+    val = (UInt32) _totalFrames / _waveformResolution;
+    if(val > 1)
+      --val;
+  }
   return MAX(1, val);
 }
 
