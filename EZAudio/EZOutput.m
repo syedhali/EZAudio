@@ -342,26 +342,34 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
 }
 
 #pragma mark - Getters
+-(AudioStreamBasicDescription)audioStreamBasicDescription {
+  return _outputASBD;
+}
+
 -(BOOL)isPlaying {
   return _isPlaying;
 }
 
 #pragma mark - Setters
 -(void)setAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd {
+  BOOL wasPlaying = NO;
   if( self.isPlaying ){
-    NSAssert(self.isPlaying,@"Cannot set the AudioStreamBasicDescription while output is performing playback");
+    [self stopPlayback];
+    wasPlaying = YES;
   }
-  else {
-    _customASBD = YES;
-    _outputASBD = asbd;
-    // Set the format for output
-    [EZAudio checkResult:AudioUnitSetProperty(_outputUnit,
-                                              kAudioUnitProperty_StreamFormat,
-                                              kAudioUnitScope_Input,
-                                              0,
-                                              &_outputASBD,
-                                              sizeof(_outputASBD))
-               operation:"Couldn't set the ASBD for input scope/bos 0"];
+  _customASBD = YES;
+  _outputASBD = asbd;
+  // Set the format for output
+  [EZAudio checkResult:AudioUnitSetProperty(_outputUnit,
+                                            kAudioUnitProperty_StreamFormat,
+                                            kAudioUnitScope_Input,
+                                            0,
+                                            &_outputASBD,
+                                            sizeof(_outputASBD))
+             operation:"Couldn't set the ASBD for input scope/bos 0"];
+  if( wasPlaying )
+  {
+    [self startPlayback];
   }
 }
 

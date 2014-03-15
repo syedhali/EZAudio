@@ -167,6 +167,16 @@ inNumberFrames:(UInt32)inNumberFrames
 
 #pragma mark - Getters
 ///-----------------------------------------------------------
+/// @name Getting The Output Audio Format
+///-----------------------------------------------------------
+
+/**
+ Provides the AudioStreamBasicDescription structure containing the format of the microphone's audio.
+ @return An AudioStreamBasicDescription structure describing the format of the microphone's audio.
+ */
+-(AudioStreamBasicDescription)audioStreamBasicDescription;
+
+///-----------------------------------------------------------
 /// @name Getting The State Of The Output
 ///-----------------------------------------------------------
 
