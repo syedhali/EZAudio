@@ -220,6 +220,9 @@
   // Make sure the update render loop is active
   if( self.paused ) self.paused = NO;
   
+  // Make sure we are updating the buffers on the correct gl context.
+  EAGLContext.currentContext = self.context;
+  
   // Draw based on plot type
   switch(_plotType) {
     case EZPlotTypeBuffer:
@@ -351,6 +354,9 @@
 
 #pragma mark - Drawing
 -(void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
+ 
+  EAGLContext.currentContext = self.context;
+ 
   // Clear the context
   glClear(GL_COLOR_BUFFER_BIT);
   
