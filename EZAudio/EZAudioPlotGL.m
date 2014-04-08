@@ -30,7 +30,7 @@
 #if TARGET_OS_IPHONE
   #import "EZAudioPlotGLKViewController.h"
 @interface EZAudioPlotGL ()
-@property (nonatomic,strong,readonly) EZAudioPlotGLKViewController *glViewController;
+@property (nonatomic,weak,readonly) EZAudioPlotGLKViewController *glViewController;
 @end
 #elif TARGET_OS_MAC
 @interface EZAudioPlotGL (){
