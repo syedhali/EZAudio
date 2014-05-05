@@ -72,7 +72,7 @@
    Customizing the audio plot's look
    */
   // Background color
-  self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.816 green: 0.349 blue: 0.255 alpha: 1];
+  self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.175 green: 0.151 blue: 0.137 alpha: 1];
   // Waveform color
   self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
   // Plot type
@@ -102,6 +102,14 @@
     default:
       break;
   }
+}
+
+-(void)changeOutputSamplingFrequency:(id)sender
+{
+  AudioStreamBasicDescription asbd = [EZOutput sharedOutput].audioStreamBasicDescription;
+  float samplingFrequency = ((NSSlider *)sender).floatValue;
+  asbd.mSampleRate = samplingFrequency;
+  [[EZOutput sharedOutput] setAudioStreamBasicDescription:asbd];
 }
 
 -(void)openFile:(id)sender {
@@ -176,7 +184,13 @@
   self.plotSegmentControl.selectedSegment = 1;
 
   // Set the client format from the EZAudioFile on the output
-  [[EZOutput sharedOutput] setAudioStreamBasicDescription:self.audioFile.clientFormat];
+  
+#pragma mark Mess Around With Audio Stream Basic Description Here!
+  self.sampleRateSlider.floatValue = self.audioFile.clientFormat.mSampleRate;
+  AudioStreamBasicDescription outputASBD = self.audioFile.clientFormat;
+
+  [[EZOutput sharedOutput] setAudioStreamBasicDescription:outputASBD];
+
   
   // Plot the whole waveform
   self.audioPlot.plotType        = EZPlotTypeBuffer;

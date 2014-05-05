@@ -61,11 +61,21 @@
 @property (nonatomic,weak) IBOutlet NSSlider *framePositionSlider;
 
 /**
+ A slider to adjust the sample rate.
+ */
+@property (nonatomic,weak) IBOutlet NSSlider *sampleRateSlider;
+
+/**
  A BOOL indicating whether or not we've reached the end of the file
  */
 @property (nonatomic,assign) BOOL eof;
 
 #pragma mark - Actions
+/**
+ Changes the sampling frequency on the output unit
+ */
+-(IBAction)changeOutputSamplingFrequency:(id)sender;
+
 /**
  Switches the plot drawing type between a buffer plot (visualizes the current stream of audio data from the update function) or a rolling plot (visualizes the audio data over time, this is the classic waveform look)
  */

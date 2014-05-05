@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1070" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
@@ -12,6 +12,7 @@
                 <outlet property="framePositionSlider" destination="CFP-v0-TzQ" id="3oy-Xn-4JK"/>
                 <outlet property="playButton" destination="OQp-Lr-dlS" id="K5R-Qg-7DY"/>
                 <outlet property="plotSegmentControl" destination="bZW-tA-C61" id="4ic-Ou-qh2"/>
+                <outlet property="sampleRateSlider" destination="rRH-oS-VV3" id="8ij-Ff-CZK"/>
                 <outlet property="view" destination="Xpo-HP-Ost" id="zlj-bW-4iz"/>
             </connections>
         </customObject>
@@ -40,8 +41,8 @@
                         <action selector="openFile:" target="-2" id="3QB-hU-LDl"/>
                     </connections>
                 </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0eT-7c-7fJ">
-                    <rect key="frame" x="141" y="235" width="321" height="17"/>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0eT-7c-7fJ">
+                    <rect key="frame" x="141" y="235" width="38" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" lineBreakMode="truncatingMiddle" sendsActionOnEndEditing="YES" title="Label" id="vXQ-HF-vLX">
                         <font key="font" metaFont="system"/>
@@ -84,6 +85,14 @@
                     <sliderCell key="cell" alignment="left" maxValue="100" doubleValue="9.3380614657210401" tickMarkPosition="above" sliderType="linear" id="gPc-pN-dmP"/>
                     <connections>
                         <action selector="seekToFrame:" target="-2" id="iVY-so-6X2"/>
+                    </connections>
+                </slider>
+                <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rRH-oS-VV3">
+                    <rect key="frame" x="141" y="199" width="96" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <sliderCell key="cell" state="on" alignment="left" minValue="8000" maxValue="88200" doubleValue="44100" tickMarkPosition="above" sliderType="linear" id="xbX-Ce-da5"/>
+                    <connections>
+                        <action selector="changeOutputSamplingFrequency:" target="-2" id="yWM-Ei-ztA"/>
                     </connections>
                 </slider>
             </subviews>
