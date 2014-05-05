@@ -185,6 +185,12 @@ typedef void (^WaveformDataCompletionBlock)(float *waveformData, UInt32 length);
 -(SInt64)frameIndex;
 
 /**
+ Provides a dictionary containing the metadata (ID3) tags that are included in the header for the audio file. Typically this contains stuff like artist, title, release year, etc.
+ @return An NSDictionary containing the metadata for the audio file.
+ */
+-(NSDictionary *)metadata;
+
+/**
  Provides the total duration of the audio file in seconds.
  @return The total duration of the audio file as a Float32.
  */

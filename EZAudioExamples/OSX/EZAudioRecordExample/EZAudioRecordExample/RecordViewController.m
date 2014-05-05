@@ -75,56 +75,64 @@
 }
 
 #pragma mark - Customize the Audio Plot
--(void)awakeFromNib {
-  
-  /*
-   Customizing the audio plot's look
-   */
-  // Background color
-  self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.984 green: 0.71 blue: 0.365 alpha: 1];
-  // Waveform color
-  self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
-  // Plot type
-  self.audioPlot.plotType        = EZPlotTypeRolling;
-  // Fill
-  self.audioPlot.shouldFill      = YES;
-  // Mirror
-  self.audioPlot.shouldMirror    = YES;
-  
-  // Configure the play button
-  [self.playButton setHidden:YES];
-  
-  /*
-   Start the microphone
-   */
-  [self.microphone startFetchingAudio];
+-(void)awakeFromNib
+{
+    /*
+     Customizing the audio plot's look
+    */
+    // Background color
+    self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.175 green: 0.151 blue: 0.137 alpha: 1];
+    // Waveform color
+    self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
+    // Plot type
+    self.audioPlot.plotType        = EZPlotTypeRolling;
+    // Fill
+    self.audioPlot.shouldFill      = YES;
+    // Mirror
+    self.audioPlot.shouldMirror    = YES;
+
+    // Configure the play button
+    [self.playButton setHidden:YES];
+
+    /*
+     Start the microphone
+    */
+    [self.microphone startFetchingAudio];
   
 }
 
 #pragma mark - Actions
 -(void)playFile:(id)sender {
   
-  // Update microphone state
-  [self.microphone stopFetchingAudio];
-  self.microphoneToggle.state = NSOffState;
-  [self.microphoneToggle setEnabled:NO];
-  
-  // Update recording state
-  self.isRecording = NO;
-  self.recordingToggle.state = NSOffState;
-  [self.recordingToggle setEnabled:NO];
-  
-  // Create Audio Player
-  if( self.audioPlayer ){
-    if( self.audioPlayer.playing ) [self.audioPlayer stop];
-    self.audioPlayer = nil;
-  }
-  NSError *err;
-  self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:kAudioFilePath]
+    // Update microphone state
+    [self.microphone stopFetchingAudio];
+    self.microphoneToggle.state = NSOffState;
+    [self.microphoneToggle setEnabled:NO];
+
+    // Update recording state
+    self.isRecording = NO;
+    self.recordingToggle.state = NSOffState;
+    [self.recordingToggle setEnabled:NO];
+
+    // Create Audio Player
+    if( self.audioPlayer )
+    {
+        if( self.audioPlayer.playing ) [self.audioPlayer stop];
+        self.audioPlayer = nil;
+    }
+    
+    // Close the audio file
+    if( self.recorder )
+    {
+        [self.recorder closeAudioFile];
+    }
+
+    NSError *err;
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:kAudioFilePath]
                                                             error:&err];
-  
-  [self.audioPlayer play];
-  self.audioPlayer.delegate = self;
+
+    [self.audioPlayer play];
+    self.audioPlayer.delegate = self;
   
 }
 
@@ -141,9 +149,28 @@
   }
 }
 
--(void)toggleRecording:(id)sender {
-  [self.playButton setHidden:NO];
-  self.isRecording = (BOOL)[sender state];
+-(void)toggleRecording:(id)sender
+{
+    [self.playButton setHidden:NO];
+    switch( [sender state] )
+    {
+        case NSOffState:
+            [self.recorder closeAudioFile];
+            break;
+            
+        case NSOnState:
+            /*
+             Create the recorder
+             */
+            self.recorder = [EZRecorder recorderWithDestinationURL:[NSURL fileURLWithPath:kAudioFilePath]
+                                                      sourceFormat:self.microphone.audioStreamBasicDescription
+                                               destinationFileType:EZRecorderFileTypeM4A];
+            break;
+            
+        default:
+            break;
+    }
+    self.isRecording = (BOOL)[sender state];
 }
 
 #pragma mark - EZMicrophoneDelegate
@@ -160,18 +187,6 @@ withNumberOfChannels:(UInt32)numberOfChannels {
     // All the audio plot needs is the buffer data (float*) and the size. Internally the audio plot will handle all the drawing related code, history management, and freeing its own resources. Hence, one badass line of code gets you a pretty plot :)
     [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
   });
-}
-
--(void)microphone:(EZMicrophone *)microphone hasAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription {
-  // The AudioStreamBasicDescription of the microphone stream. This is useful when configuring the EZRecorder or telling another component what audio format type to expect.
-  
-  // Here's a print function to allow you to inspect it a little easier
-  [EZAudio printASBD:audioStreamBasicDescription];
-  
-  // We can initialize the recorder with this ASBD
-  self.recorder = [EZRecorder recorderWithDestinationURL:[NSURL fileURLWithPath:kAudioFilePath]
-                                         andSourceFormat:audioStreamBasicDescription];
-  
 }
 
 // Append the microphone data coming as a AudioBufferList with the specified buffer size to the recorder

@@ -149,6 +149,8 @@
     _floatBuffers[i] = (float*)malloc(outputBufferSize);
   }
   
+    [EZAudio printASBD:_fileFormat];
+    
   // There's no waveform data yet
   _waveformData = NULL;
   
@@ -162,20 +164,6 @@
   audioBufferList:(AudioBufferList *)audioBufferList
        bufferSize:(UInt32 *)bufferSize
               eof:(BOOL *)eof {
-//  @autoreleasepool {
-    // Setup the buffers
-//  if( !audioBufferList->mNumberBuffers ){
-//#warning MEMORY_LEAK!!! Need a better solution
-//  if( audioBufferList->mNumberBuffers != 1 )
-//  {
-//    UInt32 outputBufferSize = 32 * frames; // 32 KB
-//    audioBufferList->mNumberBuffers = 1;
-//    audioBufferList->mBuffers[0].mNumberChannels = _clientFormat.mChannelsPerFrame;
-//    audioBufferList->mBuffers[0].mDataByteSize = _clientFormat.mChannelsPerFrame*outputBufferSize;
-//    audioBufferList->mBuffers[0].mData = (AudioUnitSampleType*)malloc(_clientFormat.mChannelsPerFrame*sizeof(AudioUnitSampleType)*outputBufferSize);
-//  }
-////  }
-  
     [EZAudio checkResult:ExtAudioFileRead(_audioFile,
                                           &frames,
                                           audioBufferList)
@@ -196,7 +184,6 @@
                      withNumberOfChannels:_clientFormat.mChannelsPerFrame];
       }
     }
-//  }
 }
 
 -(void)seekToFrame:(SInt64)frame {
@@ -288,6 +275,34 @@
 
 -(SInt64)frameIndex {
   return _frameIndex;
+}
+
+-(NSDictionary *)metadata
+{
+    AudioFileID audioFileID;
+    UInt32 propSize = sizeof(audioFileID);
+    
+    [EZAudio checkResult:ExtAudioFileGetProperty(_audioFile,
+                                                 kExtAudioFileProperty_AudioFile,
+                                                 &propSize,
+                                                 &audioFileID)
+               operation:"Failed to get audio file id"];
+    
+    CFDictionaryRef metadata;
+    UInt32 isWritable;
+    [EZAudio checkResult:AudioFileGetPropertyInfo(audioFileID,
+                                                  kAudioFilePropertyInfoDictionary,
+                                                  &propSize,
+                                                  &isWritable)
+               operation:"Failed to get the size of the metadata dictionary"];
+    
+    [EZAudio checkResult:AudioFileGetProperty(audioFileID,
+                                              kAudioFilePropertyInfoDictionary,
+                                              &propSize,
+                                              &metadata)
+               operation:"Failed to get metadata dictionary"];
+    
+    return (__bridge NSDictionary *)metadata;
 }
 
 -(Float32)totalDuration {

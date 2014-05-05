@@ -15,7 +15,7 @@
 #import <AVFoundation/AVFoundation.h>
 
 // By default this will record a file to the application's documents directory (within the application's sandbox)
-#define kAudioFilePath @"EZAudioTest.caf"
+#define kAudioFilePath @"EZAudioTest.m4a"
 
 @interface RecordViewController : UIViewController <AVAudioPlayerDelegate,EZMicrophoneDelegate>
 

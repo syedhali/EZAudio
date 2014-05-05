@@ -207,6 +207,9 @@
   [self.glViewController updateBuffer:buffer
                        withBufferSize:bufferSize];
 #elif TARGET_OS_MAC
+    
+    
+    
   if( _copiedBuffer == NULL ){
     _copiedBuffer = (float*)malloc(bufferSize*sizeof(float));
   }
@@ -277,10 +280,10 @@
 		NSLog(@"No OpenGL pixel format");
 	}
   
-  NSOpenGLContext* context = [[NSOpenGLContext alloc] initWithFormat:pf shareContext:nil];
+    NSOpenGLContext* context = [[NSOpenGLContext alloc] initWithFormat:pf shareContext:nil];
   
   // Debug only
-	CGLEnable([context CGLContextObj], kCGLCECrashOnRemovedFunctions);
+  CGLEnable([context CGLContextObj], kCGLCECrashOnRemovedFunctions);
 	
   self.pixelFormat   = pf;
   self.openGLContext = context;

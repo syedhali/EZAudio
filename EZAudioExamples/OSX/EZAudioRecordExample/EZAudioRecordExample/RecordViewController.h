@@ -32,7 +32,7 @@
 #import <AVFoundation/AVFoundation.h>
 
 // By default this will record a file to /Users/YOUR_USERNAME/Documents/test.caf
-#define kAudioFilePath [NSString stringWithFormat:@"%@%@",NSHomeDirectory(),@"/Documents/test.caf"]
+#define kAudioFilePath [NSString stringWithFormat:@"%@%@",NSHomeDirectory(),@"/Documents/test.m4a"]
 
 /**
  We will allow this view controller to act as an EZMicrophoneDelegate. This is how we listen for the microphone callback.

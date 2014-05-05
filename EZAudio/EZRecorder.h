@@ -27,11 +27,31 @@
 #import <AudioToolbox/AudioToolbox.h>
 
 /**
+ To ensure valid recording formats are used when recording to a file the EZRecorderFileType describes the most common file types that a file can be encoded in. Each of these types can be used to output recordings as such:
+ 
+ EZRecorderFileTypeAIFF - .aif, .aiff, .aifc, .aac
+ EZRecorderFileTypeM4A  - .m4a, .mp4
+ EZRecorderFileTypeWAV  - .wav
+ 
+ */
+typedef NS_ENUM(NSInteger, EZRecorderFileType)
+{
+    /**
+     <#Description#>
+     */
+    EZRecorderFileTypeAIFF,
+    /**
+     <#Description#>
+     */
+    EZRecorderFileTypeM4A,
+    /**
+     <#Description#>
+     */
+    EZRecorderFileTypeWAV
+};
+
+/**
  The EZRecorder provides a flexible way to create an audio file and append raw audio data to it. The EZRecorder will convert the incoming audio on the fly to the destination format so no conversion is needed between this and any other component. Right now the only supported output format is 'caf'. Each output file should have its own EZRecorder instance (think 1 EZRecorder = 1 audio file).
- 
- #Future Plans#
- Extend EZRecorder to allow any destination AudioStreamBasicDescription and any file extension.
- 
  */
 @interface EZRecorder : NSObject
 
@@ -44,10 +64,12 @@
  Creates a new instance of an EZRecorder using a destination file path URL and the source format of the incoming audio.
  @param url                 An NSURL specifying the file path location of where the audio file should be written to.
  @param sourceFormat        The AudioStreamBasicDescription for the incoming audio that will be written to the file.
+ @param destinationFileType A constant described by the EZRecorderFileType that corresponds to the type of destination file that should be written. For instance, an AAC file written using an '.m4a' extension would correspond to EZRecorderFileTypeM4A. See EZRecorderFileType for all the constants and mapping combinations.
  @return The newly created EZRecorder instance.
  */
 -(EZRecorder*)initWithDestinationURL:(NSURL*)url
-                     andSourceFormat:(AudioStreamBasicDescription)sourceFormat;
+                        sourceFormat:(AudioStreamBasicDescription)sourceFormat
+                 destinationFileType:(EZRecorderFileType)destinationFileType;
 
 
 #pragma mark - Class Initializers
@@ -59,27 +81,12 @@
  Class method to create a new instance of an EZRecorder using a destination file path URL and the source format of the incoming audio.
  @param url                 An NSURL specifying the file path location of where the audio file should be written to.
  @param sourceFormat        The AudioStreamBasicDescription for the incoming audio that will be written to the file.
+ @param destinationFileType A constant described by the EZRecorderFileType that corresponds to the type of destination file that should be written. For instance, an AAC file written using an '.m4a' extension would correspond to EZRecorderFileTypeM4A. See EZRecorderFileType for all the constants and mapping combinations.
  @return The newly created EZRecorder instance.
  */
 +(EZRecorder*)recorderWithDestinationURL:(NSURL*)url
-                         andSourceFormat:(AudioStreamBasicDescription)sourceFormat;
-
-#pragma mark - Class Methods
-///-----------------------------------------------------------
-/// @name Class Methods
-///-----------------------------------------------------------
-
-/**
- Class method returning the format used for the output file.
- @return An AudioStreamBasicDescription describing the output file's format.
- */
-+(AudioStreamBasicDescription)defaultDestinationFormat;
-
-/**
- Class method returning the default format extension to use for output audio file (caf).
- @return An NSString representing the default output audio file's extension @"caf"
- */
-+(NSString*)defaultDestinationFormatExtension;
+                            sourceFormat:(AudioStreamBasicDescription)sourceFormat
+                     destinationFileType:(EZRecorderFileType)destinationFileType;
 
 #pragma mark - Getters
 ///-----------------------------------------------------------

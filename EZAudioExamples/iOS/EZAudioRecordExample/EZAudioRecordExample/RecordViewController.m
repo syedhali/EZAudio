@@ -49,8 +49,10 @@
 
 #pragma mark - Initialize View Controller Here
 -(void)initializeViewController {
-  // Create an instance of the microphone and tell it to use this view controller instance as the delegate
-  self.microphone = [EZMicrophone microphoneWithDelegate:self];
+    // Create an instance of the microphone and tell it to use this view controller instance as the delegate
+    self.microphone = [EZMicrophone microphoneWithDelegate:self];
+    
+    
 }
 
 #pragma mark - Customize the Audio Plot
@@ -91,29 +93,41 @@
 }
 
 #pragma mark - Actions
--(void)playFile:(id)sender {
-  
-  // Update microphone state
-  [self.microphone stopFetchingAudio];
-  self.microphoneTextField.text = @"Microphone Off";
-  self.microphoneSwitch.on = NO;
-  
-  // Update recording state
-  self.isRecording = NO;
-  self.recordingTextField.text = @"Not Recording";
-  self.recordSwitch.on = NO;
-  
-  // Create Audio Player
-  if( self.audioPlayer ){
-    if( self.audioPlayer.playing ) [self.audioPlayer stop];
-    self.audioPlayer = nil;
-  }
-  NSError *err;
-  self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[self testFilePathURL]
+-(void)playFile:(id)sender
+{
+
+    // Update microphone state
+    [self.microphone stopFetchingAudio];
+    self.microphoneTextField.text = @"Microphone Off";
+    self.microphoneSwitch.on = NO;
+
+    // Update recording state
+    self.isRecording = NO;
+    self.recordingTextField.text = @"Not Recording";
+    self.recordSwitch.on = NO;
+
+    // Create Audio Player
+    if( self.audioPlayer )
+    {
+        if( self.audioPlayer.playing )
+        {
+            [self.audioPlayer stop];
+        }
+        self.audioPlayer = nil;
+    }
+
+    // Close the audio file
+    if( self.recorder )
+    {
+        [self.recorder closeAudioFile];
+    }
+
+    NSError *err;
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[self testFilePathURL]
                                                             error:&err];
-  [self.audioPlayer play];
-  self.audioPlayer.delegate = self;
-  self.playingTextField.text = @"Playing";
+    [self.audioPlayer play];
+    self.audioPlayer.delegate = self;
+    self.playingTextField.text = @"Playing";
   
 }
 
@@ -137,15 +151,32 @@
 
 -(void)toggleRecording:(id)sender {
   
-  self.playingTextField.text = @"Not Playing";
-  if( self.audioPlayer ){
-    if( self.audioPlayer.playing ) [self.audioPlayer stop];
-    self.audioPlayer = nil;
-  }
-  self.playButton.hidden = NO;
-  
-  self.isRecording = (BOOL)[sender isOn];
-  self.recordingTextField.text = self.isRecording ? @"Recording" : @"Not Recording";
+    self.playingTextField.text = @"Not Playing";
+    if( self.audioPlayer )
+    {
+        if( self.audioPlayer.playing )
+        {
+            [self.audioPlayer stop];
+        }
+        self.audioPlayer = nil;
+    }
+    self.playButton.hidden = NO;
+    
+    if( [sender isOn] )
+    {
+        /*
+         Create the recorder
+         */
+        self.recorder = [EZRecorder recorderWithDestinationURL:[self testFilePathURL]
+                                                  sourceFormat:self.microphone.audioStreamBasicDescription
+                                           destinationFileType:EZRecorderFileTypeM4A];
+    }
+    else
+    {
+        [self.recorder closeAudioFile];
+    }
+    self.isRecording = (BOOL)[sender isOn];
+    self.recordingTextField.text = self.isRecording ? @"Recording" : @"Not Recording";
 }
 
 #pragma mark - EZMicrophoneDelegate
@@ -162,18 +193,6 @@ withNumberOfChannels:(UInt32)numberOfChannels {
     // All the audio plot needs is the buffer data (float*) and the size. Internally the audio plot will handle all the drawing related code, history management, and freeing its own resources. Hence, one badass line of code gets you a pretty plot :)
     [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
   });
-}
-
--(void)microphone:(EZMicrophone *)microphone hasAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription {
-  // The AudioStreamBasicDescription of the microphone stream. This is useful when configuring the EZRecorder or telling another component what audio format type to expect.
-  
-  // Here's a print function to allow you to inspect it a little easier
-  [EZAudio printASBD:audioStreamBasicDescription];
-  
-  // We can initialize the recorder with this ASBD
-  self.recorder = [EZRecorder recorderWithDestinationURL:[self testFilePathURL]
-                                         andSourceFormat:audioStreamBasicDescription];
-  
 }
 
 -(void)microphone:(EZMicrophone *)microphone
@@ -215,7 +234,9 @@ withNumberOfChannels:(UInt32)numberOfChannels {
 }
 
 -(NSURL*)testFilePathURL {
-  return [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@",[self applicationDocumentsDirectory],kAudioFilePath]];
+  return [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@",
+                                 [self applicationDocumentsDirectory],
+                                 kAudioFilePath]];
 }
 
 @end

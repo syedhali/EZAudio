@@ -46,7 +46,7 @@
 
 /**
  EZAudio is a simple, intuitive framework for iOS and OSX. The goal of EZAudio was to provide a modular, cross-platform framework to simplify performing everyday audio operations like getting microphone input, creating audio waveforms, recording/playing audio files, etc. The visualization tools like the EZAudioPlot and EZAudioPlotGL were created to plug right into the framework's various components and provide highly optimized drawing routines that work in harmony with audio callback loops. All components retain the same namespace whether you're on an iOS device or a Mac computer so an EZAudioPlot understands it will subclass an UIView on an iOS device or an NSView on a Mac.
-
+ 
  Class methods for EZAudio are provided as utility methods used throughout the other modules within the framework. For instance, these methods help make sense of error codes (checkResult:operation:), map values betwen coordinate systems (MAP:leftMin:leftMax:rightMin:rightMax:), calculate root mean squared values for buffers (RMS:length:), etc.
  */
 @interface EZAudio : NSObject
@@ -79,36 +79,54 @@
 ///-----------------------------------------------------------
 
 /**
+ 
+ @param channels   The desired number of channels
+ @param sampleRate The desired sample rate
+ @return A new AudioStreamBasicDescription with the specified format.
+ */
++(AudioStreamBasicDescription)AIFFFormatWithNumberOfChannels:(UInt32)channels
+                                                  sampleRate:(float)sampleRate;
 
- @param sampleRate The desired sample rate for the AudioStreamBasicDescription
+/**
+ 
+ @param channels   The desired number of channels
+ @param sampleRate The desired sample rate
+ @return A new AudioStreamBasicDescription with the specified format.
+ */
++(AudioStreamBasicDescription)M4AFormatWithNumberOfChannels:(UInt32)channels
+                                                 sampleRate:(float)sampleRate;
+
+/**
+ 
+ @param sampleRate The desired sample rate
  @return A new AudioStreamBasicDescription with the specified format.
  */
 +(AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)sampleRate;
 
 /**
  
- @param sampleRate The desired sample rate for the AudioStreamBasicDescription
+ @param sampleRate The desired sample rate
  @return A new AudioStreamBasicDescription with the specified format.
  */
 +(AudioStreamBasicDescription)monoCanonicalFormatWithSampleRate:(float)sampleRate;
 
 /**
  
- @param sampleRate The desired sample rate for the AudioStreamBasicDescription
+ @param sampleRate The desired sample rate
  @return A new AudioStreamBasicDescription with the specified format.
  */
 +(AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)sampleRate;
 
 /**
  
- @param sampleRate The desired sample rate for the AudioStreamBasicDescription
+ @param sampleRate The desired sample rate
  @return A new AudioStreamBasicDescription with the specified format.
  */
 +(AudioStreamBasicDescription)stereoFloatInterleavedFormatWithSampleRate:(float)sampleRate;
 
 /**
  
- @param sampleRate The desired sample rate for the AudioStreamBasicDescription
+ @param sampleRate The desired sample rate
  @return A new AudioStreamBasicDescription with the specified format.
  */
 +(AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sameRate;
@@ -129,7 +147,7 @@
  @param nChannels   The number of expected channels on the description
  @param interleaved A flag indicating whether the stereo samples should be interleaved in the buffer
  */
-+(void)setCanonicalAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd
++(void)setCanonicalAudioStreamBasicDescription:(AudioStreamBasicDescription*)asbd
                               numberOfChannels:(UInt32)nChannels
                                    interleaved:(BOOL)interleaved;
 
