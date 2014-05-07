@@ -291,7 +291,7 @@
 
 -(void)_setupView {
   self.backgroundColor = [NSColor colorWithCalibratedRed: 0.796 green: 0.749 blue: 0.663 alpha: 1];
-  self.color = [NSColor colorWithCalibratedRed: 0.481 green: 0.548 blue: 0.637 alpha: 1];
+  self.color           = [NSColor colorWithCalibratedRed: 0.481 green: 0.548 blue: 0.637 alpha: 1];
 }
 
 #pragma mark - Prepare
@@ -321,12 +321,16 @@
     glBindBuffer(GL_ARRAY_BUFFER,_rollingPlotVBO);
   }
   
+    // Enable anti-aliasing
+    glEnable(GL_MULTISAMPLE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glClearColor(0, 0, 0, 0);
+    self.layer = nil;
+    
   // Set the background color
   [self _refreshWithBackgroundColor:self.backgroundColor];
   [self _refreshWithColor:self.color];
-  
-  // Enable anti-aliasing
-  glEnable(GL_MULTISAMPLE);
   
   // Setup the display link (rendering loop)
   [self _setupDisplayLink];
@@ -503,7 +507,7 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
 	CGLLockContext([[self openGLContext] CGLContextObj]);
   
   // Draw frame
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
   
   if( _hasBufferPlotData || _hasRollingPlotData ){  
     // Plot either a buffer plot or a rolling plot

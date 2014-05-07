@@ -46,6 +46,10 @@
  
  */
 @interface EZAudioPlot : EZPlot
+{
+    CGPoint *plotData;
+    UInt32   plotLength;
+}
 
 #pragma mark - Adjust Resolution
 ///-----------------------------------------------------------
@@ -64,5 +68,15 @@
  *  @return An int representing the length of the rolling history buffer
  */
 -(int)rollingHistoryLength;
+
+#pragma mark - Subclass Methods
+
+/**
+ <#Description#>
+ @param data   <#theplotData description#>
+ @param length <#length description#>
+ */
+-(void)setSampleData:(float *)data
+              length:(int)length;
 
 @end

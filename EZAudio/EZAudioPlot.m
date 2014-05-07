@@ -37,9 +37,6 @@
   int     _scrollHistoryIndex;
   UInt32  _scrollHistoryLength;
   BOOL    _changingHistorySize;
-  
-  CGPoint *_sampleData;
-  UInt32  _sampleLength;
 }
 @end
 
@@ -92,7 +89,7 @@
   self.plotType        = EZPlotTypeRolling;
   self.shouldMirror    = NO;
   self.shouldFill      = NO;
-  _sampleData          = NULL;
+  plotData             = NULL;
   _scrollHistory       = NULL;
   _scrollHistoryLength = kEZAudioPlotDefaultHistoryBufferLength;
 }
@@ -137,18 +134,18 @@
 }
   
 #pragma mark - Get Data
-- (void)_setSampleData:(float *)the_sampleData
-                length:(int)length {
-  if( _sampleData != nil ){
-    free(_sampleData);
+-(void)setSampleData:(float *)data
+              length:(int)length {
+  if( plotData != nil ){
+    free(plotData);
   }
   
-  _sampleData   = (CGPoint *)calloc(sizeof(CGPoint),length);
-  _sampleLength = length;
+  plotData   = (CGPoint *)calloc(sizeof(CGPoint),length);
+  plotLength = length;
   
   for(int i = 0; i < length; i++) {
-    the_sampleData[i] = i == 0 ? 0 : the_sampleData[i];
-    _sampleData[i]    = CGPointMake(i,the_sampleData[i] * _gain);
+    data[i]     = i == 0 ? 0 : data[i];
+    plotData[i] = CGPointMake(i,data[i] * _gain);
   }
     
   [self _refreshDisplay];
@@ -167,15 +164,15 @@
             isResolutionChanging:&_changingHistorySize];
 
     // 
-    [self _setSampleData:_scrollHistory
-                  length:(!_setMaxLength?kEZAudioPlotMaxHistoryBufferLength:_scrollHistoryLength)];
+    [self setSampleData:_scrollHistory
+                 length:(!_setMaxLength?kEZAudioPlotMaxHistoryBufferLength:_scrollHistoryLength)];
     _setMaxLength = YES;
     
   }
   else if( _plotType == EZPlotTypeBuffer ){
     
-    [self _setSampleData:buffer
-                  length:bufferSize];
+    [self setSampleData:buffer
+                 length:bufferSize];
     
   }
   else {
@@ -184,9 +181,7 @@
     
   }
 }
-  
-#pragma mark - Drawing
-  
+    
 #if TARGET_OS_IPHONE
 - (void)drawRect:(CGRect)rect
 {
@@ -214,18 +209,18 @@
     [(NSColor*)self.color set];
 #endif
     
-    if(_sampleLength > 0) {
+    if(plotLength > 0) {
       
-      _sampleData[_sampleLength-1] = CGPointMake(_sampleLength-1,0.0f);
+//      plotData[plotLength-1] = CGPointMake(plotLength-1,0.0f);
       
       CGMutablePathRef halfPath = CGPathCreateMutable();
       CGPathAddLines(halfPath,
                      NULL,
-                     _sampleData,
-                     _sampleLength);
+                     plotData,
+                     plotLength);
       CGMutablePathRef path = CGPathCreateMutable();
       
-      double xscale = (frame.size.width) / (float)_sampleLength;
+      double xscale = (frame.size.width) / (float)plotLength;
       double halfHeight = floor( frame.size.height / 2.0 );
       
       // iOS drawing origin is flipped by default so make sure we account for that
@@ -295,8 +290,8 @@
 }
     
 -(void)dealloc {
-  if( _sampleData ){
-    free(_sampleData);
+  if( plotData ){
+    free(plotData);
   }
 }
 
