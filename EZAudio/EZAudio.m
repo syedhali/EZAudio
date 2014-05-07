@@ -80,6 +80,26 @@
     return asbd;
 }
 
++(AudioStreamBasicDescription)iLBCFormatWithSampleRate:(float)sampleRate
+{
+    AudioStreamBasicDescription asbd;
+    memset(&asbd, 0, sizeof(asbd));
+    asbd.mFormatID          = kAudioFormatiLBC;
+    asbd.mChannelsPerFrame  = 1;
+    asbd.mSampleRate        = sampleRate;
+    
+    // Fill in the rest of the descriptions using the Audio Format API
+    UInt32 propSize = sizeof(asbd);
+    [EZAudio checkResult:AudioFormatGetProperty(kAudioFormatProperty_FormatInfo,
+                                                0,
+                                                NULL,
+                                                &propSize,
+                                                &asbd)
+               operation:"Failed to fill out the rest of the m4a AudioStreamBasicDescription"];
+    
+    return asbd;
+}
+
 +(AudioStreamBasicDescription)M4AFormatWithNumberOfChannels:(UInt32)channels
                                                  sampleRate:(float)sampleRate
 {
