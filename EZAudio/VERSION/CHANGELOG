@@ -46,3 +46,6 @@ Added ‘closeAudioFile’ to EZRecorder to properly dispose of internal audio f
 Added new EZOutputDataSource method that provides pre-allocated AudioBufferList to fill instead of caller allocating and disposing on AudioBufferList. Much less errors.
 Added EZAudioPlayer for playback and visualization of local audio files (no network streaming yet).
 Merged bug fixes from community for EZAudio file. 
+
+0.0.5
+Added multiple destination recording formats to the EZRecorder (EZRecorderFileType)
