@@ -33,11 +33,11 @@
  */
 typedef NS_ENUM(NSInteger,EZPlotType){
   /**
-   *  Plot that displays only the samples of the current buffer
+   Plot that displays only the samples of the current buffer
    */
   EZPlotTypeBuffer,
   /**
-   *  Plot that displays a rolling history of values using the RMS calculated for each incoming buffer
+   Plot that displays a rolling history of values using the RMS calculated for each incoming buffer
    */
   EZPlotTypeRolling
 };

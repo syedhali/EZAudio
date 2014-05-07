@@ -28,7 +28,8 @@
 #if TARGET_OS_IPHONE
 #elif TARGET_OS_MAC
 #endif
-@interface EZAudioPlayer () <EZAudioFileDelegate,EZOutputDataSource> {
+@interface EZAudioPlayer () <EZAudioFileDelegate,EZOutputDataSource>
+{
   BOOL _eof;
 }
 @property (nonatomic,strong,setter=setAudioFile:) EZAudioFile *audioFile;
@@ -190,7 +191,7 @@
   _eof       = NO;
   _audioFile = [EZAudioFile audioFileWithURL:audioFile.url andDelegate:self];
   NSAssert(_output,@"No output was found, this should by default be the EZOutput shared instance");
-  [_output setAudioStreamBasicDescription:self.audioFile.clientFormat];
+  [_output setAudioStreamBasicDescription:self.audioFile.clientFormat];    
 }
 
 -(void)setOutput:(EZOutput*)output {
