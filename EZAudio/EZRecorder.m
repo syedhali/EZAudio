@@ -26,6 +26,7 @@
 #import "EZRecorder.h"
 
 #import "EZAudio.h"
+#import "VSMacros.h"
 
 @interface EZRecorder (){
     ExtAudioFileRef             _destinationFile;
@@ -177,6 +178,56 @@
         // Null out the file reference
         _destinationFile = NULL;
     }
+}
+
+-(void) openAudioFile{
+
+
+    if(_destinationFile) return;
+
+    AudioFileID audioFileID;
+    [EZAudio checkResult:AudioFileOpenURL(_destinationFileURL, kAudioFileReadWritePermission, 0, &audioFileID)
+            operation:"Could not open audio file"];
+
+    UInt64 totalPackets;
+    UInt32 size = sizeof(totalPackets);
+    [EZAudio checkResult:AudioFileGetProperty(audioFileID, kAudioFilePropertyAudioDataPacketCount,&size, &totalPackets)
+            operation:"Could not get totalPackets"];
+
+    //check if the file has been optimized for appending
+    UInt32 isOptimized=0;
+    size = sizeof(isOptimized);
+    [EZAudio checkResult:AudioFileGetProperty(audioFileID, kAudioFilePropertyIsOptimized, &size, &isOptimized)
+            operation:"Could not get info if the file is optimized"];
+
+    if (isOptimized != 1 ){
+        [EZAudio checkResult:AudioFileOptimize(audioFileID)
+        operation:"Could not optimize the file"];
+        VSLog(@"Optimized");
+    }
+
+    [EZAudio checkResult:ExtAudioFileWrapAudioFileID(audioFileID, true, &_destinationFile)
+            operation:"Could not wrap with ExtAudioFile"];
+
+    // Set the client format (which should be equal to the source format)
+    [EZAudio checkResult:ExtAudioFileSetProperty(_destinationFile,
+            kExtAudioFileProperty_ClientDataFormat,
+            sizeof(_sourceFormat),
+            &_sourceFormat)
+               operation:"Failed to set client format on recorded audio file"];
+
+
+
+
+//    SInt64 totalFrames;
+//    size = sizeof(totalFrames);
+//    [EZAudio checkResult:ExtAudioFileGetProperty(_destinationFile,kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames)
+//               operation:"Failed to get total frames of input file"];
+//
+//    [EZAudio checkResult:ExtAudioFileSeek(_destinationFile, MAX(1,totalFrames-2)) operation:"Can't seek to the last frame"];
+
+
+
 }
 
 -(NSURL *)url

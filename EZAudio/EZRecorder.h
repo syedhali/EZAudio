@@ -92,6 +92,8 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
 ///-----------------------------------------------------------
 /// @name Getting The Recorder's Properties
 ///-----------------------------------------------------------
+
+
 /**
  Provides the file path that's currently being used by the recorder.
  @return  The NSURL representing the file path of the audio file path being used for recording.
@@ -119,5 +121,10 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
  Finishes writes to the audio file and closes it.
  */
 -(void)closeAudioFile;
+
+/**
+ Re-opens the audio file for writing.
+ */
+- (void)openAudioFile;
 
 @end

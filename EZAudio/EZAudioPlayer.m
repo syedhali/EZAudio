@@ -245,6 +245,13 @@
     [_output stopPlayback];
     [_audioFile seekToFrame:0];
     _eof = NO;
+
+      if( self.audioPlayerDelegate ){
+          if( [self.audioPlayerDelegate respondsToSelector:@selector(audioPlayer:didPausePlaybackOnAudioFile:)] ){
+              // Notify the delegate we're pausing playback
+              [self.audioPlayerDelegate audioPlayer:self didPausePlaybackOnAudioFile:_audioFile];
+          }
+      }
   }
 }
 
@@ -286,10 +293,19 @@ withNumberOfChannels:(UInt32)numberOfChannels {
                    audioBufferList:audioBufferList
                         bufferSize:&bufferSize
                                eof:&_eof];
-        if( _eof && self.shouldLoop )
-        {
-            [self seekToFrame:0];
+        if(_eof ){
+
+            //Notifies delegate about _eof
+            if(self.audioPlayerDelegate)
+                if ([self.audioPlayerDelegate respondsToSelector:@selector(audioPlayer:reachedEndOfAudioFile:)])
+                        [self.audioPlayerDelegate audioPlayer:self reachedEndOfAudioFile:self.audioFile];
+
+            //loops the playback if needed
+            if(self.shouldLoop )
+                [self seekToFrame:0];
         }
+
+
     }
 }
 
