@@ -64,7 +64,7 @@ typedef NS_ENUM(NSInteger,EZPlotType){
 /**
  The default background color of the plot. For iOS the color is specified as a UIColor while for OSX the color is an NSColor. The default value on both platforms is black.
  */
-@property (nonatomic,strong) id backgroundColor;
+//@property (nonatomic,copy) id backgroundColor;
 
 /**
  The default color of the plot's data (i.e. waveform, y-axis values). For iOS the color is specified as a UIColor while for OSX the color is an NSColor. The default value on both platforms is red.
