@@ -265,12 +265,12 @@
   NSOpenGLPixelFormatAttribute attrs[] =
 	{
 		NSOpenGLPFADoubleBuffer,
-    NSOpenGLPFAMultisample,
-    NSOpenGLPFASampleBuffers,      1,
-    NSOpenGLPFASamples,            4,
+        NSOpenGLPFAMultisample,
+        NSOpenGLPFASampleBuffers,      1,
+        NSOpenGLPFASamples,            4,
 		NSOpenGLPFADepthSize,          24,
 		NSOpenGLPFAOpenGLProfile,
-		NSOpenGLProfileVersion3_2Core, 0,
+		NSOpenGLProfileVersion3_2Core, 0
 	};
 	
 	NSOpenGLPixelFormat *pf = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
@@ -299,7 +299,7 @@
   [super prepareOpenGL];
   
   GLint swapInt = 1;
-	[self.openGLContext setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
+  [self.openGLContext setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
   
   ////////////////////////////////////////////////////////////////////////////
   //                          Setup VABs and VBOs                           //
@@ -568,8 +568,8 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   self.baseEffect.transform.modelviewMatrix = GLKMatrix4MakeXRotation(0);
   
   // Enable the vertex data
-	glEnableVertexAttribArray(GLKVertexAttribPosition);
-	// Define the vertex data size & layout
+  glEnableVertexAttribArray(GLKVertexAttribPosition);
+  // Define the vertex data size & layout
   glVertexAttribPointer(GLKVertexAttribPosition, 2, GL_FLOAT, GL_FALSE, sizeof(EZAudioPlotGLPoint), NULL);
   // Draw the triangle
   glDrawArrays(_drawingType, 0,_rollingPlotGraphSize);
