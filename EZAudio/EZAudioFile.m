@@ -281,7 +281,6 @@
 {
     AudioFileID audioFileID;
     UInt32 propSize = sizeof(audioFileID);
-    
     [EZAudio checkResult:ExtAudioFileGetProperty(_audioFile,
                                                  kExtAudioFileProperty_AudioFile,
                                                  &propSize,

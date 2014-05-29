@@ -228,6 +228,12 @@
  */
 -(AudioStreamBasicDescription)audioStreamBasicDescription;
 
+/**
+ Provides the underlying Audio Unit that is being used to fetch the audio.
+ @return The AudioUnit used for the microphone
+ */
+-(AudioUnit*)audioUnit;
+
 #pragma mark - Setters
 ///-----------------------------------------------------------
 /// @name Customizing The Microphone Input Format

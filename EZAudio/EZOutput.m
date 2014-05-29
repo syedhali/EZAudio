@@ -27,12 +27,12 @@
 
 #import "EZAudio.h"
 
-/// Buses
-static const AudioUnitScope   kEZAudioMicrophoneOutputBus   = 0;
-
-/// Flags
-static const UInt32           kEZAudioMicrophoneEnableFlag  = 1;
-static const UInt32           kEZAudioMicrophoneDisableFlag = 0;
+///// Buses
+//static const AudioUnitScope   kEZAudioMicrophoneOutputBus   = 0;
+//
+///// Flags
+//static const UInt32           kEZAudioMicrophoneEnableFlag  = 1;
+//static const UInt32           kEZAudioMicrophoneDisableFlag = 0;
 
 @interface EZOutput (){
   BOOL                        _customASBD;

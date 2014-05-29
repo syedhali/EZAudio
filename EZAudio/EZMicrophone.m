@@ -84,7 +84,8 @@ static OSStatus inputCallback(void                          *inRefCon,
                               const AudioTimeStamp          *inTimeStamp,
                               UInt32                        inBusNumber,
                               UInt32                        inNumberFrames,
-                              AudioBufferList               *ioData ) {
+                              AudioBufferList               *ioData)
+{
   EZMicrophone *microphone = (__bridge EZMicrophone*)inRefCon;
   OSStatus      result     = noErr;
   // Render audio into buffer
@@ -253,6 +254,11 @@ static OSStatus inputCallback(void                          *inRefCon,
   return streamFormat;
 }
 
+-(AudioUnit *)audioUnit
+{
+    return &microphoneInput;
+}
+
 #pragma mark - Setter
 -(void)setMicrophoneOn:(BOOL)microphoneOn {
   _microphoneOn = microphoneOn;
@@ -335,8 +341,8 @@ static OSStatus inputCallback(void                          *inRefCon,
 }
 
 #pragma mark - Audio Component Initialization
--(AudioComponentDescription)_getInputAudioComponentDescription {
-  
+-(AudioComponentDescription)_getInputAudioComponentDescription
+{
   // Create an input component description for mic input
   AudioComponentDescription inputComponentDescription;
   inputComponentDescription.componentType             = kAudioUnitType_Output;
@@ -351,7 +357,6 @@ static OSStatus inputCallback(void                          *inRefCon,
   
   // Return the successfully created input component description
   return inputComponentDescription;
-  
 }
 
 -(AudioComponent)_getInputComponentWithAudioComponentDescription:(AudioComponentDescription)audioComponentDescription {
@@ -366,7 +371,7 @@ static OSStatus inputCallback(void                          *inRefCon,
 -(void)_createNewInstanceForInputComponent:(AudioComponent)audioComponent {
   
   [EZAudio checkResult:AudioComponentInstanceNew(audioComponent,
-                                                 &microphoneInput )
+                                                 &microphoneInput)
              operation:"Couldn't open component for microphone input unit."];
   
 }

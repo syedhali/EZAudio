@@ -65,20 +65,25 @@
 #pragma mark - Customize the Audio Plot
 -(void)awakeFromNib {
   
-  /*
-   Customizing the audio plot's look
-   */
-  // Background color
-  self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.569 green: 0.82 blue: 0.478 alpha: 1];
-  // Waveform color
-  self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
-  // Plot type
-  self.audioPlot.plotType        = EZPlotTypeBuffer;
+    /*
+    Customizing the audio plot's look
+    */
+    // Background color
+    self.audioPlot.backgroundColor = [NSColor colorWithDeviceRed:0 green:0 blue:0 alpha:0];
+    
+    // Waveform color
+    self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
+    
+    // Plot type
+    self.audioPlot.plotType        = EZPlotTypeBuffer;
+    
+    // Set length
+    [self.audioPlot setRollingHistoryLength:1024];
   
-  /*
-   Start the microphone
-   */
-  [self.microphone startFetchingAudio];
+    /*
+    Start the microphone
+    */
+    [self.microphone startFetchingAudio];
   
 }
 
