@@ -30,7 +30,7 @@
 #if TARGET_OS_IPHONE
   #import "EZAudioPlotGLKViewController.h"
 @interface EZAudioPlotGL ()
-@property (nonatomic,strong,readonly) EZAudioPlotGLKViewController *glViewController;
+@property (nonatomic,weak,readonly) EZAudioPlotGLKViewController *glViewController;
 @end
 #elif TARGET_OS_MAC
 @interface EZAudioPlotGL (){
@@ -679,7 +679,6 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   _changingHistorySize = NO;
   return historyLength;
 #endif
-  return kEZAudioPlotDefaultHistoryBufferLength;
 }
 
 -(int)rollingHistoryLength {
@@ -720,20 +719,6 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   else if( drawingType == EZAudioPlotGLDrawTypeTriangleStrip ) {
     // graph size = 2 * buffer size to draw triangles and fill regions properly
     for(int i = 0; i < graphSize; i+=2){
-      int bufferIndex = (int)[EZAudio MAP:i
-                              leftMin:0
-                              leftMax:graphSize
-                              rightMin:0
-                              rightMax:bufferSize];
-      float x = [EZAudio MAP:bufferIndex
-                      leftMin:0
-                      leftMax:bufferSize
-                     rightMin:-1.0
-                     rightMax:1.0];
-      graph[i].x = x;
-      graph[i].y = 0.0f;
-    }
-    for(int i = 0; i < graphSize; i+=2){
       int bufferIndex = (int)[EZAudio
                               MAP:i
                               leftMin:0
@@ -745,7 +730,10 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
                       leftMax:bufferSize
                      rightMin:-1.0
                      rightMax:1.0];
-      graph[i+1].x = x;
+      graph[i].x = x;
+      graph[i].y = 0.0f;
+      
+			graph[i+1].x = x;
       graph[i+1].y = gain*buffer[bufferIndex];
     }
   }
