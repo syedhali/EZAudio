@@ -115,10 +115,10 @@
 
 #pragma mark - Private Configuration
 -(void)_configureAudioPlayer {
-  
+
   // Defaults
   self.output = [EZOutput sharedOutput];
-  
+
 #if TARGET_OS_IPHONE
   // Configure the AVSession
   AVAudioSession *audioSession = [AVAudioSession sharedInstance];
@@ -133,7 +133,7 @@
   }
 #elif TARGET_OS_MAC
 #endif
-  
+
 }
 
 #pragma mark - Getters
@@ -191,7 +191,7 @@
   _eof       = NO;
   _audioFile = [EZAudioFile audioFileWithURL:audioFile.url andDelegate:self];
   NSAssert(_output,@"No output was found, this should by default be the EZOutput shared instance");
-  [_output setAudioStreamBasicDescription:self.audioFile.clientFormat];    
+  [_output setAudioStreamBasicDescription:self.audioFile.clientFormat];
 }
 
 -(void)setOutput:(EZOutput*)output {
@@ -279,18 +279,23 @@ withNumberOfChannels:(UInt32)numberOfChannels {
  shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
         withNumberOfFrames:(UInt32)frames
 {
-    if( self.audioFile )
+  if( self.audioFile )
+  {
+    UInt32 bufferSize;
+    [self.audioFile readFrames:frames
+               audioBufferList:audioBufferList
+                    bufferSize:&bufferSize
+                           eof:&_eof];
+    if (_eof)
     {
-        UInt32 bufferSize;
-        [self.audioFile readFrames:frames
-                   audioBufferList:audioBufferList
-                        bufferSize:&bufferSize
-                               eof:&_eof];
-        if( _eof && self.shouldLoop )
-        {
-            [self seekToFrame:0];
-        }
+      if ( [self.audioPlayerDelegate respondsToSelector:@selector(audioPlayer:reachedEndOfAudioFile:)]) {
+        [self.audioPlayerDelegate audioPlayer:self reachedEndOfAudioFile:self.audioFile];
+      }
+      if ( self.shouldLoop ) {
+        [self seekToFrame:0];
+      }
     }
+  }
 }
 
 @end
