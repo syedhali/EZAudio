@@ -148,9 +148,7 @@
   for ( int i=0; i< _clientFormat.mChannelsPerFrame; i++ ) {
     _floatBuffers[i] = (float*)malloc(outputBufferSize);
   }
-  
-    [EZAudio printASBD:_fileFormat];
-    
+      
   // There's no waveform data yet
   _waveformData = NULL;
   
