@@ -211,7 +211,7 @@
     
     if(plotLength > 0) {
       
-//      plotData[plotLength-1] = CGPointMake(plotLength-1,0.0f);
+      plotData[plotLength-1] = CGPointMake(plotLength-1,0.0f);
       
       CGMutablePathRef halfPath = CGPathCreateMutable();
       CGPathAddLines(halfPath,
