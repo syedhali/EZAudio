@@ -457,11 +457,7 @@ static OSStatus inputCallback(void                          *inRefCon,
     // Use approximations for simulator and pull from real device if connected
     #if !(TARGET_IPHONE_SIMULATOR)
     // Sample Rate
-    UInt32 propSize = sizeof(Float64);
-    [EZAudio checkResult:AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate,
-                                                 &propSize,
-                                                 &hardwareSampleRate)
-               operation:"Could not get hardware sample rate from device"];
+    hardwareSampleRate = [[AVAudioSession sharedInstance] sampleRate];
     #endif
   #elif TARGET_OS_MAC
     hardwareSampleRate = inputScopeSampleRate;
@@ -475,17 +471,14 @@ static OSStatus inputCallback(void                          *inRefCon,
   #if TARGET_OS_IPHONE
   // Use approximations for simulator and pull from real device if connected
     #if !(TARGET_IPHONE_SIMULATOR)
-      UInt32 propSize = sizeof(Float32);
-      [EZAudio checkResult:AudioSessionSetProperty(kAudioSessionProperty_PreferredHardwareIOBufferDuration,
-                                                 propSize,
-                                                 &bufferDuration)
-               operation:"Couldn't set the preferred buffer duration from device"];
-      // Buffer Size
-      propSize = sizeof(bufferDuration);
-      [EZAudio checkResult:AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareIOBufferDuration,
-                                                 &propSize,
-                                                 &bufferDuration)
-               operation:"Could not get preferred buffer size from device"];
+        NSError *err;
+        [[AVAudioSession sharedInstance] setPreferredIOBufferDuration:bufferDuration error:&err];
+        if (err) {
+            NSLog(@"Error setting preferredIOBufferDuration for audio session: %@", err.localizedDescription);
+        }
+        
+        // Buffer Size
+        bufferDuration = [[AVAudioSession sharedInstance] IOBufferDuration];
     #endif
   #elif TARGET_OS_MAC
   
