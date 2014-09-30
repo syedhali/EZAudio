@@ -26,7 +26,7 @@
 #import <Foundation/Foundation.h>
 
 #pragma mark - 3rd Party Utilties
-#import "AEFloatConverter.h"
+#import "EZFloatConverter.h"
 #import "TPCircularBuffer.h"
 
 #pragma mark - Core Components
