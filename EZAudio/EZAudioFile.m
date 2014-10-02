@@ -30,23 +30,23 @@
 #define kEZAudioFileWaveformDefaultResolution (1024)
 
 @interface EZAudioFile (){
-  
+
   // Reading from the audio file
   ExtAudioFileRef             _audioFile;
   AudioStreamBasicDescription _clientFormat;
   AudioStreamBasicDescription _fileFormat;
   float                       **_floatBuffers;
-  AEFloatConverter            *_floatConverter;
+  EZFloatConverter            *_floatConverter;
   SInt64                      _frameIndex;
   CFURLRef                    _sourceURL;
   Float32                     _totalDuration;
   SInt64                      _totalFrames;
-  
+
   // Waveform Data
   float  *_waveformData;
   UInt32 _waveformFrameRate;
   UInt32 _waveformTotalBuffers;
-  
+
 }
 @end
 
@@ -99,28 +99,28 @@
 
 #pragma mark - Private Configuation
 -(void)_configureAudioFile {
-  
+
   // Source URL should not be nil
   NSAssert(_sourceURL,@"Source URL was not specified correctly.");
-  
+
   // Try to open the file for reading
   [EZAudio checkResult:ExtAudioFileOpenURL(_sourceURL,&_audioFile)
              operation:"Failed to open audio file for reading"];
-  
+
   // Try pulling the stream description
   UInt32 size = sizeof(_fileFormat);
   [EZAudio checkResult:ExtAudioFileGetProperty(_audioFile,kExtAudioFileProperty_FileDataFormat, &size, &_fileFormat)
              operation:"Failed to get audio stream basic description of input file"];
-  
+
   // Try pulling the total frame size
   size = sizeof(_totalFrames);
   [EZAudio checkResult:ExtAudioFileGetProperty(_audioFile,kExtAudioFileProperty_FileLengthFrames, &size, &_totalFrames)
              operation:"Failed to get total frames of input file"];
   _totalFrames = MAX(1, _totalFrames);
-  
+
   // Total duration
   _totalDuration = _totalFrames / _fileFormat.mSampleRate;
-  
+
   // Set the client format on the stream
   switch (_fileFormat.mChannelsPerFrame) {
     case 1:
@@ -132,15 +132,15 @@
     default:
       break;
   }
-    
+
   [EZAudio checkResult:ExtAudioFileSetProperty(_audioFile,
                                                kExtAudioFileProperty_ClientDataFormat,
                                                sizeof (AudioStreamBasicDescription),
                                                &_clientFormat)
              operation:"Couldn't set client data format on input ext file"];
-  
+
   // Allocate the float buffers
-  _floatConverter = [[AEFloatConverter alloc] initWithSourceFormat:_clientFormat];
+  _floatConverter = [[EZFloatConverter alloc] initWithSourceFormat:_clientFormat];
   size_t sizeToAllocate = sizeof(float*) * _clientFormat.mChannelsPerFrame;
   sizeToAllocate = MAX(8, sizeToAllocate);
   _floatBuffers   = (float**)malloc( sizeToAllocate );
@@ -148,15 +148,15 @@
   for ( int i=0; i< _clientFormat.mChannelsPerFrame; i++ ) {
     _floatBuffers[i] = (float*)malloc(outputBufferSize);
   }
-  
+
     [EZAudio printASBD:_fileFormat];
-    
+
   // There's no waveform data yet
   _waveformData = NULL;
-  
+
   // Set the default resolution for the waveform data
   _waveformResolution = kEZAudioFileWaveformDefaultResolution;
-  
+
 }
 
 #pragma mark - Events
@@ -177,7 +177,7 @@
                           updatedPosition:_frameIndex];
       }
       if( [self.audioFileDelegate respondsToSelector:@selector(audioFile:readAudio:withBufferSize:withNumberOfChannels:)] ){
-        AEFloatConverterToFloat(_floatConverter,audioBufferList,_floatBuffers,frames);
+        EZFloatConverterToFloat(_floatConverter,audioBufferList,_floatBuffers,frames);
         [self.audioFileDelegate audioFile:self
                                 readAudio:_floatBuffers
                            withBufferSize:frames
@@ -203,34 +203,34 @@
 }
 
 -(void)getWaveformDataWithCompletionBlock:(WaveformDataCompletionBlock)waveformDataCompletionBlock {
-  
+
   SInt64 currentFramePosition = _frameIndex;
-  
+
   if( _waveformData != NULL ){
     waveformDataCompletionBlock( _waveformData, _waveformTotalBuffers );
     return;
   }
-  
+
   _waveformFrameRate    = [self recommendedDrawingFrameRate];
   _waveformTotalBuffers = [self minBuffersWithFrameRate:_waveformFrameRate];
   _waveformData         = (float*)malloc(sizeof(float)*_waveformTotalBuffers);
-  
+
   if( self.totalFrames == 0 ){
     waveformDataCompletionBlock( _waveformData, _waveformTotalBuffers );
     return;
   }
-  
+
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0ul), ^{
-    
+
     for( int i = 0; i < _waveformTotalBuffers; i++ ){
-      
+
       // Take a snapshot of each buffer through the audio file to form the waveform
       AudioBufferList *bufferList = [EZAudio audioBufferListWithNumberOfFrames:_waveformFrameRate
                                                               numberOfChannels:_clientFormat.mChannelsPerFrame
                                                                    interleaved:YES];
       UInt32 bufferSize;
       BOOL eof;
-      
+
       // Read in the specified number of frames
       [EZAudio checkResult:ExtAudioFileRead(_audioFile,
                                             &_waveformFrameRate,
@@ -240,29 +240,29 @@
       bufferSize = MAX(1, bufferSize);
       eof = _waveformFrameRate == 0;
       _frameIndex += _waveformFrameRate;
-      
+
       // Calculate RMS of each buffer
       float rms = [EZAudio RMS:bufferList->mBuffers[0].mData
                         length:bufferSize];
       _waveformData[i] = rms;
-      
+
       // Since we malloc'ed, we should cleanup
       [EZAudio freeBufferList:bufferList];
-      
+
     }
-    
+
     // Seek the audio file back to the beginning
     [EZAudio checkResult:ExtAudioFileSeek(_audioFile,currentFramePosition)
                operation:"Failed to seek frame position within audio file"];
     _frameIndex = currentFramePosition;
-    
+
     // Once we're done send off the waveform data
     dispatch_async(dispatch_get_main_queue(), ^{
       waveformDataCompletionBlock( _waveformData, _waveformTotalBuffers );
     });
 
   });
-  
+
 }
 
 -(AudioStreamBasicDescription)clientFormat {
@@ -281,13 +281,13 @@
 {
     AudioFileID audioFileID;
     UInt32 propSize = sizeof(audioFileID);
-    
+
     [EZAudio checkResult:ExtAudioFileGetProperty(_audioFile,
                                                  kExtAudioFileProperty_AudioFile,
                                                  &propSize,
                                                  &audioFileID)
                operation:"Failed to get audio file id"];
-    
+
     CFDictionaryRef metadata;
     UInt32 isWritable;
     [EZAudio checkResult:AudioFileGetPropertyInfo(audioFileID,
@@ -295,13 +295,13 @@
                                                   &propSize,
                                                   &isWritable)
                operation:"Failed to get the size of the metadata dictionary"];
-    
+
     [EZAudio checkResult:AudioFileGetProperty(audioFileID,
                                               kAudioFilePropertyInfoDictionary,
                                               &propSize,
                                               &metadata)
                operation:"Failed to get metadata dictionary"];
-    
+
     return (__bridge NSDictionary *)metadata;
 }
 

@@ -127,13 +127,8 @@
   if( err ){
     NSLog(@"There was an error creating the audio session");
   }
-  [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:NULL];
-  if( err ){
-    NSLog(@"There was an error sending the audio to the speakers");
-  }
 #elif TARGET_OS_MAC
 #endif
-  
 }
 
 #pragma mark - Getters

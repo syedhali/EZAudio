@@ -18,7 +18,6 @@
 		9417A9171871492100D9D37B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A8F61871492000D9D37B /* Cocoa.framework */; };
 		9417A91F1871492100D9D37B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9417A91D1871492100D9D37B /* InfoPlist.strings */; };
 		9417A9211871492100D9D37B /* EZAudioFFTExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A9201871492100D9D37B /* EZAudioFFTExampleTests.m */; };
-		9417A9441871493900D9D37B /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A92C1871493900D9D37B /* AEFloatConverter.m */; };
 		9417A9451871493900D9D37B /* EZAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A92E1871493900D9D37B /* EZAudio.m */; };
 		9417A9461871493900D9D37B /* EZAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A9301871493900D9D37B /* EZAudioFile.m */; };
 		9417A9471871493900D9D37B /* EZAudioPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A9321871493900D9D37B /* EZAudioPlot.m */; };
@@ -40,6 +39,7 @@
 		9417A95E18714A2A00D9D37B /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A95D18714A2A00D9D37B /* Accelerate.framework */; };
 		9417A9D61872130200D9D37B /* FFTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A9D41872130200D9D37B /* FFTViewController.m */; };
 		9417A9D71872130200D9D37B /* FFTViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9417A9D51872130200D9D37B /* FFTViewController.xib */; };
+		FFC1733019DAC6C60079BA19 /* EZFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = FFC1732E19DAC6C60079BA19 /* EZFloatConverter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,8 +72,6 @@
 		9417A91C1871492100D9D37B /* EZAudioFFTExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EZAudioFFTExampleTests-Info.plist"; sourceTree = "<group>"; };
 		9417A91E1871492100D9D37B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9417A9201871492100D9D37B /* EZAudioFFTExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZAudioFFTExampleTests.m; sourceTree = "<group>"; };
-		9417A92B1871493900D9D37B /* AEFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEFloatConverter.h; sourceTree = "<group>"; };
-		9417A92C1871493900D9D37B /* AEFloatConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEFloatConverter.m; sourceTree = "<group>"; };
 		9417A92D1871493900D9D37B /* EZAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudio.h; sourceTree = "<group>"; };
 		9417A92E1871493900D9D37B /* EZAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudio.m; sourceTree = "<group>"; };
 		9417A92F1871493900D9D37B /* EZAudioFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioFile.h; sourceTree = "<group>"; };
@@ -106,6 +104,8 @@
 		9417A9D31872130200D9D37B /* FFTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFTViewController.h; sourceTree = "<group>"; };
 		9417A9D41872130200D9D37B /* FFTViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFTViewController.m; sourceTree = "<group>"; };
 		9417A9D51872130200D9D37B /* FFTViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FFTViewController.xib; sourceTree = "<group>"; };
+		FFC1732E19DAC6C60079BA19 /* EZFloatConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZFloatConverter.m; sourceTree = "<group>"; };
+		FFC1732F19DAC6C60079BA19 /* EZFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZFloatConverter.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,8 +231,8 @@
 		9417A92A1871493900D9D37B /* EZAudio */ = {
 			isa = PBXGroup;
 			children = (
-				9417A92B1871493900D9D37B /* AEFloatConverter.h */,
-				9417A92C1871493900D9D37B /* AEFloatConverter.m */,
+				FFC1732E19DAC6C60079BA19 /* EZFloatConverter.m */,
+				FFC1732F19DAC6C60079BA19 /* EZFloatConverter.h */,
 				9417A92D1871493900D9D37B /* EZAudio.h */,
 				9417A92E1871493900D9D37B /* EZAudio.m */,
 				9417A92F1871493900D9D37B /* EZAudioFile.h */,
@@ -371,9 +371,9 @@
 			files = (
 				9417A94D1871493900D9D37B /* EZRecorder.m in Sources */,
 				9417A9471871493900D9D37B /* EZAudioPlot.m in Sources */,
+				FFC1733019DAC6C60079BA19 /* EZFloatConverter.m in Sources */,
 				9417A94C1871493900D9D37B /* EZPlot.m in Sources */,
 				9417A9D61872130200D9D37B /* FFTViewController.m in Sources */,
-				9417A9441871493900D9D37B /* AEFloatConverter.m in Sources */,
 				9417A94A1871493900D9D37B /* EZMicrophone.m in Sources */,
 				9417A94B1871493900D9D37B /* EZOutput.m in Sources */,
 				9417A9451871493900D9D37B /* EZAudio.m in Sources */,
