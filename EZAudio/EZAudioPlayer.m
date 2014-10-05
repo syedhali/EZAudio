@@ -286,6 +286,9 @@ withNumberOfChannels:(UInt32)numberOfChannels {
                    audioBufferList:audioBufferList
                         bufferSize:&bufferSize
                                eof:&_eof];
+        if (_eof && [self.audioPlayerDelegate respondsToSelector:@selector(audioPlayer:reachedEndOfAudioFile:)]) {
+            [self.audioPlayerDelegate audioPlayer:self reachedEndOfAudioFile:self.audioFile];
+        }
         if( _eof && self.shouldLoop )
         {
             [self seekToFrame:0];
