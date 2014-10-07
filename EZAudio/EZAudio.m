@@ -39,7 +39,7 @@
     {
         audioBufferList->mBuffers[i].mNumberChannels = channels;
         audioBufferList->mBuffers[i].mDataByteSize = channels * outputBufferSize;
-        audioBufferList->mBuffers[i].mData = (AudioUnitSampleType*)malloc(channels * sizeof(AudioUnitSampleType) *outputBufferSize);
+        audioBufferList->mBuffers[i].mData = (float*)malloc(channels * sizeof(float) *outputBufferSize);
     }
     return audioBufferList;
 }
@@ -124,7 +124,7 @@
 +(AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
-    UInt32 byteSize = sizeof(AudioUnitSampleType);
+    UInt32 byteSize = sizeof(float);
     asbd.mBitsPerChannel   = 8 * byteSize;
     asbd.mBytesPerFrame    = byteSize;
     asbd.mBytesPerPacket   = byteSize;
@@ -139,7 +139,7 @@
 +(AudioStreamBasicDescription)monoCanonicalFormatWithSampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
-    UInt32 byteSize = sizeof(AudioUnitSampleType);
+    UInt32 byteSize = sizeof(float);
     asbd.mBitsPerChannel   = 8 * byteSize;
     asbd.mBytesPerFrame    = byteSize;
     asbd.mBytesPerPacket   = byteSize;
@@ -154,7 +154,7 @@
 +(AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
-    UInt32 byteSize = sizeof(AudioUnitSampleType);
+    UInt32 byteSize = sizeof(float);
     asbd.mBitsPerChannel   = 8 * byteSize;
     asbd.mBytesPerFrame    = byteSize;
     asbd.mBytesPerPacket   = byteSize;
@@ -217,7 +217,7 @@
     
     asbd->mFormatID = kAudioFormatLinearPCM;
 #if TARGET_OS_IPHONE
-    int sampleSize = sizeof(AudioSampleType);
+    int sampleSize = sizeof(float);
     asbd->mFormatFlags = kAudioFormatFlagsCanonical;
 #elif TARGET_OS_MAC
     int sampleSize = sizeof(Float32);

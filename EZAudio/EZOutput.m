@@ -61,8 +61,8 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
     
     TPCircularBuffer *circularBuffer = [output.outputDataSource outputShouldUseCircularBuffer:output];
     if( !circularBuffer ){
-      AudioUnitSampleType *left  = (AudioUnitSampleType*)ioData->mBuffers[0].mData;
-      AudioUnitSampleType *right = (AudioUnitSampleType*)ioData->mBuffers[1].mData;
+      float *left  = (float*)ioData->mBuffers[0].mData;
+      float *right = (float*)ioData->mBuffers[1].mData;
       for(int i = 0; i < inNumberFrames; i++ ){
         left[  i ] = 0.0f;
         right[ i ] = 0.0f;
@@ -76,12 +76,12 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
     
     // Get the desired amount of bytes to copy
     int32_t bytesToCopy = ioData->mBuffers[0].mDataByteSize;
-    AudioSampleType *left  = (AudioSampleType*)ioData->mBuffers[0].mData;
-    AudioSampleType *right = (AudioSampleType*)ioData->mBuffers[1].mData;
+    float *left  = (float*)ioData->mBuffers[0].mData;
+    float *right = (float*)ioData->mBuffers[1].mData;
     
     // Get the available bytes in the circular buffer
     int32_t availableBytes;
-    AudioSampleType *buffer = TPCircularBufferTail(circularBuffer,&availableBytes);
+    float *buffer = TPCircularBufferTail(circularBuffer,&availableBytes);
     
     // Ideally we'd have all the bytes to be copied, but compare it against the available bytes (get min)
     int32_t amount = MIN(bytesToCopy,availableBytes);
