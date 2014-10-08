@@ -115,15 +115,15 @@
 
 #pragma mark - Private Configuration
 -(void)_configureAudioPlayer {
-  
+
   // Defaults
   self.output = [EZOutput sharedOutput];
-  
+
 #if TARGET_OS_IPHONE
   // Configure the AVSession
   AVAudioSession *audioSession = [AVAudioSession sharedInstance];
   NSError *err = NULL;
-  [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&err];
+  [audioSession setCategory:AVAudioSessionCategoryPlayback error:&err];
   if( err ){
     NSLog(@"There was an error creating the audio session");
   }
@@ -191,7 +191,7 @@
   _eof       = NO;
   _audioFile = [EZAudioFile audioFileWithURL:audioFile.url andDelegate:self];
   NSAssert(_output,@"No output was found, this should by default be the EZOutput shared instance");
-  [_output setAudioStreamBasicDescription:self.audioFile.clientFormat];    
+  [_output setAudioStreamBasicDescription:self.audioFile.clientFormat];
 }
 
 -(void)setOutput:(EZOutput*)output {

@@ -127,6 +127,11 @@ static OSStatus inputCallback(void                          *inRefCon,
 -(id)init {
   self = [super init];
   if(self){
+    // make sure we got the permissions needed to use the mic
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    NSError *err = NULL;
+    [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&err];
+
     // Clear the float buffer
     floatBuffers = NULL;
     // We're not fetching anything yet
@@ -228,6 +233,11 @@ static OSStatus inputCallback(void                          *inRefCon,
 #pragma mark - Events
 -(void)startFetchingAudio {
   if( !_isFetching ){
+    // make sure we got the permissions needed to use the mic
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    NSError *err = NULL;
+    [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&err];
+
     // Start fetching input
     [EZAudio checkResult:AudioOutputUnitStart(self->microphoneInput)
                operation:"Microphone failed to start fetching audio"];
@@ -244,6 +254,12 @@ static OSStatus inputCallback(void                          *inRefCon,
                  operation:"Microphone failed to stop fetching audio"];
       _isFetching = NO;
       self.microphoneOn = NO;
+
+      // switch back audio session to playback mode so we get our audio through
+      // the main speakers.
+      AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+      NSError *err = NULL;
+      [audioSession setCategory:AVAudioSessionCategoryPlayback error:&err];
     }
   }
 }
@@ -272,71 +288,71 @@ static OSStatus inputCallback(void                          *inRefCon,
     _customASBD = YES;
     streamFormat = asbd;
     [self _configureStreamFormatWithSampleRate:_deviceSampleRate];
-  }  
+  }
 }
 
 #pragma mark - Configure The Input Unit
 
 -(void)_createInputUnit {
-  
+
   // Get component description for input
   AudioComponentDescription inputComponentDescription = [self _getInputAudioComponentDescription];
-  
+
   // Get the input component
   AudioComponent inputComponent = [self _getInputComponentWithAudioComponentDescription:inputComponentDescription];
-  
+
   // Create a new instance of the component and store it for internal use
   [self _createNewInstanceForInputComponent:inputComponent];
-  
+
   // Enable Input Scope
   [self _enableInputScope];
-  
+
   // Disable Output Scope
   [self _disableOutputScope];
-  
+
   // Get the default device if we need to (OSX only, iOS uses RemoteIO)
   #if TARGET_OS_IPHONE
     // Do nothing (using RemoteIO)
   #elif TARGET_OS_MAC
     [self _configureDefaultDevice];
   #endif
-  
+
   // Configure device and pull hardware specific sampling rate (default = 44.1 kHz)
   _deviceSampleRate = [self _configureDeviceSampleRateWithDefault:44100.0];
-  
+
   // Configure device and pull hardware specific buffer duration (default = 0.0232)
   _deviceBufferDuration = [self _configureDeviceBufferDurationWithDefault:0.0232];
-  
+
   // Configure the stream format with the hardware sample rate
   [self _configureStreamFormatWithSampleRate:_deviceSampleRate];
-  
+
   // Notify delegate the audio stream basic description was successfully created
   [self _notifyDelegateOfStreamFormat];
-  
+
   // Get buffer frame size
   _deviceBufferFrameSize = [self _getBufferFrameSize];
-  
+
   // Create the audio buffer list and pre-malloc the buffers in the list
   [self _configureAudioBufferListWithFrameSize:_deviceBufferFrameSize];
-  
+
   // Set the float converter's stream format
   [self _configureFloatConverterWithFrameSize:_deviceBufferFrameSize];
-  
+
   // Setup input callback
   [self _configureInputCallback];
-  
+
   // Disable buffer allocation (optional - do this if we want to pass in our own)
   [self _disableCallbackBufferAllocation];
-  
+
   // Initialize the audio unit
   [EZAudio checkResult:AudioUnitInitialize( microphoneInput )
              operation:"Couldn't initialize the input unit"];
-  
+
 }
 
 #pragma mark - Audio Component Initialization
 -(AudioComponentDescription)_getInputAudioComponentDescription {
-  
+
   // Create an input component description for mic input
   AudioComponentDescription inputComponentDescription;
   inputComponentDescription.componentType             = kAudioUnitType_Output;
@@ -348,27 +364,27 @@ static OSStatus inputCallback(void                          *inRefCon,
   #elif TARGET_OS_MAC
     inputComponentDescription.componentSubType          = kAudioUnitSubType_HALOutput;
   #endif
-  
+
   // Return the successfully created input component description
   return inputComponentDescription;
-  
+
 }
 
 -(AudioComponent)_getInputComponentWithAudioComponentDescription:(AudioComponentDescription)audioComponentDescription {
-  
+
   // Try and find the component
   AudioComponent inputComponent = AudioComponentFindNext( NULL , &audioComponentDescription );
   NSAssert(inputComponent,@"Couldn't get input component unit!");
   return inputComponent;
-  
+
 }
 
 -(void)_createNewInstanceForInputComponent:(AudioComponent)audioComponent {
-  
+
   [EZAudio checkResult:AudioComponentInstanceNew(audioComponent,
                                                  &microphoneInput )
              operation:"Couldn't open component for microphone input unit."];
-  
+
 }
 
 #pragma mark - Input/Output Scope Initialization
@@ -411,7 +427,7 @@ static OSStatus inputCallback(void                          *inRefCon,
                                                   &propSize,
                                                   &defaultDevice)
              operation:"Couldn't get default input device"];
-  
+
   // Set the default device on the microphone input unit
   propSize = sizeof(defaultDevice);
   [EZAudio checkResult:AudioUnitSetProperty(microphoneInput,
@@ -421,7 +437,7 @@ static OSStatus inputCallback(void                          *inRefCon,
                                             &defaultDevice,
                                             propSize)
              operation:"Couldn't set default device on I/O unit"];
-  
+
   // Get the stream format description from the newly created input unit and assign it to the output of the input unit
   AudioStreamBasicDescription inputScopeFormat;
   propSize = sizeof(AudioStreamBasicDescription);
@@ -432,7 +448,7 @@ static OSStatus inputCallback(void                          *inRefCon,
                                             &inputScopeFormat,
                                             &propSize)
              operation:"Couldn't get ASBD from input unit (1)"];
-  
+
   // Assign the same stream format description from the output of the input unit and pull the sample rate
   AudioStreamBasicDescription outputScopeFormat;
   propSize = sizeof(AudioStreamBasicDescription);
@@ -443,10 +459,10 @@ static OSStatus inputCallback(void                          *inRefCon,
                                             &outputScopeFormat,
                                             &propSize)
              operation:"Couldn't get ASBD from input unit (2)"];
-  
+
   // Store the input scope's sample rate
   inputScopeSampleRate = inputScopeFormat.mSampleRate;
-  
+
 }
 #endif
 
@@ -476,12 +492,12 @@ static OSStatus inputCallback(void                          *inRefCon,
         if (err) {
             NSLog(@"Error setting preferredIOBufferDuration for audio session: %@", err.localizedDescription);
         }
-        
+
         // Buffer Size
         bufferDuration = [[AVAudioSession sharedInstance] IOBufferDuration];
     #endif
   #elif TARGET_OS_MAC
-  
+
   #endif
   return bufferDuration;
 }
@@ -522,7 +538,7 @@ static OSStatus inputCallback(void                          *inRefCon,
                                             &streamFormat,
                                             propSize)
              operation:"Could not set microphone's stream format bus 0"];
-  
+
   // Set the stream format for the input on the microphone's output scope
   [EZAudio checkResult:AudioUnitSetProperty(microphoneInput,
                                             kAudioUnitProperty_StreamFormat,
