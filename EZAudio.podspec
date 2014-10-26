@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.author       = { "Syed Haris Ali" => "syedhali07@gmail.com" }
   s.ios.deployment_target = '6.0'
   s.osx.deployment_target = '10.8'
-  s.source       = { :git => "https://github.com/syedhali/EZAudio.git", :tag => "0.0.5" }
+  s.source       = { :git => "https://github.com/syedhali/EZAudio.git", :tag => "0.0.6" }
   s.source_files  = 'EZAudio/*.{h,m,c}'
   s.exclude_files = 'EZAudio/VERSION'
   s.ios.frameworks = 'AudioToolbox','AVFoundation','GLKit'
