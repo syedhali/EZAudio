@@ -282,7 +282,7 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
   
   // Setup an ASBD in canonical format by default
   if( !_customASBD ){
-    _outputASBD = [EZAudio stereoCanonicalNonInterleavedFormatWithSampleRate:44100];
+      _outputASBD = [EZAudio stereoFloatNonInterleavedFormatWithSampleRate:44100];
   }
   
   // Set the format for output

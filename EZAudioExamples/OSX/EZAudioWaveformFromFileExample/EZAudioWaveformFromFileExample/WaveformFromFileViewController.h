@@ -63,4 +63,6 @@
  */
 -(IBAction)openFile:(id)sender;
 
+-(IBAction)snapshot:(id)sender;
+
 @end
