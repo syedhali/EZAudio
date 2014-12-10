@@ -140,13 +140,6 @@ typedef void (^WaveformDataCompletionBlock)(float* waveformData,
  Creates a new instance of the EZAudioFile using a file path URL and allows specifying an EZAudioFileDelegate.
  @param url      The file path reference of the audio file as an NSURL.
  @param delegate The audio file delegate that receives events specified by the EZAudioFileDelegate protocol
- @return The newly created EZAudioFile instance.
- */
-
-/**
- Creates a new instance of the EZAudioFile using a file path URL and allows specifying an EZAudioFileDelegate.
- @param url      The file path reference of the audio file as an NSURL.
- @param delegate The audio file delegate that receives events specified by the EZAudioFileDelegate protocol
  @param permission A constant describing what we intend on doing with the audio file (read, write, or both)
  @param fileFormat An AudioStreamBasicDescription that will be used to create the audio file if it does not exist if the permission argument is set to EZAudioFilePermissionWrite or EZAudioFilePermissionReadWrite. Not used for EZAudioFilePermissionRead permission.
  @return The newly created EZAudioFile instance.
