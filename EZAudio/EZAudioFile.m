@@ -31,7 +31,7 @@
 
 //------------------------------------------------------------------------------
 
-static OSStatus EZAudioFileReadPermissionFileDoesNotExistCode = -92941;
+static OSStatus EZAudioFileReadPermissionFileDoesNotExistCode = -88776;
 static UInt32   EZAudioFileWaveformDefaultResolution          = 1024;
 
 //------------------------------------------------------------------------------
@@ -133,7 +133,7 @@ typedef struct
 //------------------------------------------------------------------------------
 
 + (instancetype) audioFileWithURL:(NSURL*)url
-                      delegate:(id<EZAudioFileDelegate>)delegate
+                         delegate:(id<EZAudioFileDelegate>)delegate
                        permission:(EZAudioFilePermission)permission
                        fileFormat:(AudioStreamBasicDescription)fileFormat
 {
@@ -251,12 +251,15 @@ typedef struct
     AudioFileID           audioFileID;
     OSStatus              result     = noErr;
     EZAudioFilePermission permission = self.info.permission;
+    UInt32                propSize;
     if (fileExists)
     {
         result = AudioFileOpenURL(url,
                                   permission,
                                   0,
                                   &audioFileID);
+        [EZAudio checkResult:result
+                   operation:"failed to open audio file"];
     }
     else
     {
@@ -279,9 +282,21 @@ typedef struct
     if (result == noErr)
     {
         Boolean writeable = permission != EZAudioFilePermissionRead;
-        result = ExtAudioFileWrapAudioFileID(audioFileID,
-                                             writeable,
-                                             &_info.extAudioFileRef);
+        [EZAudio checkResult:ExtAudioFileWrapAudioFileID(audioFileID,
+                                                         writeable,
+                                                         &_info.extAudioFileRef)
+                   operation:"Failed to wrap audio file ID in ext audio file ref"];
+    }
+    
+    // store the file format if we opened an existing file
+    if (fileExists)
+    {
+        propSize = sizeof(self.info.fileFormat);
+        [EZAudio checkResult:ExtAudioFileGetProperty(self.info.extAudioFileRef,
+                                                     kExtAudioFileProperty_FileDataFormat,
+                                                     &propSize,
+                                                     &_info.fileFormat)
+                   operation:"Failed to get file audio format on existing audio file"];
     }
     
     // done
@@ -291,10 +306,11 @@ typedef struct
 //------------------------------------------------------------------------------
 
 #pragma mark - Events
--(void)readFrames:(UInt32)frames
-  audioBufferList:(AudioBufferList *)audioBufferList
-       bufferSize:(UInt32 *)bufferSize
-              eof:(BOOL *)eof {
+- (void) readFrames:(UInt32)frames
+    audioBufferList:(AudioBufferList*)audioBufferList
+         bufferSize:(UInt32*)bufferSize
+                eof:(BOOL*)eof
+{
 //    [EZAudio checkResult:ExtAudioFileRead(_audioFile,
 //                                          &frames,
 //                                          audioBufferList)
@@ -317,7 +333,8 @@ typedef struct
 //    }
 }
 
--(void)seekToFrame:(SInt64)frame {
+- (void) seekToFrame:(SInt64)frame
+{
 //  [EZAudio checkResult:ExtAudioFileSeek(_audioFile,frame)
 //             operation:"Failed to seek frame position within audio file"];
 //  _frameIndex = frame;
@@ -328,13 +345,20 @@ typedef struct
 //  }
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - Getters
--(BOOL)hasLoadedAudioData {
+//------------------------------------------------------------------------------
+
+- (BOOL) hasLoadedAudioData
+{
 //  return _waveformData != NULL;
     return NO;
 }
 
--(void)getWaveformDataWithCompletionBlock:(WaveformDataCompletionBlock)waveformDataCompletionBlock {
+//------------------------------------------------------------------------------
+
+- (void) getWaveformDataWithCompletionBlock:(WaveformDataCompletionBlock)waveformDataCompletionBlock
+{
 //  
 //  SInt64 currentFramePosition = _frameIndex;
 //  
@@ -397,20 +421,28 @@ typedef struct
 //  
 }
 
+//------------------------------------------------------------------------------
+
 - (AudioStreamBasicDescription) clientFormat
 {
     return self.info.clientFormat;
 }
+
+//------------------------------------------------------------------------------
 
 - (AudioStreamBasicDescription) fileFormat
 {
     return self.info.fileFormat;
 }
 
+//------------------------------------------------------------------------------
+
 - (SInt64) frameIndex
 {
     return self.info.frameIndex;
 }
+
+//------------------------------------------------------------------------------
 
 -(NSDictionary *)metadata
 {
@@ -441,22 +473,31 @@ typedef struct
     return nil;
 }
 
+//------------------------------------------------------------------------------
+
 - (Float32) totalDuration
 {
     return self.info.duration;
 }
+
+//------------------------------------------------------------------------------
 
 - (SInt64) totalFrames
 {
     return self.info.frames;
 }
 
+//------------------------------------------------------------------------------
+
 - (NSURL*) url
 {
   return (__bridge NSURL*)self.info.sourceURL;
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - Setters
+//------------------------------------------------------------------------------
+
 -(void)setWaveformResolution:(UInt32)waveformResolution
 {
 //  if( _waveformResolution != waveformResolution ){
@@ -477,6 +518,8 @@ typedef struct
     return 0;
 }
 
+//------------------------------------------------------------------------------
+
 - (UInt32) recommendedDrawingFrameRate
 {
 //  UInt32 val = 1;
@@ -488,6 +531,8 @@ typedef struct
 //  return MAX(1, val);
     return 0;
 }
+
+//------------------------------------------------------------------------------
 
 //#pragma mark - Cleanup
 //-(void)dealloc {
@@ -507,5 +552,7 @@ typedef struct
 //               operation:"Failed to dispose of audio file"];
 //  }
 //}
+
+//------------------------------------------------------------------------------
 
 @end

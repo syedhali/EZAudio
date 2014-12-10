@@ -119,6 +119,7 @@
   openDlg.delegate = self;
   if( [openDlg runModal] == NSOKButton ){
     NSArray *selectedFiles = [openDlg URLs];
+      NSLog(@"selected files: %@", selectedFiles);
     [self openFileWithFilePathURL:selectedFiles.firstObject];
   }
 }
