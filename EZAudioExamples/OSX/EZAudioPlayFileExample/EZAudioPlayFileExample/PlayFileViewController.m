@@ -174,8 +174,13 @@
   
   // Stop playback
   [[EZOutput sharedOutput] stopPlayback];
-  
-  self.audioFile                          = [EZAudioFile audioFileWithURL:filePathURL andDelegate:self];
+
+    AudioStreamBasicDescription asbd;
+    self.audioFile = [EZAudioFile audioFileWithURL:filePathURL
+                                          delegate:self
+                                        permission:EZAudioFilePermissionReadWrite
+                                        fileFormat:asbd];
+    
   self.eof                                = NO;
   self.filePathLabel.stringValue          = filePathURL.lastPathComponent;
   self.framePositionSlider.minValue       = 0.0f;
