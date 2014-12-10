@@ -89,6 +89,16 @@ typedef struct
 //------------------------------------------------------------------------------
 
 - (instancetype) initWithURL:(NSURL*)url
+{
+    AudioStreamBasicDescription asbd;
+    return [self initWithURL:url
+                  permission:EZAudioFilePermissionRead
+                  fileFormat:asbd];
+}
+
+//------------------------------------------------------------------------------
+
+- (instancetype) initWithURL:(NSURL*)url
                   permission:(EZAudioFilePermission)permission
                   fileFormat:(AudioStreamBasicDescription)fileFormat
 {
@@ -119,6 +129,13 @@ typedef struct
 
 //------------------------------------------------------------------------------
 #pragma mark - Class Initializers
+//------------------------------------------------------------------------------
+
++ (instancetype) audioFileWithURL:(NSURL*)url
+{
+    return [[self alloc] initWithURL:url];
+}
+
 //------------------------------------------------------------------------------
 
 + (instancetype) audioFileWithURL:(NSURL*)url

@@ -115,6 +115,15 @@ typedef void (^WaveformDataCompletionBlock)(float* waveformData,
 */
 
 /**
+ Creates a new instance of the EZAudioFile using a file path URL. Read only.
+ @param url The file path reference of the audio file as an NSURL.
+ @return The newly created EZAudioFile instance.
+ */
+- (instancetype) initWithURL:(NSURL*)url;
+
+//------------------------------------------------------------------------------
+
+/**
  Creates a new instance of the EZAudioFile using a file path URL.
  @param url The file path reference of the audio file as an NSURL.
  @param permission A constant describing what we intend on doing with the audio file (read, write, or both)
@@ -153,6 +162,15 @@ typedef void (^WaveformDataCompletionBlock)(float* waveformData,
 /**
  @name Class Initializers
  */
+
+/**
+ Class method that creates a new instance of the EZAudioFile using a file path URL.
+ @param url The file path reference of the audio file as an NSURL.
+ @return The newly created EZAudioFile instance.
+ */
++ (instancetype) audioFileWithURL:(NSURL*)url;
+
+//------------------------------------------------------------------------------
 
 /**
  Class method that creates a new instance of the EZAudioFile using a file path URL.
