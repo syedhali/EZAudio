@@ -47,6 +47,7 @@ typedef struct
 
 typedef struct
 {
+    AudioFileID                 audioFileID;
     AudioStreamBasicDescription clientFormat;
     Float32                     duration;
     ExtAudioFileRef             extAudioFileRef;
@@ -265,7 +266,6 @@ typedef struct
     
     // create the file wrapper slightly differently depending what we are
     // trying to do with it
-    AudioFileID           audioFileID;
     OSStatus              result     = noErr;
     EZAudioFilePermission permission = self.info.permission;
     UInt32                propSize;
@@ -274,7 +274,7 @@ typedef struct
         result = AudioFileOpenURL(url,
                                   permission,
                                   0,
-                                  &audioFileID);
+                                  &_info.audioFileID);
         [EZAudio checkResult:result
                    operation:"failed to open audio file"];
     }
@@ -291,7 +291,7 @@ typedef struct
                                             0,
                                             &_info.fileFormat,
                                             kAudioFileFlags_EraseFile,
-                                            &audioFileID);
+                                            &_info.audioFileID);
         }
     }
     
@@ -299,7 +299,7 @@ typedef struct
     if (result == noErr)
     {
         Boolean writeable = permission != EZAudioFilePermissionRead;
-        [EZAudio checkResult:ExtAudioFileWrapAudioFileID(audioFileID,
+        [EZAudio checkResult:ExtAudioFileWrapAudioFileID(self.info.audioFileID,
                                                          writeable,
                                                          &_info.extAudioFileRef)
                    operation:"Failed to wrap audio file ID in ext audio file ref"];
@@ -461,33 +461,27 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
--(NSDictionary *)metadata
+- (NSDictionary*) metadata
 {
-//    AudioFileID audioFileID;
-//    UInt32 propSize = sizeof(audioFileID);
-//    
-//    [EZAudio checkResult:ExtAudioFileGetProperty(_audioFile,
-//                                                 kExtAudioFileProperty_AudioFile,
-//                                                 &propSize,
-//                                                 &audioFileID)
-//               operation:"Failed to get audio file id"];
-//    
-//    CFDictionaryRef metadata;
-//    UInt32 isWritable;
-//    [EZAudio checkResult:AudioFileGetPropertyInfo(audioFileID,
-//                                                  kAudioFilePropertyInfoDictionary,
-//                                                  &propSize,
-//                                                  &isWritable)
-//               operation:"Failed to get the size of the metadata dictionary"];
-//    
-//    [EZAudio checkResult:AudioFileGetProperty(audioFileID,
-//                                              kAudioFilePropertyInfoDictionary,
-//                                              &propSize,
-//                                              &metadata)
-//               operation:"Failed to get metadata dictionary"];
-//    
-//    return (__bridge NSDictionary *)metadata;
-    return nil;
+    // get size of metadata property (dictionary)
+    UInt32          propSize = sizeof(_info.audioFileID);
+    CFDictionaryRef metadata;
+    UInt32          writable;
+    [EZAudio checkResult:AudioFileGetPropertyInfo(self.info.audioFileID,
+                                                  kAudioFilePropertyInfoDictionary,
+                                                  &propSize,
+                                                  &writable)
+               operation:"Failed to get the size of the metadata dictionary"];
+    
+    // pull metadata
+    [EZAudio checkResult:AudioFileGetProperty(self.info.audioFileID,
+                                              kAudioFilePropertyInfoDictionary,
+                                              &propSize,
+                                              &metadata)
+               operation:"Failed to get metadata dictionary"];
+    
+    // cast to NSDictionary
+    return (__bridge NSDictionary*)metadata;
 }
 
 //------------------------------------------------------------------------------
