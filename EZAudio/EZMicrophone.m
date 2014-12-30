@@ -100,7 +100,7 @@ static OSStatus inputCallback(void                          *inRefCon,
     if( microphone.microphoneDelegate ){
       // THIS IS NOT OCCURING ON THE MAIN THREAD
       if( [microphone.microphoneDelegate respondsToSelector:@selector(microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:)] ){
-        AEFloatConverterToFloat(microphone->converter,
+        EZ_AEFloatConverterToFloat(microphone->converter,
                                 microphone->microphoneInputBuffer,
                                 microphone->floatBuffers,
                                 inNumberFrames);

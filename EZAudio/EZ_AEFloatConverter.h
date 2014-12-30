@@ -59,7 +59,7 @@ extern "C" {
  * @param frames            The number of frames to convert.
  * @return YES on success; NO on failure
  */
-BOOL AEFloatConverterToFloat(EZ_AEFloatConverter* converter, AudioBufferList *sourceBuffer, float * const * targetBuffers, UInt32 frames);
+BOOL EZ_AEFloatConverterToFloat(EZ_AEFloatConverter* converter, AudioBufferList *sourceBuffer, float * const * targetBuffers, UInt32 frames);
 
 /*!
  * Convert audio to floating-point, in a buffer list
@@ -74,7 +74,7 @@ BOOL AEFloatConverterToFloat(EZ_AEFloatConverter* converter, AudioBufferList *so
  * @param frames            The number of frames to convert.
  * @return YES on success; NO on failure
  */
-BOOL AEFloatConverterToFloatBufferList(EZ_AEFloatConverter* converter, AudioBufferList *sourceBuffer,  AudioBufferList *targetBuffer, UInt32 frames);
+BOOL EZ_AEFloatConverterToFloatBufferList(EZ_AEFloatConverter* converter, AudioBufferList *sourceBuffer,  AudioBufferList *targetBuffer, UInt32 frames);
 
 /*!
  * Convert audio from floating-point
@@ -90,7 +90,7 @@ BOOL AEFloatConverterToFloatBufferList(EZ_AEFloatConverter* converter, AudioBuff
  * @param frames            The number of frames to convert.
  * @return YES on success; NO on failure
  */
-BOOL AEFloatConverterFromFloat(EZ_AEFloatConverter* converter, float * const * sourceBuffers, AudioBufferList *targetBuffer, UInt32 frames);
+BOOL EZ_AEFloatConverterFromFloat(EZ_AEFloatConverter* converter, float * const * sourceBuffers, AudioBufferList *targetBuffer, UInt32 frames);
 
 /*!
  * Convert audio from floating-point, in a buffer list
@@ -105,7 +105,7 @@ BOOL AEFloatConverterFromFloat(EZ_AEFloatConverter* converter, float * const * s
  * @param frames            The number of frames to convert.
  * @return YES on success; NO on failure
  */
-BOOL AEFloatConverterFromFloatBufferList(EZ_AEFloatConverter* converter, AudioBufferList *sourceBuffer, AudioBufferList *targetBuffer, UInt32 frames);
+BOOL EZ_AEFloatConverterFromFloatBufferList(EZ_AEFloatConverter* converter, AudioBufferList *sourceBuffer, AudioBufferList *targetBuffer, UInt32 frames);
 
 /*!
  * The AudioStreamBasicDescription representing the converted floating-point format

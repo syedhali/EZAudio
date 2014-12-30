@@ -177,7 +177,7 @@
                           updatedPosition:_frameIndex];
       }
       if( [self.audioFileDelegate respondsToSelector:@selector(audioFile:readAudio:withBufferSize:withNumberOfChannels:)] ){
-        AEFloatConverterToFloat(_floatConverter,audioBufferList,_floatBuffers,frames);
+        EZ_AEFloatConverterToFloat(_floatConverter,audioBufferList,_floatBuffers,frames);
         [self.audioFileDelegate audioFile:self
                                 readAudio:_floatBuffers
                            withBufferSize:frames
