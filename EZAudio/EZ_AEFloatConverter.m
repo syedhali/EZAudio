@@ -23,7 +23,7 @@
 //  3. This notice may not be removed or altered from any source distribution.
 //
 
-#import "AEFloatConverter.h"
+#import "EZ_AEFloatConverter.h"
 
 #define checkResult(result,operation) (_checkResult((result),(operation),strrchr(__FILE__, '/')+1,__LINE__))
 static inline BOOL _checkResult(OSStatus result, const char *operation, const char* file, int line) {
@@ -40,7 +40,7 @@ struct complexInputDataProc_t {
     AudioBufferList *sourceBuffer;
 };
 
-@interface AEFloatConverter () {
+@interface EZ_AEFloatConverter () {
     AudioStreamBasicDescription _sourceAudioDescription;
     AudioStreamBasicDescription _floatAudioDescription;
     AudioConverterRef           _toFloatConverter;
@@ -55,7 +55,7 @@ static OSStatus complexInputDataProc(AudioConverterRef             inAudioConver
                                      void                          *inUserData);
 @end
 
-@implementation AEFloatConverter
+@implementation EZ_AEFloatConverter
 @synthesize sourceFormat = _sourceAudioDescription;
 
 -(id)initWithSourceFormat:(AudioStreamBasicDescription)sourceFormat {
@@ -93,7 +93,7 @@ static OSStatus complexInputDataProc(AudioConverterRef             inAudioConver
 }
 
 
-BOOL AEFloatConverterToFloat(AEFloatConverter* THIS, AudioBufferList *sourceBuffer, float * const * targetBuffers, UInt32 frames) {
+BOOL AEFloatConverterToFloat(EZ_AEFloatConverter* THIS, AudioBufferList *sourceBuffer, float * const * targetBuffers, UInt32 frames) {
     if ( frames == 0 ) return YES;
     
     if ( THIS->_toFloatConverter ) {
@@ -131,7 +131,7 @@ BOOL AEFloatConverterToFloat(AEFloatConverter* THIS, AudioBufferList *sourceBuff
     return YES;
 }
 
-BOOL AEFloatConverterToFloatBufferList(AEFloatConverter* converter, AudioBufferList *sourceBuffer,  AudioBufferList *targetBuffer, UInt32 frames) {
+BOOL AEFloatConverterToFloatBufferList(EZ_AEFloatConverter* converter, AudioBufferList *sourceBuffer,  AudioBufferList *targetBuffer, UInt32 frames) {
     assert(targetBuffer->mNumberBuffers == converter->_floatAudioDescription.mChannelsPerFrame);
     
     float *targetBuffers[targetBuffer->mNumberBuffers];
@@ -141,7 +141,7 @@ BOOL AEFloatConverterToFloatBufferList(AEFloatConverter* converter, AudioBufferL
     return AEFloatConverterToFloat(converter, sourceBuffer, targetBuffers, frames);
 }
 
-BOOL AEFloatConverterFromFloat(AEFloatConverter* THIS, float * const * sourceBuffers, AudioBufferList *targetBuffer, UInt32 frames) {
+BOOL AEFloatConverterFromFloat(EZ_AEFloatConverter* THIS, float * const * sourceBuffers, AudioBufferList *targetBuffer, UInt32 frames) {
     if ( frames == 0 ) return YES;
     
     if ( THIS->_fromFloatConverter ) {
@@ -178,7 +178,7 @@ BOOL AEFloatConverterFromFloat(AEFloatConverter* THIS, float * const * sourceBuf
     return YES;
 }
 
-BOOL AEFloatConverterFromFloatBufferList(AEFloatConverter* converter, AudioBufferList *sourceBuffer, AudioBufferList *targetBuffer, UInt32 frames) {
+BOOL AEFloatConverterFromFloatBufferList(EZ_AEFloatConverter* converter, AudioBufferList *sourceBuffer, AudioBufferList *targetBuffer, UInt32 frames) {
     assert(sourceBuffer->mNumberBuffers == converter->_floatAudioDescription.mChannelsPerFrame);
     
     float *sourceBuffers[sourceBuffer->mNumberBuffers];

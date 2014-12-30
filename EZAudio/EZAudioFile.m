@@ -36,7 +36,7 @@
   AudioStreamBasicDescription _clientFormat;
   AudioStreamBasicDescription _fileFormat;
   float                       **_floatBuffers;
-  AEFloatConverter            *_floatConverter;
+  EZ_AEFloatConverter            *_floatConverter;
   SInt64                      _frameIndex;
   CFURLRef                    _sourceURL;
   Float32                     _totalDuration;
@@ -140,7 +140,7 @@
              operation:"Couldn't set client data format on input ext file"];
   
   // Allocate the float buffers
-  _floatConverter = [[AEFloatConverter alloc] initWithSourceFormat:_clientFormat];
+  _floatConverter = [[EZ_AEFloatConverter alloc] initWithSourceFormat:_clientFormat];
   size_t sizeToAllocate = sizeof(float*) * _clientFormat.mChannelsPerFrame;
   sizeToAllocate = MAX(8, sizeToAllocate);
   _floatBuffers   = (float**)malloc( sizeToAllocate );

@@ -51,7 +51,7 @@ static const UInt32 kEZAudioMicrophoneEnableFlag  = 1;
   BOOL _isFetching;
   
   /// Stream Description
-  AEFloatConverter            *converter;
+  EZ_AEFloatConverter            *converter;
   AudioStreamBasicDescription streamFormat;
   
   /// Audio Graph and Input/Output Units
@@ -558,7 +558,7 @@ static OSStatus inputCallback(void                          *inRefCon,
 #pragma mark - Float Converter Initialization
 -(void)_configureFloatConverterWithFrameSize:(UInt32)bufferFrameSize {
   UInt32 bufferSizeBytes = bufferFrameSize * streamFormat.mBytesPerFrame;
-  converter              = [[AEFloatConverter alloc] initWithSourceFormat:streamFormat];
+  converter              = [[EZ_AEFloatConverter alloc] initWithSourceFormat:streamFormat];
   floatBuffers           = (float**)malloc(sizeof(float*)*streamFormat.mChannelsPerFrame);
   assert(floatBuffers);
   for ( int i=0; i<streamFormat.mChannelsPerFrame; i++ ) {
