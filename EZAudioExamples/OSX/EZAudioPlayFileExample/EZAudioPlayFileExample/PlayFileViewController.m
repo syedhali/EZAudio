@@ -181,6 +181,7 @@
                                           delegate:self
                                         permission:EZAudioFilePermissionReadWrite
                                         fileFormat:asbd];
+    [[EZOutput sharedOutput] setAudioStreamBasicDescription:self.audioFile.clientFormat];
     
   self.eof                                = NO;
   self.filePathLabel.stringValue          = filePathURL.lastPathComponent;
@@ -193,10 +194,6 @@
   
 #pragma mark Mess Around With Audio Stream Basic Description Here!
   self.sampleRateSlider.floatValue = self.audioFile.clientFormat.mSampleRate;
-  AudioStreamBasicDescription outputASBD = self.audioFile.clientFormat;
-
-  [[EZOutput sharedOutput] setAudioStreamBasicDescription:[EZAudio stereoFloatInterleavedFormatWithSampleRate:44100]];
-
   
   // Plot the whole waveform
   self.audioPlot.plotType        = EZPlotTypeBuffer;
@@ -235,8 +232,8 @@
 }
 
 #pragma mark - EZOutputDataSource
--(void)             output:(EZOutput *)output
- shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
+-(void)             output:(EZOutput*)output
+ shouldFillAudioBufferList:(AudioBufferList*)audioBufferList
         withNumberOfFrames:(UInt32)frames
 {
   if( self.audioFile )

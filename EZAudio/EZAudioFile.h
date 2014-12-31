@@ -147,7 +147,24 @@ typedef void (^WaveformDataCompletionBlock)(float* waveformData,
 - (instancetype) initWithURL:(NSURL*)url
                     delegate:(id<EZAudioFileDelegate>)delegate
                   permission:(EZAudioFilePermission)permission
-                  fileFormat:(AudioStreamBasicDescription)fileFormat;;
+                  fileFormat:(AudioStreamBasicDescription)fileFormat;
+
+//------------------------------------------------------------------------------
+
+/**
+ Class method that creates a new instance of the EZAudioFile using a file path URL and allows specifying an EZAudioFileDelegate, a read/write permission, a file format incase a new file is being written, and a client format for a format that will be used when read samples (different from file format).
+ @param url      The file path reference of the audio file as an NSURL.
+ @param delegate The audio file delegate that receives events specified by the EZAudioFileDelegate protocol
+ @param permission A constant describing what we intend on doing with the audio file (read, write, or both)
+ @param fileFormat An AudioStreamBasicDescription that will be used to create the audio file if it does not exist if the permission argument is set to EZAudioFilePermissionWrite or EZAudioFilePermissionReadWrite. Not used for EZAudioFilePermissionRead permission.
+ @param clientFormat An AudioStreamBasicDescription that will be used as the client format on the audio file. For instance, the audio file might be in a 22.5 kHz sample rate format in its file format, but your app wants to read the samples at a sample rate of 44.1 kHz so it can iterate with other components (like a audio processing graph) without any weird playback effects. If this initializer is not used then a non-interleaved float format will be assumed.
+ @return The newly created EZAudioFile instance.
+ */
+- (instancetype) initWithURL:(NSURL*)url
+                    delegate:(id<EZAudioFileDelegate>)delegate
+                  permission:(EZAudioFilePermission)permission
+                  fileFormat:(AudioStreamBasicDescription)fileFormat
+                clientFormat:(AudioStreamBasicDescription)clientFormat;
 
 //------------------------------------------------------------------------------
 #pragma mark - Class Initializers
@@ -189,7 +206,24 @@ typedef void (^WaveformDataCompletionBlock)(float* waveformData,
 + (instancetype) audioFileWithURL:(NSURL*)url
                          delegate:(id<EZAudioFileDelegate>)delegate
                        permission:(EZAudioFilePermission)permission
-                       fileFormat:(AudioStreamBasicDescription)fileFormat;;
+                       fileFormat:(AudioStreamBasicDescription)fileFormat;
+
+//------------------------------------------------------------------------------
+
+/**
+ Class method that creates a new instance of the EZAudioFile using a file path URL and allows specifying an EZAudioFileDelegate, a read/write permission, a file format incase a new file is being written, and a client format for a format that will be used when read samples (different from file format).
+ @param url      The file path reference of the audio file as an NSURL.
+ @param delegate The audio file delegate that receives events specified by the EZAudioFileDelegate protocol
+ @param permission A constant describing what we intend on doing with the audio file (read, write, or both)
+ @param fileFormat An AudioStreamBasicDescription that will be used to create the audio file if it does not exist if the permission argument is set to EZAudioFilePermissionWrite or EZAudioFilePermissionReadWrite. Not used for EZAudioFilePermissionRead permission.
+ @param clientFormat An AudioStreamBasicDescription that will be used as the client format on the audio file. A client format is different from the file format in that it is the format of the other components interacting with this file. For instance, the file on disk could be a 22.5 kHz, float format, but we might have an audio processing graph that has a 44.1 kHz, signed integer format that we'd like to interact with. The client format lets us set that 44.1 kHz format on the audio file to properly read samples from it with any interpolation or format conversion that must take place. If not specified the default value is equal to the class method, 'defaultClientFormat'
+ @return The newly created EZAudioFile instance.
+ */
++ (instancetype) audioFileWithURL:(NSURL*)url
+                         delegate:(id<EZAudioFileDelegate>)delegate
+                       permission:(EZAudioFilePermission)permission
+                       fileFormat:(AudioStreamBasicDescription)fileFormat
+                     clientFormat:(AudioStreamBasicDescription)clientFormat;;
 
 //------------------------------------------------------------------------------
 #pragma mark - Class Methods
@@ -197,6 +231,12 @@ typedef void (^WaveformDataCompletionBlock)(float* waveformData,
 /**
  @name Class Methods
  */
+
+/**
+ A class method that subclasses can override to specify the default client format that will be used to read audio data from this file. A client format is different from the file format in that it is the format of the other components interacting with this file. For instance, the file on disk could be a 22.5 kHz, float format, but we might have an audio processing graph that has a 44.1 kHz, signed integer format that we'd like to interact with. The client format lets us set that 44.1 kHz format on the audio file to properly read samples from it with any interpolation or format conversion that must take place. Default is stereo, non-interleaved, 44.1 kHz.
+ @return An AudioStreamBasicDescription that serves as the audio file's client format.
+ */
++ (AudioStreamBasicDescription) defaultClientFormat;
 
 /**
  Provides an array of the supported audio files types. Each audio file type is provided as a string, i.e. @"caf". Useful for filtering lists of files in an open panel to only the types allowed.
@@ -297,6 +337,16 @@ typedef void (^WaveformDataCompletionBlock)(float* waveformData,
  @return An NSURL representing the path of the EZAudioFile instance.
  */
 - (NSURL*) url;
+
+//------------------------------------------------------------------------------
+#pragma mark - Setters
+//------------------------------------------------------------------------------
+
+/**
+ A client format is different from the file format in that it is the format of the other components interacting with this file. For instance, the file on disk could be a 22.5 kHz, float format, but we might have an audio processing graph that has a 44.1 kHz, signed integer format that we'd like to interact with. The client format lets us set that 44.1 kHz format on the audio file to properly read samples from it with any interpolation or format conversion that must take place. Default is stereo, non-interleaved, 44.1 kHz.
+ @param clientFormat An AudioStreamBasicDescription that should serve as the audio file's client format.
+ */
+- (void) setClientFormat:(AudioStreamBasicDescription)clientFormat;
 
 //------------------------------------------------------------------------------
 #pragma mark - Helpers

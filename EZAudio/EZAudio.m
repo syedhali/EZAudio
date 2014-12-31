@@ -32,7 +32,7 @@
                                      numberOfChannels:(UInt32)channels
                                           interleaved:(BOOL)interleaved
 {
-    AudioBufferList *audioBufferList = (AudioBufferList*)malloc(sizeof(AudioBufferList));
+    AudioBufferList *audioBufferList = (AudioBufferList*)malloc(sizeof(AudioBufferList) + sizeof(AudioBuffer)*(channels-1));
     UInt32 outputBufferSize = 32 * frames; // 32 KB
     audioBufferList->mNumberBuffers = interleaved ? 1 : channels;
     for( int i = 0; i < audioBufferList->mNumberBuffers; i++ )

@@ -80,9 +80,8 @@ typedef struct
     self = [super init];
     if (self)
     {
-        EZAudioFileInfo info = self.info;
-        memset(&info, 0, sizeof(info));
-        info.permission = EZAudioFilePermissionRead;
+        memset(&_info, 0, sizeof(_info));
+        _info.permission = EZAudioFilePermissionRead;
     }
     return self;
 }
@@ -116,13 +115,29 @@ typedef struct
                   permission:(EZAudioFilePermission)permission
                   fileFormat:(AudioStreamBasicDescription)fileFormat
 {
+    return [self initWithURL:url
+                    delegate:delegate
+                  permission:permission
+                  fileFormat:fileFormat
+                clientFormat:[self.class defaultClientFormat]];
+}
+
+//------------------------------------------------------------------------------
+
+- (instancetype) initWithURL:(NSURL*)url
+                    delegate:(id<EZAudioFileDelegate>)delegate
+                  permission:(EZAudioFilePermission)permission
+                  fileFormat:(AudioStreamBasicDescription)fileFormat
+                clientFormat:(AudioStreamBasicDescription)clientFormat
+{
     self = [self init];
     if(self)
     {
-        _info.fileFormat = fileFormat;
-        _info.permission = permission;
-        _info.sourceURL  = (__bridge CFURLRef)url;
-        self.delegate    = delegate;
+        _info.clientFormat = clientFormat;
+        _info.fileFormat   = fileFormat;
+        _info.permission   = permission;
+        _info.sourceURL    = (__bridge CFURLRef)url;
+        self.delegate      = delegate;
         [self setup];
     }
     return self;
@@ -162,7 +177,29 @@ typedef struct
 }
 
 //------------------------------------------------------------------------------
+
++ (instancetype) audioFileWithURL:(NSURL*)url
+                         delegate:(id<EZAudioFileDelegate>)delegate
+                       permission:(EZAudioFilePermission)permission
+                       fileFormat:(AudioStreamBasicDescription)fileFormat
+                     clientFormat:(AudioStreamBasicDescription)clientFormat
+{
+    return [[self alloc] initWithURL:url
+                            delegate:delegate
+                          permission:permission
+                          fileFormat:fileFormat
+                        clientFormat:clientFormat];
+}
+
+//------------------------------------------------------------------------------
 #pragma mark - Class Methods
+//------------------------------------------------------------------------------
+
++ (AudioStreamBasicDescription) defaultClientFormat
+{
+    return [EZAudio stereoFloatNonInterleavedFormatWithSampleRate:44100.0f];
+}
+
 //------------------------------------------------------------------------------
 
 + (NSArray*) supportedAudioFileTypes
@@ -193,6 +230,12 @@ typedef struct
     // we open the file differently depending on the permissions specified
     [EZAudio checkResult:[self openAudioFile]
                operation:"Failed to create/open audio file"];
+    
+    // set the client format
+    self.clientFormat = self.info.clientFormat;
+    
+    //
+    
     
 //    
 //    
@@ -321,13 +364,24 @@ typedef struct
 }
 
 //------------------------------------------------------------------------------
-
 #pragma mark - Events
+//------------------------------------------------------------------------------
+
 - (void) readFrames:(UInt32)frames
     audioBufferList:(AudioBufferList*)audioBufferList
          bufferSize:(UInt32*)bufferSize
                 eof:(BOOL*)eof
 {
+    // read the specified number of frames from the audio file
+    [EZAudio checkResult:ExtAudioFileRead(self.info.extAudioFileRef,
+                                          &frames,
+                                          audioBufferList)
+               operation:"Failed to read audio data from file"];
+    
+    *bufferSize      =  frames;
+    *eof             =  frames == 0;
+    _info.frameIndex += frames;
+    
 //    [EZAudio checkResult:ExtAudioFileRead(_audioFile,
 //                                          &frames,
 //                                          audioBufferList)
@@ -509,7 +563,22 @@ typedef struct
 #pragma mark - Setters
 //------------------------------------------------------------------------------
 
--(void)setWaveformResolution:(UInt32)waveformResolution
+- (void) setClientFormat:(AudioStreamBasicDescription)clientFormat
+{
+    // store the client format
+    _info.clientFormat = clientFormat;
+    
+    // set the client format on the extended audio file ref
+    [EZAudio checkResult:ExtAudioFileSetProperty(self.info.extAudioFileRef,
+                                                 kExtAudioFileProperty_ClientDataFormat,
+                                                 sizeof(clientFormat),
+                                                 &clientFormat)
+               operation:"Couldn't set client data format on file"];
+}
+
+//------------------------------------------------------------------------------
+
+-(void) setWaveformResolution:(UInt32)waveformResolution
 {
 //  if( _waveformResolution != waveformResolution ){
 //    _waveformResolution = waveformResolution;
