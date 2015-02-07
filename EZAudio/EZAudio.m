@@ -144,7 +144,7 @@
     asbd.mBytesPerFrame    = byteSize;
     asbd.mBytesPerPacket   = byteSize;
     asbd.mChannelsPerFrame = 1;
-    asbd.mFormatFlags      = kAudioFormatFlagsCanonical|kAudioFormatFlagIsNonInterleaved;
+    asbd.mFormatFlags      = kAudioFormatFlagsNativeFloatPacked|kAudioFormatFlagIsNonInterleaved;
     asbd.mFormatID         = kAudioFormatLinearPCM;
     asbd.mFramesPerPacket  = 1;
     asbd.mSampleRate       = sampleRate;
@@ -159,7 +159,7 @@
     asbd.mBytesPerFrame    = byteSize;
     asbd.mBytesPerPacket   = byteSize;
     asbd.mChannelsPerFrame = 2;
-    asbd.mFormatFlags      = kAudioFormatFlagsCanonical|kAudioFormatFlagIsNonInterleaved;
+    asbd.mFormatFlags      = kAudioFormatFlagsNativeFloatPacked|kAudioFormatFlagIsNonInterleaved;
     asbd.mFormatID         = kAudioFormatLinearPCM;
     asbd.mFramesPerPacket  = 1;
     asbd.mSampleRate       = sampleRate;
@@ -218,7 +218,7 @@
     asbd->mFormatID = kAudioFormatLinearPCM;
 #if TARGET_OS_IPHONE
     int sampleSize = sizeof(float);
-    asbd->mFormatFlags = kAudioFormatFlagsCanonical;
+    asbd->mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
 #elif TARGET_OS_MAC
     int sampleSize = sizeof(Float32);
     asbd->mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
