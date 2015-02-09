@@ -596,4 +596,34 @@ static OSStatus inputCallback(void                          *inRefCon,
              operation:"Could not disable audio unit allocating its own buffers"];
 }
 
+#pragma mark De-allocation
+
+-(void) dealloc{
+
+    if(_isConfigured){
+
+        //stops fetching if it it is ongoing
+        if(_isFetching)
+            [self stopFetchingAudio];
+
+        //inputCallback shall be unregistered before de-allocation.
+        // Otherwise BAD_ACCESS within inputCallback happens while attempting to access _microphone through (__bridge EZMicrophone*)inRefCon
+        [EZAudio checkResult:
+                AudioUnitRemoveRenderNotify (microphoneInput, inputCallback, (__bridge void *)self)
+                   operation:"Couldn't unregister input callback"];
+
+        //free microphoneInputBuffer to avoid memory leaks
+        [EZAudio freeBufferList:microphoneInputBuffer];
+
+        //free float buffers allocated in _configureFloatConverterWithFrameSize
+        for ( int i=0; i<streamFormat.mChannelsPerFrame; i++ )
+            free(floatBuffers[i]);
+        free(floatBuffers);
+
+        //dicsonnects from delegate
+        self.microphoneDelegate=nil;
+
+    }
+}
+
 @end

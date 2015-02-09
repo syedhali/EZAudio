@@ -77,7 +77,7 @@
 #elif TARGET_OS_MAC
 @synthesize baseEffect = _baseEffect;
 #endif
-@synthesize backgroundColor  = _backgroundColor;
+//@synthesize backgroundColor  = _backgroundColor;
 @synthesize color            = _color;
 @synthesize gain             = _gain;
 @synthesize plotType         = _plotType;
@@ -137,7 +137,9 @@
 
 #pragma mark - Setters
 -(void)setBackgroundColor:(id)backgroundColor {
-  _backgroundColor = backgroundColor;
+
+    [super setBackgroundColor:backgroundColor];
+
 #if TARGET_OS_IPHONE
   self.glViewController.backgroundColor = backgroundColor;
 #elif TARGET_OS_MAC

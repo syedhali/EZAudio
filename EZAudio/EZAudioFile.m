@@ -149,7 +149,7 @@
     _floatBuffers[i] = (float*)malloc(outputBufferSize);
   }
   
-    [EZAudio printASBD:_fileFormat];
+//    [EZAudio printASBD:_fileFormat];
     
   // There's no waveform data yet
   _waveformData = NULL;

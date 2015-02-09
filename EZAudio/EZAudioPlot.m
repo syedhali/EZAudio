@@ -41,7 +41,7 @@
 @end
 
 @implementation EZAudioPlot
-@synthesize backgroundColor = _backgroundColor;
+//@synthesize backgroundColor = _backgroundColor;
 @synthesize color           = _color;
 @synthesize gain            = _gain;
 @synthesize plotType        = _plotType;
@@ -96,8 +96,9 @@
   
 #pragma mark - Setters
 -(void)setBackgroundColor:(id)backgroundColor {
-  _backgroundColor = backgroundColor;
-  [self _refreshDisplay];
+
+    [super setBackgroundColor:backgroundColor];
+    [self _refreshDisplay];
 }
   
 -(void)setColor:(id)color {
