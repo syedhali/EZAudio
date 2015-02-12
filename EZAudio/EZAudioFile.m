@@ -32,15 +32,14 @@
 //------------------------------------------------------------------------------
 
 static OSStatus EZAudioFileReadPermissionFileDoesNotExistCode = -88776;
-static UInt32   EZAudioFileWaveformDefaultResolution          = 1024;
 
 //------------------------------------------------------------------------------
 
 typedef struct
 {
-    Float32* data;
-    UInt32   framesPerBuffer;
-    UInt32   numberOfBuffers;
+    Float32 *data;
+    UInt32  framesPerBuffer;
+    UInt32  numberOfBuffers;
 } EZAudioFileWaveformInfo;
 
 //------------------------------------------------------------------------------
@@ -197,15 +196,14 @@ typedef struct
 
 + (AudioStreamBasicDescription) defaultClientFormat
 {
-    return [EZAudio stereoFloatNonInterleavedFormatWithSampleRate:44100.0f];
+    return [EZAudio stereoFloatInterleavedFormatWithSampleRate:44100.0f];
 }
 
 //------------------------------------------------------------------------------
 
-+ (NSArray*) supportedAudioFileTypes
++ (NSArray *) supportedAudioFileTypes
 {
-    return @
-    [
+    return @[
         @"aac",
         @"caf",
         @"aif",
@@ -273,17 +271,8 @@ typedef struct
 //                                                 sizeof (AudioStreamBasicDescription),
 //                                                 &_clientFormat)
 //               operation:"Couldn't set client data format on input ext file"];
-//    
-//    // Allocate the float buffers
-//    _floatConverter = [[AEFloatConverter alloc] initWithSourceFormat:_clientFormat];
-//    size_t sizeToAllocate = sizeof(float*) * _clientFormat.mChannelsPerFrame;
-//    sizeToAllocate = MAX(8, sizeToAllocate);
-//    _floatBuffers   = (float**)malloc( sizeToAllocate );
-//    UInt32 outputBufferSize = 32 * 1024; // 32 KB
-//    for ( int i=0; i< _clientFormat.mChannelsPerFrame; i++ ) {
-//        _floatBuffers[i] = (float*)malloc(outputBufferSize);
-//    }
-//    
+//
+//
 //    [EZAudio printASBD:_fileFormat];
 //    
 //    // There's no waveform data yet
@@ -368,19 +357,21 @@ typedef struct
 //------------------------------------------------------------------------------
 
 - (void) readFrames:(UInt32)frames
-    audioBufferList:(AudioBufferList*)audioBufferList
-         bufferSize:(UInt32*)bufferSize
-                eof:(BOOL*)eof
+    audioBufferList:(AudioBufferList *)audioBufferList
+         bufferSize:(UInt32 *)bufferSize
+                eof:(BOOL *)eof
 {
     // read the specified number of frames from the audio file
+//    CAShow(&_info.extAudioFileRef);
+//    CAShow(audioBufferList);
+    NSLog(@"frames: %i", (int)bufferSize);
     [EZAudio checkResult:ExtAudioFileRead(self.info.extAudioFileRef,
                                           &frames,
                                           audioBufferList)
                operation:"Failed to read audio data from file"];
     
-    *bufferSize      =  frames;
-    *eof             =  frames == 0;
-    _info.frameIndex += frames;
+    *bufferSize = frames;
+    *eof        = frames == 0;
     
 //    [EZAudio checkResult:ExtAudioFileRead(_audioFile,
 //                                          &frames,
