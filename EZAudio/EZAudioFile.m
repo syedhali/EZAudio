@@ -28,6 +28,7 @@
 //------------------------------------------------------------------------------
 
 #import "EZAudio.h"
+#include <pthread.h>
 
 //------------------------------------------------------------------------------
 
@@ -51,7 +52,6 @@ typedef struct
     Float32                     duration;
     ExtAudioFileRef             extAudioFileRef;
     AudioStreamBasicDescription fileFormat;
-    SInt64                      frameIndex;
     SInt64                      frames;
     EZAudioFilePermission       permission;
     CFURLRef                    sourceURL;
@@ -63,6 +63,7 @@ typedef struct
 //------------------------------------------------------------------------------
 
 @interface EZAudioFile ()
+@property (nonatomic) pthread_mutex_t lock;
 @property (nonatomic) EZAudioFileInfo info;
 @end
 
@@ -81,6 +82,7 @@ typedef struct
     {
         memset(&_info, 0, sizeof(_info));
         _info.permission = EZAudioFilePermissionRead;
+        pthread_mutex_init(&_lock, NULL);
     }
     return self;
 }
@@ -196,7 +198,7 @@ typedef struct
 
 + (AudioStreamBasicDescription) defaultClientFormat
 {
-    return [EZAudio stereoFloatInterleavedFormatWithSampleRate:44100.0f];
+    return [EZAudio stereoFloatInterleavedFormatWithSampleRate:16000];
 }
 
 //------------------------------------------------------------------------------
@@ -231,55 +233,6 @@ typedef struct
     
     // set the client format
     self.clientFormat = self.info.clientFormat;
-    
-    //
-    
-    
-//    
-//    
-//    [EZAudio checkResult:ExtAudioFileOpenURL(_sourceURL,&_audioFile)
-//               operation:"Failed to open audio file for reading"];
-//    
-//    // Try pulling the stream description
-//    UInt32 size = sizeof(_fileFormat);
-//    [EZAudio checkResult:ExtAudioFileGetProperty(_audioFile,kExtAudioFileProperty_FileDataFormat, &size, &_fileFormat)
-//               operation:"Failed to get audio stream basic description of input file"];
-//    
-//    // Try pulling the total frame size
-//    size = sizeof(_totalFrames);
-//    [EZAudio checkResult:ExtAudioFileGetProperty(_audioFile,kExtAudioFileProperty_FileLengthFrames, &size, &_totalFrames)
-//               operation:"Failed to get total frames of input file"];
-//    _totalFrames = MAX(1, _totalFrames);
-//    
-//    // Total duration
-//    _totalDuration = _totalFrames / _fileFormat.mSampleRate;
-//    
-//    // Set the client format on the stream
-//    switch (_fileFormat.mChannelsPerFrame) {
-//        case 1:
-//            _clientFormat = [EZAudio monoFloatFormatWithSampleRate:_fileFormat.mSampleRate];
-//            break;
-//        case 2:
-//            _clientFormat = [EZAudio stereoFloatInterleavedFormatWithSampleRate:_fileFormat.mSampleRate];
-//            break;
-//        default:
-//            break;
-//    }
-//    
-//    [EZAudio checkResult:ExtAudioFileSetProperty(_audioFile,
-//                                                 kExtAudioFileProperty_ClientDataFormat,
-//                                                 sizeof (AudioStreamBasicDescription),
-//                                                 &_clientFormat)
-//               operation:"Couldn't set client data format on input ext file"];
-//
-//
-//    [EZAudio printASBD:_fileFormat];
-//    
-//    // There's no waveform data yet
-//    _waveformData = NULL;
-//    
-//    // Set the default resolution for the waveform data
-//    _waveformResolution = EZAudioFileWaveformDefaultResolution;
 }
 
 //------------------------------------------------------------------------------
@@ -293,7 +246,7 @@ typedef struct
     
     // determine if the file actually exists
     CFURLRef url        = self.info.sourceURL;
-    NSURL*   fileURL    = (__bridge NSURL *)(url);
+    NSURL    *fileURL   = (__bridge NSURL *)(url);
     BOOL     fileExists = [[NSFileManager defaultManager] fileExistsAtPath:fileURL.path];
     
     // create the file wrapper slightly differently depending what we are
@@ -330,9 +283,8 @@ typedef struct
     // get the ExtAudioFile wrapper
     if (result == noErr)
     {
-        Boolean writeable = permission != EZAudioFilePermissionRead;
         [EZAudio checkResult:ExtAudioFileWrapAudioFileID(self.info.audioFileID,
-                                                         writeable,
+                                                         false,
                                                          &_info.extAudioFileRef)
                    operation:"Failed to wrap audio file ID in ext audio file ref"];
     }
@@ -361,18 +313,16 @@ typedef struct
          bufferSize:(UInt32 *)bufferSize
                 eof:(BOOL *)eof
 {
-    // read the specified number of frames from the audio file
-//    CAShow(&_info.extAudioFileRef);
-//    CAShow(audioBufferList);
-    NSLog(@"frames: %i", (int)bufferSize);
-    [EZAudio checkResult:ExtAudioFileRead(self.info.extAudioFileRef,
-                                          &frames,
-                                          audioBufferList)
-               operation:"Failed to read audio data from file"];
-    
-    *bufferSize = frames;
-    *eof        = frames == 0;
-    
+    if (pthread_mutex_trylock(&_lock) == 0)
+    {
+        [EZAudio checkResult:ExtAudioFileRead(self.info.extAudioFileRef,
+                                              &frames,
+                                              audioBufferList)
+                   operation:"Failed to read audio data from file"];
+        *bufferSize = frames;
+        *eof = frames == 0;
+        pthread_mutex_unlock(&_lock);
+    }
 //    [EZAudio checkResult:ExtAudioFileRead(_audioFile,
 //                                          &frames,
 //                                          audioBufferList)
@@ -397,14 +347,17 @@ typedef struct
 
 - (void) seekToFrame:(SInt64)frame
 {
-//  [EZAudio checkResult:ExtAudioFileSeek(_audioFile,frame)
-//             operation:"Failed to seek frame position within audio file"];
-//  _frameIndex = frame;
-//  if( self.audioFileDelegate ){
-//    if( [self.audioFileDelegate respondsToSelector:@selector(audioFile:updatedPosition:)] ){
-//      [self.audioFileDelegate audioFile:self updatedPosition:_frameIndex];
+    if (pthread_mutex_trylock(&_lock) == 0)
+    {
+        [EZAudio checkResult:ExtAudioFileSeek(self.info.extAudioFileRef, frame)
+                   operation:"Failed to seek frame position within audio file"];
+        pthread_mutex_unlock(&_lock);
+    }
+//    if( self.audioFileDelegate ){
+//        if( [self.audioFileDelegate respondsToSelector:@selector(audioFile:updatedPosition:)] ){
+//            [self.audioFileDelegate audioFile:self updatedPosition:_frameIndex];
+//        }
 //    }
-//  }
 }
 
 //------------------------------------------------------------------------------
@@ -421,7 +374,6 @@ typedef struct
 
 - (void) getWaveformDataWithCompletionBlock:(WaveformDataCompletionBlock)waveformDataCompletionBlock
 {
-//  
 //  SInt64 currentFramePosition = _frameIndex;
 //  
 //  if( _waveformData != NULL ){
@@ -480,7 +432,6 @@ typedef struct
 //    });
 //
 //  });
-//  
 }
 
 //------------------------------------------------------------------------------
@@ -501,7 +452,10 @@ typedef struct
 
 - (SInt64) frameIndex
 {
-    return self.info.frameIndex;
+    SInt64 frameIndex;
+    [EZAudio checkResult:ExtAudioFileTell(self.info.extAudioFileRef, &frameIndex)
+               operation:"Failed to get frame index"];
+    return frameIndex;
 }
 
 //------------------------------------------------------------------------------
@@ -540,7 +494,14 @@ typedef struct
 
 - (SInt64) totalFrames
 {
-    return self.info.frames;
+    SInt64 totalFrames;
+    UInt32 size = sizeof(totalFrames);
+    [EZAudio checkResult:ExtAudioFileGetProperty(self.info.extAudioFileRef,
+                                                 kExtAudioFileProperty_FileLengthFrames,
+                                                 &size,
+                                                 &totalFrames)
+               operation:"Failed to get total frames"];
+    return totalFrames;
 }
 
 //------------------------------------------------------------------------------
@@ -605,8 +566,11 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-//#pragma mark - Cleanup
-//-(void)dealloc {
+-(void)dealloc
+{
+    pthread_mutex_destroy(&_lock);
+    [EZAudio checkResult:AudioFileClose(self.info.audioFileID) operation:"Failed to close audio file"];
+    [EZAudio checkResult:ExtAudioFileDispose(self.info.extAudioFileRef) operation:"Failed to dispose of ext audio file"];
 //  if( _waveformData ){
 //    free(_waveformData);
 //    _waveformData = NULL;
@@ -622,7 +586,7 @@ typedef struct
 //    [EZAudio checkResult:ExtAudioFileDispose(_audioFile)
 //               operation:"Failed to dispose of audio file"];
 //  }
-//}
+}
 
 //------------------------------------------------------------------------------
 
