@@ -334,13 +334,13 @@ typedef struct
             [self.delegate audioFile:self
                      updatedPosition:self.frameIndex];
         }
-        if ([self.delegate respondsToSelector:@selector(audioFile:readAudio:withBufferSize:withNumberOfChannels:)])
-        {
-            [self.delegate audioFile:self
-                           readAudio:nil
-                      withBufferSize:*bufferSize
-                withNumberOfChannels:self.info.clientFormat.mChannelsPerFrame];
-        }
+//        if ([self.delegate respondsToSelector:@selector(audioFile:readAudio:withBufferSize:withNumberOfChannels:)])
+//        {
+//            [self.delegate audioFile:self
+//                           readAudio:nil
+//                      withBufferSize:*bufferSize
+//                withNumberOfChannels:self.info.clientFormat.mChannelsPerFrame];
+//        }
     }
 }
 

@@ -102,6 +102,8 @@
  */
 + (BOOL) isInterleaved:(AudioStreamBasicDescription)asbd;
 
++ (BOOL) isLinearPCM:(AudioStreamBasicDescription)asbd;
+
 /**
  
  @param channels   The desired number of channels

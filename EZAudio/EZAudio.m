@@ -105,6 +105,11 @@
     return !(asbd.mFormatFlags & kAudioFormatFlagIsNonInterleaved);
 }
 
++ (BOOL)isLinearPCM:(AudioStreamBasicDescription)asbd
+{
+    return asbd.mFormatID == kAudioFormatLinearPCM;
+}
+
 +(AudioStreamBasicDescription)M4AFormatWithNumberOfChannels:(UInt32)channels
                                                  sampleRate:(float)sampleRate
 {

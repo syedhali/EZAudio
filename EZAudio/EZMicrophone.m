@@ -57,6 +57,7 @@ static const UInt32 kEZAudioMicrophoneEnableFlag  = 1;
   AudioUnit microphoneInput;
   
   /// Audio Buffers
+    AEFloatConverter *converter;
   float           **floatBuffers;
   AudioBufferList *microphoneInputBuffer;
   
