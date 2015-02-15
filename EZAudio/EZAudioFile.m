@@ -518,7 +518,10 @@ typedef struct
 
     // async get waveform data
     dispatch_async(self.waveformQueue, ^{
+        CFTimeInterval startTime = CACurrentMediaTime();
         EZAudioWaveformData *waveformData = [self getWaveformDataWithNumberOfPoints:numberOfPoints];
+        CFTimeInterval endTime = CACurrentMediaTime();
+        NSLog(@"Total Runtime: %g s", endTime - startTime);
         dispatch_async(dispatch_get_main_queue(), ^{
             completion(waveformData);
         });
