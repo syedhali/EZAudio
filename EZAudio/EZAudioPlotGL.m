@@ -278,10 +278,7 @@
     NSOpenGLContext     *context = [[NSOpenGLContext alloc] initWithFormat:pf
                                                               shareContext:nil];
     
-//    if( !__sharedContext__ )
-//    {
-//        __sharedContext__ = context;
-//    }
+    [self setWantsBestResolutionOpenGLSurface:YES];
     
 	if (!pf)
 	{

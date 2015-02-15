@@ -44,9 +44,6 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
                                      UInt32                      inBusNumber,
                                      UInt32                      inNumberFrames,
                                      AudioBufferList             *ioData){
-  
-//  NSLog(@"output something");
-  
   EZOutput *output = (__bridge EZOutput*)inRefCon;
   // Manual override
   if( [output.outputDataSource respondsToSelector:@selector(output:callbackWithActionFlags:inTimeStamp:inBusNumber:inNumberFrames:ioData:)] ){
