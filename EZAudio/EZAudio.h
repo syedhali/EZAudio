@@ -25,24 +25,25 @@
 
 #import <Foundation/Foundation.h>
 
+#import <AudioToolbox/AudioToolbox.h>
+
 #pragma mark - 3rd Party Utilties
-#import "AEFloatConverter.h"
 #import "TPCircularBuffer.h"
 
-#pragma mark - Core Components
-#import "EZAudioFile.h"
-#import "EZMicrophone.h"
-#import "EZOutput.h"
-#import "EZRecorder.h"
-
-#pragma mark - Extended Components
-#import "EZAudioPlayer.h"
-
-#pragma mark - Interface Components
-#import "EZPlot.h"
-#import "EZAudioPlot.h"
-#import "EZAudioPlotGL.h"
-#import "EZAudioPlotGLKViewController.h"
+//#pragma mark - Core Components
+//#import "EZAudioFile.h"
+//#import "EZMicrophone.h"
+//#import "EZOutput.h"
+//#import "EZRecorder.h"
+//
+//#pragma mark - Extended Components
+//#import "EZAudioPlayer.h"
+//
+//#pragma mark - Interface Components
+//#import "EZPlot.h"
+//#import "EZAudioPlot.h"
+//#import "EZAudioPlotGL.h"
+//#import "EZAudioPlotGLKViewController.h"
 
 /**
  EZAudio is a simple, intuitive framework for iOS and OSX. The goal of EZAudio was to provide a modular, cross-platform framework to simplify performing everyday audio operations like getting microphone input, creating audio waveforms, recording/playing audio files, etc. The visualization tools like the EZAudioPlot and EZAudioPlotGL were created to plug right into the framework's various components and provide highly optimized drawing routines that work in harmony with audio callback loops. All components retain the same namespace whether you're on an iOS device or a Mac computer so an EZAudioPlot understands it will subclass an UIView on an iOS device or an NSView on a Mac.
@@ -95,12 +96,20 @@
 +(AudioStreamBasicDescription)iLBCFormatWithSampleRate:(float)sampleRate;
 
 /**
- Checks an AudioStreamBasicDescription to check for an interleaved flag (samples are
+ Checks an AudioStreamBasicDescription for an interleaved flag, meaning samples are
  stored in one buffer one after another instead of two (or n channels) parallel buffers
  @param asbd A valid AudioStreamBasicDescription
  @return A BOOL indicating whether or not the AudioStreamBasicDescription is interleaved
  */
 + (BOOL) isInterleaved:(AudioStreamBasicDescription)asbd;
+
+/**
+ Checks an AudioStreamBasicDescription to see if it is linear PCM, which is an
+ uncompressed, non-variable bit rate type format
+ @param asbd A valid AudioStreamBasicDescription
+ @return A BOOL indicating whether or not the AudioStreamBasicDescription is linear PCM
+ */
++ (BOOL) isLinearPCM:(AudioStreamBasicDescription)asbd;
 
 /**
  

@@ -99,10 +99,10 @@ static OSStatus inputCallback(void                          *inRefCon,
     if( microphone.microphoneDelegate ){
       // THIS IS NOT OCCURING ON THE MAIN THREAD
       if( [microphone.microphoneDelegate respondsToSelector:@selector(microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:)] ){
-        AEFloatConverterToFloat(microphone->converter,
-                                microphone->microphoneInputBuffer,
-                                microphone->floatBuffers,
-                                inNumberFrames);
+//        AEFloatConverterToFloat(microphone->converter,
+//                                microphone->microphoneInputBuffer,
+//                                microphone->floatBuffers,
+//                                inNumberFrames);
         [microphone.microphoneDelegate microphone:microphone
                                  hasAudioReceived:microphone->floatBuffers
                                    withBufferSize:inNumberFrames
@@ -556,14 +556,14 @@ static OSStatus inputCallback(void                          *inRefCon,
 
 #pragma mark - Float Converter Initialization
 -(void)_configureFloatConverterWithFrameSize:(UInt32)bufferFrameSize {
-  UInt32 bufferSizeBytes = bufferFrameSize * streamFormat.mBytesPerFrame;
-  converter              = [[AEFloatConverter alloc] initWithSourceFormat:streamFormat];
-  floatBuffers           = (float**)malloc(sizeof(float*)*streamFormat.mChannelsPerFrame);
-  assert(floatBuffers);
-  for ( int i=0; i<streamFormat.mChannelsPerFrame; i++ ) {
-    floatBuffers[i] = (float*)malloc(bufferSizeBytes);
-    assert(floatBuffers[i]);
-  }
+//  UInt32 bufferSizeBytes = bufferFrameSize * streamFormat.mBytesPerFrame;
+//  converter              = [[AEFloatConverter alloc] initWithSourceFormat:streamFormat];
+//  floatBuffers           = (float**)malloc(sizeof(float*)*streamFormat.mChannelsPerFrame);
+//  assert(floatBuffers);
+//  for ( int i=0; i<streamFormat.mChannelsPerFrame; i++ ) {
+//    floatBuffers[i] = (float*)malloc(bufferSizeBytes);
+//    assert(floatBuffers[i]);
+//  }
 }
 
 #pragma mark - Input Callback Initialization

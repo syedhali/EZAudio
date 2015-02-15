@@ -39,7 +39,7 @@
     {
         audioBufferList->mBuffers[i].mNumberChannels = channels;
         audioBufferList->mBuffers[i].mDataByteSize = channels * outputBufferSize;
-        audioBufferList->mBuffers[i].mData = (float*)malloc(channels * sizeof(float) *outputBufferSize);
+        audioBufferList->mBuffers[i].mData = (float*)malloc(channels * sizeof(float) * outputBufferSize);
     }
     return audioBufferList;
 }
@@ -103,6 +103,11 @@
 + (BOOL)isInterleaved:(AudioStreamBasicDescription)asbd
 {
     return !(asbd.mFormatFlags & kAudioFormatFlagIsNonInterleaved);
+}
+
++ (BOOL)isLinearPCM:(AudioStreamBasicDescription)asbd
+{
+    return asbd.mFormatID == kAudioFormatLinearPCM;
 }
 
 +(AudioStreamBasicDescription)M4AFormatWithNumberOfChannels:(UInt32)channels
@@ -324,7 +329,7 @@
     //
     if( *scrollHistory == NULL ){
         // Create the history buffer
-        *scrollHistory = (float*)calloc(kEZAudioPlotMaxHistoryBufferLength,floatByteSize);
+        *scrollHistory = (float*)calloc(1024,floatByteSize);
     }
     
     //

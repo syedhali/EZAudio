@@ -32,7 +32,6 @@
 
 @implementation PlayFileViewController
 @synthesize audioFile;
-@synthesize audioPlot;
 @synthesize eof = _eof;
 @synthesize framePositionSlider;
 
@@ -72,15 +71,20 @@
    Customizing the audio plot's look
    */
   // Background color
-  self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.175 green: 0.151 blue: 0.137 alpha: 1];
+    self.audioPlotLeft.backgroundColor = [NSColor colorWithCalibratedRed:0.1 green:0.3 blue:0.2 alpha:1.0];
+    self.audioPlotRight.backgroundColor = [NSColor colorWithCalibratedRed:0.1 green:0.3 blue:0.2 alpha:1.0];
   // Waveform color
-  self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
+  self.audioPlotLeft.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
+    self.audioPlotRight.color = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
   // Plot type
-  self.audioPlot.plotType        = EZPlotTypeBuffer;
+  self.audioPlotLeft.plotType        = EZPlotTypeBuffer;
+    self.audioPlotRight.plotType = EZPlotTypeBuffer;
   // Fill
-  self.audioPlot.shouldFill      = YES;
+  self.audioPlotLeft.shouldFill      = YES;
+    self.audioPlotRight.shouldFill = YES;
   // Mirror
-  self.audioPlot.shouldMirror    = YES;
+  self.audioPlotLeft.shouldMirror    = YES;
+    self.audioPlotRight.shouldMirror = YES;
   
   /*
    Try opening the sample file
@@ -129,10 +133,6 @@
     if( self.eof ){
       [self.audioFile seekToFrame:0];
     }
-    if( self.audioPlot.plotType   == EZPlotTypeBuffer &&
-        self.audioPlot.shouldFill == YES              ){
-      self.audioPlot.plotType = EZPlotTypeRolling;
-    }
     [EZOutput sharedOutput].outputDataSource = self;
     [[EZOutput sharedOutput] startPlayback];
   }
@@ -152,11 +152,11 @@
  */
 -(void)drawBufferPlot {
   // Change the plot type to the buffer plot
-  self.audioPlot.plotType = EZPlotTypeBuffer;
+  self.audioPlotLeft.plotType = EZPlotTypeBuffer;
   // Don't fill
-  self.audioPlot.shouldFill = NO;
+  self.audioPlotLeft.shouldFill = NO;
   // Don't mirror over the x-axis
-  self.audioPlot.shouldMirror = NO;
+  self.audioPlotLeft.shouldMirror = NO;
 }
 
 /*
@@ -164,11 +164,11 @@
  */
 -(void)drawRollingPlot {
   // Change the plot type to the rolling plot
-  self.audioPlot.plotType = EZPlotTypeRolling;
+  self.audioPlotLeft.plotType = EZPlotTypeRolling;
   // Fill the waveform
-  self.audioPlot.shouldFill = YES;
+  self.audioPlotLeft.shouldFill = YES;
   // Mirror over the x-axis
-  self.audioPlot.shouldMirror = YES;
+  self.audioPlotLeft.shouldMirror = YES;
 }
 
 -(void)openFileWithFilePathURL:(NSURL*)filePathURL {
@@ -179,7 +179,7 @@
     AudioStreamBasicDescription asbd;
     self.audioFile = [EZAudioFile audioFileWithURL:filePathURL
                                           delegate:self
-                                        permission:EZAudioFilePermissionReadWrite
+                                        permission:EZAudioFilePermissionRead
                                         fileFormat:asbd];
     [[EZOutput sharedOutput] setAudioStreamBasicDescription:self.audioFile.clientFormat];
     
@@ -196,30 +196,45 @@
   self.sampleRateSlider.floatValue = self.audioFile.clientFormat.mSampleRate;
   
   // Plot the whole waveform
-  self.audioPlot.plotType        = EZPlotTypeBuffer;
-  self.audioPlot.shouldFill      = YES;
-  self.audioPlot.shouldMirror    = YES;
-  [self.audioFile getWaveformDataWithCompletionBlock:^(float *waveformData, UInt32 length) {
-    self.audioPlot.shouldFill      = YES;
-    self.audioPlot.shouldMirror    = YES;
-    [self.audioPlot updateBuffer:waveformData withBufferSize:length];
+  self.audioPlotLeft.plotType        = EZPlotTypeBuffer;
+  self.audioPlotLeft.shouldFill      = YES;
+  self.audioPlotLeft.shouldMirror    = YES;
+    self.audioPlotRight.plotType        = EZPlotTypeBuffer;
+    self.audioPlotRight.shouldFill      = YES;
+    self.audioPlotRight.shouldMirror    = YES;
+  [self.audioFile getWaveformDataWithCompletionBlock:^(EZAudioWaveformData *data) {
+      self.audioPlotLeft.shouldFill      = YES;
+      self.audioPlotLeft.shouldMirror    = YES;
+      self.audioPlotRight.shouldFill      = YES;
+      self.audioPlotRight.shouldMirror    = YES;
+      if (data.numberOfChannels > 1)
+      {
+          [self.audioPlotLeft updateBuffer:[data bufferForChannel:0] withBufferSize:data.bufferSize];
+          [self.audioPlotRight updateBuffer:[data bufferForChannel:1] withBufferSize:data.bufferSize];
+      }
+      else
+      {
+          [self.audioPlotLeft updateBuffer:[data bufferForChannel:0] withBufferSize:data.bufferSize];
+      }
   }];
-  
 }
 
 #pragma mark - EZAudioFileDelegate
--(void)audioFile:(EZAudioFile *)audioFile readAudio:(float **)buffer withBufferSize:(UInt32)bufferSize withNumberOfChannels:(UInt32)numberOfChannels {
-  if( [EZOutput sharedOutput].isPlaying ){
-    dispatch_async(dispatch_get_main_queue(), ^{
-      if( self.audioPlot.plotType     == EZPlotTypeBuffer &&
-         self.audioPlot.shouldFill    == YES              &&
-         self.audioPlot.shouldMirror  == YES ){
-        self.audioPlot.shouldFill   = NO;
-        self.audioPlot.shouldMirror = NO;
-      }
-      [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
-    });
-  }
+-(void)audioFile:(EZAudioFile *)audioFile
+       readAudio:(float **)buffer
+  withBufferSize:(UInt32)bufferSize
+withNumberOfChannels:(UInt32)numberOfChannels {
+//  if( [EZOutput sharedOutput].isPlaying ){
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//      if( self.audioPlotLeft.plotType     == EZPlotTypeBuffer &&
+//         self.audioPlotLeft.shouldFill    == YES              &&
+//         self.audioPlotLeft.shouldMirror  == YES ){
+//        self.audioPlotLeft.shouldFill   = NO;
+//        self.audioPlotLeft.shouldMirror = NO;
+//      }
+//      [self.audioPlotLeft updateBuffer:buffer[0] withBufferSize:bufferSize];
+//    });
+//  }
 }
 
 -(void)audioFile:(EZAudioFile *)audioFile

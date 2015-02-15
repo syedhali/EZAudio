@@ -27,6 +27,9 @@
 
 // Import EZAudio header
 #import "EZAudio.h"
+#import "EZAudioFile.h"
+#import "EZOutput.h"
+#import "EZAudioPlot.h"
 
 /**
  Here's the default audio file included with the example
@@ -47,7 +50,8 @@
 /**
  The CoreGraphics based audio plot
  */
-@property (nonatomic,weak) IBOutlet EZAudioPlotGL *audioPlot;
+@property (nonatomic,weak) IBOutlet EZAudioPlot *audioPlotLeft;
+@property (nonatomic,weak) IBOutlet EZAudioPlot *audioPlotRight;
 
 #pragma mark - UI Extras
 /**

@@ -133,7 +133,7 @@
   [[EZOutput sharedOutput] stopPlayback];
   
   self.audioFile                        = [EZAudioFile audioFileWithURL:filePathURL];
-  self.audioFile.audioFileDelegate      = self;
+  self.audioFile.delegate               = self;
   self.eof                              = NO;
   self.filePathLabel.text               = filePathURL.lastPathComponent;
   self.framePositionSlider.maximumValue = (float)self.audioFile.totalFrames;
