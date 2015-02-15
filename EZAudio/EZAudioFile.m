@@ -250,7 +250,7 @@ typedef struct
 
 + (AudioStreamBasicDescription) defaultClientFormat
 {
-    return [EZAudio stereoFloatNonInterleavedFormatWithSampleRate:44100];
+    return [EZAudio stereoFloatInterleavedFormatWithSampleRate:44100];
 }
 
 //------------------------------------------------------------------------------
@@ -412,10 +412,13 @@ typedef struct
     if (pthread_mutex_trylock(&_lock) == 0)
     {
         // store current frame
-        SInt64 currentFrame = self.frameIndex;
-        UInt32 channels     = self.clientFormat.mChannelsPerFrame;
-        BOOL   interleaved  = [EZAudio isInterleaved:self.clientFormat];
-        float  **data       = (float **)malloc( sizeof(float*) * channels );
+        SInt64 currentFrame     = self.frameIndex;
+        UInt32 channels         = self.clientFormat.mChannelsPerFrame;
+        BOOL   interleaved      = [EZAudio isInterleaved:self.clientFormat];
+        SInt64 totalFrames      = self.totalClientFrames;
+        SInt64 framesPerBuffer  = ((SInt64) totalFrames / numberOfPoints);
+        SInt64 framesPerChannel = framesPerBuffer / channels;
+        float  **data           = (float **)malloc( sizeof(float*) * channels );
         for (int i = 0; i < channels; i++)
         {
             data[i] = (float *)malloc( sizeof(float) * numberOfPoints );
@@ -425,11 +428,6 @@ typedef struct
         [EZAudio checkResult:ExtAudioFileSeek(self.info.extAudioFileRef,
                                               0)
                    operation:"Failed to seek frame position within audio file"];
-        
-        // calculate the required number of frames per buffer
-        SInt64 totalFrames = self.totalClientFrames;
-        SInt64 framesPerBuffer = ((SInt64) totalFrames / numberOfPoints);
-        SInt64 framesPerChannel = framesPerBuffer / channels;
         
         // allocate an audio buffer list
         AudioBufferList *audioBufferList = [EZAudio audioBufferListWithNumberOfFrames:(UInt32)totalFrames
@@ -446,9 +444,9 @@ typedef struct
         SInt64 offset = 0;
         for (SInt64 i = 0; i < numberOfPoints; i++)
         {
+            float buffer[framesPerBuffer];
             if (interleaved)
             {
-                float buffer[framesPerBuffer];
                 float *samples = (float *)audioBufferList->mBuffers[0].mData;
                 memcpy(buffer, &samples[offset], framesPerBuffer * sizeof(float));
                 for (int channel = 0; channel < channels; channel++)
@@ -467,7 +465,6 @@ typedef struct
             {
                 for (int channel = 0; channel < channels; channel++)
                 {
-                    float buffer[framesPerBuffer];
                     float *samples = (float *)audioBufferList->mBuffers[channel].mData;
                     memcpy(buffer, &samples[offset], framesPerBuffer * sizeof(float));
                     float rms = [EZAudio RMS:buffer length:(UInt32)framesPerBuffer];
