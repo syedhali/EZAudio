@@ -25,10 +25,12 @@
 
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import "EZAudioWaveformData.h"
 
 //------------------------------------------------------------------------------
 
 @class EZAudio;
+@class EZAudioConverter;
 @class EZAudioFile;
 
 //------------------------------------------------------------------------------
@@ -57,7 +59,7 @@ typedef NS_ENUM(NSUInteger, EZAudioFilePermission)
  @param numberOfChannels The number of channels. 2 for stereo, 1 for mono.
  */
 - (void)     audioFile:(EZAudioFile*)audioFile
-             readAudio:(float***)buffer
+             readAudio:(float**)buffer
         withBufferSize:(UInt32)bufferSize
   withNumberOfChannels:(UInt32)numberOfChannels;
 
@@ -70,24 +72,6 @@ typedef NS_ENUM(NSUInteger, EZAudioFilePermission)
  */
 - (void) audioFile:(EZAudioFile*)audioFile
    updatedPosition:(SInt64)framePosition;
-
-@end
-
-//------------------------------------------------------------------------------
-#pragma mark - EZAudioWaveformData
-//------------------------------------------------------------------------------
-
-@interface EZAudioWaveformData : NSObject
-
-+ (instancetype) dataWithNumberOfChannels:(int)numberOfChannels
-                                  buffers:(float **)buffers
-                               bufferSize:(UInt32)bufferSize;
-
-@property (nonatomic, assign, readonly) int numberOfChannels;
-@property (nonatomic, assign, readonly) float **buffers;
-@property (nonatomic, assign, readonly) UInt32 bufferSize;
-
-- (float *) bufferForChannel:(int)channel;
 
 @end
 
@@ -118,13 +102,6 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
 @property (nonatomic, weak) id<EZAudioFileDelegate> delegate;
 
 //------------------------------------------------------------------------------
-
-/**
- The resolution of the waveform data. This value specifies how the recommendedDrawingFrameRate chooses itself. A low value like 128 will render a waveform containing 128 points representing a low resolution waveform while a high value like 4096 will render a high quality waveform. Higher resolutions provide more detail, but take more work to render in the audio waveform plots (EZAudioPlot or EZAudioPlotGL) while lower resolutions providel less detail, but work better for displaying many at a time (like in a UITableView)
- */
-@property (nonatomic, assign) UInt32 waveformResolution;
-
-//------------------------------------------------------------------------------
 #pragma mark - Initialization
 //------------------------------------------------------------------------------
 /**
@@ -136,7 +113,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  @param url The file path reference of the audio file as an NSURL.
  @return The newly created EZAudioFile instance.
  */
-- (instancetype) initWithURL:(NSURL*)url;
+- (instancetype)initWithURL:(NSURL*)url;
 
 //------------------------------------------------------------------------------
 
@@ -147,9 +124,9 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  @param fileFormat An AudioStreamBasicDescription that will be used to create the audio file if it does not exist if the permission argument is set to EZAudioFilePermissionWrite or EZAudioFilePermissionReadWrite. Not used for EZAudioFilePermissionRead permission.
  @return The newly created EZAudioFile instance.
  */
-- (instancetype) initWithURL:(NSURL*)url
-                  permission:(EZAudioFilePermission)permission
-                  fileFormat:(AudioStreamBasicDescription)fileFormat;
+- (instancetype)initWithURL:(NSURL*)url
+                 permission:(EZAudioFilePermission)permission
+                 fileFormat:(AudioStreamBasicDescription)fileFormat;
 
 //------------------------------------------------------------------------------
 
@@ -161,10 +138,10 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  @param fileFormat An AudioStreamBasicDescription that will be used to create the audio file if it does not exist if the permission argument is set to EZAudioFilePermissionWrite or EZAudioFilePermissionReadWrite. Not used for EZAudioFilePermissionRead permission.
  @return The newly created EZAudioFile instance.
  */
-- (instancetype) initWithURL:(NSURL*)url
-                    delegate:(id<EZAudioFileDelegate>)delegate
-                  permission:(EZAudioFilePermission)permission
-                  fileFormat:(AudioStreamBasicDescription)fileFormat;
+- (instancetype)initWithURL:(NSURL*)url
+                   delegate:(id<EZAudioFileDelegate>)delegate
+                 permission:(EZAudioFilePermission)permission
+                 fileFormat:(AudioStreamBasicDescription)fileFormat;
 
 //------------------------------------------------------------------------------
 
@@ -177,11 +154,11 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  @param clientFormat An AudioStreamBasicDescription that will be used as the client format on the audio file. For instance, the audio file might be in a 22.5 kHz sample rate format in its file format, but your app wants to read the samples at a sample rate of 44.1 kHz so it can iterate with other components (like a audio processing graph) without any weird playback effects. If this initializer is not used then a non-interleaved float format will be assumed.
  @return The newly created EZAudioFile instance.
  */
-- (instancetype) initWithURL:(NSURL*)url
-                    delegate:(id<EZAudioFileDelegate>)delegate
-                  permission:(EZAudioFilePermission)permission
-                  fileFormat:(AudioStreamBasicDescription)fileFormat
-                clientFormat:(AudioStreamBasicDescription)clientFormat;
+- (instancetype)initWithURL:(NSURL*)url
+                   delegate:(id<EZAudioFileDelegate>)delegate
+                 permission:(EZAudioFilePermission)permission
+                 fileFormat:(AudioStreamBasicDescription)fileFormat
+               clientFormat:(AudioStreamBasicDescription)clientFormat;
 
 //------------------------------------------------------------------------------
 #pragma mark - Class Initializers
@@ -195,7 +172,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  @param url The file path reference of the audio file as an NSURL.
  @return The newly created EZAudioFile instance.
  */
-+ (instancetype) audioFileWithURL:(NSURL*)url;
++ (instancetype)audioFileWithURL:(NSURL*)url;
 
 //------------------------------------------------------------------------------
 
@@ -206,9 +183,9 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  @param fileFormat An AudioStreamBasicDescription that will be used to create the audio file if it does not exist if the permission argument is set to EZAudioFilePermissionWrite or EZAudioFilePermissionReadWrite. Not used for EZAudioFilePermissionRead permission.
  @return The newly created EZAudioFile instance.
  */
-+ (instancetype) audioFileWithURL:(NSURL*)url
-                       permission:(EZAudioFilePermission)permission
-                       fileFormat:(AudioStreamBasicDescription)fileFormat;
++ (instancetype)audioFileWithURL:(NSURL*)url
+                      permission:(EZAudioFilePermission)permission
+                      fileFormat:(AudioStreamBasicDescription)fileFormat;
 
 //------------------------------------------------------------------------------
 
@@ -236,11 +213,11 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  @param clientFormat An AudioStreamBasicDescription that will be used as the client format on the audio file. A client format is different from the file format in that it is the format of the other components interacting with this file. For instance, the file on disk could be a 22.5 kHz, float format, but we might have an audio processing graph that has a 44.1 kHz, signed integer format that we'd like to interact with. The client format lets us set that 44.1 kHz format on the audio file to properly read samples from it with any interpolation or format conversion that must take place. If not specified the default value is equal to the class method, 'defaultClientFormat'
  @return The newly created EZAudioFile instance.
  */
-+ (instancetype) audioFileWithURL:(NSURL*)url
-                         delegate:(id<EZAudioFileDelegate>)delegate
-                       permission:(EZAudioFilePermission)permission
-                       fileFormat:(AudioStreamBasicDescription)fileFormat
-                     clientFormat:(AudioStreamBasicDescription)clientFormat;;
++ (instancetype)audioFileWithURL:(NSURL*)url
+                        delegate:(id<EZAudioFileDelegate>)delegate
+                      permission:(EZAudioFilePermission)permission
+                      fileFormat:(AudioStreamBasicDescription)fileFormat
+                    clientFormat:(AudioStreamBasicDescription)clientFormat;;
 
 //------------------------------------------------------------------------------
 #pragma mark - Class Methods
@@ -253,13 +230,13 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  A class method that subclasses can override to specify the default client format that will be used to read audio data from this file. A client format is different from the file format in that it is the format of the other components interacting with this file. For instance, the file on disk could be a 22.5 kHz, float format, but we might have an audio processing graph that has a 44.1 kHz, signed integer format that we'd like to interact with. The client format lets us set that 44.1 kHz format on the audio file to properly read samples from it with any interpolation or format conversion that must take place. Default is stereo, non-interleaved, 44.1 kHz.
  @return An AudioStreamBasicDescription that serves as the audio file's client format.
  */
-+ (AudioStreamBasicDescription) defaultClientFormat;
++ (AudioStreamBasicDescription)defaultClientFormat;
 
 /**
  Provides an array of the supported audio files types. Each audio file type is provided as a string, i.e. @"caf". Useful for filtering lists of files in an open panel to only the types allowed.
  @return An array of NSString objects representing the represented file types.
  */
-+ (NSArray*) supportedAudioFileTypes;
++ (NSArray *)supportedAudioFileTypes;
 
 //------------------------------------------------------------------------------
 #pragma mark - Events
@@ -275,10 +252,10 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  @param bufferSize      A pointer to a UInt32 in which to store the read buffersize
  @param eof             A pointer to a BOOL in which to store whether the read operation reached the end of the audio file.
  */
--(void) readFrames:(UInt32)frames
-   audioBufferList:(AudioBufferList*)audioBufferList
-        bufferSize:(UInt32*)bufferSize
-               eof:(BOOL*)eof;
+-(void)readFrames:(UInt32)frames
+  audioBufferList:(AudioBufferList *)audioBufferList
+       bufferSize:(UInt32 *)bufferSize
+              eof:(BOOL *)eof;
 
 
 //------------------------------------------------------------------------------
@@ -292,7 +269,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  Seeks through an audio file to a specified frame. This will notify the EZAudioFileDelegate (if specified) with the audioFile:updatedPosition: function.
  @param frame The new frame position to seek to as a SInt64.
  */
-- (void) seekToFrame:(SInt64)frame;
+- (void)seekToFrame:(SInt64)frame;
 
 //------------------------------------------------------------------------------
 #pragma mark - Getters
@@ -305,7 +282,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  Provides the AudioStreamBasicDescription structure used within the app. The file's format will be converted to this format and then sent back as either a float array or a `AudioBufferList` pointer. Use this when communicating with other EZAudio components.
  @return An AudioStreamBasicDescription structure describing the format of the audio file.
  */
-- (AudioStreamBasicDescription) clientFormat;
+- (AudioStreamBasicDescription)clientFormat;
 
 //------------------------------------------------------------------------------
 
@@ -313,7 +290,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  Provides the AudioStreamBasicDescription structure containing the format of the file.
  @return An AudioStreamBasicDescription structure describing the format of the audio file.
  */
-- (AudioStreamBasicDescription) fileFormat;
+- (AudioStreamBasicDescription)fileFormat;
 
 //------------------------------------------------------------------------------
 
@@ -321,7 +298,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  Provides the frame index (a.k.a the seek positon) within the audio file as an integer. This can be helpful when seeking through the audio file.
  @return The current frame index within the audio file as a SInt64.
  */
-- (SInt64) frameIndex;
+- (SInt64)frameIndex;
 
 //------------------------------------------------------------------------------
 
@@ -329,7 +306,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  Provides a dictionary containing the metadata (ID3) tags that are included in the header for the audio file. Typically this contains stuff like artist, title, release year, etc.
  @return An NSDictionary containing the metadata for the audio file.
  */
-- (NSDictionary*) metadata;
+- (NSDictionary *)metadata;
 
 //------------------------------------------------------------------------------
 
@@ -337,7 +314,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  Provides the total duration of the audio file in seconds.
  @return The total duration of the audio file as a Float32.
  */
-- (NSTimeInterval) totalDuration;
+- (NSTimeInterval)totalDuration;
 
 //------------------------------------------------------------------------------
 
@@ -345,7 +322,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  Provides the total frame count of the audio file in the client format.
  @return The total number of frames in the audio file in the AudioStreamBasicDescription representing the client format as a SInt64.
  */
-- (SInt64) totalClientFrames;
+- (SInt64)totalClientFrames;
 
 //------------------------------------------------------------------------------
 
@@ -353,7 +330,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  Provides the total frame count of the audio file in the file format.
  @return The total number of frames in the audio file in the AudioStreamBasicDescription representing the file format as a SInt64.
  */
-- (SInt64) totalFrames;
+- (SInt64)totalFrames;
 
 //------------------------------------------------------------------------------
 
@@ -361,7 +338,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  Provides the NSURL for the audio file.
  @return An NSURL representing the path of the EZAudioFile instance.
  */
-- (NSURL*) url;
+- (NSURL*)url;
 
 //------------------------------------------------------------------------------
 #pragma mark - Setters
@@ -371,7 +348,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  A client format is different from the file format in that it is the format of the other components interacting with this file. For instance, the file on disk could be a 22.5 kHz, float format, but we might have an audio processing graph that has a 44.1 kHz, signed integer format that we'd like to interact with. The client format lets us set that 44.1 kHz format on the audio file to properly read samples from it with any interpolation or format conversion that must take place. Default is stereo, non-interleaved, 44.1 kHz.
  @param clientFormat An AudioStreamBasicDescription that should serve as the audio file's client format.
  */
-- (void) setClientFormat:(AudioStreamBasicDescription)clientFormat;
+- (void)setClientFormat:(AudioStreamBasicDescription)clientFormat;
 
 //------------------------------------------------------------------------------
 #pragma mark - Helpers
@@ -382,7 +359,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  @param numberOfPoints A UInt32 representing the number of data points you need. The higher the number of points the more detailed the waveform will be.
  @return A EZAudioWaveformData instance containing the audio data for all channels of the audio.
  */
-- (EZAudioWaveformData *) getWaveformData;
+- (EZAudioWaveformData *)getWaveformData;
 
 //------------------------------------------------------------------------------
 
@@ -391,7 +368,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
   @param numberOfPoints A UInt32 representing the number of data points you need. The higher the number of points the more detailed the waveform will be.
  @return A EZAudioWaveformData instance containing the audio data for all channels of the audio.
  */
-- (EZAudioWaveformData *) getWaveformDataWithNumberOfPoints:(UInt32)numberOfPoints;
+- (EZAudioWaveformData *)getWaveformDataWithNumberOfPoints:(UInt32)numberOfPoints;
 
 //------------------------------------------------------------------------------
 
@@ -399,7 +376,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  Asynchronously pulls the waveform amplitude data into a float array for the receiver. This returns a waveform with a default resolution of 1024, meaning there are 1024 data points to plot the waveform.
  @param completion A WaveformDataCompletionBlock that executes when the waveform data has been extracted. Provides a `EZAudioWaveformData` instance containing the waveform data for all audio channels.
  */
-- (void) getWaveformDataWithCompletionBlock:(WaveformDataCompletionBlock)completion;
+- (void)getWaveformDataWithCompletionBlock:(WaveformDataCompletionBlock)completion;
 
 //------------------------------------------------------------------------------
 
@@ -408,8 +385,8 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  @param numberOfPoints A UInt32 representing the number of data points you need. The higher the number of points the more detailed the waveform will be.
  @param completion A WaveformDataCompletionBlock that executes when the waveform data has been extracted. Provides a `EZAudioWaveformData` instance containing the waveform data for all audio channels.
  */
-- (void) getWaveformDataWithNumberOfPoints:(UInt32)numberOfPoints
-                                completion:(WaveformDataCompletionBlock)completion;
+- (void)getWaveformDataWithNumberOfPoints:(UInt32)numberOfPoints
+                               completion:(WaveformDataCompletionBlock)completion;
 
 //------------------------------------------------------------------------------
 

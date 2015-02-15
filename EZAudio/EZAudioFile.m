@@ -28,6 +28,8 @@
 //------------------------------------------------------------------------------
 
 #import "EZAudio.h"
+#import "EZAudioConverter.h"
+#import "EZAudioWaveformData.h"
 #include <pthread.h>
 
 //------------------------------------------------------------------------------
@@ -36,7 +38,7 @@
 static OSStatus EZAudioFileReadPermissionFileDoesNotExistCode = -88776;
 
 // constants
-static UInt32    EZAudioFileWaveformDefaultResolution   = 1024;
+static UInt32 EZAudioFileWaveformDefaultResolution = 1024;
 static NSString *EZAudioFileWaveformDataQueueIdentifier = @"com.ezaudio.waveformQueue";
 
 //------------------------------------------------------------------------------
@@ -52,61 +54,6 @@ typedef struct
     EZAudioFilePermission       permission;
     CFURLRef                    sourceURL;
 } EZAudioFileInfo;
-
-//------------------------------------------------------------------------------
-#pragma mark - EZAudioWaveformData
-//------------------------------------------------------------------------------
-
-@interface EZAudioWaveformData ()
-@property (nonatomic, assign, readwrite) int numberOfChannels;
-@property (nonatomic, assign, readwrite) float **buffers;
-@property (nonatomic, assign, readwrite) UInt32 bufferSize;
-@end
-
-@implementation EZAudioWaveformData
-
-- (void)dealloc
-{
-    for (int i = 0; i < self.numberOfChannels; i++)
-    {
-        free(self.buffers[i]);
-    }
-    free(self.buffers);
-}
-
-+ (instancetype)dataWithNumberOfChannels:(int)numberOfChannels
-                                 buffers:(float **)buffers
-                              bufferSize:(UInt32)bufferSize
-{
-    id waveformData = [[self alloc] init];
-    
-    size_t size = sizeof(float *) * numberOfChannels;
-    float **buffersCopy = (float **)malloc(size);
-    for (int i = 0; i < numberOfChannels; i++)
-    {
-        size = sizeof(float) * bufferSize;
-        buffersCopy[i] = (float *)malloc(size);
-        memcpy(buffersCopy[i], buffers[i], size);
-    }
-    
-    ((EZAudioWaveformData *)waveformData).buffers = buffersCopy;
-    ((EZAudioWaveformData *)waveformData).bufferSize = bufferSize;
-    ((EZAudioWaveformData *)waveformData).numberOfChannels = numberOfChannels;
-    
-    return waveformData;
-}
-
-- (float *)bufferForChannel:(int)channel
-{
-    float *buffer = NULL;
-    if (channel < self.numberOfChannels)
-    {
-        buffer = self.buffers[channel];
-    }
-    return buffer;
-}
-
-@end
 
 //------------------------------------------------------------------------------
 #pragma mark - EZAudioFile
@@ -126,7 +73,7 @@ typedef struct
 #pragma mark - Initialization
 //------------------------------------------------------------------------------
 
-- (instancetype) init
+- (instancetype)init
 {
     self = [super init];
     if (self)
@@ -141,7 +88,7 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-- (instancetype) initWithURL:(NSURL*)url
+- (instancetype)initWithURL:(NSURL *)url
 {
     AudioStreamBasicDescription asbd;
     return [self initWithURL:url
@@ -151,9 +98,9 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-- (instancetype) initWithURL:(NSURL*)url
-                  permission:(EZAudioFilePermission)permission
-                  fileFormat:(AudioStreamBasicDescription)fileFormat
+- (instancetype)initWithURL:(NSURL*)url
+                 permission:(EZAudioFilePermission)permission
+                 fileFormat:(AudioStreamBasicDescription)fileFormat
 {
     return [self initWithURL:url
                     delegate:nil
@@ -163,10 +110,10 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-- (instancetype) initWithURL:(NSURL*)url
-                    delegate:(id<EZAudioFileDelegate>)delegate
-                  permission:(EZAudioFilePermission)permission
-                  fileFormat:(AudioStreamBasicDescription)fileFormat
+- (instancetype)initWithURL:(NSURL*)url
+                   delegate:(id<EZAudioFileDelegate>)delegate
+                 permission:(EZAudioFilePermission)permission
+                 fileFormat:(AudioStreamBasicDescription)fileFormat
 {
     return [self initWithURL:url
                     delegate:delegate
@@ -177,11 +124,11 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-- (instancetype) initWithURL:(NSURL*)url
-                    delegate:(id<EZAudioFileDelegate>)delegate
-                  permission:(EZAudioFilePermission)permission
-                  fileFormat:(AudioStreamBasicDescription)fileFormat
-                clientFormat:(AudioStreamBasicDescription)clientFormat
+- (instancetype)initWithURL:(NSURL*)url
+                   delegate:(id<EZAudioFileDelegate>)delegate
+                 permission:(EZAudioFilePermission)permission
+                 fileFormat:(AudioStreamBasicDescription)fileFormat
+               clientFormat:(AudioStreamBasicDescription)clientFormat
 {
     self = [self init];
     if(self)
@@ -200,16 +147,16 @@ typedef struct
 #pragma mark - Class Initializers
 //------------------------------------------------------------------------------
 
-+ (instancetype) audioFileWithURL:(NSURL*)url
++ (instancetype)audioFileWithURL:(NSURL*)url
 {
     return [[self alloc] initWithURL:url];
 }
 
 //------------------------------------------------------------------------------
 
-+ (instancetype) audioFileWithURL:(NSURL*)url
-                       permission:(EZAudioFilePermission)permission
-                       fileFormat:(AudioStreamBasicDescription)fileFormat
++ (instancetype)audioFileWithURL:(NSURL*)url
+                      permission:(EZAudioFilePermission)permission
+                      fileFormat:(AudioStreamBasicDescription)fileFormat
 {
     return [[self alloc] initWithURL:url
                           permission:permission
@@ -218,10 +165,10 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-+ (instancetype) audioFileWithURL:(NSURL*)url
-                         delegate:(id<EZAudioFileDelegate>)delegate
-                       permission:(EZAudioFilePermission)permission
-                       fileFormat:(AudioStreamBasicDescription)fileFormat
++ (instancetype)audioFileWithURL:(NSURL*)url
+                        delegate:(id<EZAudioFileDelegate>)delegate
+                      permission:(EZAudioFilePermission)permission
+                      fileFormat:(AudioStreamBasicDescription)fileFormat
 {
     return [[self alloc] initWithURL:url
                             delegate:delegate
@@ -231,11 +178,11 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-+ (instancetype) audioFileWithURL:(NSURL*)url
-                         delegate:(id<EZAudioFileDelegate>)delegate
-                       permission:(EZAudioFilePermission)permission
-                       fileFormat:(AudioStreamBasicDescription)fileFormat
-                     clientFormat:(AudioStreamBasicDescription)clientFormat
++ (instancetype)audioFileWithURL:(NSURL*)url
+                        delegate:(id<EZAudioFileDelegate>)delegate
+                      permission:(EZAudioFilePermission)permission
+                      fileFormat:(AudioStreamBasicDescription)fileFormat
+                    clientFormat:(AudioStreamBasicDescription)clientFormat
 {
     return [[self alloc] initWithURL:url
                             delegate:delegate
@@ -248,14 +195,14 @@ typedef struct
 #pragma mark - Class Methods
 //------------------------------------------------------------------------------
 
-+ (AudioStreamBasicDescription) defaultClientFormat
++ (AudioStreamBasicDescription)defaultClientFormat
 {
     return [EZAudio stereoFloatInterleavedFormatWithSampleRate:44100];
 }
 
 //------------------------------------------------------------------------------
 
-+ (NSArray *) supportedAudioFileTypes
++ (NSArray *)supportedAudioFileTypes
 {
     return @[
         @"aac",
@@ -277,7 +224,7 @@ typedef struct
 #pragma mark - Setup
 //------------------------------------------------------------------------------
 
-- (void) setup
+- (void)setup
 {
     // we open the file differently depending on the permissions specified
     [EZAudio checkResult:[self openAudioFile]
@@ -291,7 +238,7 @@ typedef struct
 #pragma mark - Creating/Opening Audio File
 //------------------------------------------------------------------------------
 
-- (OSStatus) openAudioFile
+- (OSStatus)openAudioFile
 {
     // need a source url
     NSAssert(_info.sourceURL, @"EZAudioFile cannot be created without a source url!");
@@ -352,6 +299,11 @@ typedef struct
                    operation:"Failed to get file audio format on existing audio file"];
     }
     
+    NSLog(@"file format......................");
+    [EZAudio printASBD:self.info.fileFormat];
+    NSLog(@"client format....................");
+    [EZAudio printASBD:self.info.clientFormat];
+    
     // done
     return result;
 }
@@ -360,13 +312,14 @@ typedef struct
 #pragma mark - Events
 //------------------------------------------------------------------------------
 
-- (void) readFrames:(UInt32)frames
+- (void)readFrames:(UInt32)frames
     audioBufferList:(AudioBufferList *)audioBufferList
          bufferSize:(UInt32 *)bufferSize
-                eof:(BOOL *)eof
+               eof:(BOOL *)eof
 {
     if (pthread_mutex_trylock(&_lock) == 0)
     {
+        // perform read
         [EZAudio checkResult:ExtAudioFileRead(self.info.extAudioFileRef,
                                               &frames,
                                               audioBufferList)
@@ -374,12 +327,26 @@ typedef struct
         *bufferSize = frames;
         *eof = frames == 0;
         pthread_mutex_unlock(&_lock);
+        
+        // notify delegate
+        if ([self.delegate respondsToSelector:@selector(audioFile:updatedPosition:)])
+        {
+            [self.delegate audioFile:self
+                     updatedPosition:self.frameIndex];
+        }
+        if ([self.delegate respondsToSelector:@selector(audioFile:readAudio:withBufferSize:withNumberOfChannels:)])
+        {
+            [self.delegate audioFile:self
+                           readAudio:nil
+                      withBufferSize:*bufferSize
+                withNumberOfChannels:self.info.clientFormat.mChannelsPerFrame];
+        }
     }
 }
 
 //------------------------------------------------------------------------------
 
-- (void) seekToFrame:(SInt64)frame
+- (void)seekToFrame:(SInt64)frame
 {
     if (pthread_mutex_trylock(&_lock) == 0)
     {
@@ -387,12 +354,14 @@ typedef struct
                                               frame)
                    operation:"Failed to seek frame position within audio file"];
         pthread_mutex_unlock(&_lock);
+        
+        // notify delegate
+        if ([self.delegate respondsToSelector:@selector(audioFile:updatedPosition:)])
+        {
+            [self.delegate audioFile:self
+                     updatedPosition:self.frameIndex];
+        }
     }
-//    if( self.audioFileDelegate ){
-//        if( [self.audioFileDelegate respondsToSelector:@selector(audioFile:updatedPosition:)] ){
-//            [self.audioFileDelegate audioFile:self updatedPosition:_frameIndex];
-//        }
-//    }
 }
 
 //------------------------------------------------------------------------------
@@ -518,10 +487,7 @@ typedef struct
 
     // async get waveform data
     dispatch_async(self.waveformQueue, ^{
-        CFTimeInterval startTime = CACurrentMediaTime();
         EZAudioWaveformData *waveformData = [self getWaveformDataWithNumberOfPoints:numberOfPoints];
-        CFTimeInterval endTime = CACurrentMediaTime();
-        NSLog(@"Total Runtime: %g s", endTime - startTime);
         dispatch_async(dispatch_get_main_queue(), ^{
             completion(waveformData);
         });
@@ -631,6 +597,8 @@ typedef struct
 
 - (void)setClientFormat:(AudioStreamBasicDescription)clientFormat
 {
+    NSAssert([EZAudio isLinearPCM:clientFormat], @"Client format must be linear PCM");
+    
     // store the client format
     _info.clientFormat = clientFormat;
     

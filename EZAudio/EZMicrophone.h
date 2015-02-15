@@ -25,7 +25,6 @@
 
 #import  <Foundation/Foundation.h>
 #import  <AudioToolbox/AudioToolbox.h>
-#import  "AEFloatConverter.h"
 #import  "TargetConditionals.h"
 
 @class EZAudio;

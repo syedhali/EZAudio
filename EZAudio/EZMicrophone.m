@@ -51,7 +51,6 @@ static const UInt32 kEZAudioMicrophoneEnableFlag  = 1;
   BOOL _isFetching;
   
   /// Stream Description
-  AEFloatConverter            *converter;
   AudioStreamBasicDescription streamFormat;
   
   /// Audio Graph and Input/Output Units
