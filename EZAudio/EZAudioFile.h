@@ -389,27 +389,38 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
 //------------------------------------------------------------------------------
 
 /**
+ Synchronously pulls the waveform amplitude data into a float array for the receiver. This returns a waveform with a default resolution of 1024, meaning there are 1024 data points to plot the waveform.
+ @param numberOfPoints A UInt32 representing the number of data points you need. The higher the number of points the more detailed the waveform will be.
+ @return A EZAudioWaveformData instance containing the audio data for all channels of the audio.
+ */
+- (EZAudioWaveformData *) getWaveformData;
+
+//------------------------------------------------------------------------------
+
+/**
+ Synchronously pulls the waveform amplitude data into a float array for the receiver.
+  @param numberOfPoints A UInt32 representing the number of data points you need. The higher the number of points the more detailed the waveform will be.
+ @return A EZAudioWaveformData instance containing the audio data for all channels of the audio.
+ */
+- (EZAudioWaveformData *) getWaveformDataWithNumberOfPoints:(UInt32)numberOfPoints;
+
+//------------------------------------------------------------------------------
+
+/**
+ Asynchronously pulls the waveform amplitude data into a float array for the receiver. This returns a waveform with a default resolution of 1024, meaning there are 1024 data points to plot the waveform.
+ @param completion A WaveformDataCompletionBlock that executes when the waveform data has been extracted. Provides a `EZAudioWaveformData` instance containing the waveform data for all audio channels.
+ */
+- (void) getWaveformDataWithCompletionBlock:(WaveformDataCompletionBlock)completion;
+
+//------------------------------------------------------------------------------
+
+/**
  Asynchronously pulls the waveform amplitude data into a float array for the receiver.
- @param waveformDataCompletionBlock A WaveformDataCompletionBlock that executes when the waveform data has been extracted. Provides the waveform data as a float array and the length of the array.
+ @param numberOfPoints A UInt32 representing the number of data points you need. The higher the number of points the more detailed the waveform will be.
+ @param completion A WaveformDataCompletionBlock that executes when the waveform data has been extracted. Provides a `EZAudioWaveformData` instance containing the waveform data for all audio channels.
  */
-- (void) getWaveformDataWithCompletionBlock:(WaveformDataCompletionBlock)waveformDataCompletionBlock;
-
-//------------------------------------------------------------------------------
-
-/**
- Provides the minimum number of buffers that would be required with the constant frames read rate provided.
- @param frameRate A constant frame rate to use when calculating the number of buffers needed as a UInt32.
- @return The minimum number of buffers required for the constant frames read rate provided as a UInt32.
- */
-- (UInt32) minBuffersWithFrameRate:(UInt32)frameRate;
-
-//------------------------------------------------------------------------------
-
-/**
- Provides a frame rate to use when drawing and averaging a bin of values to create each point in a graph. The ideal amount of end buffers seems to be between 1000-3000 so we determine a frame rate per audio file that can achieve a high degree of detail for the entire waveform.
- @return A frame rate value as a UInt32 to use when reading frames in a file.
- */
-- (UInt32) recommendedDrawingFrameRate;
+- (void) getWaveformDataWithNumberOfPoints:(UInt32)numberOfPoints
+                                completion:(WaveformDataCompletionBlock)completion;
 
 //------------------------------------------------------------------------------
 
