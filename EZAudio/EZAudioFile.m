@@ -421,7 +421,7 @@ typedef struct
 
 - (void)getWaveformDataWithCompletionBlock:(WaveformDataCompletionBlock)waveformDataCompletionBlock
 {
-    [self getWaveformDataWithNumberOfPoints:2048
+    [self getWaveformDataWithNumberOfPoints:512
                                  completion:waveformDataCompletionBlock];
 }
 
@@ -454,7 +454,7 @@ typedef struct
                    operation:"Failed to seek frame position within audio file"];
         
         // calculate the required number of frames per buffer
-        SInt64 framesPerBuffer = ((SInt64) self.totalFrames / numberOfPoints);
+        SInt64 framesPerBuffer = ((SInt64) self.totalClientFrames / numberOfPoints);
         SInt64 framesPerChannel = framesPerBuffer / channels;
         
         // allocate an audio buffer list
@@ -572,15 +572,27 @@ typedef struct
 
 - (NSTimeInterval) totalDuration
 {
-    SInt64 totalFrames;
-    UInt32 size = sizeof(SInt64);
-    [EZAudio checkResult:ExtAudioFileGetProperty(self.info.extAudioFileRef,
-                                                 kExtAudioFileProperty_FileLengthFrames,
-                                                 &size,
-                                                 &totalFrames)
-               operation:"Failed to get total frames to calculate duration"];
-    
+    SInt64 totalFrames = [self totalFrames];
     return (NSTimeInterval) totalFrames / self.info.fileFormat.mSampleRate;
+}
+
+//------------------------------------------------------------------------------
+
+- (SInt64) totalClientFrames
+{
+    SInt64 totalFrames = [self totalFrames];
+    
+    // check sample rate of client vs file format
+    AudioStreamBasicDescription clientFormat = self.info.clientFormat;
+    AudioStreamBasicDescription fileFormat   = self.info.fileFormat;
+    BOOL sameSampleRate = clientFormat.mSampleRate == fileFormat.mSampleRate;
+    if (!sameSampleRate)
+    {
+        NSTimeInterval duration = [self totalDuration];
+        totalFrames = duration * clientFormat.mSampleRate;
+    }
+    
+    return totalFrames;
 }
 
 //------------------------------------------------------------------------------
@@ -594,17 +606,6 @@ typedef struct
                                                  &size,
                                                  &totalFrames)
                operation:"Failed to get total frames"];
-    
-    // check sample rate of client vs file format
-    AudioStreamBasicDescription clientFormat = self.info.clientFormat;
-    AudioStreamBasicDescription fileFormat   = self.info.fileFormat;
-    BOOL sameSampleRate = clientFormat.mSampleRate == fileFormat.mSampleRate;
-    if (!sameSampleRate)
-    {
-        NSTimeInterval duration = [self totalDuration];
-        totalFrames = duration * clientFormat.mSampleRate;
-    }
-    
     return totalFrames;
 }
 

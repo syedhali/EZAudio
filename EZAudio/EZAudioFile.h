@@ -342,8 +342,16 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
 //------------------------------------------------------------------------------
 
 /**
- Provides the total frame count of the audio file.
- @return The total number of frames in the audio file as a SInt64.
+ Provides the total frame count of the audio file in the client format.
+ @return The total number of frames in the audio file in the AudioStreamBasicDescription representing the client format as a SInt64.
+ */
+- (SInt64) totalClientFrames;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the total frame count of the audio file in the file format.
+ @return The total number of frames in the audio file in the AudioStreamBasicDescription representing the file format as a SInt64.
  */
 - (SInt64) totalFrames;
 
