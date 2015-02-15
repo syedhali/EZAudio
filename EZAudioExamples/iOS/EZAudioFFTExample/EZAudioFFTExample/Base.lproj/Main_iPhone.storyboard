@@ -21,7 +21,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="284"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tRL-re-aMl" customClass="EZAudioPlot">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tRL-re-aMl" customClass="EZAudioPlotGL">
                                 <rect key="frame" x="0.0" y="284" width="320" height="284"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>

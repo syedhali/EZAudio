@@ -120,6 +120,7 @@
   GLKView *view            = (GLKView *)self.view;
   view.context             = self.context;
   view.drawableMultisample = GLKViewDrawableMultisample4X;
+  view.opaque              = NO;
   
   // Generate both the buffer id references
   glGenBuffers(1, &_bufferPlotVBO);
@@ -338,6 +339,7 @@
   
   // Fill the graph with data
   EZAudioPlotGLPoint graph[_rollingPlotGraphSize];
+    
   // Fill in graph data
   [EZAudioPlotGL fillGraph:graph
              withGraphSize:_rollingPlotGraphSize

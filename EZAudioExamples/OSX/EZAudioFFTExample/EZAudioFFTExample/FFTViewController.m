@@ -74,15 +74,15 @@
 -(void)awakeFromNib {
   
   // Setup time domain audio plot
-  self.audioPlotTime.backgroundColor = [NSColor colorWithCalibratedRed: 0.569 green: 0.82 blue: 0.478 alpha: 1];
-  self.audioPlotTime.color           = [NSColor colorWithCalibratedRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+  self.audioPlotTime.backgroundColor = [NSColor colorWithCalibratedRed: 0.175 green: 0.151 blue: 0.137 alpha: 1];
+  self.audioPlotTime.color           = [NSColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
   self.audioPlotTime.shouldFill      = YES;
   self.audioPlotTime.shouldMirror    = YES;
   self.audioPlotTime.plotType        = EZPlotTypeRolling;
   
   // Setup frequency domain audio plot
-  self.audioPlotFreq.backgroundColor = [NSColor colorWithCalibratedRed: 0.984 green: 0.471 blue: 0.525 alpha: 1];
-  self.audioPlotFreq.color           = [NSColor colorWithCalibratedRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+  self.audioPlotFreq.backgroundColor = [NSColor colorWithCalibratedRed: 0.175 green: 0.151 blue: 0.137 alpha: 1];
+  self.audioPlotFreq.color           = [NSColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
   self.audioPlotFreq.shouldFill      = YES;
   self.audioPlotFreq.plotType        = EZPlotTypeBuffer;
   
@@ -106,6 +106,7 @@
   // Populate *window with the values for a hamming window function
   float *window = (float *)malloc(sizeof(float)*bufferSize);
   vDSP_hamm_window(window, bufferSize, 0);
+    
   // Window the samples
   vDSP_vmul(data, 1, window, 1, data, 1, bufferSize);
   

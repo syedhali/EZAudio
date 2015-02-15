@@ -262,7 +262,8 @@
 }
 
 -(void)_setupProfile {
-  NSOpenGLPixelFormatAttribute attrs[] =
+    
+    NSOpenGLPixelFormatAttribute attrs[] =
 	{
 		NSOpenGLPFADoubleBuffer,
         NSOpenGLPFAMultisample,
@@ -273,20 +274,24 @@
 		NSOpenGLProfileVersion3_2Core, 0
 	};
 	
-	NSOpenGLPixelFormat *pf = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
-	
+	NSOpenGLPixelFormat *pf      = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
+    NSOpenGLContext     *context = [[NSOpenGLContext alloc] initWithFormat:pf
+                                                              shareContext:nil];
+    
+    [self setWantsBestResolutionOpenGLSurface:YES];
+    
 	if (!pf)
 	{
 		NSLog(@"No OpenGL pixel format");
 	}
   
-    NSOpenGLContext* context = [[NSOpenGLContext alloc] initWithFormat:pf shareContext:nil];
-  
-  // Debug only
-  CGLEnable([context CGLContextObj], kCGLCECrashOnRemovedFunctions);
-	
-  self.pixelFormat   = pf;
-  self.openGLContext = context;
+    // Debug only
+    CGLEnable([context CGLContextObj], kCGLCECrashOnRemovedFunctions);
+    
+    NSLog(@"open gl context: %@",context);
+    
+    self.pixelFormat = pf;
+    self.openGLContext = context;
 }
 
 -(void)_setupView {
