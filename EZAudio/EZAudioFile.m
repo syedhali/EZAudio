@@ -250,7 +250,7 @@ typedef struct
 
 + (AudioStreamBasicDescription) defaultClientFormat
 {
-    return [EZAudio stereoFloatNonInterleavedFormatWithSampleRate:41000];
+    return [EZAudio stereoFloatInterleavedFormatWithSampleRate:44100];
 }
 
 //------------------------------------------------------------------------------
@@ -449,11 +449,27 @@ typedef struct
                    operation:"Failed to read audio data from file waveform"];
         
         // read through file and calculate rms at each point
-//        SInt64 index = 0;
+        float *samples = (float *)audioBufferList->mBuffers[0].mData;
+        SInt64 offset = 0;
         for (SInt64 i = 0; i < numberOfPoints; i++)
         {
+            float buffer[framesPerBuffer];
+            memcpy(buffer, &samples[offset], framesPerBuffer * sizeof(float));
+            offset += framesPerBuffer;
             
-            
+            if (interleaved)
+            {
+                for (int channel = 0; channel < channels; channel++)
+                {
+                    float channelData[framesPerChannel];
+                    for (int frame = 0; frame < framesPerChannel; frame++)
+                    {
+                        channelData[frame] = buffer[frame * channels + channel];
+                    }
+                    float rms = [EZAudio RMS:channelData length:(UInt32)framesPerChannel];
+                    data[channel][i] = rms;
+                }
+            }
             
 //            if (interleaved)
 //            {
@@ -525,7 +541,10 @@ typedef struct
 
     // async get waveform data
     dispatch_async(self.waveformQueue, ^{
+        CFTimeInterval startTime = CACurrentMediaTime();
         EZAudioWaveformData *waveformData = [self getWaveformDataWithNumberOfPoints:numberOfPoints];
+        CFTimeInterval endTime = CACurrentMediaTime();
+        NSLog(@"Total Runtime: %g s", endTime - startTime);
         dispatch_async(dispatch_get_main_queue(), ^{
             completion(waveformData);
         });
