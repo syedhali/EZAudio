@@ -1,5 +1,5 @@
 //
-//  EZAudioWaveformData.h
+//  EZAudioFloatData.h
 //  EZAudioPlayFileExample
 //
 //  Created by Syed Haris Ali on 2/14/15.
@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 
 //------------------------------------------------------------------------------
-#pragma mark - EZAudioWaveformData
+#pragma mark - EZAudioFloatData
 //------------------------------------------------------------------------------
 
-@interface EZAudioWaveformData : NSObject
+@interface EZAudioFloatData : NSObject
 
 //------------------------------------------------------------------------------
 

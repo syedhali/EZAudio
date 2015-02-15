@@ -21,18 +21,46 @@ typedef struct
 
 @implementation EZAudioConverter
 
+//------------------------------------------------------------------------------
+#pragma mark - Class Methods
+//------------------------------------------------------------------------------
+
 + (instancetype)converterWithInputFormat:(AudioStreamBasicDescription)inputFormat
                             outputFormat:(AudioStreamBasicDescription)outputFormat
 {
-    id converter = [[self alloc] init];
-    
-    EZAudioConverterInfo info;
-    memset(&info, 0, sizeof(info));
-    info.inputFormat = inputFormat;
-    info.outputFormat = outputFormat;
-    ((EZAudioConverter *)converter).info = info;
-    
-    return converter;
+    return [[self alloc] initWithInputFormat:inputFormat
+                                outputFormat:outputFormat];
 }
+
+//------------------------------------------------------------------------------
+#pragma mark - Initialization
+//------------------------------------------------------------------------------
+
+- (instancetype)initWithInputFormat:(AudioStreamBasicDescription)inputFormat
+                       outputFormat:(AudioStreamBasicDescription)outputFormat
+{
+    self = [super init];
+    if (self)
+    {
+        EZAudioConverterInfo info;
+        memset(&info, 0, sizeof(info));
+        info.inputFormat = inputFormat;
+        info.outputFormat = outputFormat;
+        self.info = info;
+        [self setup];
+    }
+    return self;
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Setup
+//------------------------------------------------------------------------------
+
+- (void)setup
+{
+    
+}
+
+//------------------------------------------------------------------------------
 
 @end

@@ -1,18 +1,18 @@
 //
-//  EZAudioWaveformData.m
+//  EZAudioFloatData.m
 //  EZAudioPlayFileExample
 //
 //  Created by Syed Haris Ali on 2/14/15.
 //  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
 
-#import "EZAudioWaveformData.h"
+#import "EZAudioFloatData.h"
 
 //------------------------------------------------------------------------------
-#pragma mark - EZAudioWaveformData
+#pragma mark - EZAudioFloatData
 //------------------------------------------------------------------------------
 
-@interface EZAudioWaveformData ()
+@interface EZAudioFloatData ()
 @property (nonatomic, assign, readwrite) int    numberOfChannels;
 @property (nonatomic, assign, readwrite) float  **buffers;
 @property (nonatomic, assign, readwrite) UInt32 bufferSize;
@@ -20,7 +20,7 @@
 
 //------------------------------------------------------------------------------
 
-@implementation EZAudioWaveformData
+@implementation EZAudioFloatData
 
 //------------------------------------------------------------------------------
 
@@ -50,9 +50,9 @@
         memcpy(buffersCopy[i], buffers[i], size);
     }
     
-    ((EZAudioWaveformData *)waveformData).buffers = buffersCopy;
-    ((EZAudioWaveformData *)waveformData).bufferSize = bufferSize;
-    ((EZAudioWaveformData *)waveformData).numberOfChannels = numberOfChannels;
+    ((EZAudioFloatData *)waveformData).buffers = buffersCopy;
+    ((EZAudioFloatData *)waveformData).bufferSize = bufferSize;
+    ((EZAudioFloatData *)waveformData).numberOfChannels = numberOfChannels;
     
     return waveformData;
 }

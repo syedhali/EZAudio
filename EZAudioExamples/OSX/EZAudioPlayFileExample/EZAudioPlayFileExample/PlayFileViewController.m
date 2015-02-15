@@ -26,250 +26,220 @@
 #import "PlayFileViewController.h"
 
 @interface PlayFileViewController ()
-@property (nonatomic,weak) IBOutlet NSSegmentedControl *plotSegmentControl;
-@property (nonatomic,weak) IBOutlet NSButton *playButton;
+@property (nonatomic, strong) EZOutput *output;
 @end
 
 @implementation PlayFileViewController
-@synthesize audioFile;
-@synthesize audioPlot;
-@synthesize eof = _eof;
-@synthesize framePositionSlider;
-
-#pragma mark - Initialization
--(id)init {
-  self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil];
-  if(self){
-    [self initializeViewController];
-  }
-  return self;
-}
-
--(id)initWithCoder:(NSCoder *)aDecoder {
-  self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil];
-  if(self){
-    [self initializeViewController];
-  }
-  return self;
-}
-
--(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-  self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil];
-  if(self){
-    [self initializeViewController];
-  }
-  return self;
-}
-
-#pragma mark - Initialize View Controller
--(void)initializeViewController {
-}
 
 #pragma mark - Customize the Audio Plot
--(void)awakeFromNib {
+- (void)awakeFromNib
+{
+    /*
+     Customizing the audio plot's look
+     */
+    self.audioPlot.backgroundColor = [NSColor clearColor];
+    self.audioPlot.color = [NSColor colorWithCalibratedRed: 0.255 green: 0.608 blue: 0.976 alpha: 1];
+    self.audioPlot.plotType = EZPlotTypeBuffer;
+    self.audioPlot.shouldFill = YES;
+    self.audioPlot.shouldMirror = YES;
+    self.audioPlot.wantsLayer = YES;
+    
+    /**
+     Setup an output
+     */
+    self.output = [EZOutput outputWithDataSource:self];
   
-  /*
-   Customizing the audio plot's look
-   */
-  // Background color
-  self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.175 green: 0.151 blue: 0.137 alpha: 1];
-  // Waveform color
-  self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
-  // Plot type
-  self.audioPlot.plotType        = EZPlotTypeBuffer;
-  // Fill
-  self.audioPlot.shouldFill      = YES;
-  // Mirror
-  self.audioPlot.shouldMirror    = YES;
-  
-  /*
-   Try opening the sample file
-   */
-  [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
-  
+    /*
+     Try opening the sample file
+     */
+    [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
 }
 
 #pragma mark - Actions
--(void)changePlotType:(id)sender {
-  NSInteger selectedSegment = [sender selectedSegment];
-  switch(selectedSegment){
-    case 0:
-      [self drawBufferPlot];
-      break;
-    case 1:
-      [self drawRollingPlot];
-      break;
-    default:
-      break;
-  }
+-(void)changePlotType:(id)sender
+{
+    NSInteger selectedSegment = [sender selectedSegment];
+    switch (selectedSegment)
+    {
+        case 0:
+            [self drawBufferPlot];
+            break;
+        case 1:
+            [self drawRollingPlot];
+            break;
+        default:
+            break;
+    }
 }
 
 -(void)changeOutputSamplingFrequency:(id)sender
 {
-  AudioStreamBasicDescription asbd = [EZOutput sharedOutput].audioStreamBasicDescription;
-  float samplingFrequency = ((NSSlider *)sender).floatValue;
-  asbd.mSampleRate = samplingFrequency;
-  [[EZOutput sharedOutput] setAudioStreamBasicDescription:asbd];
+    AudioStreamBasicDescription asbd = self.output.audioStreamBasicDescription;
+    float samplingFrequency = [sender floatValue];
+    asbd.mSampleRate = samplingFrequency;
+    self.output.audioStreamBasicDescription = asbd;
 }
 
--(void)openFile:(id)sender {
-  NSOpenPanel* openDlg = [NSOpenPanel openPanel];
-  openDlg.canChooseFiles = YES;
-  openDlg.canChooseDirectories = NO;
-  openDlg.delegate = self;
-  if( [openDlg runModal] == NSOKButton ){
-    NSArray *selectedFiles = [openDlg URLs];
-      NSLog(@"selected files: %@", selectedFiles);
-    [self openFileWithFilePathURL:selectedFiles.firstObject];
-  }
-}
-
--(void)play:(id)sender {
-  if( ![[EZOutput sharedOutput] isPlaying] ){
-    if( self.eof ){
-      [self.audioFile seekToFrame:0];
+-(void)openFile:(id)sender
+{
+    NSOpenPanel *openDlg = [NSOpenPanel openPanel];
+    openDlg.canChooseFiles = YES;
+    openDlg.canChooseDirectories = NO;
+    openDlg.delegate = self;
+    if( [openDlg runModal] == NSOKButton )
+    {
+        NSArray *selectedFiles = [openDlg URLs];
+        [self openFileWithFilePathURL:selectedFiles.firstObject];
+        NSLog(@"selected files: %@", selectedFiles);
     }
-    if( self.audioPlot.plotType   == EZPlotTypeBuffer &&
-        self.audioPlot.shouldFill == YES              ){
-      self.audioPlot.plotType = EZPlotTypeRolling;
-    }
-    [EZOutput sharedOutput].outputDataSource = self;
-    [[EZOutput sharedOutput] startPlayback];
-  }
-  else {
-    [EZOutput sharedOutput].outputDataSource = nil;
-    [[EZOutput sharedOutput] stopPlayback];
-  }
 }
 
--(void)seekToFrame:(id)sender {
-  [self.audioFile seekToFrame:(SInt64)[(NSSlider*)sender doubleValue]];
+-(void)play:(id)sender
+{
+    if( ![self.output isPlaying] )
+    {
+        if( self.eof )
+        {
+            [self.audioFile seekToFrame:0];
+        }
+        [self.output startPlayback];
+    }
+    else
+    {
+        [self.output stopPlayback];
+    }
+}
+
+- (void)seekToFrame:(id)sender
+{
+    SInt64 frame = [sender integerValue];
+    [self.audioFile seekToFrame:frame];
 }
 
 #pragma mark - Action Extensions
 /*
  Give the visualization of the current buffer (this is almost exactly the openFrameworks audio input example)
  */
--(void)drawBufferPlot {
-  // Change the plot type to the buffer plot
-  self.audioPlot.plotType = EZPlotTypeBuffer;
-  // Don't fill
-  self.audioPlot.shouldFill = NO;
-  // Don't mirror over the x-axis
-  self.audioPlot.shouldMirror = NO;
+- (void)drawBufferPlot
+{
+    self.audioPlot.plotType = EZPlotTypeBuffer;
+    self.audioPlot.shouldFill = NO;
+    self.audioPlot.shouldMirror = NO;
 }
 
 /*
  Give the classic mirrored, rolling waveform look
  */
--(void)drawRollingPlot {
-  // Change the plot type to the rolling plot
-  self.audioPlot.plotType = EZPlotTypeRolling;
-  // Fill the waveform
-  self.audioPlot.shouldFill = YES;
-  // Mirror over the x-axis
-  self.audioPlot.shouldMirror = YES;
+- (void)drawRollingPlot
+{
+    self.audioPlot.plotType = EZPlotTypeRolling;
+    self.audioPlot.shouldFill = YES;
+    self.audioPlot.shouldMirror = YES;
 }
 
--(void)openFileWithFilePathURL:(NSURL*)filePathURL {
-  
-  // Stop playback
-  [[EZOutput sharedOutput] stopPlayback];
+- (void)openFileWithFilePathURL:(NSURL *)filePathURL
+{
+    // stop playback
+    [self.output stopPlayback];
 
+    // create a new audio file
     AudioStreamBasicDescription asbd;
     self.audioFile = [EZAudioFile audioFileWithURL:filePathURL
                                           delegate:self
-                                        permission:EZAudioFilePermissionReadWrite
+                                        permission:EZAudioFilePermissionRead
                                         fileFormat:asbd];
-    [[EZOutput sharedOutput] setAudioStreamBasicDescription:self.audioFile.clientFormat];
     
-  self.eof                                = NO;
-  self.filePathLabel.stringValue          = filePathURL.lastPathComponent;
-  self.framePositionSlider.minValue       = 0.0f;
-  self.framePositionSlider.maxValue       = (double)self.audioFile.totalFrames;
-  self.playButton.state                   = NSOffState;
-  self.plotSegmentControl.selectedSegment = 1;
-
-  // Set the client format from the EZAudioFile on the output
+    //
+    self.filePathLabel.stringValue = filePathURL.lastPathComponent;
+    self.framePositionSlider.minValue = 0.0;
+    self.framePositionSlider.maxValue = (double)self.audioFile.totalFrames;
+    self.output.audioStreamBasicDescription = self.audioFile.clientFormat;
+    self.playButton.state = NSOffState;
+    self.plotSegmentControl.selectedSegment = 1;
+    self.sampleRateSlider.floatValue = self.audioFile.clientFormat.mSampleRate;
   
-#pragma mark Mess Around With Audio Stream Basic Description Here!
-  self.sampleRateSlider.floatValue = self.audioFile.clientFormat.mSampleRate;
-  
-  // Plot the whole waveform
-  self.audioPlot.plotType        = EZPlotTypeBuffer;
-  self.audioPlot.shouldFill      = YES;
-  self.audioPlot.shouldMirror    = YES;
-  [self.audioFile getWaveformDataWithCompletionBlock:^(EZAudioWaveformData *waveformData) {
-    self.audioPlot.shouldFill      = YES;
-    self.audioPlot.shouldMirror    = YES;
-    [self.audioPlot updateBuffer:[waveformData bufferForChannel:0] withBufferSize:waveformData.bufferSize];
-  }];
-  
+    // plot the whole waveform
+    self.audioPlot.plotType = EZPlotTypeBuffer;
+    self.audioPlot.shouldFill = YES;
+    self.audioPlot.shouldMirror = YES;
+    [self.progressIndicator startAnimation:nil];
+    
+    //
+    __weak PlayFileViewController *weakSelf = self;
+    [self.audioFile getWaveformDataWithCompletionBlock:^(EZAudioFloatData *waveformData)
+    {
+        [weakSelf.progressIndicator stopAnimation:nil];
+        [weakSelf.audioPlot updateBuffer:[waveformData bufferForChannel:0]
+                          withBufferSize:waveformData.bufferSize];
+    }];
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - EZAudioFileDelegate
--(void)audioFile:(EZAudioFile *)audioFile readAudio:(float **)buffer withBufferSize:(UInt32)bufferSize withNumberOfChannels:(UInt32)numberOfChannels {
-  if( [EZOutput sharedOutput].isPlaying ){
-    dispatch_async(dispatch_get_main_queue(), ^{
-      if( self.audioPlot.plotType     == EZPlotTypeBuffer &&
-         self.audioPlot.shouldFill    == YES              &&
-         self.audioPlot.shouldMirror  == YES ){
-        self.audioPlot.shouldFill   = NO;
-        self.audioPlot.shouldMirror = NO;
-      }
-      [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
-    });
-  }
+//------------------------------------------------------------------------------
+- (void)audioFile:(EZAudioFile *)audioFile
+        readAudio:(float **)buffer
+   withBufferSize:(UInt32)bufferSize
+withNumberOfChannels:(UInt32)numberOfChannels
+{
+    if( self.output.isPlaying )
+    {
+        __weak PlayFileViewController *weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.audioPlot updateBuffer:buffer[0]
+                              withBufferSize:bufferSize];
+        });
+    }
 }
+
+//------------------------------------------------------------------------------
 
 -(void)audioFile:(EZAudioFile *)audioFile
- updatedPosition:(SInt64)framePosition {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    if( ![self.framePositionSlider.cell isHighlighted] ){
-      self.framePositionSlider.floatValue = (float)framePosition;
-    }
-  });
+ updatedPosition:(SInt64)framePosition
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if( ![self.framePositionSlider.cell isHighlighted] )
+        {
+            self.framePositionSlider.floatValue = (float)framePosition;
+        }
+    });
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - EZOutputDataSource
+//------------------------------------------------------------------------------
 -(void)             output:(EZOutput*)output
  shouldFillAudioBufferList:(AudioBufferList*)audioBufferList
         withNumberOfFrames:(UInt32)frames
 {
-  if( self.audioFile )
-  {
-    UInt32 bufferSize;
-    [self.audioFile readFrames:frames
-               audioBufferList:audioBufferList
-                    bufferSize:&bufferSize
-                           eof:&_eof];
-    if( _eof )
+    if( self.audioFile )
     {
-      [self seekToFrame:0];
+        UInt32 bufferSize;
+        [self.audioFile readFrames:frames
+                   audioBufferList:audioBufferList
+                        bufferSize:&bufferSize
+                               eof:&_eof];
+        if( _eof )
+        {
+            [self seekToFrame:0];
+        }
     }
-  }
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - NSOpenSavePanelDelegate
+//------------------------------------------------------------------------------
 /**
  Here's an example how to filter the open panel to only show the supported file types by the EZAudioFile (which are just the audio file types supported by Core Audio).
  */
--(BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename {
-  NSString* ext = [filename pathExtension];
-  if ([ext isEqualToString:@""] || [ext isEqualToString:@"/"] || ext == nil || ext == NULL || [ext length] < 1) {
-    return YES;
-  }
-  NSArray *fileTypes = [EZAudioFile supportedAudioFileTypes];
-  NSEnumerator* tagEnumerator = [fileTypes objectEnumerator];
-  NSString* allowedExt;
-  while ((allowedExt = [tagEnumerator nextObject]))
-  {
-    if ([ext caseInsensitiveCompare:allowedExt] == NSOrderedSame)
-    {
-      return YES;
-    }
-  }
-  return NO;
+- (BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename
+{
+    NSString *ext = [filename pathExtension];
+    NSArray *fileTypes = [EZAudioFile supportedAudioFileTypes];
+    BOOL isDirectory = [ext isEqualToString:@""];
+    return [fileTypes containsObject:ext] || isDirectory;
 }
+
+//------------------------------------------------------------------------------
 
 @end

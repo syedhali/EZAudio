@@ -25,12 +25,11 @@
 
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
-#import "EZAudioWaveformData.h"
+#import "EZAudioFloatData.h"
 
 //------------------------------------------------------------------------------
 
 @class EZAudio;
-@class EZAudioConverter;
 @class EZAudioFile;
 
 //------------------------------------------------------------------------------
@@ -41,6 +40,15 @@ typedef NS_ENUM(NSUInteger, EZAudioFilePermission)
     EZAudioFilePermissionWrite     = kAudioFileWritePermission,
     EZAudioFilePermissionReadWrite = kAudioFileReadWritePermission,
 };
+
+//------------------------------------------------------------------------------
+#pragma mark - Blocks
+//------------------------------------------------------------------------------
+/**
+ A block used when returning back the waveform data. The waveform data itself will be an array of float values and the length indicates the total length of the float array.
+ @param waveformData An EZAudioFloatData instance containing the waveform data for all channels of audio
+ */
+typedef void (^WaveformDataCompletionBlock)(EZAudioFloatData *waveformData);
 
 //------------------------------------------------------------------------------
 #pragma mark - EZAudioFileDelegate
@@ -82,16 +90,6 @@ typedef NS_ENUM(NSUInteger, EZAudioFilePermission)
  The EZAudioFile provides a lightweight and intuitive way to asynchronously interact with audio files. These interactions included reading audio data, seeking within an audio file, getting information about the file, and pulling the waveform data for visualizing the contents of the audio file. The EZAudioFileDelegate provides event callbacks for when reads, seeks, and various updates happen within the audio file to allow the caller to interact with the action in meaningful ways. Common use cases here could be to read the audio file's data as AudioBufferList structures for output (see EZOutput) and visualizing the audio file's data as a float array using an audio plot (see EZAudioPlot).
  */
 @interface EZAudioFile : NSObject
-
-//------------------------------------------------------------------------------
-#pragma mark - Blocks
-//------------------------------------------------------------------------------
-/**
- A block used when returning back the waveform data. The waveform data itself will be an array of float values and the length indicates the total length of the float array.
- @param waveformData An array of float values representing the amplitude data from the audio waveform
- @param length       The length of the waveform data's float array
- */
-typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
 
 //------------------------------------------------------------------------------
 #pragma mark - Properties
@@ -197,10 +195,10 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  @param fileFormat An AudioStreamBasicDescription that will be used to create the audio file if it does not exist if the permission argument is set to EZAudioFilePermissionWrite or EZAudioFilePermissionReadWrite. Not used for EZAudioFilePermissionRead permission.
  @return The newly created EZAudioFile instance.
  */
-+ (instancetype) audioFileWithURL:(NSURL*)url
-                         delegate:(id<EZAudioFileDelegate>)delegate
-                       permission:(EZAudioFilePermission)permission
-                       fileFormat:(AudioStreamBasicDescription)fileFormat;
++ (instancetype)audioFileWithURL:(NSURL*)url
+                        delegate:(id<EZAudioFileDelegate>)delegate
+                      permission:(EZAudioFilePermission)permission
+                      fileFormat:(AudioStreamBasicDescription)fileFormat;
 
 //------------------------------------------------------------------------------
 
@@ -280,6 +278,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
 
 /**
  Provides the AudioStreamBasicDescription structure used within the app. The file's format will be converted to this format and then sent back as either a float array or a `AudioBufferList` pointer. Use this when communicating with other EZAudio components.
+ @warning This must be a linear PCM format!
  @return An AudioStreamBasicDescription structure describing the format of the audio file.
  */
 - (AudioStreamBasicDescription)clientFormat;
@@ -357,24 +356,24 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
 /**
  Synchronously pulls the waveform amplitude data into a float array for the receiver. This returns a waveform with a default resolution of 1024, meaning there are 1024 data points to plot the waveform.
  @param numberOfPoints A UInt32 representing the number of data points you need. The higher the number of points the more detailed the waveform will be.
- @return A EZAudioWaveformData instance containing the audio data for all channels of the audio.
+ @return A EZAudioFloatData instance containing the audio data for all channels of the audio.
  */
-- (EZAudioWaveformData *)getWaveformData;
+- (EZAudioFloatData *)getWaveformData;
 
 //------------------------------------------------------------------------------
 
 /**
  Synchronously pulls the waveform amplitude data into a float array for the receiver.
   @param numberOfPoints A UInt32 representing the number of data points you need. The higher the number of points the more detailed the waveform will be.
- @return A EZAudioWaveformData instance containing the audio data for all channels of the audio.
+ @return A EZAudioFloatData instance containing the audio data for all channels of the audio.
  */
-- (EZAudioWaveformData *)getWaveformDataWithNumberOfPoints:(UInt32)numberOfPoints;
+- (EZAudioFloatData *)getWaveformDataWithNumberOfPoints:(UInt32)numberOfPoints;
 
 //------------------------------------------------------------------------------
 
 /**
  Asynchronously pulls the waveform amplitude data into a float array for the receiver. This returns a waveform with a default resolution of 1024, meaning there are 1024 data points to plot the waveform.
- @param completion A WaveformDataCompletionBlock that executes when the waveform data has been extracted. Provides a `EZAudioWaveformData` instance containing the waveform data for all audio channels.
+ @param completion A WaveformDataCompletionBlock that executes when the waveform data has been extracted. Provides a `EZAudioFloatData` instance containing the waveform data for all audio channels.
  */
 - (void)getWaveformDataWithCompletionBlock:(WaveformDataCompletionBlock)completion;
 
@@ -383,7 +382,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
 /**
  Asynchronously pulls the waveform amplitude data into a float array for the receiver.
  @param numberOfPoints A UInt32 representing the number of data points you need. The higher the number of points the more detailed the waveform will be.
- @param completion A WaveformDataCompletionBlock that executes when the waveform data has been extracted. Provides a `EZAudioWaveformData` instance containing the waveform data for all audio channels.
+ @param completion A WaveformDataCompletionBlock that executes when the waveform data has been extracted. Provides a `EZAudioFloatData` instance containing the waveform data for all audio channels.
  */
 - (void)getWaveformDataWithNumberOfPoints:(UInt32)numberOfPoints
                                completion:(WaveformDataCompletionBlock)completion;

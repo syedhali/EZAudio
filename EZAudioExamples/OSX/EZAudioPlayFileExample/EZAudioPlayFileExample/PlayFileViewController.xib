@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1070" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PlayFileViewController">
@@ -12,6 +12,7 @@
                 <outlet property="framePositionSlider" destination="CFP-v0-TzQ" id="3oy-Xn-4JK"/>
                 <outlet property="playButton" destination="OQp-Lr-dlS" id="K5R-Qg-7DY"/>
                 <outlet property="plotSegmentControl" destination="bZW-tA-C61" id="4ic-Ou-qh2"/>
+                <outlet property="progressIndicator" destination="ASF-7j-bsr" id="n2Y-ej-m4e"/>
                 <outlet property="sampleRateSlider" destination="rRH-oS-VV3" id="8ij-Ff-CZK"/>
                 <outlet property="view" destination="Xpo-HP-Ost" id="zlj-bW-4iz"/>
             </connections>
@@ -22,8 +23,17 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lz1-Gs-1lD" customClass="EZAudioPlotGL">
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="Lz1-Gs-1lD" customClass="EZAudioPlot">
                     <rect key="frame" x="0.0" y="0.0" width="480" height="148"/>
+                    <subviews>
+                        <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="ASF-7j-bsr">
+                            <rect key="frame" x="224" y="58" width="32" height="32"/>
+                        </progressIndicator>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="centerY" secondItem="ASF-7j-bsr" secondAttribute="centerY" id="YP7-Wu-iyp"/>
+                        <constraint firstAttribute="centerX" secondItem="ASF-7j-bsr" secondAttribute="centerX" id="ng2-OR-wkx"/>
+                    </constraints>
                 </customView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2Ma-jj-U3z">
                     <rect key="frame" x="14" y="224" width="125" height="32"/>
@@ -61,8 +71,8 @@
                         <action selector="play:" target="-2" id="y83-JF-y4e"/>
                     </connections>
                 </button>
-                <segmentedControl verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bZW-tA-C61">
-                    <rect key="frame" x="333" y="196" width="129" height="24"/>
+                <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bZW-tA-C61">
+                    <rect key="frame" x="335" y="196" width="127" height="24"/>
                     <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="8U1-ER-vPJ">
                         <font key="font" metaFont="system"/>
                         <segments>
@@ -74,23 +84,23 @@
                         <action selector="changePlotType:" target="-2" id="alU-Rf-22L"/>
                     </connections>
                 </segmentedControl>
-                <slider verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CFP-v0-TzQ">
+                <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CFP-v0-TzQ">
                     <rect key="frame" x="18" y="159" width="444" height="20"/>
-                    <sliderCell key="cell" alignment="left" maxValue="100" doubleValue="9.3380614657210401" tickMarkPosition="above" sliderType="linear" id="gPc-pN-dmP"/>
+                    <sliderCell key="cell" continuous="YES" alignment="left" maxValue="100" doubleValue="9.3380614657210401" tickMarkPosition="above" sliderType="linear" id="gPc-pN-dmP"/>
                     <connections>
                         <action selector="seekToFrame:" target="-2" id="iVY-so-6X2"/>
                     </connections>
                 </slider>
                 <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rRH-oS-VV3">
                     <rect key="frame" x="141" y="199" width="96" height="20"/>
-                    <sliderCell key="cell" state="on" alignment="left" minValue="8000" maxValue="88200" doubleValue="44100" tickMarkPosition="above" sliderType="linear" id="xbX-Ce-da5"/>
+                    <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="8000" maxValue="88200" doubleValue="44100" tickMarkPosition="above" sliderType="linear" id="xbX-Ce-da5"/>
                     <connections>
                         <action selector="changeOutputSamplingFrequency:" target="-2" id="yWM-Ei-ztA"/>
                     </connections>
                 </slider>
             </subviews>
             <constraints>
-                <constraint firstItem="CFP-v0-TzQ" firstAttribute="top" secondItem="OQp-Lr-dlS" secondAttribute="bottom" constant="20" id="6uf-rh-zEf"/>
+                <constraint firstItem="CFP-v0-TzQ" firstAttribute="top" secondItem="OQp-Lr-dlS" secondAttribute="bottom" constant="21" id="6uf-rh-zEf"/>
                 <constraint firstItem="0eT-7c-7fJ" firstAttribute="leading" secondItem="2Ma-jj-U3z" secondAttribute="trailing" constant="10" id="AcA-Rv-Lwl"/>
                 <constraint firstItem="Lz1-Gs-1lD" firstAttribute="top" secondItem="CFP-v0-TzQ" secondAttribute="bottom" constant="13" id="JjU-ri-rxV"/>
                 <constraint firstItem="0eT-7c-7fJ" firstAttribute="top" secondItem="Xpo-HP-Ost" secondAttribute="top" constant="20" id="T86-Jj-i0N"/>

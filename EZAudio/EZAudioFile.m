@@ -29,7 +29,7 @@
 
 #import "EZAudio.h"
 #import "EZAudioConverter.h"
-#import "EZAudioWaveformData.h"
+#import "EZAudioFloatData.h"
 #include <pthread.h>
 
 //------------------------------------------------------------------------------
@@ -299,11 +299,6 @@ typedef struct
                    operation:"Failed to get file audio format on existing audio file"];
     }
     
-    NSLog(@"file format......................");
-    [EZAudio printASBD:self.info.fileFormat];
-    NSLog(@"client format....................");
-    [EZAudio printASBD:self.info.clientFormat];
-    
     // done
     return result;
 }
@@ -368,16 +363,16 @@ typedef struct
 #pragma mark - Getters
 //------------------------------------------------------------------------------
 
-- (EZAudioWaveformData *)getWaveformData
+- (EZAudioFloatData *)getWaveformData
 {
     return [self getWaveformDataWithNumberOfPoints:EZAudioFileWaveformDefaultResolution];
 }
 
 //------------------------------------------------------------------------------
 
-- (EZAudioWaveformData *)getWaveformDataWithNumberOfPoints:(UInt32)numberOfPoints
+- (EZAudioFloatData *)getWaveformDataWithNumberOfPoints:(UInt32)numberOfPoints
 {
-    EZAudioWaveformData *waveformData;
+    EZAudioFloatData *waveformData;
     if (pthread_mutex_trylock(&_lock) == 0)
     {
         // store current frame
@@ -453,7 +448,7 @@ typedef struct
         
         pthread_mutex_unlock(&_lock);
         
-        waveformData = [EZAudioWaveformData dataWithNumberOfChannels:channels
+        waveformData = [EZAudioFloatData dataWithNumberOfChannels:channels
                                                              buffers:(float **)data
                                                           bufferSize:numberOfPoints];
         
@@ -487,7 +482,7 @@ typedef struct
 
     // async get waveform data
     dispatch_async(self.waveformQueue, ^{
-        EZAudioWaveformData *waveformData = [self getWaveformDataWithNumberOfPoints:numberOfPoints];
+        EZAudioFloatData *waveformData = [self getWaveformDataWithNumberOfPoints:numberOfPoints];
         dispatch_async(dispatch_get_main_queue(), ^{
             completion(waveformData);
         });

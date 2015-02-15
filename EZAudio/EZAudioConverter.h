@@ -11,10 +11,13 @@
 
 @interface EZAudioConverter : NSObject
 
++ (instancetype) converterWithInputFormat:(AudioStreamBasicDescription)inputFormat
+                             outputFormat:(AudioStreamBasicDescription)outputFormat;
+
 @property (nonatomic, assign, readonly) AudioStreamBasicDescription inputFormat;
 @property (nonatomic, assign, readonly) AudioStreamBasicDescription outputFormat;
 
-+ (instancetype) converterWithInputFormat:(AudioStreamBasicDescription)inputFormat
-                             outputFormat:(AudioStreamBasicDescription)outputFormat;
+- (instancetype) initWithInputFormat:(AudioStreamBasicDescription)inputFormat
+                        outputFormat:(AudioStreamBasicDescription)outputFormat;
 
 @end

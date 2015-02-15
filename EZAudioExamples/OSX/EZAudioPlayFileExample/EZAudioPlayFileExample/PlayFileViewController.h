@@ -47,7 +47,7 @@
 /**
  The CoreGraphics based audio plot
  */
-@property (nonatomic,weak) IBOutlet EZAudioPlotGL *audioPlot;
+@property (nonatomic,weak) IBOutlet EZAudioPlot *audioPlot;
 
 #pragma mark - UI Extras
 /**
@@ -59,6 +59,10 @@
  A slider to indicate the current frame position in the audio file
  */
 @property (nonatomic,weak) IBOutlet NSSlider *framePositionSlider;
+
+@property (nonatomic, weak) IBOutlet NSButton *playButton;
+@property (nonatomic, weak) IBOutlet NSSegmentedControl *plotSegmentControl;
+@property (nonatomic, weak) IBOutlet NSProgressIndicator *progressIndicator;
 
 /**
  A slider to adjust the sample rate.
