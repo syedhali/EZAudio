@@ -248,7 +248,7 @@
 		// no, format it as an integer
 		sprintf(errorString, "%d", (int)result);
 	fprintf(stderr, "Error: %s (%s)\n", operation, errorString);
-	exit(1);
+    @throw [NSException exceptionWithName:@"EZAudioException" reason:[NSString stringWithFormat:@"Error: %s (%s)", operation, errorString] userInfo:nil];
 }
 
 #pragma mark - Math Utility
