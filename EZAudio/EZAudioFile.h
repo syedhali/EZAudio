@@ -337,7 +337,7 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
  Provides the total duration of the audio file in seconds.
  @return The total duration of the audio file as a Float32.
  */
-- (Float32) totalDuration;
+- (NSTimeInterval) totalDuration;
 
 //------------------------------------------------------------------------------
 

@@ -259,7 +259,7 @@ typedef struct
 
 + (AudioStreamBasicDescription) defaultClientFormat
 {
-    return [EZAudio stereoFloatNonInterleavedFormatWithSampleRate:44100];
+    return [EZAudio stereoFloatNonInterleavedFormatWithSampleRate:48000];
 }
 
 //------------------------------------------------------------------------------
@@ -360,6 +360,11 @@ typedef struct
                                                      &_info.fileFormat)
                    operation:"Failed to get file audio format on existing audio file"];
     }
+    
+    NSLog(@"file format......................");
+    [EZAudio printASBD:self.info.fileFormat];
+    NSLog(@"client format....................");
+    [EZAudio printASBD:self.info.clientFormat];
     
     // done
     return result;
@@ -565,9 +570,17 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-- (Float32) totalDuration
+- (NSTimeInterval) totalDuration
 {
-    return self.info.duration;
+    SInt64 totalFrames;
+    UInt32 size = sizeof(SInt64);
+    [EZAudio checkResult:ExtAudioFileGetProperty(self.info.extAudioFileRef,
+                                                 kExtAudioFileProperty_FileLengthFrames,
+                                                 &size,
+                                                 &totalFrames)
+               operation:"Failed to get total frames to calculate duration"];
+    
+    return (NSTimeInterval) totalFrames / self.info.fileFormat.mSampleRate;
 }
 
 //------------------------------------------------------------------------------
@@ -575,12 +588,23 @@ typedef struct
 - (SInt64) totalFrames
 {
     SInt64 totalFrames;
-    UInt32 size = sizeof(totalFrames);
+    UInt32 size = sizeof(SInt64);
     [EZAudio checkResult:ExtAudioFileGetProperty(self.info.extAudioFileRef,
                                                  kExtAudioFileProperty_FileLengthFrames,
                                                  &size,
                                                  &totalFrames)
                operation:"Failed to get total frames"];
+    
+    // check sample rate of client vs file format
+    AudioStreamBasicDescription clientFormat = self.info.clientFormat;
+    AudioStreamBasicDescription fileFormat   = self.info.fileFormat;
+    BOOL sameSampleRate = clientFormat.mSampleRate == fileFormat.mSampleRate;
+    if (!sameSampleRate)
+    {
+        NSTimeInterval duration = [self totalDuration];
+        totalFrames = duration * clientFormat.mSampleRate;
+    }
+    
     return totalFrames;
 }
 
