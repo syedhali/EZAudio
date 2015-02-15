@@ -189,7 +189,7 @@
   self.sampleRateSlider.floatValue = self.audioFile.clientFormat.mSampleRate;
   AudioStreamBasicDescription outputASBD = self.audioFile.clientFormat;
 
-  [[EZOutput sharedOutput] setAudioStreamBasicDescription:outputASBD];
+  [[EZOutput sharedOutput] setAudioStreamBasicDescription:[EZAudio stereoFloatInterleavedFormatWithSampleRate:44100]];
 
   
   // Plot the whole waveform

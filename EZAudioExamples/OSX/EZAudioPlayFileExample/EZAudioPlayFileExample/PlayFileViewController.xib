@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1070" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PlayFileViewController">
@@ -17,18 +17,16 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Xpo-HP-Ost">
             <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <customView translatesAutoresizingMaskIntoConstraints="NO" id="Lz1-Gs-1lD" customClass="EZAudioPlotGL">
+                <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lz1-Gs-1lD" customClass="EZAudioPlotGL">
                     <rect key="frame" x="0.0" y="0.0" width="480" height="148"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                 </customView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2Ma-jj-U3z">
                     <rect key="frame" x="14" y="224" width="125" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="Lm5-0d-A72"/>
                         <constraint firstAttribute="width" constant="113" id="Tij-5V-y1Q"/>
@@ -43,7 +41,6 @@
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0eT-7c-7fJ">
                     <rect key="frame" x="141" y="235" width="38" height="17"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" lineBreakMode="truncatingMiddle" sendsActionOnEndEditing="YES" title="Label" id="vXQ-HF-vLX">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -52,7 +49,6 @@
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OQp-Lr-dlS">
                     <rect key="frame" x="14" y="191" width="125" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="geC-A9-48j"/>
                         <constraint firstAttribute="width" constant="113" id="lc3-4H-QK6"/>
@@ -65,10 +61,9 @@
                         <action selector="play:" target="-2" id="y83-JF-y4e"/>
                     </connections>
                 </button>
-                <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bZW-tA-C61">
+                <segmentedControl verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bZW-tA-C61">
                     <rect key="frame" x="333" y="196" width="129" height="24"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <segmentedCell key="cell" alignment="left" style="rounded" trackingMode="selectOne" id="8U1-ER-vPJ">
+                    <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="8U1-ER-vPJ">
                         <font key="font" metaFont="system"/>
                         <segments>
                             <segment label="Buffer" selected="YES"/>
@@ -79,17 +74,15 @@
                         <action selector="changePlotType:" target="-2" id="alU-Rf-22L"/>
                     </connections>
                 </segmentedControl>
-                <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CFP-v0-TzQ">
-                    <rect key="frame" x="18" y="159" width="444" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <slider verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CFP-v0-TzQ">
+                    <rect key="frame" x="18" y="159" width="444" height="20"/>
                     <sliderCell key="cell" alignment="left" maxValue="100" doubleValue="9.3380614657210401" tickMarkPosition="above" sliderType="linear" id="gPc-pN-dmP"/>
                     <connections>
                         <action selector="seekToFrame:" target="-2" id="iVY-so-6X2"/>
                     </connections>
                 </slider>
                 <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rRH-oS-VV3">
-                    <rect key="frame" x="141" y="199" width="96" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <rect key="frame" x="141" y="199" width="96" height="20"/>
                     <sliderCell key="cell" state="on" alignment="left" minValue="8000" maxValue="88200" doubleValue="44100" tickMarkPosition="above" sliderType="linear" id="xbX-Ce-da5"/>
                     <connections>
                         <action selector="changeOutputSamplingFrequency:" target="-2" id="yWM-Ei-ztA"/>

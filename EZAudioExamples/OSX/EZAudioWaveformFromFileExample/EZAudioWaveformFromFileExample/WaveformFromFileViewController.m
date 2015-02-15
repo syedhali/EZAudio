@@ -66,25 +66,16 @@
 
 #pragma mark - Customize the Audio Plot
 -(void)awakeFromNib {
-  
-  /*
-   Customizing the audio plot's look
-   */
-  // Background color
-  self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.169 green: 0.643 blue: 0.675 alpha: 1];
-  // Waveform color
-  self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
-  // Plot type
-  self.audioPlot.plotType        = EZPlotTypeBuffer;
-  // Fill
-  self.audioPlot.shouldFill      = YES;
-  // Mirror
-  self.audioPlot.shouldMirror    = YES;
-  
-  /*
-   Try opening the sample file
-   */
-  [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
+    self.audioPlot.wantsLayer = YES;
+    self.audioPlot.backgroundColor = [NSColor clearColor];
+    self.audioPlot.plotType        = EZPlotTypeBuffer;
+    self.audioPlot.shouldFill      = YES;
+    self.audioPlot.shouldMirror    = YES;
+    self.audioPlot.color           = [NSColor colorWithCalibratedRed:0
+                                                               green:0.676
+                                                                blue:0.575
+                                                               alpha:1];
+    [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
   
 }
 
@@ -98,6 +89,14 @@
     NSArray *selectedFiles = [openDlg URLs];
     [self openFileWithFilePathURL:selectedFiles.firstObject];
   }
+}
+
+- (void)snapshot:(id)sender
+{
+    NSBitmapImageRep* imageRep = [self.audioPlot bitmapImageRepForCachingDisplayInRect:self.audioPlot.bounds];
+    [self.audioPlot cacheDisplayInRect:self.audioPlot.bounds toBitmapImageRep:imageRep];
+    NSData* data = [imageRep representationUsingType:NSPNGFileType properties:nil];
+    [data writeToFile:@"/Users/haris/Documents/waveform.png" atomically:NO];
 }
 
 #pragma mark - Action Extensions

@@ -168,7 +168,7 @@
                                           &frames,
                                           audioBufferList)
                operation:"Failed to read audio data from audio file"];
-    *bufferSize = audioBufferList->mBuffers[0].mDataByteSize/sizeof(AudioUnitSampleType);
+    *bufferSize = audioBufferList->mBuffers[0].mDataByteSize/sizeof(float);
     *eof = frames == 0;
     _frameIndex += frames;
     if( self.audioFileDelegate ){
@@ -236,7 +236,7 @@
                                             &_waveformFrameRate,
                                             bufferList)
                  operation:"Failed to read audio data from audio file"];
-      bufferSize = bufferList->mBuffers[0].mDataByteSize/sizeof(AudioUnitSampleType);
+      bufferSize = bufferList->mBuffers[0].mDataByteSize/sizeof(float);
       bufferSize = MAX(1, bufferSize);
       eof = _waveformFrameRate == 0;
       _frameIndex += _waveformFrameRate;

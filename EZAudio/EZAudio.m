@@ -39,7 +39,7 @@
     {
         audioBufferList->mBuffers[i].mNumberChannels = channels;
         audioBufferList->mBuffers[i].mDataByteSize = channels * outputBufferSize;
-        audioBufferList->mBuffers[i].mData = (AudioUnitSampleType*)malloc(channels * sizeof(AudioUnitSampleType) *outputBufferSize);
+        audioBufferList->mBuffers[i].mData = (float*)malloc(channels * sizeof(float) *outputBufferSize);
     }
     return audioBufferList;
 }
@@ -124,7 +124,7 @@
 +(AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
-    UInt32 byteSize = sizeof(AudioUnitSampleType);
+    UInt32 byteSize = sizeof(float);
     asbd.mBitsPerChannel   = 8 * byteSize;
     asbd.mBytesPerFrame    = byteSize;
     asbd.mBytesPerPacket   = byteSize;
@@ -139,12 +139,12 @@
 +(AudioStreamBasicDescription)monoCanonicalFormatWithSampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
-    UInt32 byteSize = sizeof(AudioUnitSampleType);
+    UInt32 byteSize = sizeof(float);
     asbd.mBitsPerChannel   = 8 * byteSize;
     asbd.mBytesPerFrame    = byteSize;
     asbd.mBytesPerPacket   = byteSize;
     asbd.mChannelsPerFrame = 1;
-    asbd.mFormatFlags      = kAudioFormatFlagsCanonical|kAudioFormatFlagIsNonInterleaved;
+    asbd.mFormatFlags      = kAudioFormatFlagsNativeFloatPacked|kAudioFormatFlagIsNonInterleaved;
     asbd.mFormatID         = kAudioFormatLinearPCM;
     asbd.mFramesPerPacket  = 1;
     asbd.mSampleRate       = sampleRate;
@@ -154,12 +154,12 @@
 +(AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
-    UInt32 byteSize = sizeof(AudioUnitSampleType);
+    UInt32 byteSize = sizeof(float);
     asbd.mBitsPerChannel   = 8 * byteSize;
     asbd.mBytesPerFrame    = byteSize;
     asbd.mBytesPerPacket   = byteSize;
     asbd.mChannelsPerFrame = 2;
-    asbd.mFormatFlags      = kAudioFormatFlagsCanonical|kAudioFormatFlagIsNonInterleaved;
+    asbd.mFormatFlags      = kAudioFormatFlagsNativeFloatPacked|kAudioFormatFlagIsNonInterleaved;
     asbd.mFormatID         = kAudioFormatLinearPCM;
     asbd.mFramesPerPacket  = 1;
     asbd.mSampleRate       = sampleRate;
@@ -217,8 +217,8 @@
     
     asbd->mFormatID = kAudioFormatLinearPCM;
 #if TARGET_OS_IPHONE
-    int sampleSize = sizeof(AudioSampleType);
-    asbd->mFormatFlags = kAudioFormatFlagsCanonical;
+    int sampleSize = sizeof(float);
+    asbd->mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
 #elif TARGET_OS_MAC
     int sampleSize = sizeof(Float32);
     asbd->mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
