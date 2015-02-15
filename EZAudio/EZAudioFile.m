@@ -433,45 +433,51 @@ typedef struct
                    operation:"Failed to seek frame position within audio file"];
         
         // calculate the required number of frames per buffer
-        SInt64 framesPerBuffer = ((SInt64) self.totalClientFrames / numberOfPoints);
+        SInt64 totalFrames = self.totalClientFrames;
+        SInt64 framesPerBuffer = ((SInt64) totalFrames / numberOfPoints);
         SInt64 framesPerChannel = framesPerBuffer / channels;
         
         // allocate an audio buffer list
-        AudioBufferList *audioBufferList = [EZAudio audioBufferListWithNumberOfFrames:(UInt32)framesPerBuffer
+        AudioBufferList *audioBufferList = [EZAudio audioBufferListWithNumberOfFrames:(UInt32)totalFrames
                                                                      numberOfChannels:self.info.clientFormat.mChannelsPerFrame
                                                                           interleaved:interleaved];
+
+        UInt32 bufferSize = (UInt32)totalFrames;
+        [EZAudio checkResult:ExtAudioFileRead(self.info.extAudioFileRef,
+                                              &bufferSize,
+                                              audioBufferList)
+                   operation:"Failed to read audio data from file waveform"];
         
         // read through file and calculate rms at each point
+//        SInt64 index = 0;
         for (SInt64 i = 0; i < numberOfPoints; i++)
         {
-            UInt32 bufferSize = (UInt32) framesPerBuffer;
-            [EZAudio checkResult:ExtAudioFileRead(self.info.extAudioFileRef,
-                                                  &bufferSize,
-                                                  audioBufferList)
-                       operation:"Failed to read audio data from file waveform"];
-            if (interleaved)
-            {
-                float *buffer = (float *)audioBufferList->mBuffers[0].mData;
-                for (int channel = 0; channel < channels; channel++)
-                {
-                    float channelData[framesPerChannel];
-                    for (int frame = 0; frame < framesPerChannel; frame++)
-                    {
-                        channelData[frame] = buffer[frame * channels + channel];
-                    }
-                    float rms = [EZAudio RMS:channelData length:(UInt32)framesPerChannel];
-                    data[channel][i] = rms;
-                }
-            }
-            else
-            {
-                for (int channel = 0; channel < channels; channel++)
-                {
-                    float *channelData = audioBufferList->mBuffers[channel].mData;
-                    float rms = [EZAudio RMS:channelData length:bufferSize];
-                    data[channel][i] = rms;
-                }
-            }
+            
+            
+            
+//            if (interleaved)
+//            {
+//                float *buffer = (float *)audioBufferList->mBuffers[0].mData;
+//                for (int channel = 0; channel < channels; channel++)
+//                {
+//                    float channelData[framesPerChannel];
+//                    for (int frame = 0; frame < framesPerChannel; frame++)
+//                    {
+//                        channelData[frame] = buffer[frame * channels + channel];
+//                    }
+//                    float rms = [EZAudio RMS:channelData length:(UInt32)framesPerChannel];
+//                    data[channel][i] = rms;
+//                }
+//            }
+//            else
+//            {
+//                for (int channel = 0; channel < channels; channel++)
+//                {
+//                    float *channelData = audioBufferList->mBuffers[channel].mData;
+//                    float rms = [EZAudio RMS:channelData length:bufferSize];
+//                    data[channel][i] = rms;
+//                }
+//            }
         }
         
         // clean up
@@ -484,6 +490,7 @@ typedef struct
         
         pthread_mutex_unlock(&_lock);
         
+        NSLog(@"done");
         waveformData = [EZAudioWaveformData dataWithNumberOfChannels:channels
                                                              buffers:(float **)data
                                                           bufferSize:numberOfPoints];
