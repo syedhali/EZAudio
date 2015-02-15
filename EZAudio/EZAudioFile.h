@@ -376,17 +376,6 @@ typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
 //------------------------------------------------------------------------------
 #pragma mark - Helpers
 //------------------------------------------------------------------------------
-/**
- @name Manipulating The Audio Data
- */
-
-/**
- Tells the caller whether the EZAudioFile has cached waveform data that was loaded via the getWaveformDataWithCompletionBlock: function.
- *  @return A BOOL indicating whether there is cached waveform data
- */
-- (BOOL) hasLoadedAudioData;
-
-//------------------------------------------------------------------------------
 
 /**
  Synchronously pulls the waveform amplitude data into a float array for the receiver. This returns a waveform with a default resolution of 1024, meaning there are 1024 data points to plot the waveform.

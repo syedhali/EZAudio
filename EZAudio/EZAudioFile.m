@@ -250,7 +250,7 @@ typedef struct
 
 + (AudioStreamBasicDescription) defaultClientFormat
 {
-    return [EZAudio stereoFloatInterleavedFormatWithSampleRate:44100];
+    return [EZAudio stereoFloatNonInterleavedFormatWithSampleRate:44100];
 }
 
 //------------------------------------------------------------------------------
@@ -377,6 +377,8 @@ typedef struct
     }
 }
 
+//------------------------------------------------------------------------------
+
 - (void) seekToFrame:(SInt64)frame
 {
     if (pthread_mutex_trylock(&_lock) == 0)
@@ -397,14 +399,6 @@ typedef struct
 #pragma mark - Getters
 //------------------------------------------------------------------------------
 
-- (BOOL) hasLoadedAudioData
-{
-//  return _waveformData != NULL;
-    return NO;
-}
-
-//------------------------------------------------------------------------------
-
 - (EZAudioWaveformData *)getWaveformData
 {
     return [self getWaveformDataWithNumberOfPoints:EZAudioFileWaveformDefaultResolution];
@@ -419,9 +413,9 @@ typedef struct
     {
         // store current frame
         SInt64 currentFrame = self.frameIndex;
-        BOOL interleaved = [EZAudio isInterleaved:self.clientFormat];
-        UInt32 channels = self.clientFormat.mChannelsPerFrame;
-        float **data = (float **)malloc( sizeof(float*) * channels );
+        UInt32 channels     = self.clientFormat.mChannelsPerFrame;
+        BOOL   interleaved  = [EZAudio isInterleaved:self.clientFormat];
+        float  **data       = (float **)malloc( sizeof(float*) * channels );
         for (int i = 0; i < channels; i++)
         {
             data[i] = (float *)malloc( sizeof(float) * numberOfPoints );
@@ -449,16 +443,14 @@ typedef struct
                    operation:"Failed to read audio data from file waveform"];
         
         // read through file and calculate rms at each point
-        float *samples = (float *)audioBufferList->mBuffers[0].mData;
         SInt64 offset = 0;
         for (SInt64 i = 0; i < numberOfPoints; i++)
         {
-            float buffer[framesPerBuffer];
-            memcpy(buffer, &samples[offset], framesPerBuffer * sizeof(float));
-            offset += framesPerBuffer;
-            
             if (interleaved)
             {
+                float buffer[framesPerBuffer];
+                float *samples = (float *)audioBufferList->mBuffers[0].mData;
+                memcpy(buffer, &samples[offset], framesPerBuffer * sizeof(float));
                 for (int channel = 0; channel < channels; channel++)
                 {
                     float channelData[framesPerChannel];
@@ -469,31 +461,20 @@ typedef struct
                     float rms = [EZAudio RMS:channelData length:(UInt32)framesPerChannel];
                     data[channel][i] = rms;
                 }
+                offset += channels * framesPerBuffer;
             }
-            
-//            if (interleaved)
-//            {
-//                float *buffer = (float *)audioBufferList->mBuffers[0].mData;
-//                for (int channel = 0; channel < channels; channel++)
-//                {
-//                    float channelData[framesPerChannel];
-//                    for (int frame = 0; frame < framesPerChannel; frame++)
-//                    {
-//                        channelData[frame] = buffer[frame * channels + channel];
-//                    }
-//                    float rms = [EZAudio RMS:channelData length:(UInt32)framesPerChannel];
-//                    data[channel][i] = rms;
-//                }
-//            }
-//            else
-//            {
-//                for (int channel = 0; channel < channels; channel++)
-//                {
-//                    float *channelData = audioBufferList->mBuffers[channel].mData;
-//                    float rms = [EZAudio RMS:channelData length:bufferSize];
-//                    data[channel][i] = rms;
-//                }
-//            }
+            else
+            {
+                for (int channel = 0; channel < channels; channel++)
+                {
+                    float buffer[framesPerBuffer];
+                    float *samples = (float *)audioBufferList->mBuffers[channel].mData;
+                    memcpy(buffer, &samples[offset], framesPerBuffer * sizeof(float));
+                    float rms = [EZAudio RMS:buffer length:(UInt32)framesPerBuffer];
+                    data[channel][i] = rms;
+                }
+                offset += framesPerBuffer;
+            }
         }
         
         // clean up
@@ -506,7 +487,6 @@ typedef struct
         
         pthread_mutex_unlock(&_lock);
         
-        NSLog(@"done");
         waveformData = [EZAudioWaveformData dataWithNumberOfChannels:channels
                                                              buffers:(float **)data
                                                           bufferSize:numberOfPoints];
@@ -553,21 +533,21 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-- (AudioStreamBasicDescription) clientFormat
+- (AudioStreamBasicDescription)clientFormat
 {
     return self.info.clientFormat;
 }
 
 //------------------------------------------------------------------------------
 
-- (AudioStreamBasicDescription) fileFormat
+- (AudioStreamBasicDescription)fileFormat
 {
     return self.info.fileFormat;
 }
 
 //------------------------------------------------------------------------------
 
-- (SInt64) frameIndex
+- (SInt64)frameIndex
 {
     SInt64 frameIndex;
     [EZAudio checkResult:ExtAudioFileTell(self.info.extAudioFileRef, &frameIndex)
@@ -577,7 +557,7 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-- (NSDictionary *) metadata
+- (NSDictionary *)metadata
 {
     // get size of metadata property (dictionary)
     UInt32          propSize = sizeof(_info.audioFileID);
@@ -602,7 +582,7 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-- (NSTimeInterval) totalDuration
+- (NSTimeInterval)totalDuration
 {
     SInt64 totalFrames = [self totalFrames];
     return (NSTimeInterval) totalFrames / self.info.fileFormat.mSampleRate;
@@ -610,7 +590,7 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-- (SInt64) totalClientFrames
+- (SInt64)totalClientFrames
 {
     SInt64 totalFrames = [self totalFrames];
     
@@ -629,7 +609,7 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-- (SInt64) totalFrames
+- (SInt64)totalFrames
 {
     SInt64 totalFrames;
     UInt32 size = sizeof(SInt64);
@@ -643,7 +623,7 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-- (NSURL*) url
+- (NSURL*)url
 {
   return (__bridge NSURL*)self.info.sourceURL;
 }
@@ -652,7 +632,7 @@ typedef struct
 #pragma mark - Setters
 //------------------------------------------------------------------------------
 
-- (void) setClientFormat:(AudioStreamBasicDescription)clientFormat
+- (void)setClientFormat:(AudioStreamBasicDescription)clientFormat
 {
     // store the client format
     _info.clientFormat = clientFormat;
@@ -663,19 +643,6 @@ typedef struct
                                                  sizeof(clientFormat),
                                                  &clientFormat)
                operation:"Couldn't set client data format on file"];
-}
-
-//------------------------------------------------------------------------------
-
--(void) setWaveformResolution:(UInt32)waveformResolution
-{
-//  if( _waveformResolution != waveformResolution ){
-//    _waveformResolution = waveformResolution;
-//    if( _waveformData ){
-//      free(_waveformData);
-//      _waveformData = NULL;
-//    }
-//  }
 }
 
 //------------------------------------------------------------------------------
