@@ -57,7 +57,7 @@ typedef NS_ENUM(NSUInteger, EZAudioFilePermission)
  @param numberOfChannels The number of channels. 2 for stereo, 1 for mono.
  */
 - (void)     audioFile:(EZAudioFile*)audioFile
-             readAudio:(float**)buffer
+             readAudio:(float***)buffer
         withBufferSize:(UInt32)bufferSize
   withNumberOfChannels:(UInt32)numberOfChannels;
 
@@ -70,6 +70,24 @@ typedef NS_ENUM(NSUInteger, EZAudioFilePermission)
  */
 - (void) audioFile:(EZAudioFile*)audioFile
    updatedPosition:(SInt64)framePosition;
+
+@end
+
+//------------------------------------------------------------------------------
+#pragma mark - EZAudioWaveformData
+//------------------------------------------------------------------------------
+
+@interface EZAudioWaveformData : NSObject
+
++ (instancetype) dataWithNumberOfChannels:(int)numberOfChannels
+                                  buffers:(float **)buffers
+                               bufferSize:(UInt32)bufferSize;
+
+@property (nonatomic, assign, readonly) int numberOfChannels;
+@property (nonatomic, assign, readonly) float **buffers;
+@property (nonatomic, assign, readonly) UInt32 bufferSize;
+
+- (float *) bufferForChannel:(int)channel;
 
 @end
 
@@ -89,8 +107,7 @@ typedef NS_ENUM(NSUInteger, EZAudioFilePermission)
  @param waveformData An array of float values representing the amplitude data from the audio waveform
  @param length       The length of the waveform data's float array
  */
-typedef void (^WaveformDataCompletionBlock)(float* waveformData,
-                                            UInt32 length);
+typedef void (^WaveformDataCompletionBlock)(EZAudioWaveformData *waveformData);
 
 //------------------------------------------------------------------------------
 #pragma mark - Properties

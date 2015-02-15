@@ -95,6 +95,14 @@
 +(AudioStreamBasicDescription)iLBCFormatWithSampleRate:(float)sampleRate;
 
 /**
+ Checks an AudioStreamBasicDescription to check for an interleaved flag (samples are
+ stored in one buffer one after another instead of two (or n channels) parallel buffers
+ @param asbd A valid AudioStreamBasicDescription
+ @return A BOOL indicating whether or not the AudioStreamBasicDescription is interleaved
+ */
++ (BOOL) isInterleaved:(AudioStreamBasicDescription)asbd;
+
+/**
  
  @param channels   The desired number of channels
  @param sampleRate The desired sample rate

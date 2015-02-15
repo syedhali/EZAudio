@@ -100,6 +100,11 @@
     return asbd;
 }
 
++ (BOOL)isInterleaved:(AudioStreamBasicDescription)asbd
+{
+    return !(asbd.mFormatFlags & kAudioFormatFlagIsNonInterleaved);
+}
+
 +(AudioStreamBasicDescription)M4AFormatWithNumberOfChannels:(UInt32)channels
                                                  sampleRate:(float)sampleRate
 {
