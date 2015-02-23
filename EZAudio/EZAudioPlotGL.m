@@ -337,6 +337,10 @@
   [self _refreshWithBackgroundColor:self.backgroundColor];
   [self _refreshWithColor:self.color];
   
+  const GLint flag = 0.5;
+  [[self openGLContext] setValues:&flag
+                     forParameter:NSOpenGLCPSurfaceOpacity];
+    
   // Setup the display link (rendering loop)
   [self _setupDisplayLink];
   

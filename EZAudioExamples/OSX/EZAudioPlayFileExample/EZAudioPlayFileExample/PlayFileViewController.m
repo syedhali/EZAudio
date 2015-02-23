@@ -37,12 +37,18 @@
     /*
      Customizing the audio plot's look
      */
-    self.audioPlot.backgroundColor = [NSColor clearColor];
-    self.audioPlot.color = [NSColor colorWithCalibratedRed: 0.255 green: 0.608 blue: 0.976 alpha: 1];
-    self.audioPlot.plotType = EZPlotTypeBuffer;
-    self.audioPlot.shouldFill = YES;
-    self.audioPlot.shouldMirror = YES;
-    self.audioPlot.wantsLayer = YES;
+    self.audioPlotLeft.backgroundColor = [NSColor colorWithCalibratedRed:0.0 green:0.0 blue:0.0 alpha:0.0];
+    self.audioPlotLeft.color = [NSColor colorWithCalibratedRed: 0.255 green: 0.608 blue: 0.976 alpha: 1];
+    self.audioPlotLeft.plotType = EZPlotTypeBuffer;
+    self.audioPlotLeft.shouldFill = YES;
+    self.audioPlotLeft.shouldMirror = YES;
+    self.audioPlotRight.backgroundColor = [NSColor colorWithCalibratedRed:0.0 green:0.0 blue:0.0 alpha:0.0];
+    self.audioPlotRight.color = [NSColor colorWithCalibratedRed: 0.255 green: 0.608 blue: 0.976 alpha: 1];
+    self.audioPlotRight.plotType = EZPlotTypeBuffer;
+    self.audioPlotRight.shouldFill = YES;
+    self.audioPlotRight.shouldMirror = YES;
+    self.audioPlotLeft.wantsLayer = YES;
+    self.audioPlotRight.wantsLayer = YES;
     
     /**
      Setup an output
@@ -122,9 +128,12 @@
  */
 - (void)drawBufferPlot
 {
-    self.audioPlot.plotType = EZPlotTypeBuffer;
-    self.audioPlot.shouldFill = NO;
-    self.audioPlot.shouldMirror = NO;
+    self.audioPlotLeft.plotType = EZPlotTypeBuffer;
+    self.audioPlotLeft.shouldFill = NO;
+    self.audioPlotLeft.shouldMirror = NO;
+    self.audioPlotRight.plotType = EZPlotTypeBuffer;
+    self.audioPlotRight.shouldFill = NO;
+    self.audioPlotRight.shouldMirror = NO;
 }
 
 /*
@@ -132,9 +141,12 @@
  */
 - (void)drawRollingPlot
 {
-    self.audioPlot.plotType = EZPlotTypeRolling;
-    self.audioPlot.shouldFill = YES;
-    self.audioPlot.shouldMirror = YES;
+    self.audioPlotLeft.plotType = EZPlotTypeRolling;
+    self.audioPlotLeft.shouldFill = YES;
+    self.audioPlotLeft.shouldMirror = YES;
+    self.audioPlotRight.plotType = EZPlotTypeRolling;
+    self.audioPlotRight.shouldFill = YES;
+    self.audioPlotRight.shouldMirror = YES;
 }
 
 - (void)openFileWithFilePathURL:(NSURL *)filePathURL
@@ -159,9 +171,12 @@
     self.sampleRateSlider.floatValue = self.audioFile.clientFormat.mSampleRate;
   
     // plot the whole waveform
-    self.audioPlot.plotType = EZPlotTypeBuffer;
-    self.audioPlot.shouldFill = YES;
-    self.audioPlot.shouldMirror = YES;
+    self.audioPlotLeft.plotType = EZPlotTypeBuffer;
+    self.audioPlotLeft.shouldFill = YES;
+    self.audioPlotLeft.shouldMirror = YES;
+    self.audioPlotRight.plotType = EZPlotTypeBuffer;
+    self.audioPlotRight.shouldFill = YES;
+    self.audioPlotRight.shouldMirror = YES;
     [self.progressIndicator startAnimation:nil];
     
     //
@@ -169,8 +184,10 @@
     [self.audioFile getWaveformDataWithCompletionBlock:^(EZAudioFloatData *waveformData)
     {
         [weakSelf.progressIndicator stopAnimation:nil];
-        [weakSelf.audioPlot updateBuffer:[waveformData bufferForChannel:0]
-                          withBufferSize:waveformData.bufferSize];
+        [weakSelf.audioPlotLeft updateBuffer:[waveformData bufferForChannel:0]
+                              withBufferSize:waveformData.bufferSize];
+        [weakSelf.audioPlotRight updateBuffer:[waveformData bufferForChannel:1]
+                               withBufferSize:waveformData.bufferSize];
     }];
 }
 
@@ -186,8 +203,10 @@ withNumberOfChannels:(UInt32)numberOfChannels
     {
         __weak PlayFileViewController *weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.audioPlot updateBuffer:buffer[0]
-                              withBufferSize:bufferSize];
+            [weakSelf.audioPlotLeft updateBuffer:buffer[0]
+                                  withBufferSize:bufferSize];
+            [weakSelf.audioPlotRight updateBuffer:buffer[1]
+                                   withBufferSize:bufferSize];
         });
     }
 }

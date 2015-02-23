@@ -28,7 +28,7 @@
 //------------------------------------------------------------------------------
 
 #import "EZAudio.h"
-#import "EZAudioConverter.h"
+#import "EZAudioFloatConverter.h"
 #import "EZAudioFloatData.h"
 #include <pthread.h>
 
@@ -47,7 +47,7 @@ typedef struct
 {
     AudioFileID                 audioFileID;
     AudioStreamBasicDescription clientFormat;
-    Float32                     duration;
+    float                       duration;
     ExtAudioFileRef             extAudioFileRef;
     AudioStreamBasicDescription fileFormat;
     SInt64                      frames;
@@ -60,6 +60,8 @@ typedef struct
 //------------------------------------------------------------------------------
 
 @interface EZAudioFile ()
+@property (nonatomic, strong) EZAudioFloatConverter *floatConverter;
+@property (nonatomic) float **floatData;
 @property (nonatomic) EZAudioFileInfo info;
 @property (nonatomic) pthread_mutex_t lock;
 @property (nonatomic) dispatch_queue_t waveformQueue;
@@ -79,6 +81,7 @@ typedef struct
     if (self)
     {
         memset(&_info, 0, sizeof(_info));
+        _floatData = NULL;
         _info.permission = EZAudioFilePermissionRead;
         pthread_mutex_init(&_lock, NULL);
         _waveformQueue = dispatch_queue_create(EZAudioFileWaveformDataQueueIdentifier.UTF8String, DISPATCH_QUEUE_PRIORITY_DEFAULT);
@@ -134,10 +137,10 @@ typedef struct
     if(self)
     {
         _info.clientFormat = clientFormat;
-        _info.fileFormat   = fileFormat;
-        _info.permission   = permission;
-        _info.sourceURL    = (__bridge CFURLRef)url;
-        self.delegate      = delegate;
+        _info.fileFormat = fileFormat;
+        _info.permission = permission;
+        _info.sourceURL = (__bridge CFURLRef)url;
+        self.delegate = delegate;
         [self setup];
     }
     return self;
@@ -197,7 +200,7 @@ typedef struct
 
 + (AudioStreamBasicDescription)defaultClientFormat
 {
-    return [EZAudio stereoFloatInterleavedFormatWithSampleRate:44100];
+    return [EZAudio stereoFloatNonInterleavedFormatWithSampleRate:44100];
 }
 
 //------------------------------------------------------------------------------
@@ -321,7 +324,6 @@ typedef struct
                    operation:"Failed to read audio data from file"];
         *bufferSize = frames;
         *eof = frames == 0;
-        pthread_mutex_unlock(&_lock);
         
         // notify delegate
         if ([self.delegate respondsToSelector:@selector(audioFile:updatedPosition:)])
@@ -329,13 +331,23 @@ typedef struct
             [self.delegate audioFile:self
                      updatedPosition:self.frameIndex];
         }
-//        if ([self.delegate respondsToSelector:@selector(audioFile:readAudio:withBufferSize:withNumberOfChannels:)])
-//        {
-//            [self.delegate audioFile:self
-//                           readAudio:nil
-//                      withBufferSize:*bufferSize
-//                withNumberOfChannels:self.info.clientFormat.mChannelsPerFrame];
-//        }
+        
+        // convert into float data
+        [self.floatConverter convertDataFromAudioBufferList:audioBufferList
+                                         withNumberOfFrames:*bufferSize
+                                             toFloatBuffers:self.floatData];
+        
+        pthread_mutex_unlock(&_lock);
+        
+        if ([self.delegate respondsToSelector:@selector(audioFile:readAudio:withBufferSize:withNumberOfChannels:)])
+        {
+            UInt32 channels = self.clientFormat.mChannelsPerFrame;
+            [self.delegate audioFile:self
+                           readAudio:self.floatData
+                      withBufferSize:*bufferSize
+                withNumberOfChannels:channels];
+            
+        }
     }
 }
 
@@ -363,6 +375,13 @@ typedef struct
 #pragma mark - Getters
 //------------------------------------------------------------------------------
 
+- (AudioStreamBasicDescription)floatFormat
+{
+    return [EZAudio stereoFloatNonInterleavedFormatWithSampleRate:44100];
+}
+
+//------------------------------------------------------------------------------
+
 - (EZAudioFloatData *)getWaveformData
 {
     return [self getWaveformDataWithNumberOfPoints:EZAudioFileWaveformDefaultResolution];
@@ -382,7 +401,7 @@ typedef struct
         SInt64 totalFrames      = self.totalClientFrames;
         SInt64 framesPerBuffer  = ((SInt64) totalFrames / numberOfPoints);
         SInt64 framesPerChannel = framesPerBuffer / channels;
-        float  **data           = (float **)malloc( sizeof(float*) * channels );
+        float  **data           = (float **)malloc( sizeof(float *) * channels );
         for (int i = 0; i < channels; i++)
         {
             data[i] = (float *)malloc( sizeof(float) * numberOfPoints );
@@ -481,8 +500,9 @@ typedef struct
     }
 
     // async get waveform data
+    __weak EZAudioFile *weakSelf = self;
     dispatch_async(self.waveformQueue, ^{
-        EZAudioFloatData *waveformData = [self getWaveformDataWithNumberOfPoints:numberOfPoints];
+        EZAudioFloatData *waveformData = [weakSelf getWaveformDataWithNumberOfPoints:numberOfPoints];
         dispatch_async(dispatch_get_main_queue(), ^{
             completion(waveformData);
         });
@@ -603,6 +623,29 @@ typedef struct
                                                  sizeof(clientFormat),
                                                  &clientFormat)
                operation:"Couldn't set client data format on file"];
+    
+    // create a new float converter using the client format as the input format
+    self.floatConverter = [EZAudioFloatConverter converterWithInputFormat:clientFormat];
+    
+    UInt32 maxPacketSize;
+    UInt32 propSize = sizeof(maxPacketSize);
+    [EZAudio checkResult:ExtAudioFileGetProperty(self.info.extAudioFileRef,
+                                                 kExtAudioFileProperty_ClientMaxPacketSize,
+                                                 &propSize,
+                                                 &maxPacketSize)
+               operation:"Failed to get max packet size"];
+    
+    
+    
+    // figure out what the max packet size is
+    
+    
+    
+    
+    
+    
+    self.floatData = [EZAudio floatBuffersWithNumberOfFrames:1024
+                                            numberOfChannels:self.clientFormat.mChannelsPerFrame];
 }
 
 //------------------------------------------------------------------------------
@@ -610,6 +653,7 @@ typedef struct
 -(void)dealloc
 {
     pthread_mutex_destroy(&_lock);
+    [EZAudio freeFloatBuffers:self.floatData numberOfChannels:self.clientFormat.mChannelsPerFrame];
     [EZAudio checkResult:AudioFileClose(self.info.audioFileID) operation:"Failed to close audio file"];
     [EZAudio checkResult:ExtAudioFileDispose(self.info.extAudioFileRef) operation:"Failed to dispose of ext audio file"];
 }
