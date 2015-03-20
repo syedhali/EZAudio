@@ -23,6 +23,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wauto-import"
+
 #import <Foundation/Foundation.h>
 #import "TargetConditionals.h"
 
@@ -32,6 +35,8 @@
   #import <AVFoundation/AVFoundation.h>
 #elif TARGET_OS_MAC
 #endif
+
+#pragma clang diagnostic pop
 
 @class EZAudioPlayer;
 
