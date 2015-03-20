@@ -183,7 +183,7 @@ static __inline__ __attribute__((always_inline)) bool TPCircularBufferProduceByt
     int32_t space;
     void *ptr = TPCircularBufferHead(buffer, &space);
     if ( space < len ) return false;
-    memcpy(ptr, src, len);
+    memcpy(ptr, src, (size_t)len);
     TPCircularBufferProduce(buffer, len);
     return true;
 }
