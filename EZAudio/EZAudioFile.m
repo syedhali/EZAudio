@@ -143,6 +143,7 @@
   _floatConverter = [[AEFloatConverter alloc] initWithSourceFormat:_clientFormat];
   size_t sizeToAllocate = sizeof(float*) * _clientFormat.mChannelsPerFrame;
   sizeToAllocate = MAX(8, sizeToAllocate);
+  assert(NULL == _floatBuffers && "the float buffers will need to be freed in the event this implementation is executed multiple times");
   _floatBuffers   = (float**)malloc( sizeToAllocate );
   UInt32 outputBufferSize = 32 * 1024; // 32 KB
   for ( int i=0; i< _clientFormat.mChannelsPerFrame; i++ ) {
@@ -349,10 +350,15 @@
     free(_waveformData);
     _waveformData = NULL;
   }
-//  if( _floatBuffers ){
-//    free(_floatBuffers);
-//    _floatBuffers = NULL;
-//  }
+  if( _floatBuffers ){
+	for ( int i=0; i< _clientFormat.mChannelsPerFrame; i++ ) {
+	  free(_floatBuffers[i]);
+	  _floatBuffers[i] = NULL;
+	}
+
+	free(_floatBuffers);
+	_floatBuffers = NULL;
+	}
   _frameIndex = 0;
   _waveformFrameRate = 0;
   _waveformTotalBuffers = 0;
