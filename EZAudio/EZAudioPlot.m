@@ -25,7 +25,7 @@
 
 #import "EZAudioPlot.h"
 
-#import "EZAudio.h"
+#import "EZAudioUtilities.h"
 
 @interface EZAudioPlot () {
 //  BOOL             _hasData;
@@ -152,11 +152,12 @@
 }
   
 #pragma mark - Update
--(void)updateBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize {
+-(void)updateBuffer:(float *)buffer
+withBufferSize:(UInt32)bufferSize {
   if( _plotType == EZPlotTypeRolling ){
     
     // Update the scroll history datasource
-    [EZAudio updateScrollHistory:&_scrollHistory
+    [EZAudioUtilities updateScrollHistory:&_scrollHistory
                       withLength:_scrollHistoryLength
                          atIndex:&_scrollHistoryIndex
                       withBuffer:buffer

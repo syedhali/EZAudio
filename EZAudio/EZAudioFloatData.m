@@ -7,8 +7,7 @@
 //
 
 #import "EZAudioFloatData.h"
-
-#import "EZAudio.h"
+#import "EZAudioUtilities.h"
 
 //------------------------------------------------------------------------------
 #pragma mark - EZAudioFloatData
@@ -28,8 +27,8 @@
 
 - (void)dealloc
 {
-    [EZAudio freeFloatBuffers:self.buffers
-             numberOfChannels:self.numberOfChannels];
+    [EZAudioUtilities freeFloatBuffers:self.buffers
+                      numberOfChannels:self.numberOfChannels];
 }
 
 //------------------------------------------------------------------------------
@@ -41,8 +40,8 @@
     id waveformData = [[self alloc] init];
     
     size_t size = sizeof(float) * bufferSize;
-    float **buffersCopy = [EZAudio floatBuffersWithNumberOfFrames:bufferSize
-                                                 numberOfChannels:numberOfChannels];
+    float **buffersCopy = [EZAudioUtilities floatBuffersWithNumberOfFrames:bufferSize
+                                                          numberOfChannels:numberOfChannels];
     for (int i = 0; i < numberOfChannels; i++)
     {
         memcpy(buffersCopy[i], buffers[i], size);

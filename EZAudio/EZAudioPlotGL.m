@@ -477,12 +477,12 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   
   
   // Update the scroll history datasource
-  [EZAudio updateScrollHistory:&_scrollHistory
-                    withLength:_scrollHistoryLength
-                       atIndex:&_scrollHistoryIndex
-                    withBuffer:buffer
-                withBufferSize:bufferSize
-          isResolutionChanging:&_changingHistorySize];
+  [EZAudioUtilities updateScrollHistory:&_scrollHistory
+                             withLength:_scrollHistoryLength
+                                atIndex:&_scrollHistoryIndex
+                             withBuffer:buffer
+                         withBufferSize:bufferSize
+                   isResolutionChanging:&_changingHistorySize];
   
   // Fill in graph data
   [EZAudioPlotGL fillGraph:graph
@@ -717,7 +717,7 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   if( drawingType == EZAudioPlotGLDrawTypeLineStrip ){
     // graph size = buffer size to stroke waveform
     for(int i = 0; i < graphSize; i++){
-      float x = [EZAudio MAP:i
+      float x = [EZAudioUtilities MAP:i
                       leftMin:0
                       leftMax:bufferSize
                      rightMin:-1.0
@@ -729,12 +729,12 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   else if( drawingType == EZAudioPlotGLDrawTypeTriangleStrip ) {
     // graph size = 2 * buffer size to draw triangles and fill regions properly
     for(int i = 0; i < graphSize; i+=2){
-      int bufferIndex = (int)[EZAudio MAP:i
+      int bufferIndex = (int)[EZAudioUtilities MAP:i
                               leftMin:0
                               leftMax:graphSize
                               rightMin:0
                               rightMax:bufferSize];
-      float x = [EZAudio MAP:bufferIndex
+      float x = [EZAudioUtilities MAP:bufferIndex
                       leftMin:0
                       leftMax:bufferSize
                      rightMin:-1.0
@@ -743,13 +743,12 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
       graph[i].y = 0.0f;
     }
     for(int i = 0; i < graphSize; i+=2){
-      int bufferIndex = (int)[EZAudio
-                              MAP:i
-                              leftMin:0
-                              leftMax:graphSize
-                              rightMin:0
-                              rightMax:bufferSize];
-      float x = [EZAudio MAP:bufferIndex
+      int bufferIndex = (int)[EZAudioUtilities MAP:i
+                                           leftMin:0
+                                           leftMax:graphSize
+                                          rightMin:0
+                                          rightMax:bufferSize];
+      float x = [EZAudioUtilities MAP:bufferIndex
                       leftMin:0
                       leftMax:bufferSize
                      rightMin:-1.0

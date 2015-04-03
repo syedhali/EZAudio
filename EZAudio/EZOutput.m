@@ -174,8 +174,8 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
 
 -(void)_createNewInstanceForOutputComponent:(AudioComponent)outputComponent {
   //
-  [EZAudio checkResult:AudioComponentInstanceNew( outputComponent, &_outputUnit )
-             operation:"Failed to open component for output unit"];
+  [EZAudioUtilities checkResult:AudioComponentInstanceNew( outputComponent, &_outputUnit )
+                      operation:"Failed to open component for output unit"];
 }
 
 #pragma mark - Configure The Output Unit
@@ -206,13 +206,13 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
   
   //
   AudioComponent comp = AudioComponentFindNext(NULL,&outputcd);
-  [EZAudio checkResult:AudioComponentInstanceNew(comp,&_outputUnit)
+  [EZAudioUtilities checkResult:AudioComponentInstanceNew(comp,&_outputUnit)
              operation:"Failed to get output unit"];
   
   // Setup the output unit for playback
   UInt32           oneFlag = 1;
   AudioUnitElement bus0    = 0;
-  [EZAudio checkResult:AudioUnitSetProperty(_outputUnit,
+  [EZAudioUtilities checkResult:AudioUnitSetProperty(_outputUnit,
                                             kAudioOutputUnitProperty_EnableIO,
                                             kAudioUnitScope_Output,
                                             bus0,
@@ -232,7 +232,7 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
   }
   
   // Set the format for output
-  [EZAudio checkResult:AudioUnitSetProperty(_outputUnit,
+  [EZAudioUtilities checkResult:AudioUnitSetProperty(_outputUnit,
                                             kAudioUnitProperty_StreamFormat,
                                             kAudioUnitScope_Input,
                                             bus0,
@@ -244,7 +244,7 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
   AURenderCallbackStruct input;
   input.inputProc = OutputRenderCallback;
   input.inputProcRefCon = (__bridge void *)self;
-  [EZAudio checkResult:AudioUnitSetProperty(_outputUnit,
+  [EZAudioUtilities checkResult:AudioUnitSetProperty(_outputUnit,
                                             kAudioUnitProperty_SetRenderCallback,
                                             kAudioUnitScope_Input,
                                             bus0,
@@ -253,7 +253,7 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
              operation:"Failed to set the render callback on the output unit"];
   
   //
-  [EZAudio checkResult:AudioUnitInitialize(_outputUnit)
+  [EZAudioUtilities checkResult:AudioUnitInitialize(_outputUnit)
              operation:"Couldn't initialize output unit"];
   
   
@@ -273,17 +273,17 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
     NSLog(@"Failed to get output unit");
     exit(-1);
   }
-  [EZAudio checkResult:AudioComponentInstanceNew(comp,&_outputUnit)
+  [EZAudioUtilities checkResult:AudioComponentInstanceNew(comp,&_outputUnit)
              operation:"Failed to open component for output unit"];
 
   
   // Setup an ASBD in canonical format by default
   if( !_customASBD ){
-      _outputASBD = [EZAudio stereoFloatNonInterleavedFormatWithSampleRate:44100];
+      _outputASBD = [EZAudioUtilities stereoFloatNonInterleavedFormatWithSampleRate:44100];
   }
   
   // Set the format for output
-  [EZAudio checkResult:AudioUnitSetProperty(_outputUnit,
+  [EZAudioUtilities checkResult:AudioUnitSetProperty(_outputUnit,
                                             kAudioUnitProperty_StreamFormat,
                                             kAudioUnitScope_Input,
                                             0,
@@ -295,7 +295,7 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
   AURenderCallbackStruct input;
   input.inputProc = OutputRenderCallback;
   input.inputProcRefCon = (__bridge void *)(self);
-  [EZAudio checkResult:AudioUnitSetProperty(_outputUnit,
+  [EZAudioUtilities checkResult:AudioUnitSetProperty(_outputUnit,
                                             kAudioUnitProperty_SetRenderCallback,
                                             kAudioUnitScope_Input,
                                             0,
@@ -304,7 +304,7 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
              operation:"Failed to set the render callback on the output unit"];
   
   //
-  [EZAudio checkResult:AudioUnitInitialize(_outputUnit)
+  [EZAudioUtilities checkResult:AudioUnitInitialize(_outputUnit)
              operation:"Couldn't initialize output unit"];
   
 }
@@ -313,7 +313,7 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
 #pragma mark - Events
 -(void)startPlayback {
   if( !_isPlaying ){
-    [EZAudio checkResult:AudioOutputUnitStart(_outputUnit)
+    [EZAudioUtilities checkResult:AudioOutputUnitStart(_outputUnit)
                operation:"Failed to start output unit"];
     _isPlaying = YES;
   }
@@ -321,7 +321,7 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
 
 -(void)stopPlayback {
   if( _isPlaying ){
-    [EZAudio checkResult:AudioOutputUnitStop(_outputUnit)
+    [EZAudioUtilities checkResult:AudioOutputUnitStop(_outputUnit)
                operation:"Failed to stop output unit"];
     _isPlaying = NO;
   }
@@ -346,7 +346,7 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
   _customASBD = YES;
   _outputASBD = asbd;
   // Set the format for output
-  [EZAudio checkResult:AudioUnitSetProperty(_outputUnit,
+  [EZAudioUtilities checkResult:AudioUnitSetProperty(_outputUnit,
                                             kAudioUnitProperty_StreamFormat,
                                             kAudioUnitScope_Input,
                                             0,
@@ -360,11 +360,11 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
 }
 
 -(void)dealloc {
-  [EZAudio checkResult:AudioOutputUnitStop(_outputUnit)
+  [EZAudioUtilities checkResult:AudioOutputUnitStop(_outputUnit)
              operation:"Failed to uninitialize output unit"];
-  [EZAudio checkResult:AudioUnitUninitialize(_outputUnit)
+  [EZAudioUtilities checkResult:AudioUnitUninitialize(_outputUnit)
              operation:"Failed to uninitialize output unit"];
-  [EZAudio checkResult:AudioComponentInstanceDispose(_outputUnit)
+  [EZAudioUtilities checkResult:AudioComponentInstanceDispose(_outputUnit)
              operation:"Failed to uninitialize output unit"];
 }
 

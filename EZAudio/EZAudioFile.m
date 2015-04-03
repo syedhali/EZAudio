@@ -200,7 +200,7 @@ typedef struct
 
 + (AudioStreamBasicDescription)defaultClientFormat
 {
-    return [EZAudio stereoFloatNonInterleavedFormatWithSampleRate:44100];
+    return [EZAudioUtilities stereoFloatNonInterleavedFormatWithSampleRate:44100];
 }
 
 //------------------------------------------------------------------------------
@@ -230,7 +230,7 @@ typedef struct
 - (void)setup
 {
     // we open the file differently depending on the permissions specified
-    [EZAudio checkResult:[self openAudioFile]
+    [EZAudioUtilities checkResult:[self openAudioFile]
                operation:"Failed to create/open audio file"];
     
     // set the client format
@@ -262,8 +262,8 @@ typedef struct
                                   permission,
                                   0,
                                   &_info.audioFileID);
-        [EZAudio checkResult:result
-                   operation:"failed to open audio file"];
+        [EZAudioUtilities checkResult:result
+                            operation:"failed to open audio file"];
     }
     else
     {
@@ -285,21 +285,21 @@ typedef struct
     // get the ExtAudioFile wrapper
     if (result == noErr)
     {
-        [EZAudio checkResult:ExtAudioFileWrapAudioFileID(self.info.audioFileID,
-                                                         false,
-                                                         &_info.extAudioFileRef)
-                   operation:"Failed to wrap audio file ID in ext audio file ref"];
+        [EZAudioUtilities checkResult:ExtAudioFileWrapAudioFileID(self.info.audioFileID,
+                                                                  false,
+                                                                  &_info.extAudioFileRef)
+                            operation:"Failed to wrap audio file ID in ext audio file ref"];
     }
     
     // store the file format if we opened an existing file
     if (fileExists)
     {
         propSize = sizeof(self.info.fileFormat);
-        [EZAudio checkResult:ExtAudioFileGetProperty(self.info.extAudioFileRef,
-                                                     kExtAudioFileProperty_FileDataFormat,
-                                                     &propSize,
-                                                     &_info.fileFormat)
-                   operation:"Failed to get file audio format on existing audio file"];
+        [EZAudioUtilities checkResult:ExtAudioFileGetProperty(self.info.extAudioFileRef,
+                                                              kExtAudioFileProperty_FileDataFormat,
+                                                              &propSize,
+                                                              &_info.fileFormat)
+                            operation:"Failed to get file audio format on existing audio file"];
     }
     
     // done
@@ -318,10 +318,10 @@ typedef struct
     if (pthread_mutex_trylock(&_lock) == 0)
     {
         // perform read
-        [EZAudio checkResult:ExtAudioFileRead(self.info.extAudioFileRef,
-                                              &frames,
-                                              audioBufferList)
-                   operation:"Failed to read audio data from file"];
+        [EZAudioUtilities checkResult:ExtAudioFileRead(self.info.extAudioFileRef,
+                                                       &frames,
+                                                       audioBufferList)
+                            operation:"Failed to read audio data from file"];
         *bufferSize = frames;
         *eof = frames == 0;
         
@@ -357,8 +357,8 @@ typedef struct
 {
     if (pthread_mutex_trylock(&_lock) == 0)
     {
-        [EZAudio checkResult:ExtAudioFileSeek(self.info.extAudioFileRef,
-                                              frame)
+        [EZAudioUtilities checkResult:ExtAudioFileSeek(self.info.extAudioFileRef,
+                                                       frame)
                    operation:"Failed to seek frame position within audio file"];
 
         pthread_mutex_unlock(&_lock);
@@ -378,7 +378,7 @@ typedef struct
 
 - (AudioStreamBasicDescription)floatFormat
 {
-    return [EZAudio stereoFloatNonInterleavedFormatWithSampleRate:44100];
+    return [EZAudioUtilities stereoFloatNonInterleavedFormatWithSampleRate:44100];
 }
 
 //------------------------------------------------------------------------------
@@ -398,7 +398,7 @@ typedef struct
         // store current frame
         SInt64 currentFrame     = self.frameIndex;
         UInt32 channels         = self.clientFormat.mChannelsPerFrame;
-        BOOL   interleaved      = [EZAudio isInterleaved:self.clientFormat];
+        BOOL   interleaved      = [EZAudioUtilities isInterleaved:self.clientFormat];
         SInt64 totalFrames      = self.totalClientFrames;
         SInt64 framesPerBuffer  = ((SInt64) totalFrames / numberOfPoints);
         SInt64 framesPerChannel = framesPerBuffer / channels;
@@ -409,20 +409,20 @@ typedef struct
         }
         
         // seek to 0
-        [EZAudio checkResult:ExtAudioFileSeek(self.info.extAudioFileRef,
-                                              0)
+        [EZAudioUtilities checkResult:ExtAudioFileSeek(self.info.extAudioFileRef,
+                                                       0)
                    operation:"Failed to seek frame position within audio file"];
         
         // allocate an audio buffer list
-        AudioBufferList *audioBufferList = [EZAudio audioBufferListWithNumberOfFrames:(UInt32)totalFrames
-                                                                     numberOfChannels:self.info.clientFormat.mChannelsPerFrame
-                                                                          interleaved:interleaved];
+        AudioBufferList *audioBufferList = [EZAudioUtilities audioBufferListWithNumberOfFrames:(UInt32)totalFrames
+                                                                              numberOfChannels:self.info.clientFormat.mChannelsPerFrame
+                                                                                   interleaved:interleaved];
 
         UInt32 bufferSize = (UInt32)totalFrames;
-        [EZAudio checkResult:ExtAudioFileRead(self.info.extAudioFileRef,
-                                              &bufferSize,
-                                              audioBufferList)
-                   operation:"Failed to read audio data from file waveform"];
+        [EZAudioUtilities checkResult:ExtAudioFileRead(self.info.extAudioFileRef,
+                                                       &bufferSize,
+                                                       audioBufferList)
+                            operation:"Failed to read audio data from file waveform"];
         
         // read through file and calculate rms at each point
         SInt64 offset = 0;
@@ -440,7 +440,7 @@ typedef struct
                     {
                         channelData[frame] = buffer[frame * channels + channel];
                     }
-                    float rms = [EZAudio RMS:channelData length:(UInt32)framesPerChannel];
+                    float rms = [EZAudioUtilities RMS:channelData length:(UInt32)framesPerChannel];
                     data[channel][i] = rms;
                 }
                 offset += channels * framesPerBuffer;
@@ -451,7 +451,7 @@ typedef struct
                 {
                     float *samples = (float *)audioBufferList->mBuffers[channel].mData;
                     memcpy(buffer, &samples[offset], framesPerBuffer * sizeof(float));
-                    float rms = [EZAudio RMS:buffer length:(UInt32)framesPerBuffer];
+                    float rms = [EZAudioUtilities RMS:buffer length:(UInt32)framesPerBuffer];
                     data[channel][i] = rms;
                 }
                 offset += framesPerBuffer;
@@ -459,25 +459,22 @@ typedef struct
         }
         
         // clean up
-        [EZAudio freeBufferList:audioBufferList];
+        [EZAudioUtilities freeBufferList:audioBufferList];
         
         // seek back to previous position
-        [EZAudio checkResult:ExtAudioFileSeek(self.info.extAudioFileRef,
-                                              currentFrame)
-                   operation:"Failed to seek frame position within audio file"];
+        [EZAudioUtilities checkResult:ExtAudioFileSeek(self.info.extAudioFileRef,
+                                                       currentFrame)
+                            operation:"Failed to seek frame position within audio file"];
         
         pthread_mutex_unlock(&_lock);
         
         waveformData = [EZAudioFloatData dataWithNumberOfChannels:channels
-                                                             buffers:(float **)data
-                                                          bufferSize:numberOfPoints];
+                                                          buffers:(float **)data
+                                                       bufferSize:numberOfPoints];
         
         // cleanup
-        for (int i = 0; i < channels; i++)
-        {
-            free(data[i]);
-        }
-        free(data);
+        [EZAudioUtilities freeFloatBuffers:data
+                          numberOfChannels:channels];
     }
     return waveformData;
 }
@@ -529,8 +526,8 @@ typedef struct
 - (SInt64)frameIndex
 {
     SInt64 frameIndex;
-    [EZAudio checkResult:ExtAudioFileTell(self.info.extAudioFileRef, &frameIndex)
-               operation:"Failed to get frame index"];
+    [EZAudioUtilities checkResult:ExtAudioFileTell(self.info.extAudioFileRef, &frameIndex)
+                        operation:"Failed to get frame index"];
     return frameIndex;
 }
 
@@ -542,18 +539,18 @@ typedef struct
     UInt32          propSize = sizeof(_info.audioFileID);
     CFDictionaryRef metadata;
     UInt32          writable;
-    [EZAudio checkResult:AudioFileGetPropertyInfo(self.info.audioFileID,
-                                                  kAudioFilePropertyInfoDictionary,
-                                                  &propSize,
-                                                  &writable)
-               operation:"Failed to get the size of the metadata dictionary"];
+    [EZAudioUtilities checkResult:AudioFileGetPropertyInfo(self.info.audioFileID,
+                                                           kAudioFilePropertyInfoDictionary,
+                                                           &propSize,
+                                                           &writable)
+                        operation:"Failed to get the size of the metadata dictionary"];
     
     // pull metadata
-    [EZAudio checkResult:AudioFileGetProperty(self.info.audioFileID,
-                                              kAudioFilePropertyInfoDictionary,
-                                              &propSize,
-                                              &metadata)
-               operation:"Failed to get metadata dictionary"];
+    [EZAudioUtilities checkResult:AudioFileGetProperty(self.info.audioFileID,
+                                                       kAudioFilePropertyInfoDictionary,
+                                                       &propSize,
+                                                       &metadata)
+                        operation:"Failed to get metadata dictionary"];
     
     // cast to NSDictionary
     return (__bridge NSDictionary*)metadata;
@@ -592,11 +589,11 @@ typedef struct
 {
     SInt64 totalFrames;
     UInt32 size = sizeof(SInt64);
-    [EZAudio checkResult:ExtAudioFileGetProperty(self.info.extAudioFileRef,
-                                                 kExtAudioFileProperty_FileLengthFrames,
-                                                 &size,
-                                                 &totalFrames)
-               operation:"Failed to get total frames"];
+    [EZAudioUtilities checkResult:ExtAudioFileGetProperty(self.info.extAudioFileRef,
+                                                          kExtAudioFileProperty_FileLengthFrames,
+                                                          &size,
+                                                          &totalFrames)
+                        operation:"Failed to get total frames"];
     return totalFrames;
 }
 
@@ -613,28 +610,28 @@ typedef struct
 
 - (void)setClientFormat:(AudioStreamBasicDescription)clientFormat
 {
-    NSAssert([EZAudio isLinearPCM:clientFormat], @"Client format must be linear PCM");
+    NSAssert([EZAudioUtilities isLinearPCM:clientFormat], @"Client format must be linear PCM");
     
     // store the client format
     _info.clientFormat = clientFormat;
     
     // set the client format on the extended audio file ref
-    [EZAudio checkResult:ExtAudioFileSetProperty(self.info.extAudioFileRef,
-                                                 kExtAudioFileProperty_ClientDataFormat,
-                                                 sizeof(clientFormat),
-                                                 &clientFormat)
-               operation:"Couldn't set client data format on file"];
+    [EZAudioUtilities checkResult:ExtAudioFileSetProperty(self.info.extAudioFileRef,
+                                                          kExtAudioFileProperty_ClientDataFormat,
+                                                          sizeof(clientFormat),
+                                                          &clientFormat)
+                        operation:"Couldn't set client data format on file"];
     
     // create a new float converter using the client format as the input format
     self.floatConverter = [EZAudioFloatConverter converterWithInputFormat:clientFormat];
     
     UInt32 maxPacketSize;
     UInt32 propSize = sizeof(maxPacketSize);
-    [EZAudio checkResult:ExtAudioFileGetProperty(self.info.extAudioFileRef,
-                                                 kExtAudioFileProperty_ClientMaxPacketSize,
-                                                 &propSize,
-                                                 &maxPacketSize)
-               operation:"Failed to get max packet size"];
+    [EZAudioUtilities checkResult:ExtAudioFileGetProperty(self.info.extAudioFileRef,
+                                                          kExtAudioFileProperty_ClientMaxPacketSize,
+                                                          &propSize,
+                                                          &maxPacketSize)
+                        operation:"Failed to get max packet size"];
     
     
     
@@ -645,8 +642,8 @@ typedef struct
     
     
     
-    self.floatData = [EZAudio floatBuffersWithNumberOfFrames:1024
-                                            numberOfChannels:self.clientFormat.mChannelsPerFrame];
+    self.floatData = [EZAudioUtilities floatBuffersWithNumberOfFrames:1024
+                                                     numberOfChannels:self.clientFormat.mChannelsPerFrame];
 }
 
 //------------------------------------------------------------------------------
@@ -654,9 +651,9 @@ typedef struct
 -(void)dealloc
 {
     pthread_mutex_destroy(&_lock);
-    [EZAudio freeFloatBuffers:self.floatData numberOfChannels:self.clientFormat.mChannelsPerFrame];
-    [EZAudio checkResult:AudioFileClose(self.info.audioFileID) operation:"Failed to close audio file"];
-    [EZAudio checkResult:ExtAudioFileDispose(self.info.extAudioFileRef) operation:"Failed to dispose of ext audio file"];
+    [EZAudioUtilities freeFloatBuffers:self.floatData numberOfChannels:self.clientFormat.mChannelsPerFrame];
+    [EZAudioUtilities checkResult:AudioFileClose(self.info.audioFileID) operation:"Failed to close audio file"];
+    [EZAudioUtilities checkResult:ExtAudioFileDispose(self.info.extAudioFileRef) operation:"Failed to dispose of ext audio file"];
 }
 
 //------------------------------------------------------------------------------
