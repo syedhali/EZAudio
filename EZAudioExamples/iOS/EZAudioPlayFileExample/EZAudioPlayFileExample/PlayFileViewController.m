@@ -129,26 +129,27 @@
 
 -(void)openFileWithFilePathURL:(NSURL*)filePathURL {
   
-  // Stop playback
-  [[EZOutput sharedOutput] stopPlayback];
-  
-  self.audioFile                        = [EZAudioFile audioFileWithURL:filePathURL];
-  self.audioFile.audioFileDelegate      = self;
-  self.eof                              = NO;
-  self.filePathLabel.text               = filePathURL.lastPathComponent;
-  self.framePositionSlider.maximumValue = (float)self.audioFile.totalFrames;
-  
-  // Set the client format from the EZAudioFile on the output
-  [[EZOutput sharedOutput] setAudioStreamBasicDescription:self.audioFile.clientFormat];
+    // Stop playback
+    [[EZOutput sharedOutput] stopPlayback];
 
-  // Plot the whole waveform
-  self.audioPlot.plotType        = EZPlotTypeBuffer;
-  self.audioPlot.shouldFill      = YES;
-  self.audioPlot.shouldMirror    = YES;
-  [self.audioFile getWaveformDataWithCompletionBlock:^(float *waveformData, UInt32 length) {
-    [self.audioPlot updateBuffer:waveformData withBufferSize:length];
-  }];
-  
+    self.audioFile = [EZAudioFile audioFileWithURL:filePathURL];
+    self.audioFile.delegate = self;
+    self.eof = NO;
+    self.filePathLabel.text = filePathURL.lastPathComponent;
+    self.framePositionSlider.maximumValue = (float)self.audioFile.totalFrames;
+
+    // Set the client format from the EZAudioFile on the output
+    [[EZOutput sharedOutput] setAudioStreamBasicDescription:self.audioFile.clientFormat];
+
+    // Plot the whole waveform
+    self.audioPlot.plotType = EZPlotTypeBuffer;
+    self.audioPlot.shouldFill = YES;
+    self.audioPlot.shouldMirror = YES;
+    
+    [self.audioFile getWaveformDataWithCompletionBlock:^(EZAudioFloatData *waveformData) {
+        [self.audioPlot updateBuffer:[waveformData bufferForChannel:0]
+                      withBufferSize:waveformData.bufferSize];
+    }];
 }
 
 #pragma mark - EZAudioFileDelegate

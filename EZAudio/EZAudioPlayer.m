@@ -76,7 +76,12 @@
   self = [super init];
   if(self){
     [self _configureAudioPlayer];
-    self.audioFile           = [EZAudioFile audioFileWithURL:url andDelegate:self];
+      
+      AudioStreamBasicDescription asbd;
+      self.audioFile = [EZAudioFile audioFileWithURL:url
+                                            delegate:self
+                                          permission:EZAudioFilePermissionRead
+                                          fileFormat:asbd];
     self.audioPlayerDelegate = audioPlayerDelegate;
   }
   return self;
@@ -186,10 +191,14 @@
 #pragma mark - Setters
 -(void)setAudioFile:(EZAudioFile *)audioFile {
   if( _audioFile ){
-    _audioFile.audioFileDelegate = nil;
+    _audioFile.delegate = nil;
   }
+    AudioStreamBasicDescription asbd;
   _eof       = NO;
-  _audioFile = [EZAudioFile audioFileWithURL:audioFile.url andDelegate:self];
+    _audioFile = [EZAudioFile audioFileWithURL:audioFile.url
+                                      delegate:self
+                                    permission:EZAudioFilePermissionRead
+                                    fileFormat:asbd];
   NSAssert(_output,@"No output was found, this should by default be the EZOutput shared instance");
   [_output setAudioStreamBasicDescription:self.audioFile.clientFormat];    
 }

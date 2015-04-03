@@ -227,8 +227,8 @@ withNumberOfChannels:(UInt32)numberOfChannels
 //------------------------------------------------------------------------------
 #pragma mark - EZOutputDataSource
 //------------------------------------------------------------------------------
--(void)             output:(EZOutput*)output
- shouldFillAudioBufferList:(AudioBufferList*)audioBufferList
+-(void)             output:(EZOutput *)output
+ shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
         withNumberOfFrames:(UInt32)frames
 {
     if( self.audioFile )

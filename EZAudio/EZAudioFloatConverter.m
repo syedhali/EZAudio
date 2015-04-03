@@ -145,7 +145,7 @@ OSStatus EZAudioFloatConverterCallback(AudioConverterRef            inAudioConve
     EZAudioFloatConverterInfo info = self.info;
     if (frames == 0)
     {
-        
+
     }
     else
     {
