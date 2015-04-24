@@ -596,4 +596,13 @@ static OSStatus inputCallback(void                          *inRefCon,
              operation:"Could not disable audio unit allocating its own buffers"];
 }
 
+-(void)dealloc {
+    [EZAudio freeBufferList:microphoneInputBuffer];
+    for ( int i=0; i<streamFormat.mChannelsPerFrame; i++ ) {
+        free(floatBuffers[i]);
+    }
+    free(floatBuffers);
+    floatBuffers = NULL;
+}
+
 @end
