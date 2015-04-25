@@ -351,10 +351,11 @@
     free(_waveformData);
     _waveformData = NULL;
   }
-//  if( _floatBuffers ){
-//    free(_floatBuffers);
-//    _floatBuffers = NULL;
-//  }
+  for ( int i=0; i< _clientFormat.mChannelsPerFrame; i++ ) {
+    free(_floatBuffers[i]);
+  }
+  free(_floatBuffers);
+  _floatBuffers = NULL;
   _frameIndex = 0;
   _waveformFrameRate = 0;
   _waveformTotalBuffers = 0;
