@@ -545,7 +545,8 @@ static OSStatus inputCallback(void                          *inRefCon,
 #pragma mark - AudioBufferList Initialization
 -(void)_configureAudioBufferListWithFrameSize:(UInt32)bufferFrameSize {
   UInt32 bufferSizeBytes = bufferFrameSize * streamFormat.mBytesPerFrame;
-  UInt32 propSize = offsetof( AudioBufferList, mBuffers[0] ) + ( sizeof( AudioBuffer ) *streamFormat.mChannelsPerFrame );
+  AudioBufferList bufferList;
+  UInt32 propSize = bufferList.mBuffers[0].mDataByteSize + ( sizeof( AudioBuffer ) *streamFormat.mChannelsPerFrame );
   microphoneInputBuffer                 = (AudioBufferList*)malloc(propSize);
   microphoneInputBuffer->mNumberBuffers = streamFormat.mChannelsPerFrame;
   for( UInt32 i = 0; i < microphoneInputBuffer->mNumberBuffers; i++ ){
