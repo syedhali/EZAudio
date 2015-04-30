@@ -148,11 +148,11 @@
 
 -(float)currentTime {
   NSAssert(_audioFile,@"No audio file to perform the seek on, check that EZAudioFile is not nil");
-  return [EZAudio MAP:self.audioFile.frameIndex
-              leftMin:0
-              leftMax:self.audioFile.totalFrames
-             rightMin:0
-             rightMax:self.audioFile.totalDuration];
+  return [EZAudioUtilities MAP:self.audioFile.frameIndex
+                       leftMin:0
+                       leftMax:self.audioFile.totalFrames
+                      rightMin:0
+                      rightMax:self.audioFile.totalDuration];
 }
 
 -(BOOL)endOfFile {

@@ -27,8 +27,13 @@
 #import  <AudioToolbox/AudioToolbox.h>
 #import  "TargetConditionals.h"
 
-@class EZAudio;
 @class EZMicrophone;
+
+#if TARGET_OS_IPHONE
+@import AVFoundation;
+#elif TARGET_OS_MAC
+@class EZAudioDevice;
+#endif
 
 #pragma mark - EZMicrophoneDelegate
 /**
@@ -55,8 +60,8 @@
  @param microphone The instance of the EZMicrophone that triggered the event.
  @param audioStreamBasicDescription The AudioStreamBasicDescription that was created for the microphone instance.
  */
--(void)              microphone:(EZMicrophone *)microphone
- hasAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
+- (void)              microphone:(EZMicrophone *)microphone
+  hasAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
 
 ///-----------------------------------------------------------
 /// @name Audio Data Callbacks
@@ -70,10 +75,10 @@
  @param numberOfChannels The number of channels for the incoming audio.
  @warning This function executes on a background thread to avoid blocking any audio operations. If operations should be performed on any other thread (like the main thread) it should be performed within a dispatch block like so: dispatch_async(dispatch_get_main_queue(), ^{ ...Your Code... })
  */
--(void)    microphone:(EZMicrophone *)microphone
-     hasAudioReceived:(float **)buffer
-       withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels;
+- (void)    microphone:(EZMicrophone *)microphone
+      hasAudioReceived:(float **)buffer
+        withBufferSize:(UInt32)bufferSize
+  withNumberOfChannels:(UInt32)numberOfChannels;
 
 /**
  Returns back the buffer list containing the audio received. This occurs on the background thread so any drawing code must explicity perform its functions on the main thread.
@@ -83,10 +88,10 @@
  @param numberOfChannels The number of channels for the incoming audio.
  @warning This function executes on a background thread to avoid blocking any audio operations. If operations should be performed on any other thread (like the main thread) it should be performed within a dispatch block like so: dispatch_async(dispatch_get_main_queue(), ^{ ...Your Code... })
  */
--(void)    microphone:(EZMicrophone *)microphone
-        hasBufferList:(AudioBufferList *)bufferList
-       withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels;
+- (void)    microphone:(EZMicrophone *)microphone
+         hasBufferList:(AudioBufferList *)bufferList
+        withBufferSize:(UInt32)bufferSize
+  withNumberOfChannels:(UInt32)numberOfChannels;
 
 @end
 
@@ -99,7 +104,7 @@
 /**
  The EZMicrophoneDelegate for which to handle the microphone callbacks
  */
-@property (nonatomic,assign) id<EZMicrophoneDelegate> microphoneDelegate;
+@property (nonatomic,assign) id<EZMicrophoneDelegate> delegate;
 
 /**
  A bool describing whether the microphone is on and passing back audio data to its delegate.
@@ -116,10 +121,10 @@
 
 /**
  Creates an instance of the EZMicrophone with a delegate to respond to the audioReceived callback. This will not start fetching the audio until startFetchingAudio has been called. Use initWithMicrophoneDelegate:startsImmediately: to instantiate this class and immediately start fetching audio data.
- @param 	microphoneDelegate 	A EZMicrophoneDelegate delegate that will receive the audioReceived callback.
+ @param 	delegate 	A EZMicrophoneDelegate delegate that will receive the audioReceived callback.
  @return	An instance of the EZMicrophone class. This should be strongly retained.
  */
--(EZMicrophone *)initWithMicrophoneDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate;
+- (EZMicrophone *)initWithMicrophoneDelegate:(id<EZMicrophoneDelegate>)delegate;
 
 /**
  Creates an instance of the EZMicrophone with a custom AudioStreamBasicDescription and provides the caller to specify a delegate to respond to the audioReceived callback. This will not start fetching the audio until startFetchingAudio has been called. Use initWithMicrophoneDelegate:startsImmediately: to instantiate this class and immediately start fetching audio data.
@@ -127,28 +132,28 @@
  @param 	audioStreamBasicDescription A custom AudioStreamBasicFormat for the microphone input.
  @return	An instance of the EZMicrophone class. This should be strongly retained.
  */
--(EZMicrophone *)initWithMicrophoneDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate
+-(EZMicrophone *)initWithMicrophoneDelegate:(id<EZMicrophoneDelegate>)delegate
             withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
 
 /**
  Creates an instance of the EZMicrophone with a delegate to respond to the audioReceived callback and allows the caller to specify whether they'd immediately like to start fetching the audio data.
- @param 	microphoneDelegate 	A EZMicrophoneDelegate delegate that will receive the audioReceived callback.
+ @param 	delegate 	A EZMicrophoneDelegate delegate that will receive the audioReceived callback.
  @param 	startsImmediately 	A boolean indicating whether to start fetching the data immediately. IF YES, the delegate's audioReceived callback will immediately start getting called.
  @return	An instance of the EZMicrophone class. This should be strongly retained.
  */
--(EZMicrophone *)initWithMicrophoneDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate
-                          startsImmediately:(BOOL)startsImmediately;
+- (EZMicrophone *)initWithMicrophoneDelegate:(id<EZMicrophoneDelegate>)delegate
+                           startsImmediately:(BOOL)startsImmediately;
 
 /**
  Creates an instance of the EZMicrophone with a custom AudioStreamBasicDescription and provides the caller with a delegate to respond to the audioReceived callback and allows the caller to specify whether they'd immediately like to start fetching the audio data.
- @param 	microphoneDelegate 	A EZMicrophoneDelegate delegate that will receive the audioReceived callback.
+ @param 	delegate 	A EZMicrophoneDelegate delegate that will receive the audioReceived callback.
  @param 	audioStreamBasicDescription A custom AudioStreamBasicFormat for the microphone input.
  @param 	startsImmediately 	A boolean indicating whether to start fetching the data immediately. IF YES, the delegate's audioReceived callback will immediately start getting called.
  @return	An instance of the EZMicrophone class. This should be strongly retained.
  */
--(EZMicrophone *)initWithMicrophoneDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate
-            withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription
-                          startsImmediately:(BOOL)startsImmediately;
+- (EZMicrophone *)initWithMicrophoneDelegate:(id<EZMicrophoneDelegate>)delegate
+             withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription
+                           startsImmediately:(BOOL)startsImmediately;
 
 //------------------------------------------------------------------------------
 #pragma mark - Class Initializers
@@ -160,19 +165,19 @@
 
 /**
  Creates an instance of the EZMicrophone with a delegate to respond to the audioReceived callback. This will not start fetching the audio until startFetchingAudio has been called. Use microphoneWithDelegate:startsImmediately: to instantiate this class and immediately start fetching audio data.
- @param 	microphoneDelegate 	A EZMicrophoneDelegate delegate that will receive the audioReceived callback.
+ @param 	delegate 	A EZMicrophoneDelegate delegate that will receive the audioReceived callback.
  @return	An instance of the EZMicrophone class. This should be declared as a strong property!
  */
-+(EZMicrophone *)microphoneWithDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate;
++ (EZMicrophone *)microphoneWithDelegate:(id<EZMicrophoneDelegate>)delegate;
 
 /**
  Creates an instance of the EZMicrophone with a delegate to respond to the audioReceived callback. This will not start fetching the audio until startFetchingAudio has been called. Use microphoneWithDelegate:startsImmediately: to instantiate this class and immediately start fetching audio data.
- @param 	microphoneDelegate 	A EZMicrophoneDelegate delegate that will receive the audioReceived callback.
+ @param 	delegate 	A EZMicrophoneDelegate delegate that will receive the audioReceived callback.
  @param 	audioStreamBasicDescription A custom AudioStreamBasicFormat for the microphone input.
  @return	An instance of the EZMicrophone class. This should be declared as a strong property!
  */
-+(EZMicrophone *)microphoneWithDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate
-        withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
++ (EZMicrophone *)microphoneWithDelegate:(id<EZMicrophoneDelegate>)delegate
+         withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
 
 /**
  Creates an instance of the EZMicrophone with a delegate to respond to the audioReceived callback and allows the caller to specify whether they'd immediately like to start fetching the audio data.
@@ -181,8 +186,8 @@
  @param startsImmediately  A boolean indicating whether to start fetching the data immediately. IF YES, the delegate's audioReceived callback will immediately start getting called.
  @return An instance of the EZMicrophone class. This should be strongly retained.
  */
-+(EZMicrophone *)microphoneWithDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate
-                       startsImmediately:(BOOL)startsImmediately;
++ (EZMicrophone *)microphoneWithDelegate:(id<EZMicrophoneDelegate>)delegate
+                        startsImmediately:(BOOL)startsImmediately;
 
 /**
  Creates an instance of the EZMicrophone with a delegate to respond to the audioReceived callback and allows the caller to specify whether they'd immediately like to start fetching the audio data.
@@ -192,9 +197,9 @@
  @param startsImmediately  A boolean indicating whether to start fetching the data immediately. IF YES, the delegate's audioReceived callback will immediately start getting called.
  @return An instance of the EZMicrophone class. This should be strongly retained.
  */
-+(EZMicrophone *)microphoneWithDelegate:(id<EZMicrophoneDelegate>)microphoneDelegate
-        withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription
-                      startsImmediately:(BOOL)startsImmediately;
++ (EZMicrophone *)microphoneWithDelegate:(id<EZMicrophoneDelegate>)delegate
+         withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription
+                       startsImmediately:(BOOL)startsImmediately;
 
 //------------------------------------------------------------------------------
 #pragma mark - Shared Instance
@@ -208,7 +213,7 @@
  A shared instance of the microphone component. Most applications will only need to use one instance of the microphone component across multiple views. Make sure to call the `startFetchingAudio` method to receive the audio data in the microphone delegate.
  @return A shared instance of the `EZAudioMicrophone` component.
  */
-+(EZMicrophone *)sharedMicrophone;
++ (EZMicrophone *)sharedMicrophone;
 
 //------------------------------------------------------------------------------
 #pragma mark - Events
@@ -221,14 +226,14 @@
 /**
  Starts fetching audio from the default microphone. Will notify delegate with audioReceived callback.
  */
--(void)startFetchingAudio;
+- (void)startFetchingAudio;
 
 //------------------------------------------------------------------------------
 
 /**
  Stops fetching audio. Will stop notifying the delegate's audioReceived callback.
  */
--(void)stopFetchingAudio;
+- (void)stopFetchingAudio;
 
 //------------------------------------------------------------------------------
 #pragma mark - Getters
@@ -242,13 +247,13 @@
  Provides the AudioStreamBasicDescription structure containing the format of the microphone's audio.
  @return An AudioStreamBasicDescription structure describing the format of the microphone's audio.
  */
--(AudioStreamBasicDescription)audioStreamBasicDescription;
+- (AudioStreamBasicDescription)audioStreamBasicDescription;
 
 /**
  Provides the underlying Audio Unit that is being used to fetch the audio.
  @return The AudioUnit used for the microphone
  */
--(AudioUnit *)audioUnit;
+- (AudioUnit *)audioUnit;
 
 #pragma mark - Setters
 ///-----------------------------------------------------------
@@ -260,6 +265,13 @@
  @warning Do not set this while fetching audio (startFetchingAudio)
  @param asbd The new AudioStreamBasicDescription to use in place of the current audio format description.
  */
--(void)setAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd;
+- (void)setAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd;
+
+//------------------------------------------------------------------------------
+
+#if TARGET_OS_IPHONE
+#elif TARGET_OS_MAC
+- (void)setDevice:(EZAudioDevice *)device;
+#endif
 
 @end

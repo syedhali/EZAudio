@@ -63,7 +63,7 @@
   /**
    Initialize the circular buffer
    */
-  [EZAudio circularBuffer:&_circularBuffer withSize:2048];
+  [EZAudioUtilities circularBuffer:&_circularBuffer withSize:2048];
 }
 
 #pragma mark - Customize the Audio Plot
@@ -82,7 +82,7 @@
   /*
    Start the microphone
    */
-  [EZMicrophone sharedMicrophone].microphoneDelegate = self;
+  [EZMicrophone sharedMicrophone].delegate = self;
   [[EZMicrophone sharedMicrophone] startFetchingAudio];
   
   /**
@@ -162,7 +162,7 @@ withNumberOfChannels:(UInt32)numberOfChannels {
   /**
    Append the audio data to a circular buffer
    */
-  [EZAudio appendDataToCircularBuffer:&_circularBuffer
+  [EZAudioUtilities appendDataToCircularBuffer:&_circularBuffer
                   fromAudioBufferList:bufferList];
 }
 
@@ -173,7 +173,7 @@ withNumberOfChannels:(UInt32)numberOfChannels {
 
 #pragma mark - Cleanup
 -(void)dealloc {
-  [EZAudio freeCircularBuffer:&_circularBuffer];
+  [EZAudioUtilities freeCircularBuffer:&_circularBuffer];
 }
 
 @end
