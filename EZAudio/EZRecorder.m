@@ -27,6 +27,9 @@
 
 #import "EZAudio.h"
 
+#include <pthread.h>
+static pthread_mutex_t outputAudioFileLock;
+
 @interface EZRecorder (){
     ExtAudioFileRef             _destinationFile;
     AudioFileTypeID             _destinationFileTypeID;
@@ -47,6 +50,8 @@
     self = [super init];
     if( self )
     {
+        pthread_mutex_init(&outputAudioFileLock,NULL);
+        
         // Set defaults
         _destinationFile        = NULL;
         _destinationFileURL     = (__bridge CFURLRef)url;
@@ -159,10 +164,13 @@
 {
     if( _destinationFile )
     {
-        [EZAudio checkResult:ExtAudioFileWriteAsync(_destinationFile,
-                                                    bufferSize,
-                                                    bufferList)
-                   operation:"Failed to write audio data to recorded audio file"];
+        if (0 == pthread_mutex_trylock(&outputAudioFileLock)) {
+            OSStatus err = ExtAudioFileWriteAsync(_destinationFile, bufferSize, bufferList);
+            [EZAudio checkResult:err
+                       operation:"Failed to write audio data to recorded audio file"];
+            pthread_mutex_unlock(&outputAudioFileLock);
+        }
+        
     }
 }
 
@@ -171,7 +179,10 @@
     if( _destinationFile )
     {
         // Dispose of the audio file reference
-        [EZAudio checkResult:ExtAudioFileDispose(_destinationFile)
+        pthread_mutex_lock(&outputAudioFileLock);
+        OSStatus setupErr;
+        setupErr = ExtAudioFileDispose(_destinationFile);
+        [EZAudio checkResult:setupErr
                    operation:"Failed to close audio file"];
         
         // Null out the file reference
