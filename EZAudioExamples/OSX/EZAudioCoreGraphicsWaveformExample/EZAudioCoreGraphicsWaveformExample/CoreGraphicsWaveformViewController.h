@@ -34,15 +34,21 @@
 @interface CoreGraphicsWaveformViewController : NSViewController <EZMicrophoneDelegate>
 
 #pragma mark - Components
+
 /**
  The CoreGraphics based audio plot
  */
-@property (nonatomic,weak) IBOutlet EZAudioPlot *audioPlot;
+@property (nonatomic, weak) IBOutlet EZAudioPlot *audioPlot;
 
 /**
  The microphone component
  */
-@property (nonatomic,strong) EZMicrophone *microphone;
+@property (nonatomic, strong) EZMicrophone *microphone;
+
+/**
+ The microphone pop up button (contains the menu for choosing a microphone input)
+ */
+@property (nonatomic, weak) IBOutlet NSPopUpButton *microphoneInputPopUpButton;
 
 #pragma mark - Actions
 /**

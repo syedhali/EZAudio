@@ -1,41 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1070" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CoreGraphicsWaveformViewController">
             <connections>
                 <outlet property="audioPlot" destination="1uw-Yi-HM2" id="64z-gn-hPW"/>
+                <outlet property="microphoneInputPopUpButton" destination="cSw-gJ-SFw" id="yRJ-A2-X7x"/>
                 <outlet property="view" destination="1" id="2"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="1">
             <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="1uw-Yi-HM2" customClass="EZAudioPlot">
                     <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <subviews>
-                        <button translatesAutoresizingMaskIntoConstraints="NO" id="bst-4p-f4H">
-                            <rect key="frame" x="18" y="18" width="119" height="18"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <buttonCell key="cell" type="check" title="Microphone On" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="X83-kX-Oau">
-                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                            <connections>
-                                <action selector="toggleMicrophone:" target="-2" id="WUF-aw-GV2"/>
-                            </connections>
-                        </button>
                         <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xVu-eW-fRp">
-                            <rect key="frame" x="333" y="15" width="129" height="24"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <segmentedCell key="cell" alignment="left" style="rounded" trackingMode="selectOne" id="mpa-RS-2hy">
+                            <rect key="frame" x="335" y="15" width="127" height="24"/>
+                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="mpa-RS-2hy">
                                 <font key="font" metaFont="system"/>
                                 <segments>
                                     <segment label="Buffer" selected="YES"/>
@@ -46,12 +34,44 @@
                                 <action selector="changePlotType:" target="-2" id="IsT-Sq-sKO"/>
                             </connections>
                         </segmentedControl>
+                        <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cSw-gJ-SFw">
+                            <rect key="frame" x="18" y="14" width="180" height="26"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="175" id="3bZ-AG-HEc"/>
+                            </constraints>
+                            <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="N46-B2-cLY" id="Xcw-jv-o9z">
+                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="menu"/>
+                                <menu key="menu" id="GlX-yy-Rxe">
+                                    <items>
+                                        <menuItem title="Item 1" state="on" id="N46-B2-cLY"/>
+                                        <menuItem title="Item 2" id="Sc8-aS-esq"/>
+                                        <menuItem title="Item 3" id="4AE-sw-bQq"/>
+                                    </items>
+                                </menu>
+                            </popUpButtonCell>
+                        </popUpButton>
+                        <button translatesAutoresizingMaskIntoConstraints="NO" id="bst-4p-f4H">
+                            <rect key="frame" x="343" y="44" width="119" height="18"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="115" id="vYJ-8O-eut"/>
+                            </constraints>
+                            <buttonCell key="cell" type="check" title="Microphone On" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="X83-kX-Oau">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="toggleMicrophone:" target="-2" id="WUF-aw-GV2"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="bst-4p-f4H" firstAttribute="leading" secondItem="1uw-Yi-HM2" secondAttribute="leading" constant="20" id="OEK-K5-KgC"/>
-                        <constraint firstAttribute="bottom" secondItem="bst-4p-f4H" secondAttribute="bottom" constant="20" id="Xb8-Oc-8K5"/>
+                        <constraint firstItem="cSw-gJ-SFw" firstAttribute="leading" secondItem="1uw-Yi-HM2" secondAttribute="leading" constant="20" id="9dC-JY-g1J"/>
+                        <constraint firstItem="xVu-eW-fRp" firstAttribute="top" secondItem="bst-4p-f4H" secondAttribute="bottom" constant="8" id="T2f-9O-EYV"/>
+                        <constraint firstAttribute="bottom" secondItem="cSw-gJ-SFw" secondAttribute="bottom" constant="17" id="dqc-Zk-rt6"/>
                         <constraint firstAttribute="bottom" secondItem="xVu-eW-fRp" secondAttribute="bottom" constant="17" id="gPn-xu-hrZ"/>
                         <constraint firstAttribute="trailing" secondItem="xVu-eW-fRp" secondAttribute="trailing" constant="20" id="tHh-2L-ypE"/>
+                        <constraint firstAttribute="trailing" secondItem="bst-4p-f4H" secondAttribute="trailing" constant="20" id="tKB-Ii-DGK"/>
                     </constraints>
                 </customView>
             </subviews>

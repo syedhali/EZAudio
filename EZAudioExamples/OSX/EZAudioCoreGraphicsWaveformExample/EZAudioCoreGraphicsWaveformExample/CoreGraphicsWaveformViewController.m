@@ -25,65 +25,85 @@
 
 #import "CoreGraphicsWaveformViewController.h"
 
-@interface CoreGraphicsWaveformViewController ()
-
-@end
-
 @implementation CoreGraphicsWaveformViewController
 
-#pragma mark - Initialization
--(id)init {
-  self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil];
-  if(self){
-    [self initializeViewController];
-  }
-  return self;
-}
-
--(id)initWithCoder:(NSCoder *)aDecoder {
-  self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil];
-  if(self){
-    [self initializeViewController];
-  }
-  return self;
-}
-
--(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-  self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil];
-  if(self){
-    [self initializeViewController];
-  }
-  return self;
-}
-
-#pragma mark - Initialize View Controller
--(void)initializeViewController {
-  // Create an instance of the microphone and tell it to use this view controller instance as the delegate
-  self.microphone = [EZMicrophone microphoneWithDelegate:self];
-}
-
+//------------------------------------------------------------------------------
 #pragma mark - Customize the Audio Plot
--(void)awakeFromNib {
-  
-  /*
-   Customizing the audio plot's look
-   */
-  // Background color
-  self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.984 green: 0.471 blue: 0.525 alpha: 1];
-  // Waveform color
-  self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
-  // Plot type
-  self.audioPlot.plotType        = EZPlotTypeBuffer;
-  
-  /*
-   Start the microphone
-   */
-  [self.microphone startFetchingAudio];
-  
+//------------------------------------------------------------------------------
+
+-(void)awakeFromNib
+{
+    //
+    // Customizing the audio plot's look
+    //
+    
+    // Background color
+    self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.984 green: 0.471 blue: 0.525 alpha: 1];
+    
+    // Waveform color
+    self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
+    
+    // Plot type
+    self.audioPlot.plotType        = EZPlotTypeBuffer;
+
+    //
+    // Create the microphone
+    //
+    
+    self.microphone = [EZMicrophone microphoneWithDelegate:self];
+    
+    //
+    // Setting Up the microphone input popup button's items
+    //
+    
+    NSArray *inputDevices = [EZAudioDevice inputDevices];
+    NSMenu *menu = [[NSMenu alloc] init];
+    NSMenuItem *defaultInputMenuItem;
+    for (EZAudioDevice *device in inputDevices)
+    {
+        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:device.name
+                                                      action:@selector(changedInput:)
+                                               keyEquivalent:@""];
+        item.representedObject = device;
+        item.target = self;
+        [menu addItem:item];
+        
+        // If this device is the same one the microphone is using then
+        // we will use this menu item as the currently selected item
+        // in the microphone input popup button's list of items. For instance,
+        // if you are connected to an external display by default the external
+        // display's microphone might be used instead of the mac's built in
+        // mic.
+        if ([device isEqual:self.microphone.device])
+        {
+            defaultInputMenuItem = item;
+        }
+    }
+    self.microphoneInputPopUpButton.menu = menu;
+    
+    //
+    // Set the selected device to the current selection on the
+    // microphone input popup button
+    //
+    
+    [self.microphoneInputPopUpButton selectItem:defaultInputMenuItem];
+    
+    //
+    // Start the microphone
+    //
+    
+    [self.microphone startFetchingAudio];
 }
 
 #pragma mark - Actions
--(void)changePlotType:(id)sender {
+- (void)changedInput:(id)sender
+{
+    EZAudioDevice *device = [sender representedObject];
+    [self.microphone setDevice:device];
+}
+
+-(void)changePlotType:(id)sender
+{
   NSInteger selectedSegment = [sender selectedSegment];
   switch(selectedSegment){
     case 0:
@@ -97,7 +117,8 @@
   }
 }
 
--(void)toggleMicrophone:(id)sender {
+-(void)toggleMicrophone:(id)sender
+{
   switch([sender state]){
     case NSOffState:
       [self.microphone stopFetchingAudio];
@@ -115,11 +136,8 @@
  Give the visualization of the current buffer (this is almost exactly the openFrameworks audio input eample)
  */
 -(void)drawBufferPlot {
-  // Change the plot type to the buffer plot
   self.audioPlot.plotType = EZPlotTypeBuffer;
-  // Don't mirror over the x-axis
   self.audioPlot.shouldMirror = NO;
-  // Don't fill
   self.audioPlot.shouldFill = NO;
 }
 
@@ -138,26 +156,29 @@
 -(void)microphone:(EZMicrophone *)microphone
  hasAudioReceived:(float **)buffer
    withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
-  // Getting audio data as an array of float buffer arrays. What does that mean? Because the audio is coming in as a stereo signal the data is split into a left and right channel. So buffer[0] corresponds to the float* data for the left channel while buffer[1] corresponds to the float* data for the right channel.
-  
-  // See the Thread Safety warning above, but in a nutshell these callbacks happen on a separate audio thread. We wrap any UI updating in a GCD block on the main thread to avoid blocking that audio flow.
-  dispatch_async(dispatch_get_main_queue(),^{
+withNumberOfChannels:(UInt32)numberOfChannels
+{
+    // Getting audio data as an array of float buffer arrays. What does that mean? Because the audio is coming in as a stereo signal the data is split into a left and right channel. So buffer[0] corresponds to the float* data for the left channel while buffer[1] corresponds to the float* data for the right channel.
+
+    // See the Thread Safety warning above, but in a nutshell these callbacks happen on a separate audio thread. We wrap any UI updating in a GCD block on the main thread to avoid blocking that audio flow.
+    dispatch_async(dispatch_get_main_queue(),^{
     // All the audio plot needs is the buffer data (float*) and the size. Internally the audio plot will handle all the drawing related code, history management, and freeing its own resources. Hence, one badass line of code gets you a pretty plot :)
-    [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
-  });
+        [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
+    });
 }
 
--(void)microphone:(EZMicrophone *)microphone hasAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription {
-  // The AudioStreamBasicDescription of the microphone stream. This is useful when configuring the EZRecorder or telling another component what audio format type to expect.
-  // Here's a print function to allow you to inspect it a little easier
-  [EZAudio printASBD:audioStreamBasicDescription];
+-(void)microphone:(EZMicrophone *)microphone hasAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription
+{
+    // The AudioStreamBasicDescription of the microphone stream. This is useful when configuring the EZRecorder or telling another component what audio format type to expect.
+    // Here's a print function to allow you to inspect it a little easier
+    [EZAudioUtilities printASBD:audioStreamBasicDescription];
 }
 
 -(void)microphone:(EZMicrophone *)microphone
     hasBufferList:(AudioBufferList *)bufferList
    withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
+withNumberOfChannels:(UInt32)numberOfChannels
+{
     // Getting audio data as a buffer list that can be directly fed into the EZRecorder or EZOutput. Say whattt...
 }
 

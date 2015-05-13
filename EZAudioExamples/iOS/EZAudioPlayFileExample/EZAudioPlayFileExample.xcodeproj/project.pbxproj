@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		664FC6841A9DB8D9001D0184 /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 664FC6661A9DB8D9001D0184 /* AEFloatConverter.m */; };
-		664FC6851A9DB8D9001D0184 /* EZAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 664FC6681A9DB8D9001D0184 /* EZAudio.m */; };
 		664FC6861A9DB8D9001D0184 /* EZAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 664FC66A1A9DB8D9001D0184 /* EZAudioFile.m */; };
 		664FC6871A9DB8D9001D0184 /* EZAudioFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 664FC66C1A9DB8D9001D0184 /* EZAudioFloatConverter.m */; };
 		664FC6881A9DB8D9001D0184 /* EZAudioFloatData.m in Sources */ = {isa = PBXBuildFile; fileRef = 664FC66E1A9DB8D9001D0184 /* EZAudioFloatData.m */; };
@@ -58,7 +57,6 @@
 		664FC6651A9DB8D9001D0184 /* AEFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEFloatConverter.h; sourceTree = "<group>"; };
 		664FC6661A9DB8D9001D0184 /* AEFloatConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEFloatConverter.m; sourceTree = "<group>"; };
 		664FC6671A9DB8D9001D0184 /* EZAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudio.h; sourceTree = "<group>"; };
-		664FC6681A9DB8D9001D0184 /* EZAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudio.m; sourceTree = "<group>"; };
 		664FC6691A9DB8D9001D0184 /* EZAudioFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioFile.h; sourceTree = "<group>"; };
 		664FC66A1A9DB8D9001D0184 /* EZAudioFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudioFile.m; sourceTree = "<group>"; };
 		664FC66B1A9DB8D9001D0184 /* EZAudioFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioFloatConverter.h; sourceTree = "<group>"; };
@@ -144,7 +142,6 @@
 				664FC6651A9DB8D9001D0184 /* AEFloatConverter.h */,
 				664FC6661A9DB8D9001D0184 /* AEFloatConverter.m */,
 				664FC6671A9DB8D9001D0184 /* EZAudio.h */,
-				664FC6681A9DB8D9001D0184 /* EZAudio.m */,
 				664FC6691A9DB8D9001D0184 /* EZAudioFile.h */,
 				664FC66A1A9DB8D9001D0184 /* EZAudioFile.m */,
 				664FC66B1A9DB8D9001D0184 /* EZAudioFloatConverter.h */,
@@ -373,7 +370,6 @@
 				944D03E9186038A60076EF7A /* main.m in Sources */,
 				664FC68C1A9DB8D9001D0184 /* EZAudioPlotGLKViewController.m in Sources */,
 				664FC6891A9DB8D9001D0184 /* EZAudioPlayer.m in Sources */,
-				664FC6851A9DB8D9001D0184 /* EZAudio.m in Sources */,
 				664FC68E1A9DB8D9001D0184 /* EZOutput.m in Sources */,
 				664FC6881A9DB8D9001D0184 /* EZAudioFloatData.m in Sources */,
 				664FC6901A9DB8D9001D0184 /* EZRecorder.m in Sources */,

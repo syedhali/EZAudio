@@ -31,7 +31,7 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
   // Swap in our view controller in the window's content view
-  self.coreGraphicsWaveformViewController = [[CoreGraphicsWaveformViewController alloc] init];
+  self.coreGraphicsWaveformViewController = [[CoreGraphicsWaveformViewController alloc] initWithNibName:NSStringFromClass(CoreGraphicsWaveformViewController.class) bundle:nil];
   // Resize view controller to content view's current size
   self.coreGraphicsWaveformViewController.view.frame = [self.window.contentView frame];
   // Add resizing flags to make the view controller resize with the window
