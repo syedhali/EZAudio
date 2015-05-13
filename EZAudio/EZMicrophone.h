@@ -27,13 +27,13 @@
 #import  <AudioToolbox/AudioToolbox.h>
 #import  "TargetConditionals.h"
 
-@class EZMicrophone;
-
 #if TARGET_OS_IPHONE
-@import AVFoundation;
+#import <AVFoundation/AVFoundation.h>
 #elif TARGET_OS_MAC
-@class EZAudioDevice;
+#import "EZAudioDevice.h"
 #endif
+
+@class EZMicrophone;
 
 #pragma mark - EZMicrophoneDelegate
 /**
@@ -54,6 +54,16 @@
 ///-----------------------------------------------------------
 /// @name Audio Data Description
 ///-----------------------------------------------------------
+
+#if TARGET_OS_IPHONE
+#elif TARGET_OS_MAC
+/**
+ Called anytime the input device changes on an `EZMicrophone` instance. Mac only.
+ @param microphone The instance of the EZMicrophone that triggered the event.
+ @param device The instance of the new EZAudioDevice the microphone is using to pull input.
+ */
+- (void)microphone:(EZMicrophone *)microphone changedDevice:(EZAudioDevice *)device;
+#endif
 
 /**
  Returns back the audio stream basic description as soon as it has been initialized. This is guaranteed to occur before the stream callbacks, `microphone:hasBufferList:withBufferSize:withNumberOfChannels:` or `microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:`
@@ -104,12 +114,18 @@
 /**
  The EZMicrophoneDelegate for which to handle the microphone callbacks
  */
-@property (nonatomic,assign) id<EZMicrophoneDelegate> delegate;
+@property (nonatomic, weak) id<EZMicrophoneDelegate> delegate;
+
+#if TARGET_OS_IPHONE
+#elif TARGET_OS_MAC
+// TODO: document this
+@property (nonatomic, strong) EZAudioDevice *device;
+#endif
 
 /**
  A bool describing whether the microphone is on and passing back audio data to its delegate.
  */
-@property (nonatomic,assign) BOOL microphoneOn;
+@property (nonatomic, assign) BOOL microphoneOn;
 
 //------------------------------------------------------------------------------
 #pragma mark - Initializers
@@ -270,7 +286,6 @@
 //------------------------------------------------------------------------------
 
 #if TARGET_OS_IPHONE
-
 #elif TARGET_OS_MAC
 - (void)setDevice:(EZAudioDevice *)device;
 #endif

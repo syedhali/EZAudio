@@ -28,10 +28,6 @@
 #import "EZAudioUtilities.h"
 #import "EZAudioDevice.h"
 
-// Buses
-static const AudioUnitScope EZAudioMicrophoneInputBus = 1;
-static const AudioUnitScope EZAudioMicrophoneOutputBus = 0;
-
 typedef struct EZMicrophoneInfo
 {
     AudioUnit audioUnit;
@@ -103,7 +99,10 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
     return result;
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - Initialization
+//------------------------------------------------------------------------------
+
 - (id)init
 {
     self = [super init];
@@ -257,10 +256,17 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
             operation:"Failed to get audio component instance"];
     
 #if TARGET_OS_IPHONE
-    // use AVFoundation to select input device
+    // must enable input scope for remote IO unit
+    UInt32 flag = 1;
+    [EZAudioUtilities checkResult:AudioUnitSetProperty(self.info.audioUnit,
+                                                       kAudioOutputUnitProperty_EnableIO,
+                                                       kAudioUnitScope_Input,
+                                                       1,
+                                                       &flag,
+                                                       sizeof(flag))
+                        operation:"Couldn't enable input on remote IO unit."];
 #elif TARGET_OS_MAC
     NSArray *inputDevices = [EZAudioDevice inputDevices];
-    NSLog(@"input devices: %@", inputDevices);
     EZAudioDevice *defaultMicrophone = [inputDevices lastObject];
     [self setDevice:defaultMicrophone];
 #endif
@@ -296,7 +302,8 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 
 -(void)stopFetchingAudio
 {
-    
+    [EZAudioUtilities checkResult:AudioOutputUnitStop(self.info.audioUnit)
+                        operation:"Failed to stop microphone audio unit"];
 }
 
 //------------------------------------------------------------------------------
@@ -385,6 +392,12 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
     _info.audioBufferList = [EZAudioUtilities audioBufferListWithNumberOfFrames:maximumBufferSize
                                                                numberOfChannels:channels
                                                                     interleaved:isInterleaved];
+    
+    // notify delegate
+    if ([self.delegate respondsToSelector:@selector(microphone:hasAudioStreamBasicDescription:)])
+    {
+        [self.delegate microphone:self hasAudioStreamBasicDescription:asbd];
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -420,7 +433,14 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
                                                        sizeof(AudioDeviceID))
                         operation:"Couldn't set default device on I/O unit"];
     
-    NSLog(@"set input device: %@", device);
+    // store device
+    _device = device;
+    
+    // notify delegate
+    if ([self.delegate respondsToSelector:@selector(microphone:changedDevice:)])
+    {
+        [self.delegate microphone:self changedDevice:device];
+    }
 }
 #endif
 
