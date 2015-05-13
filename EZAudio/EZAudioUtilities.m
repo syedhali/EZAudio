@@ -8,7 +8,18 @@
 
 #import "EZAudioUtilities.h"
 
+BOOL __shouldExitOnCheckResultFail = YES;
+
 @implementation EZAudioUtilities
+
+//------------------------------------------------------------------------------
+#pragma mark - Debugging
+//------------------------------------------------------------------------------
+
++ (void)setShouldExitOnCheckResultFail:(BOOL)shouldExitOnCheckResultFail
+{
+    __shouldExitOnCheckResultFail = shouldExitOnCheckResultFail;
+}
 
 #pragma mark - AudioBufferList Utility
 +(AudioBufferList *)audioBufferListWithNumberOfFrames:(UInt32)frames
@@ -20,7 +31,7 @@
     audioBufferList->mNumberBuffers = interleaved ? 1 : channels;
     for( int i = 0; i < audioBufferList->mNumberBuffers; i++ )
     {
-        audioBufferList->mBuffers[i].mNumberChannels = 1;
+        audioBufferList->mBuffers[i].mNumberChannels = channels;
         audioBufferList->mBuffers[i].mDataByteSize = channels * outputBufferSize;
         audioBufferList->mBuffers[i].mData = (float*)malloc(channels * sizeof(float) *outputBufferSize);
     }
@@ -273,7 +284,8 @@
 
 #pragma mark - OSStatus Utility
 +(void)checkResult:(OSStatus)result
-         operation:(const char *)operation {
+         operation:(const char *)operation
+{
     if (result == noErr) return;
     char errorString[20];
     // see if it appears to be a 4-char-code
@@ -285,7 +297,10 @@
         // no, format it as an integer
         sprintf(errorString, "%d", (int)result);
     fprintf(stderr, "Error: %s (%s)\n", operation, errorString);
-    exit(1);
+    if (__shouldExitOnCheckResultFail)
+    {
+        exit(-1);
+    }
 }
 
 #pragma mark - Math Utility

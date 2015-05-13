@@ -16,6 +16,13 @@
 
 @interface EZAudioUtilities : NSObject
 
+//------------------------------------------------------------------------------
+#pragma mark - Debugging
+//------------------------------------------------------------------------------
+
+// TODO: document
++ (void)setShouldExitOnCheckResultFail:(BOOL)shouldExitOnCheckResultFail;
+
 #pragma mark - AudioBufferList Utility
 ///-----------------------------------------------------------
 /// @name AudioBufferList Utility
