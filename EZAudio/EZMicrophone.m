@@ -419,6 +419,8 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
                                                        &deviceId,
                                                        sizeof(AudioDeviceID))
                         operation:"Couldn't set default device on I/O unit"];
+    
+    NSLog(@"set input device: %@", device);
 }
 #endif
 

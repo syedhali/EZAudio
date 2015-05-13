@@ -270,6 +270,7 @@
 //------------------------------------------------------------------------------
 
 #if TARGET_OS_IPHONE
+
 #elif TARGET_OS_MAC
 - (void)setDevice:(EZAudioDevice *)device;
 #endif

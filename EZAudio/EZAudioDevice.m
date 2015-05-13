@@ -7,6 +7,7 @@
 //
 
 #import "EZAudioDevice.h"
+#import "EZAudioUtilities.h"
 
 @implementation EZAudioDevice
 
@@ -21,25 +22,25 @@
     // get the present system devices
     AudioObjectPropertyAddress address = [self addressForPropertySelector:kAudioHardwarePropertyDevices];
     UInt32 devicesDataSize;
-    [self checkResult:AudioObjectGetPropertyDataSize(kAudioObjectSystemObject,
+    [EZAudioUtilities checkResult:AudioObjectGetPropertyDataSize(kAudioObjectSystemObject,
                                                      &address,
                                                      0,
                                                      NULL,
                                                      &devicesDataSize)
-            operation:@"Failed to get data size"];
+            operation:"Failed to get data size"];
     
     // enumerate devices
     NSInteger count = devicesDataSize / sizeof(AudioDeviceID);
     AudioDeviceID *deviceIDs = (AudioDeviceID *)malloc(devicesDataSize);
     
     // fill in the devices
-    [self checkResult:AudioObjectGetPropertyData(kAudioObjectSystemObject,
+    [EZAudioUtilities checkResult:AudioObjectGetPropertyData(kAudioObjectSystemObject,
                                                  &address,
                                                  0,
                                                  NULL,
                                                  &devicesDataSize,
                                                  deviceIDs)
-            operation:@""];
+            operation:""];
 
     BOOL stop = NO;
     for (UInt32 i = 0; i < count; i++)
@@ -126,13 +127,13 @@
     CFStringRef string;
     UInt32 propSize = sizeof(CFStringRef);
     NSString *errorString = [NSString stringWithFormat:@"Failed to get device property (%u)",(unsigned int)selector];
-    [self checkResult:AudioObjectGetPropertyData(deviceID,
+    [EZAudioUtilities checkResult:AudioObjectGetPropertyData(deviceID,
                                                  &address,
                                                  0,
                                                  NULL,
                                                  &propSize,
                                                  &string)
-            operation:errorString];
+                        operation:errorString.UTF8String];
     
     
     
@@ -151,13 +152,13 @@
     
     AudioBufferList streamConfiguration;
     UInt32 propSize = sizeof(streamConfiguration);
-    [self checkResult:AudioObjectGetPropertyData(deviceID,
+    [EZAudioUtilities checkResult:AudioObjectGetPropertyData(deviceID,
                                                  &address,
                                                  0,
                                                  NULL,
                                                  &propSize,
                                                  &streamConfiguration)
-            operation:@"Failed to get frame size"];
+                        operation:"Failed to get frame size"];
     
     return streamConfiguration.mNumberBuffers > 0;
 }
@@ -200,26 +201,6 @@
 {
     return [self stringPropertyForSelector:kAudioDevicePropertyDeviceUID
                               withDeviceID:deviceID];
-}
-
-//------------------------------------------------------------------------------
-
-+ (void)checkResult:(OSStatus)result operation:(NSString *)operation
-{
-    if (result == noErr) return;
-    char errorString[20];
-    // see if it appears to be a 4-char-code
-    *(UInt32 *)(errorString + 1) = CFSwapInt32HostToBig(result);
-    if (isprint(errorString[1]) && isprint(errorString[2]) && isprint(errorString[3]) && isprint(errorString[4])) {
-        errorString[0] = errorString[5] = '\'';
-        errorString[6] = '\0';
-    }
-    else
-    {
-        NSLog(@"%d", result);
-    }
-    NSLog(@"Error: %@, (%s)", operation, errorString);
-    exit(1);
 }
 
 //------------------------------------------------------------------------------

@@ -196,12 +196,12 @@
       _scrollHistory[i] = 0.0f;
     }
     // Update the scroll history datasource
-    [EZAudio updateScrollHistory:&_scrollHistory
-                      withLength:_scrollHistoryLength
-                         atIndex:&_scrollHistoryIndex
-                      withBuffer:empty
-                  withBufferSize:_rollingPlotGraphSize
-            isResolutionChanging:&_changingHistorySize];
+    [EZAudioUtilities updateScrollHistory:&_scrollHistory
+                               withLength:_scrollHistoryLength
+                                  atIndex:&_scrollHistoryIndex
+                               withBuffer:empty
+                           withBufferSize:_rollingPlotGraphSize
+                     isResolutionChanging:&_changingHistorySize];
     // Fill in graph data
     [EZAudioPlotGL fillGraph:graph
                withGraphSize:_rollingPlotGraphSize
@@ -304,12 +304,12 @@
   EZAudioPlotGLPoint graph[_rollingPlotGraphSize];
   
   // Update the scroll history datasource
-  [EZAudio updateScrollHistory:&_scrollHistory
-                    withLength:_scrollHistoryLength
-                       atIndex:&_scrollHistoryIndex
-                    withBuffer:buffer
-                withBufferSize:bufferSize
-          isResolutionChanging:&_changingHistorySize];
+  [EZAudioUtilities updateScrollHistory:&_scrollHistory
+                             withLength:_scrollHistoryLength
+                                atIndex:&_scrollHistoryIndex
+                             withBuffer:buffer
+                         withBufferSize:bufferSize
+                   isResolutionChanging:&_changingHistorySize];
   
   // Fill in graph data
   [EZAudioPlotGL fillGraph:graph

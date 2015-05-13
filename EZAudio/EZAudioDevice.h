@@ -15,7 +15,10 @@
 + (NSArray *)inputDevices;
 + (NSArray *)outputDevices;
 
+#if TARGET_OS_IPHONE
+#elif TARGET_OS_MAC
 @property (nonatomic, assign) AudioDeviceID deviceID;
+#endif
 @property (nonatomic, copy) NSString *manufacturer;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, assign) BOOL isInput;
