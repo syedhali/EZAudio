@@ -11,6 +11,10 @@
 
 @implementation EZAudioDevice
 
+#if TARGET_OS_IPHONE
+
+#elif TARGET_OS_MAC
+
 + (void)enumerateDevicesUsingBlock:(void(^)(EZAudioDevice *device,
                                             BOOL *stop))block
 {
@@ -128,15 +132,12 @@
     UInt32 propSize = sizeof(CFStringRef);
     NSString *errorString = [NSString stringWithFormat:@"Failed to get device property (%u)",(unsigned int)selector];
     [EZAudioUtilities checkResult:AudioObjectGetPropertyData(deviceID,
-                                                 &address,
-                                                 0,
-                                                 NULL,
-                                                 &propSize,
-                                                 &string)
-                        operation:errorString.UTF8String];
-    
-    
-    
+                                                             &address,
+                                                             0,
+                                                             NULL,
+                                                             &propSize,
+                                                             &string)
+                            operation:errorString.UTF8String];
     return (__bridge_transfer NSString *)string;
 }
 
@@ -218,5 +219,22 @@
 }
 
 //------------------------------------------------------------------------------
+
+- (BOOL)isEqual:(id)object
+{
+    if ([object isKindOfClass:self.class])
+    {
+        EZAudioDevice *device = (EZAudioDevice *)object;
+        return [self.UID isEqualToString:device.UID];
+    }
+    else
+    {
+        return [super isEqual:object];
+    }
+}
+
+//------------------------------------------------------------------------------
+
+#endif
 
 @end
