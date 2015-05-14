@@ -559,6 +559,7 @@ static OSStatus inputCallback(void                          *inRefCon,
 -(void)_configureFloatConverterWithFrameSize:(UInt32)bufferFrameSize {
   UInt32 bufferSizeBytes = bufferFrameSize * streamFormat.mBytesPerFrame;
   converter              = [[AEFloatConverter alloc] initWithSourceFormat:streamFormat];
+  assert(streamFormat.mChannelsPerFrame);
   floatBuffers           = (float**)malloc(sizeof(float*)*streamFormat.mChannelsPerFrame);
   assert(floatBuffers);
   for ( int i=0; i<streamFormat.mChannelsPerFrame; i++ ) {
@@ -594,6 +595,15 @@ static OSStatus inputCallback(void                          *inRefCon,
                                             &kEZAudioMicrophoneDisableFlag,
                                             sizeof(kEZAudioMicrophoneDisableFlag))
              operation:"Could not disable audio unit allocating its own buffers"];
+}
+
+-(void)dealloc {
+    [EZAudio freeBufferList:microphoneInputBuffer];
+    for ( int i=0; i<streamFormat.mChannelsPerFrame; i++ ) {
+        free(floatBuffers[i]);
+    }
+    free(floatBuffers);
+    floatBuffers = NULL;
 }
 
 @end
