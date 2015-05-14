@@ -8,22 +8,43 @@
 
 #import "CoreGraphicsWaveformViewController.h"
 
+@interface CoreGraphicsWaveformViewController ()
+
+@property (nonatomic, strong) NSArray *inputs;
+
+@end
+
 @implementation CoreGraphicsWaveformViewController
 
 #pragma mark - Customize the Audio Plot
 - (void)viewDidLoad
 {
-  [super viewDidLoad];
+    [super viewDidLoad];
   
+    //
+    // Setup the AVAudioSession
+    //
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error;
+    [session setCategory:AVAudioSessionCategoryRecord error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session category: %@", error.localizedDescription);
+    }
+    [session setActive:YES error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session active: %@", error.localizedDescription);
+    }
+    
     //
     // Customizing the audio plot's look
     //
-    
     // Background color
     self.audioPlot.backgroundColor = [UIColor colorWithRed:0.984 green:0.471 blue:0.525 alpha:1.0];
     
     // Waveform color
-    self.audioPlot.color  = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+    self.audioPlot.color = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
     
     // Plot type
     self.audioPlot.plotType = EZPlotTypeBuffer;
@@ -31,8 +52,23 @@
     //
     // Create the microphone
     //
-    
     self.microphone = [EZMicrophone microphoneWithDelegate:self];
+    
+    //
+    // Set up the microphone input UIPickerView items to select
+    // between different microphone inputs. Here what we're doing is
+    // enumerating the available inputs provided by the AVAudioSession.
+    // These inputs are actually called AVAudioSessionPortDescription that
+    // can also contain multiple data sources per port description. For
+    // instance, on an iPhone 5 and 6 there is the built-in microphone port
+    // that contains 3 data sources, the bottom, front, and back. Plugged
+    // in devices like headphones typically don't have extra data
+    // sources so we only have to use that port description as the preferred
+    // input.
+    //
+    self.inputs = [EZAudioDevice inputDevices];
+    self.microphoneInputPickerView.dataSource = self;
+    self.microphoneInputPickerView.delegate = self;
     
     //
     // Start the microphone
@@ -40,6 +76,58 @@
     [self.microphone startFetchingAudio];
     self.microphoneTextLabel.text = @"Microphone On";
 }
+
+//------------------------------------------------------------------------------
+#pragma mark - UIPickerViewDataSource
+//------------------------------------------------------------------------------
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
+- (NSString *)pickerView:(UIPickerView *)pickerView
+             titleForRow:(NSInteger)row
+            forComponent:(NSInteger)component
+{
+    EZAudioDevice *device = self.inputs[row];    
+    return device.name;
+}
+
+//------------------------------------------------------------------------------
+
+- (NSAttributedString *)pickerView:(UIPickerView *)pickerView
+             attributedTitleForRow:(NSInteger)row
+                      forComponent:(NSInteger)component
+{
+    EZAudioDevice *device = self.inputs[row];
+    UIColor *textColor = [device isEqual:self.microphone.device] ? self.audioPlot.backgroundColor : [UIColor blackColor];
+    return  [[NSAttributedString alloc] initWithString:device.name
+                                            attributes:@{ NSForegroundColorAttributeName : textColor }];
+}
+
+//------------------------------------------------------------------------------
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return self.inputs.count;
+}
+
+//------------------------------------------------------------------------------
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    EZAudioDevice *device = self.inputs[row];
+    [self.microphone setDevice:device];
+    [pickerView reloadAllComponents];
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - UIPickerView
+//------------------------------------------------------------------------------
+
 
 #pragma mark - Actions
 -(void)changePlotType:(id)sender {

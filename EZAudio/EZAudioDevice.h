@@ -9,21 +9,38 @@
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 
+#if TARGET_OS_IPHONE
+#import <AVFoundation/AVFoundation.h>
+#elif TARGET_OS_MAC
+#endif
+
 @interface EZAudioDevice : NSObject
+
++ (EZAudioDevice *)currentInputDevice;
++ (NSArray *)inputDevices;
+
+@property (nonatomic, copy, readonly) NSString *name;
 
 #if TARGET_OS_IPHONE
 
++ (void)enumerateInputDevicesUsingBlock:(void(^)(EZAudioDevice *device,
+                                                 BOOL *stop))block;
+
+@property (nonatomic, strong, readonly) AVAudioSessionPortDescription *port;
+@property (nonatomic, strong, readonly) AVAudioSessionDataSourceDescription *dataSource;
+
 #elif TARGET_OS_MAC
 + (NSArray *)devices;
-+ (NSArray *)inputDevices;
 + (NSArray *)outputDevices;
 
-@property (nonatomic, assign) AudioDeviceID deviceID;
-@property (nonatomic, copy) NSString *manufacturer;
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, assign) BOOL isInput;
-@property (nonatomic, assign) BOOL isOutput;
-@property (nonatomic, copy) NSString *UID;
++ (void)enumerateDevicesUsingBlock:(void(^)(EZAudioDevice *device,
+                                            BOOL *stop))block;
+
+@property (nonatomic, assign, readonly) AudioDeviceID deviceID;
+@property (nonatomic, copy, readonly) NSString *manufacturer;
+@property (nonatomic, assign, readonly) BOOL isInput;
+@property (nonatomic, assign, readonly) BOOL isOutput;
+@property (nonatomic, copy, readonly) NSString *UID;
 #endif
 
 @end

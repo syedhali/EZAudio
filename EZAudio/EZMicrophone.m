@@ -265,6 +265,8 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
                                                        &flag,
                                                        sizeof(flag))
                         operation:"Couldn't enable input on remote IO unit."];
+    EZAudioDevice *currentInputDevice = [EZAudioDevice currentInputDevice];
+    [self setDevice:currentInputDevice];
 #elif TARGET_OS_MAC
     NSArray *inputDevices = [EZAudioDevice inputDevices];
     EZAudioDevice *defaultMicrophone = [inputDevices lastObject];
@@ -402,10 +404,38 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 
 //------------------------------------------------------------------------------
 
-#if TARGET_OS_IPHONE
-#elif TARGET_OS_MAC
 - (void)setDevice:(EZAudioDevice *)device
 {
+#if TARGET_OS_IPHONE
+    
+    if ([device isEqual:self.device])
+    {
+        return;
+    }
+    
+    NSError *error;
+    [[AVAudioSession sharedInstance] setPreferredInput:device.port error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting input device port (%@), reason: %@",
+              device.port,
+              error.localizedDescription);
+    }
+    else
+    {
+        if (device.dataSource)
+        {
+            [[AVAudioSession sharedInstance] setInputDataSource:device.dataSource error:&error];
+            if (error)
+            {
+                NSLog(@"Error setting input data source (%@), reason: %@",
+                      device.dataSource,
+                      error.localizedDescription);
+            }
+        }
+    }
+    
+#elif TARGET_OS_MAC
     UInt32 inputEnabled = device.isInput;
     [EZAudioUtilities checkResult:AudioUnitSetProperty(self.info.audioUnit,
                                                        kAudioOutputUnitProperty_EnableIO,
@@ -432,6 +462,7 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
                                                        &deviceId,
                                                        sizeof(AudioDeviceID))
                         operation:"Couldn't set default device on I/O unit"];
+#endif
     
     // store device
     _device = device;
@@ -442,7 +473,6 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
         [self.delegate microphone:self changedDevice:device];
     }
 }
-#endif
 
 //------------------------------------------------------------------------------
 

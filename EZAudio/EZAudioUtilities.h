@@ -82,7 +82,7 @@
 
 //------------------------------------------------------------------------------
 
-+ (BOOL) isFloatFormat:(AudioStreamBasicDescription)asbd;
++ (BOOL)isFloatFormat:(AudioStreamBasicDescription)asbd;
 
 //------------------------------------------------------------------------------
 
@@ -92,11 +92,11 @@
  @param asbd A valid AudioStreamBasicDescription
  @return A BOOL indicating whether or not the AudioStreamBasicDescription is interleaved
  */
-+ (BOOL) isInterleaved:(AudioStreamBasicDescription)asbd;
++ (BOOL)isInterleaved:(AudioStreamBasicDescription)asbd;
 
 //------------------------------------------------------------------------------
 
-+ (BOOL) isLinearPCM:(AudioStreamBasicDescription)asbd;
++ (BOOL)isLinearPCM:(AudioStreamBasicDescription)asbd;
 
 //------------------------------------------------------------------------------
 

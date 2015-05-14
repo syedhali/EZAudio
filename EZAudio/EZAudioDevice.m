@@ -9,9 +9,135 @@
 #import "EZAudioDevice.h"
 #import "EZAudioUtilities.h"
 
+@interface EZAudioDevice ()
+
+@property (nonatomic, copy, readwrite) NSString *name;
+
+#if TARGET_OS_IPHONE
+
+@property (nonatomic, strong, readwrite) AVAudioSessionPortDescription *port;
+@property (nonatomic, strong, readwrite) AVAudioSessionDataSourceDescription *dataSource;
+
+#elif TARGET_OS_MAC
+
+@property (nonatomic, assign, readwrite) AudioDeviceID deviceID;
+@property (nonatomic, copy, readwrite) NSString *manufacturer;
+@property (nonatomic, assign, readwrite) BOOL isInput;
+@property (nonatomic, assign, readwrite) BOOL isOutput;
+@property (nonatomic, copy, readwrite) NSString *UID;
+
+#endif
+
+@end
+
 @implementation EZAudioDevice
 
 #if TARGET_OS_IPHONE
+
+//------------------------------------------------------------------------------
+
++ (EZAudioDevice *)currentInputDevice
+{
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    AVAudioSessionPortDescription *port = [[[session currentRoute] inputs] firstObject];
+    AVAudioSessionDataSourceDescription *dataSource = [session inputDataSource];
+    EZAudioDevice *device = [[EZAudioDevice alloc] init];
+    device.port = port;
+    device.dataSource = dataSource;
+    return device;
+}
+
+//------------------------------------------------------------------------------
+
++ (NSArray *)inputDevices
+{
+    __block NSMutableArray *devices = [NSMutableArray array];
+    [self enumerateInputDevicesUsingBlock:^(EZAudioDevice *device, BOOL *stop)
+    {
+        [devices addObject:device];
+    }];
+    return devices;
+}
+
+//------------------------------------------------------------------------------
+
++ (void)enumerateInputDevicesUsingBlock:(void (^)(EZAudioDevice *, BOOL *))block
+{
+    if (!block)
+    {
+        return;
+    }
+    
+    NSArray *inputs = [[AVAudioSession sharedInstance] availableInputs];
+    if (inputs == nil)
+    {
+        NSLog(@"Audio session is not active! In order to enumerate the audio devices you must set the category and set active the audio session for your iOS app before calling this function.");
+        return;
+    }
+    
+    BOOL stop;
+    for (AVAudioSessionPortDescription *inputDevicePortDescription in inputs)
+    {
+        // add any additional sub-devices
+        NSArray *dataSources = [inputDevicePortDescription dataSources];
+        if (dataSources.count)
+        {
+            for (AVAudioSessionDataSourceDescription *inputDeviceDataSourceDescription in dataSources)
+            {
+                EZAudioDevice *device = [[EZAudioDevice alloc] init];
+                device.port = inputDevicePortDescription;
+                device.dataSource = inputDeviceDataSourceDescription;
+                block(device, &stop);
+            }
+        }
+        else
+        {
+            EZAudioDevice *device = [[EZAudioDevice alloc] init];
+            device.port = inputDevicePortDescription;
+            block(device, &stop);
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+
+- (NSString *)name
+{
+    NSMutableString *name = [NSMutableString string];
+    [name appendString:self.port.portName];
+    if (self.dataSource)
+    {
+        [name appendFormat:@": %@", self.dataSource.dataSourceName];
+    }
+    return name;
+}
+
+//------------------------------------------------------------------------------
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"%@ { port: %@, data source: %@ }",
+            [super description],
+            self.port,
+            self.dataSource];
+}
+
+//------------------------------------------------------------------------------
+
+- (BOOL)isEqual:(id)object
+{
+    if ([object isKindOfClass:self.class])
+    {
+        EZAudioDevice *device = (EZAudioDevice *)object;
+        BOOL isPortUIDEqual = [device.port.UID isEqualToString:self.port.UID];
+        BOOL isDataSourceIDEqual = device.dataSource.dataSourceID.longValue == self.dataSource.dataSourceID.longValue;
+        return isPortUIDEqual && isDataSourceIDEqual;
+    }
+    else
+    {
+        return [super isEqual:object];
+    }
+}
 
 #elif TARGET_OS_MAC
 

@@ -23,15 +23,10 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import  <Foundation/Foundation.h>
-#import  <AudioToolbox/AudioToolbox.h>
-#import  "TargetConditionals.h"
-
-#if TARGET_OS_IPHONE
-#import <AVFoundation/AVFoundation.h>
-#elif TARGET_OS_MAC
+#import <Foundation/Foundation.h>
+#import <AudioToolbox/AudioToolbox.h>
+#import "TargetConditionals.h"
 #import "EZAudioDevice.h"
-#endif
 
 @class EZMicrophone;
 
@@ -55,15 +50,12 @@
 /// @name Audio Data Description
 ///-----------------------------------------------------------
 
-#if TARGET_OS_IPHONE
-#elif TARGET_OS_MAC
 /**
  Called anytime the input device changes on an `EZMicrophone` instance. Mac only.
  @param microphone The instance of the EZMicrophone that triggered the event.
  @param device The instance of the new EZAudioDevice the microphone is using to pull input.
  */
 - (void)microphone:(EZMicrophone *)microphone changedDevice:(EZAudioDevice *)device;
-#endif
 
 /**
  Returns back the audio stream basic description as soon as it has been initialized. This is guaranteed to occur before the stream callbacks, `microphone:hasBufferList:withBufferSize:withNumberOfChannels:` or `microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:`
@@ -116,11 +108,8 @@
  */
 @property (nonatomic, weak) id<EZMicrophoneDelegate> delegate;
 
-#if TARGET_OS_IPHONE
-#elif TARGET_OS_MAC
 // TODO: document this
 @property (nonatomic, strong) EZAudioDevice *device;
-#endif
 
 /**
  A bool describing whether the microphone is on and passing back audio data to its delegate.
@@ -285,9 +274,8 @@
 
 //------------------------------------------------------------------------------
 
-#if TARGET_OS_IPHONE
-#elif TARGET_OS_MAC
 - (void)setDevice:(EZAudioDevice *)device;
-#endif
+
+//------------------------------------------------------------------------------
 
 @end

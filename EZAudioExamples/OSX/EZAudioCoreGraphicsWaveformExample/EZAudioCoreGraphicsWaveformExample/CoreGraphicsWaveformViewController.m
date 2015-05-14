@@ -36,7 +36,6 @@
     //
     // Customizing the audio plot's look
     //
-    
     // Background color
     self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.984 green: 0.471 blue: 0.525 alpha: 1];
     
@@ -49,14 +48,12 @@
     //
     // Create the microphone
     //
-    
     self.microphone = [EZMicrophone microphoneWithDelegate:self];
     
     //
     // Set up the microphone input popup button's items to select
     // between different microphone inputs
     //
-    
     NSArray *inputDevices = [EZAudioDevice inputDevices];
     NSMenu *menu = [[NSMenu alloc] init];
     NSMenuItem *defaultInputMenuItem;
@@ -86,13 +83,11 @@
     // Set the selected device to the current selection on the
     // microphone input popup button
     //
-    
     [self.microphoneInputPopUpButton selectItem:defaultInputMenuItem];
     
     //
     // Start the microphone
     //
-    
     [self.microphone startFetchingAudio];
 }
 

@@ -58,6 +58,10 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <pickerView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5do-cK-DtK">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="162"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </pickerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -66,10 +70,13 @@
                             <constraint firstItem="PTM-3g-RZx" firstAttribute="top" secondItem="LZk-FQ-Roy" secondAttribute="top" id="PsC-ng-whC"/>
                             <constraint firstItem="82V-bR-cRo" firstAttribute="top" secondItem="YOL-mD-qlh" secondAttribute="bottom" constant="10" id="Q6t-KE-QM6"/>
                             <constraint firstItem="eTB-c6-hqM" firstAttribute="top" secondItem="PTM-3g-RZx" secondAttribute="bottom" id="Qdf-yH-08h"/>
+                            <constraint firstAttribute="trailing" secondItem="5do-cK-DtK" secondAttribute="trailing" id="TFf-n7-Lar"/>
                             <constraint firstItem="qEV-qa-XcB" firstAttribute="leading" secondItem="YOL-mD-qlh" secondAttribute="trailing" constant="8" symbolic="YES" id="TTM-IM-GgG"/>
                             <constraint firstItem="eTB-c6-hqM" firstAttribute="top" secondItem="iZQ-my-xGs" secondAttribute="bottom" constant="16" id="VDh-aa-K3c"/>
                             <constraint firstItem="YOL-mD-qlh" firstAttribute="leading" secondItem="82V-bR-cRo" secondAttribute="leading" id="Ybz-Ri-nBr"/>
                             <constraint firstItem="iZQ-my-xGs" firstAttribute="leading" secondItem="LZk-FQ-Roy" secondAttribute="leading" constant="16" id="aFq-vx-F9B"/>
+                            <constraint firstItem="5do-cK-DtK" firstAttribute="leading" secondItem="LZk-FQ-Roy" secondAttribute="leading" id="aos-wc-RIm"/>
+                            <constraint firstItem="5do-cK-DtK" firstAttribute="top" secondItem="LZk-FQ-Roy" secondAttribute="top" id="d1n-BP-bOa"/>
                             <constraint firstAttribute="trailing" secondItem="PTM-3g-RZx" secondAttribute="trailing" id="duY-lt-nwK"/>
                             <constraint firstItem="82V-bR-cRo" firstAttribute="top" secondItem="qEV-qa-XcB" secondAttribute="bottom" constant="17" id="hN9-AW-5mr"/>
                             <constraint firstItem="iZQ-my-xGs" firstAttribute="top" secondItem="82V-bR-cRo" secondAttribute="bottom" constant="8" id="jPu-90-foy"/>
@@ -78,6 +85,7 @@
                     </view>
                     <connections>
                         <outlet property="audioPlot" destination="PTM-3g-RZx" id="XT9-Ss-mS5"/>
+                        <outlet property="microphoneInputPickerView" destination="5do-cK-DtK" id="nuC-9V-HG0"/>
                         <outlet property="microphoneTextLabel" destination="qEV-qa-XcB" id="5id-wg-zWA"/>
                     </connections>
                 </viewController>

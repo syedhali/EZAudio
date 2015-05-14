@@ -14,7 +14,9 @@
 /**
  We will allow this view controller to act as an EZMicrophoneDelegate. This is how we listen for the microphone callback.
  */
-@interface CoreGraphicsWaveformViewController : UIViewController <EZMicrophoneDelegate>
+@interface CoreGraphicsWaveformViewController : UIViewController <EZMicrophoneDelegate,
+                                                                  UIPickerViewDataSource,
+                                                                  UIPickerViewDelegate>
 
 //------------------------------------------------------------------------------
 #pragma mark - Components
@@ -29,6 +31,11 @@
  The microphone component
  */
 @property (nonatomic, strong) EZMicrophone *microphone;
+
+/**
+ The microphone pop up button (contains the menu for choosing a microphone input)
+ */
+@property (nonatomic, weak) IBOutlet UIPickerView *microphoneInputPickerView;
 
 /**
  The text label displaying "Microphone On" or "Microphone Off"
