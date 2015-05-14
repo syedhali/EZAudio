@@ -53,7 +53,8 @@
     self.microphone = [EZMicrophone microphoneWithDelegate:self];
     
     //
-    // Setting Up the microphone input popup button's items
+    // Set up the microphone input popup button's items to select
+    // between different microphone inputs
     //
     
     NSArray *inputDevices = [EZAudioDevice inputDevices];

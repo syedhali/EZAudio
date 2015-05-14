@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		66B5CEA91B002C750046BE9D /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B5CE881B002C740046BE9D /* AEFloatConverter.m */; };
 		66B5CEAA1B002C750046BE9D /* EZAudioDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B5CE8B1B002C740046BE9D /* EZAudioDevice.m */; };
 		66B5CEAB1B002C750046BE9D /* EZAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B5CE8D1B002C740046BE9D /* EZAudioFile.m */; };
 		66B5CEAC1B002C750046BE9D /* EZAudioFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B5CE8F1B002C740046BE9D /* EZAudioFloatConverter.m */; };
@@ -24,14 +23,14 @@
 		66B5CEB71B002C750046BE9D /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 66B5CEA41B002C740046BE9D /* TPCircularBuffer.c */; };
 		66B5CEB81B002C750046BE9D /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 66B5CEA71B002C750046BE9D /* CHANGELOG */; };
 		66B5CEB91B002C750046BE9D /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 66B5CEA81B002C750046BE9D /* VERSION */; };
+		66DB85531B0425CB0018EFC5 /* EZAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 66DB85521B0425CB0018EFC5 /* EZAudio.m */; };
+		66DB85831B0430E70018EFC5 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66DB85821B0430E70018EFC5 /* MainStoryboard.storyboard */; };
 		94056F7E185E593500EB94BA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056F7D185E593500EB94BA /* Foundation.framework */; };
 		94056F80185E593500EB94BA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056F7F185E593500EB94BA /* CoreGraphics.framework */; };
 		94056F82185E593500EB94BA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056F81185E593500EB94BA /* UIKit.framework */; };
 		94056F88185E593500EB94BA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94056F86185E593500EB94BA /* InfoPlist.strings */; };
 		94056F8A185E593500EB94BA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 94056F89185E593500EB94BA /* main.m */; };
 		94056F8E185E593500EB94BA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94056F8D185E593500EB94BA /* AppDelegate.m */; };
-		94056F91185E593500EB94BA /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94056F8F185E593500EB94BA /* Main_iPhone.storyboard */; };
-		94056F94185E593500EB94BA /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94056F92185E593500EB94BA /* Main_iPad.storyboard */; };
 		94056F99185E593500EB94BA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94056F98185E593500EB94BA /* Images.xcassets */; };
 		94056FA0185E593500EB94BA /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056F9F185E593500EB94BA /* XCTest.framework */; };
 		94056FA1185E593500EB94BA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056F7D185E593500EB94BA /* Foundation.framework */; };
@@ -55,8 +54,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		66B5CE871B002C740046BE9D /* AEFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEFloatConverter.h; sourceTree = "<group>"; };
-		66B5CE881B002C740046BE9D /* AEFloatConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEFloatConverter.m; sourceTree = "<group>"; };
 		66B5CE891B002C740046BE9D /* EZAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudio.h; sourceTree = "<group>"; };
 		66B5CE8A1B002C740046BE9D /* EZAudioDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioDevice.h; sourceTree = "<group>"; };
 		66B5CE8B1B002C740046BE9D /* EZAudioDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudioDevice.m; sourceTree = "<group>"; };
@@ -88,6 +85,8 @@
 		66B5CEA51B002C740046BE9D /* TPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPCircularBuffer.h; sourceTree = "<group>"; };
 		66B5CEA71B002C750046BE9D /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		66B5CEA81B002C750046BE9D /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
+		66DB85521B0425CB0018EFC5 /* EZAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudio.m; sourceTree = "<group>"; };
+		66DB85821B0430E70018EFC5 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		94056F7A185E593500EB94BA /* EZAudioCoreGraphicsWaveformExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EZAudioCoreGraphicsWaveformExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94056F7D185E593500EB94BA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		94056F7F185E593500EB94BA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -98,8 +97,6 @@
 		94056F8B185E593500EB94BA /* EZAudioCoreGraphicsWaveformExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EZAudioCoreGraphicsWaveformExample-Prefix.pch"; sourceTree = "<group>"; };
 		94056F8C185E593500EB94BA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		94056F8D185E593500EB94BA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		94056F90185E593500EB94BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		94056F93185E593500EB94BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		94056F98185E593500EB94BA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		94056F9E185E593500EB94BA /* EZAudioCoreGraphicsWaveformExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EZAudioCoreGraphicsWaveformExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		94056F9F185E593500EB94BA /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -143,9 +140,8 @@
 		66B5CE861B002C740046BE9D /* EZAudio */ = {
 			isa = PBXGroup;
 			children = (
-				66B5CE871B002C740046BE9D /* AEFloatConverter.h */,
-				66B5CE881B002C740046BE9D /* AEFloatConverter.m */,
 				66B5CE891B002C740046BE9D /* EZAudio.h */,
+				66DB85521B0425CB0018EFC5 /* EZAudio.m */,
 				66B5CE8A1B002C740046BE9D /* EZAudioDevice.h */,
 				66B5CE8B1B002C740046BE9D /* EZAudioDevice.m */,
 				66B5CE8C1B002C740046BE9D /* EZAudioFile.h */,
@@ -228,8 +224,7 @@
 				66B5CE861B002C740046BE9D /* EZAudio */,
 				94056F8C185E593500EB94BA /* AppDelegate.h */,
 				94056F8D185E593500EB94BA /* AppDelegate.m */,
-				94056F8F185E593500EB94BA /* Main_iPhone.storyboard */,
-				94056F92185E593500EB94BA /* Main_iPad.storyboard */,
+				66DB85821B0430E70018EFC5 /* MainStoryboard.storyboard */,
 				94056FDC185E59D900EB94BA /* CoreGraphicsWaveformViewController.h */,
 				94056FDD185E59D900EB94BA /* CoreGraphicsWaveformViewController.m */,
 				94056F98185E593500EB94BA /* Images.xcassets */,
@@ -343,9 +338,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				94056F94185E593500EB94BA /* Main_iPad.storyboard in Resources */,
 				94056F99185E593500EB94BA /* Images.xcassets in Resources */,
-				94056F91185E593500EB94BA /* Main_iPhone.storyboard in Resources */,
+				66DB85831B0430E70018EFC5 /* MainStoryboard.storyboard in Resources */,
 				66B5CEB91B002C750046BE9D /* VERSION in Resources */,
 				94056F88185E593500EB94BA /* InfoPlist.strings in Resources */,
 				66B5CEB81B002C750046BE9D /* CHANGELOG in Resources */,
@@ -370,7 +364,7 @@
 				66B5CEB01B002C750046BE9D /* EZAudioPlotGL.m in Sources */,
 				66B5CEB51B002C750046BE9D /* EZPlot.m in Sources */,
 				94056FDE185E59D900EB94BA /* CoreGraphicsWaveformViewController.m in Sources */,
-				66B5CEA91B002C750046BE9D /* AEFloatConverter.m in Sources */,
+				66DB85531B0425CB0018EFC5 /* EZAudio.m in Sources */,
 				94056F8E185E593500EB94BA /* AppDelegate.m in Sources */,
 				66B5CEB31B002C750046BE9D /* EZMicrophone.m in Sources */,
 				66B5CEB71B002C750046BE9D /* TPCircularBuffer.c in Sources */,
@@ -413,22 +407,6 @@
 				94056F87185E593500EB94BA /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		94056F8F185E593500EB94BA /* Main_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				94056F90185E593500EB94BA /* Base */,
-			);
-			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		94056F92185E593500EB94BA /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				94056F93185E593500EB94BA /* Base */,
-			);
-			name = Main_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 		94056FA8185E593500EB94BA /* InfoPlist.strings */ = {

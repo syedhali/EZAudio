@@ -432,7 +432,7 @@ typedef struct
             if (interleaved)
             {
                 float *samples = (float *)audioBufferList->mBuffers[0].mData;
-                memcpy(buffer, &samples[offset], framesPerBuffer * sizeof(float));
+                memcpy(buffer, &samples[offset], (size_t)framesPerBuffer * sizeof(float));
                 for (int channel = 0; channel < channels; channel++)
                 {
                     float channelData[framesPerChannel];
@@ -450,7 +450,7 @@ typedef struct
                 for (int channel = 0; channel < channels; channel++)
                 {
                     float *samples = (float *)audioBufferList->mBuffers[channel].mData;
-                    memcpy(buffer, &samples[offset], framesPerBuffer * sizeof(float));
+                    memcpy(buffer, &samples[offset], (size_t)framesPerBuffer * sizeof(float));
                     float rms = [EZAudioUtilities RMS:buffer length:(UInt32)framesPerBuffer];
                     data[channel][i] = rms;
                 }
