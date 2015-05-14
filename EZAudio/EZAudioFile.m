@@ -229,7 +229,6 @@
                                                               numberOfChannels:_clientFormat.mChannelsPerFrame
                                                                    interleaved:YES];
       UInt32 bufferSize;
-      BOOL eof;
       
       // Read in the specified number of frames
       [EZAudio checkResult:ExtAudioFileRead(_audioFile,
@@ -238,7 +237,6 @@
                  operation:"Failed to read audio data from audio file"];
       bufferSize = bufferList->mBuffers[0].mDataByteSize/sizeof(float);
       bufferSize = MAX(1, bufferSize);
-      eof = _waveformFrameRate == 0;
       _frameIndex += _waveformFrameRate;
       
       // Calculate RMS of each buffer
