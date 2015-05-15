@@ -113,7 +113,6 @@
 {
     EZAudioDevice *device = self.inputs[row];
     [self.microphone setDevice:device];
-    [self toggleMicrophonePickerViewHidden];
 }
 
 //------------------------------------------------------------------------------
@@ -159,12 +158,13 @@
 {
     [self.microphone stopFetchingAudio];
     self.microphoneTextLabel.text = @"Microphone Off";
-    [self toggleMicrophonePickerViewHidden];
+    BOOL isHidden = self.microphoneInputPickerViewTopConstraint.constant != 0.0;
+    [self setMicrophonePickerViewHidden:!isHidden];
 }
 
 //------------------------------------------------------------------------------
 
-- (void)toggleMicrophonePickerViewHidden
+- (void)setMicrophonePickerViewHidden:(BOOL)hidden
 {
     CGFloat pickerHeight = CGRectGetHeight(self.microphoneInputPickerView.bounds);
     __weak typeof(self) weakSelf = self;
@@ -176,14 +176,7 @@
                                  UIViewAnimationOptionCurveEaseInOut|
                                  UIViewAnimationOptionLayoutSubviews)
                      animations:^{
-        if (weakSelf.microphoneInputPickerViewTopConstraint.constant == 0.0)
-        {
-            weakSelf.microphoneInputPickerViewTopConstraint.constant = -pickerHeight;
-        }
-        else
-        {
-            weakSelf.microphoneInputPickerViewTopConstraint.constant = 0.0;
-        }
+        weakSelf.microphoneInputPickerViewTopConstraint.constant = hidden ? -pickerHeight : 0.0f;
         [weakSelf.view layoutSubviews];
     } completion:nil];
 }
@@ -286,6 +279,7 @@
         // reset the device list (a device may have been plugged in/out)
         weakSelf.inputs = [EZAudioDevice inputDevices];
         [weakSelf.microphoneInputPickerView reloadAllComponents];
+        [weakSelf setMicrophonePickerViewHidden:YES];
         
         [weakSelf.microphone startFetchingAudio];
         weakSelf.microphoneTextLabel.text = @"Microphone On";

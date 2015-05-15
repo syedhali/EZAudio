@@ -49,6 +49,7 @@ typedef struct EZMicrophoneInfo
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [EZAudioUtilities freeBufferList:self.info.audioBufferList];
 }
 
