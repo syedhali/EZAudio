@@ -476,7 +476,7 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
     }
     
 #elif TARGET_OS_MAC
-    UInt32 inputEnabled = device.isInput;
+    UInt32 inputEnabled = device.inputChannelCount > 0;
     [EZAudioUtilities checkResult:AudioUnitSetProperty(self.info.audioUnit,
                                                        kAudioOutputUnitProperty_EnableIO,
                                                        kAudioUnitScope_Input,
@@ -485,7 +485,7 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
                                                        sizeof(inputEnabled))
                         operation:"Failed to set flag on device input"];
     
-    UInt32 outputEnabled = device.isOutput;
+    UInt32 outputEnabled = device.outputChannelCount > 0;
     [EZAudioUtilities checkResult:AudioUnitSetProperty(self.info.audioUnit,
                                                        kAudioOutputUnitProperty_EnableIO,
                                                        kAudioUnitScope_Output,

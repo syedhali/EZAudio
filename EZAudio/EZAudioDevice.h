@@ -16,13 +16,13 @@
 
 @interface EZAudioDevice : NSObject
 
-+ (EZAudioDevice *)currentInputDevice;
 + (NSArray *)inputDevices;
 
 @property (nonatomic, copy, readonly) NSString *name;
 
 #if TARGET_OS_IPHONE
 
++ (EZAudioDevice *)currentInputDevice;
 + (void)enumerateInputDevicesUsingBlock:(void(^)(EZAudioDevice *device,
                                                  BOOL *stop))block;
 
@@ -32,14 +32,13 @@
 #elif TARGET_OS_MAC
 + (NSArray *)devices;
 + (NSArray *)outputDevices;
-
 + (void)enumerateDevicesUsingBlock:(void(^)(EZAudioDevice *device,
                                             BOOL *stop))block;
 
 @property (nonatomic, assign, readonly) AudioDeviceID deviceID;
 @property (nonatomic, copy, readonly) NSString *manufacturer;
-@property (nonatomic, assign, readonly) BOOL isInput;
-@property (nonatomic, assign, readonly) BOOL isOutput;
+@property (nonatomic, assign, readonly) NSInteger inputChannelCount;
+@property (nonatomic, assign, readonly) NSInteger outputChannelCount;
 @property (nonatomic, copy, readonly) NSString *UID;
 #endif
 

@@ -44,14 +44,22 @@
 /**
  The OpenGL based audio plot
  */
-@property (nonatomic,weak) IBOutlet EZAudioPlotGL *audioPlot;
-
-//------------------------------------------------------------------------------
+@property (nonatomic, weak) IBOutlet EZAudioPlotGL *audioPlot;
 
 /**
  The microphone component
  */
-@property (nonatomic,strong) EZMicrophone *microphone;
+@property (nonatomic, strong) EZMicrophone *microphone;
+
+/**
+ The microphone pop up button (contains the menu for choosing a microphone input)
+ */
+@property (nonatomic, weak) IBOutlet NSPopUpButton *microphoneInputPopUpButton;
+
+/**
+ The microphone input channel pop up button (contains the menu for choosing a microphone input channel)
+ */
+@property (nonatomic, weak) IBOutlet NSPopUpButton *microphoneInputChannelPopUpButton;
 
 //------------------------------------------------------------------------------
 #pragma mark - Actions
@@ -62,13 +70,9 @@
  */
 -(IBAction)changePlotType:(id)sender;
 
-//------------------------------------------------------------------------------
-
 /**
  Toggles the microphone on and off. When the microphone is on it will send its delegate (aka this view controller) the audio data in various ways (check out the EZMicrophoneDelegate documentation for more details);
  */
 -(IBAction)toggleMicrophone:(id)sender;
-
-//------------------------------------------------------------------------------
 
 @end

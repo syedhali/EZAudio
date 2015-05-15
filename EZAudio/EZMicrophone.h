@@ -110,7 +110,7 @@
 @property (nonatomic, weak) id<EZMicrophoneDelegate> delegate;
 
 // TODO: document this
-@property (nonatomic, strong) EZAudioDevice *device;
+@property (atomic, strong) EZAudioDevice *device;
 
 /**
  A bool describing whether the microphone is on and passing back audio data to its delegate.

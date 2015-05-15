@@ -288,8 +288,6 @@
     // Debug only
     CGLEnable([context CGLContextObj], kCGLCECrashOnRemovedFunctions);
     
-    NSLog(@"open gl context: %@",context);
-    
     self.pixelFormat = pf;
     self.openGLContext = context;
 }

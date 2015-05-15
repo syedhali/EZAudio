@@ -14,7 +14,19 @@
 
 @implementation CoreGraphicsWaveformViewController
 
+//------------------------------------------------------------------------------
+#pragma mark - View Style
+//------------------------------------------------------------------------------
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+//------------------------------------------------------------------------------
 #pragma mark - Customize the Audio Plot
+//------------------------------------------------------------------------------
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

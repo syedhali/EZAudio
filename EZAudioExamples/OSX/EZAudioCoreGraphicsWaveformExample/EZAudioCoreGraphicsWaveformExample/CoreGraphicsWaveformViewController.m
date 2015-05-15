@@ -51,9 +51,17 @@
     self.microphone = [EZMicrophone microphoneWithDelegate:self];
     
     //
-    // Set up the microphone input popup button's items to select
-    // between different microphone inputs
+    // Start the microphone
     //
+    [self.microphone startFetchingAudio];
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Setup
+//------------------------------------------------------------------------------
+
+- (void) reloadMicrophoneInputPopUpButtonMenu
+{
     NSArray *inputDevices = [EZAudioDevice inputDevices];
     NSMenu *menu = [[NSMenu alloc] init];
     NSMenuItem *defaultInputMenuItem;
@@ -84,11 +92,24 @@
     // microphone input popup button
     //
     [self.microphoneInputPopUpButton selectItem:defaultInputMenuItem];
-    
-    //
-    // Start the microphone
-    //
-    [self.microphone startFetchingAudio];
+}
+
+//------------------------------------------------------------------------------
+
+- (void) reloadMicrophoneInputChannelPopUpButtonMenu
+{
+    NSMenu *menu = [[NSMenu alloc] init];
+    for (int i = 0; i < self.microphone.device.inputChannelCount; i++)
+    {
+        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:@(i).stringValue
+                                                      action:@selector(changedInputChannel:)
+                                               keyEquivalent:@""];
+        item.representedObject = @(i);
+        item.target = self;
+        [menu addItem:item];
+    }
+    self.microphoneInputChannelPopUpButton.menu = menu;
+    [self.microphoneInputChannelPopUpButton selectItemAtIndex:0];
 }
 
 //------------------------------------------------------------------------------
@@ -100,6 +121,14 @@
     EZAudioDevice *device = [sender representedObject];
     [self.microphone setDevice:device];
 }
+
+//------------------------------------------------------------------------------
+
+- (void)changedInputChannel:(id)sender
+{
+}
+
+//------------------------------------------------------------------------------
 
 - (void)changePlotType:(id)sender
 {
@@ -116,6 +145,8 @@
             break;
     }
 }
+
+//------------------------------------------------------------------------------
 
 - (void)toggleMicrophone:(id)sender
 {
@@ -143,6 +174,8 @@
     self.audioPlot.shouldFill = NO;
 }
 
+//------------------------------------------------------------------------------
+
 /*
  Give the classic mirrored, rolling waveform look
  */
@@ -161,14 +194,16 @@
     withBufferSize:(UInt32)bufferSize
 withNumberOfChannels:(UInt32)numberOfChannels
 {
-    // Getting audio data as an array of float buffer arrays. What does that mean? Because the audio is coming in as a stereo signal the data is split into a left and right channel. So buffer[0] corresponds to the float* data for the left channel while buffer[1] corresponds to the float* data for the right channel.
-
     // See the Thread Safety warning above, but in a nutshell these callbacks happen on a separate audio thread. We wrap any UI updating in a GCD block on the main thread to avoid blocking that audio flow.
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(),^{
     // All the audio plot needs is the buffer data (float*) and the size. Internally the audio plot will handle all the drawing related code, history management, and freeing its own resources. Hence, one badass line of code gets you a pretty plot :)
-        [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
+        NSInteger channel = [weakSelf.microphoneInputChannelPopUpButton indexOfSelectedItem];
+        [weakSelf.audioPlot updateBuffer:buffer[channel] withBufferSize:bufferSize];
     });
 }
+
+//------------------------------------------------------------------------------
 
 - (void)microphone:(EZMicrophone *)microphone hasAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription
 {
@@ -177,12 +212,36 @@ withNumberOfChannels:(UInt32)numberOfChannels
     [EZAudioUtilities printASBD:audioStreamBasicDescription];
 }
 
+//------------------------------------------------------------------------------
+
 - (void)microphone:(EZMicrophone *)microphone
-    hasBufferList:(AudioBufferList *)bufferList
-   withBufferSize:(UInt32)bufferSize
+     hasBufferList:(AudioBufferList *)bufferList
+    withBufferSize:(UInt32)bufferSize
 withNumberOfChannels:(UInt32)numberOfChannels
 {
     // Getting audio data as a buffer list that can be directly fed into the EZRecorder or EZOutput. Say whattt...
 }
+
+//------------------------------------------------------------------------------
+
+- (void)microphone:(EZMicrophone *)microphone
+     changedDevice:(EZAudioDevice *)device
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //
+        // Set up the microphone input popup button's items to select
+        // between different microphone inputs
+        //
+        [self reloadMicrophoneInputPopUpButtonMenu];
+        
+        //
+        // Set up the microphone input popup button's items to select
+        // between different microphone input channels
+        //
+        [self reloadMicrophoneInputChannelPopUpButtonMenu];
+    });
+}
+
+//------------------------------------------------------------------------------
 
 @end

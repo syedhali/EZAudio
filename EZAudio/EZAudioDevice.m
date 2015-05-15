@@ -22,8 +22,8 @@
 
 @property (nonatomic, assign, readwrite) AudioDeviceID deviceID;
 @property (nonatomic, copy, readwrite) NSString *manufacturer;
-@property (nonatomic, assign, readwrite) BOOL isInput;
-@property (nonatomic, assign, readwrite) BOOL isOutput;
+@property (nonatomic, assign, readwrite) NSInteger inputChannelCount;
+@property (nonatomic, assign, readwrite) NSInteger outputChannelCount;
 @property (nonatomic, copy, readwrite) NSString *UID;
 
 #endif
@@ -184,8 +184,8 @@
         device.manufacturer = [self manufacturerForDeviceID:deviceID];
         device.name = [self namePropertyForDeviceID:deviceID];
         device.UID = [self UIDPropertyForDeviceID:deviceID];
-        device.isInput = [self isInputPropertyForDeviceID:deviceID];
-        device.isOutput = [self isOutputPropertyForDeviceID:deviceID];
+        device.inputChannelCount = [self channelCountForScope:kAudioObjectPropertyScopeInput forDeviceID:deviceID];
+        device.outputChannelCount = [self channelCountForScope:kAudioObjectPropertyScopeOutput forDeviceID:deviceID];
         block(device, &stop);
         if (stop)
         {
@@ -215,7 +215,7 @@
     __block NSMutableArray *devices = [NSMutableArray array];
     [self enumerateDevicesUsingBlock:^(EZAudioDevice *device, BOOL *stop)
     {
-        if (device.isInput)
+        if (device.inputChannelCount > 0)
         {
             [devices addObject:device];
         }
@@ -230,7 +230,7 @@
     __block NSMutableArray *devices = [NSMutableArray array];
     [self enumerateDevicesUsingBlock:^(EZAudioDevice *device, BOOL *stop)
     {
-        if (device.isOutput)
+        if (device.outputChannelCount > 0)
         {
             [devices addObject:device];
         }
@@ -272,8 +272,8 @@
 
 //------------------------------------------------------------------------------
 
-+ (BOOL)isScopeEnabled:(AudioObjectPropertyScope)scope
-           forDeviceID:(AudioDeviceID)deviceID
++ (NSInteger)channelCountForScope:(AudioObjectPropertyScope)scope
+                      forDeviceID:(AudioDeviceID)deviceID
 {
     AudioObjectPropertyAddress address;
     address.mScope = scope;
@@ -290,23 +290,13 @@
                                                  &streamConfiguration)
                         operation:"Failed to get frame size"];
     
-    return streamConfiguration.mNumberBuffers > 0;
-}
-
-//------------------------------------------------------------------------------
-
-+ (BOOL)isInputPropertyForDeviceID:(AudioDeviceID)deviceID
-{
-    return [self isScopeEnabled:kAudioDevicePropertyScopeInput
-                    forDeviceID:deviceID];
-}
-
-//------------------------------------------------------------------------------
-
-+ (BOOL)isOutputPropertyForDeviceID:(AudioDeviceID)deviceID
-{
-    return [self isScopeEnabled:kAudioDevicePropertyScopeOutput
-                    forDeviceID:deviceID];
+    NSInteger channelCount = 0;
+    for (NSInteger i = 0; i < streamConfiguration.mNumberBuffers; i++)
+    {
+        channelCount += streamConfiguration.mBuffers[i].mNumberChannels;
+    }
+    
+    return channelCount;
 }
 
 //------------------------------------------------------------------------------
@@ -337,14 +327,14 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"%@ { deviceID: %i, manufacturer: %@, name: %@, UID: %@, isInput: %i, isOutput: %i }",
+    return [NSString stringWithFormat:@"%@ { deviceID: %i, manufacturer: %@, name: %@, UID: %@, inputChannelCount: %ld, outputChannelCount: %ld }",
             [super description],
             self.deviceID,
             self.manufacturer,
             self.name,
             self.UID,
-            self.isInput,
-            self.isOutput];
+            self.inputChannelCount,
+            self.outputChannelCount];
 }
 
 //------------------------------------------------------------------------------

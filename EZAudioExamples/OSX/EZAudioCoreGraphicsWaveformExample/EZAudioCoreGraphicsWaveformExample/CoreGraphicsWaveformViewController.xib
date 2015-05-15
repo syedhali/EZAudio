@@ -8,6 +8,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="CoreGraphicsWaveformViewController">
             <connections>
                 <outlet property="audioPlot" destination="1uw-Yi-HM2" id="64z-gn-hPW"/>
+                <outlet property="microphoneInputChannelPopUpButton" destination="bgj-fj-Oy6" id="vGS-SR-U0L"/>
                 <outlet property="microphoneInputPopUpButton" destination="cSw-gJ-SFw" id="yRJ-A2-X7x"/>
                 <outlet property="view" destination="1" id="2"/>
             </connections>
@@ -21,6 +22,19 @@
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="1uw-Yi-HM2" customClass="EZAudioPlot">
                     <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
                     <subviews>
+                        <button translatesAutoresizingMaskIntoConstraints="NO" id="bst-4p-f4H">
+                            <rect key="frame" x="339" y="44" width="123" height="18"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="119" id="vYJ-8O-eut"/>
+                            </constraints>
+                            <buttonCell key="cell" type="check" title="Microphone On" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="X83-kX-Oau">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="toggleMicrophone:" target="-2" id="WUF-aw-GV2"/>
+                            </connections>
+                        </button>
                         <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xVu-eW-fRp">
                             <rect key="frame" x="335" y="15" width="127" height="24"/>
                             <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="mpa-RS-2hy">
@@ -34,7 +48,7 @@
                                 <action selector="changePlotType:" target="-2" id="IsT-Sq-sKO"/>
                             </connections>
                         </segmentedControl>
-                        <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cSw-gJ-SFw">
+                        <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cSw-gJ-SFw" userLabel="microphoneInputPopUpButton">
                             <rect key="frame" x="18" y="14" width="180" height="26"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="175" id="3bZ-AG-HEc"/>
@@ -51,25 +65,52 @@
                                 </menu>
                             </popUpButtonCell>
                         </popUpButton>
-                        <button translatesAutoresizingMaskIntoConstraints="NO" id="bst-4p-f4H">
-                            <rect key="frame" x="343" y="44" width="119" height="18"/>
+                        <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bgj-fj-Oy6" userLabel="microphoneInputChannelPopUpButton">
+                            <rect key="frame" x="204" y="14" width="79" height="26"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="115" id="vYJ-8O-eut"/>
+                                <constraint firstAttribute="width" constant="74" id="O47-ik-v0U"/>
                             </constraints>
-                            <buttonCell key="cell" type="check" title="Microphone On" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="X83-kX-Oau">
-                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                            <connections>
-                                <action selector="toggleMicrophone:" target="-2" id="WUF-aw-GV2"/>
-                            </connections>
-                        </button>
+                            <popUpButtonCell key="cell" type="push" title="1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="tTv-6r-U14" id="Z7r-Xg-PEv">
+                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="menu"/>
+                                <menu key="menu" id="sGP-Ke-ZB2">
+                                    <items>
+                                        <menuItem title="1" state="on" id="tTv-6r-U14"/>
+                                        <menuItem title="Item 2" id="CJ3-iu-BhA"/>
+                                        <menuItem title="Item 3" id="7sU-Xx-DWe"/>
+                                    </items>
+                                </menu>
+                            </popUpButtonCell>
+                        </popUpButton>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w28-wR-YmZ">
+                            <rect key="frame" x="18" y="43" width="31" height="14"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Input" id="IFk-or-5QP">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Xqu-aw-xXE">
+                            <rect key="frame" x="204" y="43" width="48" height="14"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Channel" id="8wF-S3-uJD">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
                     </subviews>
                     <constraints>
+                        <constraint firstItem="w28-wR-YmZ" firstAttribute="leading" secondItem="1uw-Yi-HM2" secondAttribute="leading" constant="20" id="8P3-V6-63s"/>
                         <constraint firstItem="cSw-gJ-SFw" firstAttribute="leading" secondItem="1uw-Yi-HM2" secondAttribute="leading" constant="20" id="9dC-JY-g1J"/>
+                        <constraint firstItem="bgj-fj-Oy6" firstAttribute="leading" secondItem="cSw-gJ-SFw" secondAttribute="trailing" constant="11" id="ALb-Id-GvM"/>
+                        <constraint firstItem="cSw-gJ-SFw" firstAttribute="top" secondItem="w28-wR-YmZ" secondAttribute="bottom" constant="5" id="IB5-Vs-Blp"/>
+                        <constraint firstItem="bgj-fj-Oy6" firstAttribute="leading" secondItem="Xqu-aw-xXE" secondAttribute="leading" id="Ign-Zq-OBi"/>
+                        <constraint firstItem="xVu-eW-fRp" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="bgj-fj-Oy6" secondAttribute="trailing" constant="11" id="Pg3-wW-s6X"/>
                         <constraint firstItem="xVu-eW-fRp" firstAttribute="top" secondItem="bst-4p-f4H" secondAttribute="bottom" constant="8" id="T2f-9O-EYV"/>
+                        <constraint firstAttribute="bottom" secondItem="bgj-fj-Oy6" secondAttribute="bottom" constant="17" id="Ufb-HM-5mm"/>
                         <constraint firstAttribute="bottom" secondItem="cSw-gJ-SFw" secondAttribute="bottom" constant="17" id="dqc-Zk-rt6"/>
                         <constraint firstAttribute="bottom" secondItem="xVu-eW-fRp" secondAttribute="bottom" constant="17" id="gPn-xu-hrZ"/>
+                        <constraint firstItem="bgj-fj-Oy6" firstAttribute="top" secondItem="Xqu-aw-xXE" secondAttribute="bottom" constant="5" id="rDF-or-8OQ"/>
                         <constraint firstAttribute="trailing" secondItem="xVu-eW-fRp" secondAttribute="trailing" constant="20" id="tHh-2L-ypE"/>
                         <constraint firstAttribute="trailing" secondItem="bst-4p-f4H" secondAttribute="trailing" constant="20" id="tKB-Ii-DGK"/>
                     </constraints>
@@ -81,6 +122,7 @@
                 <constraint firstAttribute="trailing" secondItem="1uw-Yi-HM2" secondAttribute="trailing" id="bjW-C2-2Mw"/>
                 <constraint firstAttribute="bottom" secondItem="1uw-Yi-HM2" secondAttribute="bottom" id="f1L-xR-BaI"/>
             </constraints>
+            <point key="canvasLocation" x="60" y="440"/>
         </customView>
     </objects>
 </document>

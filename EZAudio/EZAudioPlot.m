@@ -89,6 +89,7 @@
   self.plotType        = EZPlotTypeRolling;
   self.shouldMirror    = NO;
   self.shouldFill      = NO;
+  self.layer.drawsAsynchronously = YES;
   plotData             = NULL;
   _scrollHistory       = NULL;
   _scrollHistoryLength = kEZAudioPlotDefaultHistoryBufferLength;
