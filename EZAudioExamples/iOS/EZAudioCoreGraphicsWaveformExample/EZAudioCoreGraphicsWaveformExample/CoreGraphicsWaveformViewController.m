@@ -25,7 +25,7 @@
     //
     AVAudioSession *session = [AVAudioSession sharedInstance];
     NSError *error;
-    [session setCategory:AVAudioSessionCategoryRecord error:&error];
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
     if (error)
     {
         NSLog(@"Error setting up audio session category: %@", error.localizedDescription);
