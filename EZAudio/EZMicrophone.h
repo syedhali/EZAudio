@@ -54,6 +54,7 @@
  Called anytime the input device changes on an `EZMicrophone` instance. Mac only.
  @param microphone The instance of the EZMicrophone that triggered the event.
  @param device The instance of the new EZAudioDevice the microphone is using to pull input.
+ @param notification Incase the device changed because of a notification (like from AVAudioSession) then we provide that notification to give the full context of the change.
  */
 - (void)microphone:(EZMicrophone *)microphone changedDevice:(EZAudioDevice *)device;
 

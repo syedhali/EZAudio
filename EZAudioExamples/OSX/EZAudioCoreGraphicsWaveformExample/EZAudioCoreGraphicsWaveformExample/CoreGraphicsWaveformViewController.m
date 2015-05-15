@@ -31,7 +31,7 @@
 #pragma mark - Customize the Audio Plot
 //------------------------------------------------------------------------------
 
--(void)awakeFromNib
+- (void)awakeFromNib
 {
     //
     // Customizing the audio plot's look
@@ -91,67 +91,74 @@
     [self.microphone startFetchingAudio];
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - Actions
+//------------------------------------------------------------------------------
+
 - (void)changedInput:(id)sender
 {
     EZAudioDevice *device = [sender representedObject];
     [self.microphone setDevice:device];
 }
 
--(void)changePlotType:(id)sender
+- (void)changePlotType:(id)sender
 {
-  NSInteger selectedSegment = [sender selectedSegment];
-  switch(selectedSegment){
-    case 0:
-      [self drawBufferPlot];
-      break;
-    case 1:
-      [self drawRollingPlot];
-      break;
-    default:
-      break;
-  }
+    NSInteger selectedSegment = [sender selectedSegment];
+    switch(selectedSegment)
+    {
+        case 0:
+            [self drawBufferPlot];
+            break;
+        case 1:
+            [self drawRollingPlot];
+            break;
+        default:
+            break;
+    }
 }
 
--(void)toggleMicrophone:(id)sender
+- (void)toggleMicrophone:(id)sender
 {
-  switch([sender state]){
-    case NSOffState:
-      [self.microphone stopFetchingAudio];
-      break;
-    case NSOnState:
-      [self.microphone startFetchingAudio];
-      break;
-    default:
-      break;
-  }
+    switch([sender state])
+    {
+        case NSOffState:
+            [self.microphone stopFetchingAudio];
+            break;
+        case NSOnState:
+            [self.microphone startFetchingAudio];
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - Action Extensions
 /*
  Give the visualization of the current buffer (this is almost exactly the openFrameworks audio input eample)
  */
--(void)drawBufferPlot {
-  self.audioPlot.plotType = EZPlotTypeBuffer;
-  self.audioPlot.shouldMirror = NO;
-  self.audioPlot.shouldFill = NO;
+- (void)drawBufferPlot
+{
+    self.audioPlot.plotType = EZPlotTypeBuffer;
+    self.audioPlot.shouldMirror = NO;
+    self.audioPlot.shouldFill = NO;
 }
 
 /*
  Give the classic mirrored, rolling waveform look
  */
--(void)drawRollingPlot {
-  self.audioPlot.plotType = EZPlotTypeRolling;
-  self.audioPlot.shouldFill = YES;
-  self.audioPlot.shouldMirror = YES;
+- (void)drawRollingPlot
+{
+    self.audioPlot.plotType = EZPlotTypeRolling;
+    self.audioPlot.shouldFill = YES;
+    self.audioPlot.shouldMirror = YES;
 }
 
 #pragma mark - EZMicrophoneDelegate
 #warning Thread Safety
 // Note that any callback that provides streamed audio data (like streaming microphone input) happens on a separate audio thread that should not be blocked. When we feed audio data into any of the UI components we need to explicity create a GCD block on the main thread to properly get the UI to work.
--(void)microphone:(EZMicrophone *)microphone
- hasAudioReceived:(float **)buffer
-   withBufferSize:(UInt32)bufferSize
+- (void)microphone:(EZMicrophone *)microphone
+  hasAudioReceived:(float **)buffer
+    withBufferSize:(UInt32)bufferSize
 withNumberOfChannels:(UInt32)numberOfChannels
 {
     // Getting audio data as an array of float buffer arrays. What does that mean? Because the audio is coming in as a stereo signal the data is split into a left and right channel. So buffer[0] corresponds to the float* data for the left channel while buffer[1] corresponds to the float* data for the right channel.
@@ -163,14 +170,14 @@ withNumberOfChannels:(UInt32)numberOfChannels
     });
 }
 
--(void)microphone:(EZMicrophone *)microphone hasAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription
+- (void)microphone:(EZMicrophone *)microphone hasAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription
 {
     // The AudioStreamBasicDescription of the microphone stream. This is useful when configuring the EZRecorder or telling another component what audio format type to expect.
     // Here's a print function to allow you to inspect it a little easier
     [EZAudioUtilities printASBD:audioStreamBasicDescription];
 }
 
--(void)microphone:(EZMicrophone *)microphone
+- (void)microphone:(EZMicrophone *)microphone
     hasBufferList:(AudioBufferList *)bufferList
    withBufferSize:(UInt32)bufferSize
 withNumberOfChannels:(UInt32)numberOfChannels

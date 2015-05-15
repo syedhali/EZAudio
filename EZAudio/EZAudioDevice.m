@@ -104,7 +104,10 @@
 - (NSString *)name
 {
     NSMutableString *name = [NSMutableString string];
-    [name appendString:self.port.portName];
+    if (self.port)
+    {
+        [name appendString:self.port.portName];
+    }
     if (self.dataSource)
     {
         [name appendFormat:@": %@", self.dataSource.dataSourceName];

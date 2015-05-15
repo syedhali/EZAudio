@@ -288,7 +288,45 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
     
     [EZAudioUtilities checkResult:AudioUnitInitialize(self.info.audioUnit)
                         operation:"Failed to initialize input unit"];
+    
+    // setup notifications
+    [self setupNotifications];
 }
+
+- (void)setupNotifications
+{
+#if TARGET_OS_IPHONE
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(microphoneWasInterrupted:)
+                                                 name:AVAudioSessionInterruptionNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(microphoneRouteChanged:)
+                                                 name:AVAudioSessionRouteChangeNotification
+                                               object:nil];
+#elif TARGET_OS_MAC
+#endif
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Notifications
+//------------------------------------------------------------------------------
+
+#if TARGET_OS_IPHONE
+
+- (void)microphoneWasInterrupted:(NSNotification *)notification
+{
+    
+}
+
+- (void)microphoneRouteChanged:(NSNotification *)notification
+{
+    EZAudioDevice *device = [EZAudioDevice currentInputDevice];
+    [self setDevice:device];
+}
+
+#elif TARGET_OS_MAC
+#endif
 
 //------------------------------------------------------------------------------
 #pragma mark - Events
@@ -408,6 +446,7 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 {
 #if TARGET_OS_IPHONE
     
+    // if the devices are equal then ignore
     if ([device isEqual:self.device])
     {
         return;
