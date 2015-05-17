@@ -29,7 +29,6 @@
 @class EZAudio;
 
 #define kEZAudioPlotMaxHistoryBufferLength (8192)
-
 #define kEZAudioPlotDefaultHistoryBufferLength (1024)
 
 /**
@@ -46,12 +45,16 @@
  
  */
 @interface EZAudioPlot : EZPlot
-{
-    CGPoint *plotData;
-    UInt32   plotLength;
-}
 
+/**
+ This property optimizes the audio plot drawing for real-time displays. Since the update function may be updating the plot's data very quickly (over 60 frames per second) this property will throttle the drawing calls to be 30 frames per second for a much smoother plot.
+ */
+@property (nonatomic, assign) BOOL optimizeForRealtimePlot;
+
+//------------------------------------------------------------------------------
 #pragma mark - Adjust Resolution
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Adjusting The Resolution
 ///-----------------------------------------------------------
@@ -69,12 +72,19 @@
  */
 -(int)rollingHistoryLength;
 
+//------------------------------------------------------------------------------
 #pragma mark - Subclass Methods
+//------------------------------------------------------------------------------
+
+///-----------------------------------------------------------
+/// @name Subclass Methods
+///-----------------------------------------------------------
 
 /**
- <#Description#>
- @param data   <#theplotData description#>
- @param length <#length description#>
+ Main method used to copy the sample data from the source buffer and update the 
+ plot. Subclasses can overwrite this method for custom behavior.
+ @param data   A float array of the sample data. Subclasses should copy this data to a separate array to avoid threading issues.
+ @param length The length of the float array as an int.
  */
 -(void)setSampleData:(float *)data
               length:(int)length;
