@@ -90,7 +90,7 @@
   // Setup the base effect
   self.baseEffect = [[GLKBaseEffect alloc] init];
   self.baseEffect.useConstantColor = GL_TRUE;
-  self.preferredFramesPerSecond = 60;
+  self.preferredFramesPerSecond = 30;
   _scrollHistory       = NULL;
   _scrollHistoryLength = kEZAudioPlotDefaultHistoryBufferLength;
 }
@@ -132,7 +132,6 @@
   
   // Set the line width for the context
   glLineWidth(2.0);
-  
 }
 
 #pragma mark - Adjust Resolution

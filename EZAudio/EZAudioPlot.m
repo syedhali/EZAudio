@@ -25,9 +25,7 @@
 
 #import "EZAudioPlot.h"
 #import "EZAudioUtilities.h"
-#import <Accelerate/Accelerate.h>
 #import <QuartzCore/QuartzCore.h>
-#include <pthread.h>
 
 #if TARGET_OS_IPHONE
 typedef CGRect EZRect;
@@ -37,13 +35,26 @@ typedef NSRect EZRect;
 
 typedef struct EZAudioPlotInfo
 {
-    CGPoint *points;
-    UInt32  numberOfPoints;
+    CVDisplayLinkRef  displayLink;
+    CGPoint          *points;
+    UInt32            numberOfPoints;
 } EZAudioPlotInfo;
+
+// This is the renderer output callback function
+static CVReturn EZAudioPlotDisplayLinkCallback(CVDisplayLinkRef displayLink,
+                                               const CVTimeStamp *now,
+                                               const CVTimeStamp *outputTime,
+                                               CVOptionFlags flagsIn,
+                                               CVOptionFlags *flagsOut,
+                                               void *displayLinkContext)
+{
+    EZAudioPlot *plot = (__bridge EZAudioPlot*)displayLinkContext;
+    [plot redraw];
+    return kCVReturnSuccess;
+}
 
 @interface EZAudioPlot ()
 @property (nonatomic, assign) EZAudioPlotInfo info;
-@property (nonatomic) pthread_mutex_t lock;
 @property (nonatomic, strong) CAShapeLayer *waveformLayer;
 @end
 
@@ -55,6 +66,7 @@ typedef struct EZAudioPlotInfo
 
 - (void)dealloc
 {
+    CVDisplayLinkRelease(_info.displayLink);
     free(_info.points);
 }
 
@@ -118,6 +130,7 @@ typedef struct EZAudioPlotInfo
 
 - (void)initPlot
 {
+    self.centerYAxis = YES;
     self.gain = 1.0;
     self.plotType = EZPlotTypeRolling;
     self.shouldMirror = NO;
@@ -137,7 +150,21 @@ typedef struct EZAudioPlotInfo
 #endif
     [self.layer addSublayer:self.waveformLayer];
     self.waveformLayer.fillColor = nil;
+    [self setupDisplayLink];
 }
+
+- (void)setupDisplayLink
+{
+    CVDisplayLinkCreateWithActiveCGDisplays(&_info.displayLink);
+    CVDisplayLinkSetOutputCallback(_info.displayLink,
+                                   EZAudioPlotDisplayLinkCallback,
+                                   (__bridge void *)(self));
+    CVDisplayLinkStart(_info.displayLink);
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Setters
+//------------------------------------------------------------------------------
 
 - (void)setBackgroundColor:(id)backgroundColor
 {
@@ -151,6 +178,10 @@ typedef struct EZAudioPlotInfo
     self.waveformLayer.strokeColor = [color CGColor];
 }
 
+//------------------------------------------------------------------------------
+#pragma mark - Drawing
+//------------------------------------------------------------------------------
+
 - (void)redraw
 {
     EZRect frame = [self.waveformLayer frame];
@@ -161,7 +192,8 @@ typedef struct EZAudioPlotInfo
         double halfHeight = floor(frame.size.height / 2.0);
         int deviceOriginFlipped = 1;
         CGAffineTransform xf = CGAffineTransformIdentity;
-        xf = CGAffineTransformTranslate(xf, frame.origin.x , halfHeight + frame.origin.y);
+        CGFloat translateY = !self.centerYAxis ?: halfHeight + frame.origin.y;
+        xf = CGAffineTransformTranslate(xf, 0.0, translateY);
         xf = CGAffineTransformScale(xf, xscale, deviceOriginFlipped * halfHeight);
         CGPathAddLines(path, &xf, _info.points, _info.numberOfPoints);
         [CATransaction begin];
@@ -172,11 +204,17 @@ typedef struct EZAudioPlotInfo
     }
 }
 
+//------------------------------------------------------------------------------
+#pragma mark - Update
+//------------------------------------------------------------------------------
+
 - (void)updateBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize
 {
     // copy samples
     [self setSampleData:buffer length:bufferSize];
 }
+
+//------------------------------------------------------------------------------
 
 - (void)setSampleData:(float *)data length:(int)length
 {
@@ -187,12 +225,6 @@ typedef struct EZAudioPlotInfo
         points[i].y = data[i] * self.gain;
     }
     _info.numberOfPoints = length;
-
-    // redraw the plot if it's not yet optimized
-    if (!self.optimizeForRealtimePlot)
-    {
-        [self redraw];
-    }
 }
 
 //------------------------------------------------------------------------------

@@ -612,10 +612,10 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   
 	// Get the view size in Points
 	NSRect viewRectPoints = [self bounds];
-  NSRect viewRectPixels = [self convertRectToBacking:viewRectPoints];
+    NSRect viewRectPixels = [self convertRectToBacking:viewRectPoints];
   
 	// Set the new dimensions in our renderer
-  glViewport(0, 0, viewRectPixels.size.width, viewRectPixels.size.height);
+    glViewport(0, 0, viewRectPixels.size.width, viewRectPixels.size.height);
 	
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
 }

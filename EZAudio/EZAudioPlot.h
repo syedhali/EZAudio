@@ -51,6 +51,8 @@
  */
 @property (nonatomic, assign) BOOL optimizeForRealtimePlot;
 
+@property (nonatomic, assign) BOOL centerYAxis;
+
 //------------------------------------------------------------------------------
 #pragma mark - Adjust Resolution
 //------------------------------------------------------------------------------
@@ -79,6 +81,8 @@
 ///-----------------------------------------------------------
 /// @name Subclass Methods
 ///-----------------------------------------------------------
+
+- (void)redraw;
 
 /**
  Main method used to copy the sample data from the source buffer and update the 

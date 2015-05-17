@@ -317,7 +317,7 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 
 - (void)microphoneWasInterrupted:(NSNotification *)notification
 {
-    
+    // TODO: implement
 }
 
 - (void)microphoneRouteChanged:(NSNotification *)notification
