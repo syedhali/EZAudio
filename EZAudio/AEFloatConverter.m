@@ -133,9 +133,12 @@ BOOL AEFloatConverterToFloat(AEFloatConverter* THIS, AudioBufferList *sourceBuff
 
 BOOL AEFloatConverterToFloatBufferList(AEFloatConverter* converter, AudioBufferList *sourceBuffer,  AudioBufferList *targetBuffer, UInt32 frames) {
     assert(targetBuffer->mNumberBuffers == converter->_floatAudioDescription.mChannelsPerFrame);
-    
-    float *targetBuffers[targetBuffer->mNumberBuffers];
-    for ( int i=0; i<targetBuffer->mNumberBuffers; i++ ) {
+	
+	const size_t nBuffers = targetBuffer->mNumberBuffers;
+	float *targetBuffers[nBuffers];
+	bzero(targetBuffers, nBuffers * sizeof(targetBuffers[0]));
+
+	for ( int i=0; i<targetBuffer->mNumberBuffers; i++ ) {
         targetBuffers[i] = (float*)targetBuffer->mBuffers[i].mData;
     }
     return AEFloatConverterToFloat(converter, sourceBuffer, targetBuffers, frames);
@@ -180,9 +183,12 @@ BOOL AEFloatConverterFromFloat(AEFloatConverter* THIS, float * const * sourceBuf
 
 BOOL AEFloatConverterFromFloatBufferList(AEFloatConverter* converter, AudioBufferList *sourceBuffer, AudioBufferList *targetBuffer, UInt32 frames) {
     assert(sourceBuffer->mNumberBuffers == converter->_floatAudioDescription.mChannelsPerFrame);
-    
-    float *sourceBuffers[sourceBuffer->mNumberBuffers];
-    for ( int i=0; i<sourceBuffer->mNumberBuffers; i++ ) {
+	
+	const size_t nBuffers = sourceBuffer->mNumberBuffers;
+    float *sourceBuffers[nBuffers];
+	bzero(sourceBuffers, nBuffers * sizeof(sourceBuffer[0]));
+
+	for ( int i=0; i<sourceBuffer->mNumberBuffers; i++ ) {
         sourceBuffers[i] = (float*)sourceBuffer->mBuffers[i].mData;
     }
     return AEFloatConverterFromFloat(converter, sourceBuffers, targetBuffer, frames);
