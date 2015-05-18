@@ -15,7 +15,6 @@
  Here's the default audio file included with the example
  */
 #define kAudioFileDefault [[NSBundle mainBundle] pathForResource:@"simple-drum-beat" ofType:@"wav"]
-//#define kAudioFileDefault [[NSBundle mainBundle] pathForResource:@"Röyksopp - Röyksopp Forever" ofType:@"mp3"]
 
 /**
  Using the EZOutputDataSource to provide output data to the EZOutput component.
