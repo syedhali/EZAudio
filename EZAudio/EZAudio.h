@@ -23,6 +23,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wauto-import"
+
 #import <Foundation/Foundation.h>
 
 #pragma mark - 3rd Party Utilties
@@ -43,6 +46,8 @@
 #import "EZAudioPlot.h"
 #import "EZAudioPlotGL.h"
 #import "EZAudioPlotGLKViewController.h"
+
+#pragma clang diagnostic pop
 
 /**
  EZAudio is a simple, intuitive framework for iOS and OSX. The goal of EZAudio was to provide a modular, cross-platform framework to simplify performing everyday audio operations like getting microphone input, creating audio waveforms, recording/playing audio files, etc. The visualization tools like the EZAudioPlot and EZAudioPlotGL were created to plug right into the framework's various components and provide highly optimized drawing routines that work in harmony with audio callback loops. All components retain the same namespace whether you're on an iOS device or a Mac computer so an EZAudioPlot understands it will subclass an UIView on an iOS device or an NSView on a Mac.
@@ -136,7 +141,7 @@
  @param sampleRate The desired sample rate
  @return A new AudioStreamBasicDescription with the specified format.
  */
-+(AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sameRate;
++(AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sampleRate;
 
 ///-----------------------------------------------------------
 /// @name AudioStreamBasicDescription Utilities

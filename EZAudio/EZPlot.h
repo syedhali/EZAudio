@@ -23,6 +23,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#import <TargetConditionals.h>
+#import <Foundation/Foundation.h>
+
 #pragma mark - Enumerations
 ///-----------------------------------------------------------
 /// @name Plot Types
@@ -31,7 +34,7 @@
 /**
  The types of plots that can be displayed in the view using the data.
  */
-typedef NS_ENUM(NSInteger,EZPlotType){
+typedef NS_ENUM(NSInteger,EZPlotType) {
   /**
    Plot that displays only the samples of the current buffer
    */

@@ -76,7 +76,6 @@ inNumberFrames:(UInt32)inNumberFrames
  @param output The instance of the EZOutput that asked for the data.
  @param audioBufferList The AudioBufferList structure pointer that needs to be filled with audio data
  @param frames The amount of frames as a UInt32 that output will need to properly fill its output buffer.
- @return A pointer to the AudioBufferList structure holding the audio data. If nil or NULL, will output silence.
  */
 -(void)             output:(EZOutput *)output
  shouldFillAudioBufferList:(AudioBufferList*)audioBufferList

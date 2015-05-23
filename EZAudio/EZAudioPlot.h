@@ -47,8 +47,11 @@
  */
 @interface EZAudioPlot : EZPlot
 {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-interface-ivars"
     CGPoint *plotData;
     UInt32   plotLength;
+#pragma clang diagnostic pop
 }
 
 #pragma mark - Adjust Resolution
