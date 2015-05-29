@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Mlw-nQ-rjI">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+    </dependencies>
+    <scenes>
+        <!--Waveform From File View Controller-->
+        <scene sceneID="pTa-uf-LcH">
+            <objects>
+                <viewController id="Mlw-nQ-rjI" customClass="WaveformFromFileViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="A6L-0P-MH5"/>
+                        <viewControllerLayoutGuide type="bottom" id="l2b-Mr-Lhg"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="hy8-yB-VnN">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dsD-0P-GYs">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fRU-2C-Uqy" customClass="EZAudioPlot">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                </subviews>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="l2b-Mr-Lhg" firstAttribute="top" secondItem="dsD-0P-GYs" secondAttribute="bottom" id="2nw-vO-y58"/>
+                            <constraint firstItem="dsD-0P-GYs" firstAttribute="leading" secondItem="hy8-yB-VnN" secondAttribute="leading" id="3p8-TA-OeY"/>
+                            <constraint firstItem="dsD-0P-GYs" firstAttribute="top" secondItem="hy8-yB-VnN" secondAttribute="top" id="80D-j2-Ktl"/>
+                            <constraint firstAttribute="trailing" secondItem="dsD-0P-GYs" secondAttribute="trailing" id="ayU-WR-1El"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="audioPlot" destination="fRU-2C-Uqy" id="8kO-3b-fug"/>
+                        <outlet property="scrollView" destination="dsD-0P-GYs" id="N1h-qR-WKG"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Kw4-aB-FNF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="309" y="397"/>
+        </scene>
+    </scenes>
+</document>

@@ -12,7 +12,8 @@
 
 //------------------------------------------------------------------------------
 
-static UInt32 EZAudioFloatConverterDefaultOutputBufferSize = 32 * 128;
+static UInt32 EZAudioFloatConverterDefaultOutputBufferSize = 128 * 32;
+UInt32 EZAudioFloatConverterDefaultPacketSize = 2048;
 
 //------------------------------------------------------------------------------
 
@@ -40,6 +41,8 @@ OSStatus EZAudioFloatConverterCallback(AudioConverterRef            inAudioConve
            sizeof(AudioBufferList) + (sourceBuffer->mNumberBuffers - 1)*sizeof(AudioBuffer));
     return noErr;
 }
+
+//------------------------------------------------------------------------------
 
 @interface EZAudioFloatConverter ()
 @property (nonatomic, assign) EZAudioFloatConverterInfo info;
@@ -93,11 +96,14 @@ OSStatus EZAudioFloatConverterCallback(AudioConverterRef            inAudioConve
             // determine the max output buffer size
             UInt32 maxOutputPacketSize;
             UInt32 propSize = sizeof(maxOutputPacketSize);
-            [EZAudioUtilities checkResult:AudioConverterGetProperty(info.converterRef,
-                                                                    kAudioConverterPropertyMaximumOutputPacketSize,
-                                                                    &propSize,
-                                                                    &maxOutputPacketSize)
-                                operation:"Failed to get max packet size in converter"];
+            OSStatus result = AudioConverterGetProperty(info.converterRef,
+                                                        kAudioConverterPropertyMaximumOutputPacketSize,
+                                                        &propSize,
+                                                        &maxOutputPacketSize);
+            if (result != noErr)
+            {
+                maxOutputPacketSize = EZAudioFloatConverterDefaultPacketSize;
+            }
             
             // set the output buffer size to at least the max output size
             if (maxOutputPacketSize > outputBufferSize)
@@ -148,10 +154,21 @@ OSStatus EZAudioFloatConverterCallback(AudioConverterRef            inAudioConve
                     withNumberOfFrames:(UInt32)frames
                         toFloatBuffers:(float **)buffers
 {
+    [self convertDataFromAudioBufferList:audioBufferList
+                      withNumberOfFrames:frames
+                          toFloatBuffers:buffers
+                      packetDescriptions:self.info.packetDescriptions];
+}
+
+- (void)convertDataFromAudioBufferList:(AudioBufferList *)audioBufferList
+                    withNumberOfFrames:(UInt32)frames
+                        toFloatBuffers:(float **)buffers
+                    packetDescriptions:(AudioStreamPacketDescription *)packetDescriptions
+{
     EZAudioFloatConverterInfo info = self.info;
     if (frames == 0)
     {
-
+        
     }
     else
     {
@@ -160,7 +177,7 @@ OSStatus EZAudioFloatConverterCallback(AudioConverterRef            inAudioConve
                                                                       audioBufferList,
                                                                       &frames,
                                                                       info.floatAudioBufferList,
-                                                                      info.packetDescriptions)
+                                                                      packetDescriptions ? packetDescriptions : info.packetDescriptions)
                             operation:"Failed to fill complex buffer in float converter"];
         for (int i = 0; i < info.floatAudioBufferList->mNumberBuffers; i++)
         {

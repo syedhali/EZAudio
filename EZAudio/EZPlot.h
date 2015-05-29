@@ -31,7 +31,8 @@
 /**
  The types of plots that can be displayed in the view using the data.
  */
-typedef NS_ENUM(NSInteger,EZPlotType){
+typedef NS_ENUM(NSInteger,EZPlotType)
+{
   /**
    Plot that displays only the samples of the current buffer
    */
@@ -41,6 +42,15 @@ typedef NS_ENUM(NSInteger,EZPlotType){
    */
   EZPlotTypeRolling
 };
+
+typedef struct
+{
+    float   *buffer;
+    BOOL    changingHistorySize;
+    int     index;
+    UInt32  bufferSize;
+}
+EZPlotHistoryInfo;
 
 /**
  EZPlot is a cross-platform (iOS and OSX) class used to subclass the default view type (either UIView or NSView, respectively).
@@ -70,6 +80,8 @@ typedef NS_ENUM(NSInteger,EZPlotType){
  The default color of the plot's data (i.e. waveform, y-axis values). For iOS the color is specified as a UIColor while for OSX the color is an NSColor. The default value on both platforms is red.
  */
 @property (nonatomic,strong) id color;
+
+@property (nonatomic, assign) EZPlotHistoryInfo *history;
 
 /**
  The plot's gain value, which controls the scale of the y-axis values. The default value of the gain is 1.0f and should always be greater than 0.0f.

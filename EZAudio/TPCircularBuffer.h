@@ -57,7 +57,7 @@ typedef struct {
     int32_t           head;
     volatile int32_t  fillCount;
 } TPCircularBuffer;
-
+ 
 /*!
  * Initialise buffer
  *

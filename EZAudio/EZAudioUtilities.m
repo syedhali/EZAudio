@@ -244,7 +244,8 @@ BOOL __shouldExitOnCheckResultFail = YES;
     return asbd;
 }
 
-+(void)printASBD:(AudioStreamBasicDescription)asbd {
++(void)printASBD:(AudioStreamBasicDescription)asbd
+{
     char formatIDString[5];
     UInt32 formatID = CFSwapInt32HostToBig(asbd.mFormatID);
     bcopy (&formatID, formatIDString, 4);
@@ -257,6 +258,33 @@ BOOL __shouldExitOnCheckResultFail = YES;
     NSLog (@"  Bytes per Frame:     %10d",    (unsigned int)asbd.mBytesPerFrame);
     NSLog (@"  Channels per Frame:  %10d",    (unsigned int)asbd.mChannelsPerFrame);
     NSLog (@"  Bits per Channel:    %10d",    (unsigned int)asbd.mBitsPerChannel);
+}
+
++(NSString *)stringForAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd
+{
+    char formatIDString[5];
+    UInt32 formatID = CFSwapInt32HostToBig(asbd.mFormatID);
+    bcopy (&formatID, formatIDString, 4);
+    formatIDString[4] = '\0';
+    return [NSString stringWithFormat:
+            @"\nSample Rate:       %10.0f,\n"
+            @"Format ID:           %10s,\n"
+            @"Format Flags:        %10X,\n"
+            @"Bytes per Packet:    %10d,\n"
+            @"Frames per Packet:   %10d,\n"
+            @"Bytes per Frame:     %10d,\n"
+            @"Channels per Frame:  %10d,\n"
+            @"Bits per Channel:    %10d,\n"
+            @"IsInterleaved:       %i",
+            asbd.mSampleRate,
+            formatIDString,
+            (unsigned int)asbd.mFormatFlags,
+            (unsigned int)asbd.mBytesPerPacket,
+            (unsigned int)asbd.mFramesPerPacket,
+            (unsigned int)asbd.mBytesPerFrame,
+            (unsigned int)asbd.mChannelsPerFrame,
+            (unsigned int)asbd.mBitsPerChannel,
+            [self isInterleaved:asbd]];
 }
 
 +(void)setCanonicalAudioStreamBasicDescription:(AudioStreamBasicDescription*)asbd
@@ -303,14 +331,30 @@ BOOL __shouldExitOnCheckResultFail = YES;
     }
 }
 
++ (NSString *)stringFromUInt32Code:(UInt32)code
+{
+    char errorString[20];
+    // see if it appears to be a 4-char-code
+    *(UInt32 *)(errorString + 1) = CFSwapInt32HostToBig(code);
+    if (isprint(errorString[1]) &&
+        isprint(errorString[2]) &&
+        isprint(errorString[3]) &&
+        isprint(errorString[4]))
+    {
+        errorString[0] = errorString[5] = '\'';
+        errorString[6] = '\0';
+    }
+    return [NSString stringWithUTF8String:errorString];
+}
+
 #pragma mark - Math Utility
 +(void)appendBufferAndShift:(float*)buffer
              withBufferSize:(int)bufferLength
             toScrollHistory:(float*)scrollHistory
       withScrollHistorySize:(int)scrollHistoryLength {
-    NSAssert(scrollHistoryLength>=bufferLength,@"Scroll history array length must be greater buffer length");
-    NSAssert(scrollHistoryLength>0,@"Scroll history array length must be greater than 0");
-    NSAssert(bufferLength>0,@"Buffer array length must be greater than 0");
+//    NSAssert(scrollHistoryLength>=bufferLength,@"Scroll history array length must be greater buffer length");
+//    NSAssert(scrollHistoryLength>0,@"Scroll history array length must be greater than 0");
+//    NSAssert(bufferLength>0,@"Buffer array length must be greater than 0");
     int    shiftLength    = scrollHistoryLength - bufferLength;
     size_t floatByteSize  = sizeof(float);
     size_t shiftByteSize  = shiftLength  * floatByteSize;

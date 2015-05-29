@@ -171,6 +171,10 @@
 
 //------------------------------------------------------------------------------
 
++(NSString *)stringForAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd;
+
+//------------------------------------------------------------------------------
+
 /**
  Just a wrapper around the setCanonical function provided in the Core Audio Utility C++ class.
  @param asbd        The AudioStreamBasicDescription structure to modify
@@ -262,6 +266,8 @@
  */
 +(void)checkResult:(OSStatus)result
          operation:(const char*)operation;
+
++(NSString *)stringFromUInt32Code:(UInt32)code;
 
 #pragma mark - Plot Utility
 ///-----------------------------------------------------------

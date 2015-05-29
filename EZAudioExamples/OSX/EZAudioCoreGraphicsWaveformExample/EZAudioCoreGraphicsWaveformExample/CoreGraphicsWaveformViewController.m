@@ -40,10 +40,10 @@
     self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.984 green: 0.471 blue: 0.525 alpha: 1];
     
     // Waveform color
-    self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
+    self.audioPlot.color = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
     
     // Plot type
-    self.audioPlot.plotType        = EZPlotTypeBuffer;
+    self.audioPlot.plotType = EZPlotTypeBuffer;
 
     //
     // Create the microphone

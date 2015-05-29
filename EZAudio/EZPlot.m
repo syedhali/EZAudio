@@ -31,17 +31,22 @@
 
 @implementation EZPlot
 
+//------------------------------------------------------------------------------
 #pragma mark - Clearing
--(void)clear
+//------------------------------------------------------------------------------
+
+- (void)clear
 {
-  // Override in subclass
+    // Override in subclass
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - Get Samples
--(void)updateBuffer:(float *)buffer
-     withBufferSize:(UInt32)bufferSize
+//------------------------------------------------------------------------------
+
+- (void)updateBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize
 {
-  // Override in subclass
+    // Override in subclass
 }
 
 @end

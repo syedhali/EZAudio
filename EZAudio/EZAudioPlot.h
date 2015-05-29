@@ -23,13 +23,15 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#import <QuartzCore/QuartzCore.h>
 #import "TargetConditionals.h"
+#import "EZAudioUtilities.h"
 #import "EZPlot.h"
 
 @class EZAudio;
 
 #define kEZAudioPlotMaxHistoryBufferLength (8192)
-#define kEZAudioPlotDefaultHistoryBufferLength (1024)
+#define kEZAudioPlotDefaultHistoryBufferLength (256)
 
 /**
  `EZAudioPlot`, a subclass of `EZPlot`, is a cross-platform (iOS and OSX) class that plots an audio waveform using Core Graphics. 
@@ -47,11 +49,12 @@
 @interface EZAudioPlot : EZPlot
 
 /**
- This property optimizes the audio plot drawing for real-time displays. Since the update function may be updating the plot's data very quickly (over 60 frames per second) this property will throttle the drawing calls to be 30 frames per second for a much smoother plot.
+ This property optimizes the audio plot drawing for real-time displays. Since the update function may be updating the plot's data very quickly (over 60 frames per second) this property will throttle the drawing calls to be 60 frames per second (or whatever the screen rate is).
  */
 @property (nonatomic, assign) BOOL optimizeForRealtimePlot;
-
 @property (nonatomic, assign) BOOL centerYAxis;
+@property (nonatomic, assign) CGPoint waveformLayerCenter;
+@property (nonatomic, strong) CAShapeLayer *waveformLayer;
 
 //------------------------------------------------------------------------------
 #pragma mark - Adjust Resolution

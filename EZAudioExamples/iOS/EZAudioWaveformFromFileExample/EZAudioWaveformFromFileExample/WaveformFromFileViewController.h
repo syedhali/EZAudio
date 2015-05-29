@@ -16,7 +16,7 @@
  */
 #define kAudioFileDefault [[NSBundle mainBundle] pathForResource:@"simple-drum-beat" ofType:@"wav"]
 
-@interface WaveformFromFileViewController : UIViewController
+@interface WaveformFromFileViewController : UIViewController <UIScrollViewDelegate>
 
 #pragma mark - Components
 /**
@@ -28,6 +28,8 @@
  The CoreGraphics based audio plot
  */
 @property (nonatomic,weak) IBOutlet EZAudioPlot *audioPlot;
+
+@property (nonatomic,weak) IBOutlet UIScrollView *scrollView;
 
 /**
  A BOOL indicating whether or not we've reached the end of the file
