@@ -140,6 +140,12 @@
     free(plotData);
   }
   
+                  //fixes issue where sometimes first sample data is 8k long, and locks thread
+                  //for very intense drawing operation
+                  if (length > self.rollingHistoryLength) {
+                      return;
+                  }
+                  
   plotData   = (CGPoint *)calloc(sizeof(CGPoint),length);
   plotLength = length;
   
