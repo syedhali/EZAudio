@@ -171,6 +171,10 @@
 
 //------------------------------------------------------------------------------
 
++ (NSString *)displayTimeStringFromSeconds:(NSTimeInterval)seconds;
+
+//------------------------------------------------------------------------------
+
 +(NSString *)stringForAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd;
 
 //------------------------------------------------------------------------------

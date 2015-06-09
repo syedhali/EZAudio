@@ -31,7 +31,7 @@
 @class EZAudio;
 
 #define kEZAudioPlotMaxHistoryBufferLength (8192)
-#define kEZAudioPlotDefaultHistoryBufferLength (256)
+#define kEZAudioPlotDefaultHistoryBufferLength (1024)
 
 /**
  `EZAudioPlot`, a subclass of `EZPlot`, is a cross-platform (iOS and OSX) class that plots an audio waveform using Core Graphics. 
@@ -65,7 +65,7 @@
 ///-----------------------------------------------------------
 
 /**
- Sets the length of the rolling history display. Can grow or shrink the display up to the maximum size specified by the kEZAudioPlotMaxHistoryBufferLength macro. Will return the actual set value, which will be either the given value if smaller than the kEZAudioPlotMaxHistoryBufferLength or kEZAudioPlotMaxHistoryBufferLength if a larger value is attempted to be set. 
+ The length of the rolling history display. Can grow or shrink the display up to the maximum size specified by the kEZAudioPlotMaxHistoryBufferLength macro. Will return the actual set value, which will be either the given value if smaller than the kEZAudioPlotMaxHistoryBufferLength or kEZAudioPlotMaxHistoryBufferLength if a larger value is attempted to be set.
  @param  historyLength The new length of the rolling history buffer.
  @return The new value equal to the historyLength or the kEZAudioPlotMaxHistoryBufferLength.
  */

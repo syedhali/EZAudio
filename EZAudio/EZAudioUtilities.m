@@ -161,10 +161,10 @@ BOOL __shouldExitOnCheckResultFail = YES;
     UInt32 propSize = sizeof(asbd);
     [EZAudioUtilities checkResult:AudioFormatGetProperty(kAudioFormatProperty_FormatInfo,
                                                          0,
-                                                NULL,
-                                                &propSize,
-                                                &asbd)
-               operation:"Failed to fill out the rest of the m4a AudioStreamBasicDescription"];
+                                                         NULL,
+                                                         &propSize,
+                                                         &asbd)
+                        operation:"Failed to fill out the rest of the m4a AudioStreamBasicDescription"];
     
     return asbd;
 }
@@ -221,11 +221,12 @@ BOOL __shouldExitOnCheckResultFail = YES;
     asbd.mChannelsPerFrame = 2;
     asbd.mBitsPerChannel   = 8 * floatByteSize;
     asbd.mBytesPerFrame    = asbd.mChannelsPerFrame * floatByteSize;
-    asbd.mBytesPerPacket   = asbd.mChannelsPerFrame * floatByteSize;
-    asbd.mFormatFlags      = kAudioFormatFlagIsPacked|kAudioFormatFlagIsFloat;
-    asbd.mFormatID         = kAudioFormatLinearPCM;
     asbd.mFramesPerPacket  = 1;
+    asbd.mBytesPerPacket   = asbd.mFramesPerPacket * asbd.mBytesPerFrame;
+    asbd.mFormatFlags      = kAudioFormatFlagIsFloat;
+    asbd.mFormatID         = kAudioFormatLinearPCM;
     asbd.mSampleRate       = sampleRate;
+    asbd.mReserved         = 0;
     return asbd;
 }
 
@@ -235,11 +236,11 @@ BOOL __shouldExitOnCheckResultFail = YES;
     UInt32 floatByteSize   = sizeof(float);
     asbd.mBitsPerChannel   = 8 * floatByteSize;
     asbd.mBytesPerFrame    = floatByteSize;
-    asbd.mBytesPerPacket   = floatByteSize;
     asbd.mChannelsPerFrame = 2;
     asbd.mFormatFlags      = kAudioFormatFlagIsFloat|kAudioFormatFlagIsNonInterleaved;
     asbd.mFormatID         = kAudioFormatLinearPCM;
     asbd.mFramesPerPacket  = 1;
+    asbd.mBytesPerPacket   = asbd.mFramesPerPacket * asbd.mBytesPerFrame;
     asbd.mSampleRate       = sampleRate;
     return asbd;
 }
@@ -260,6 +261,14 @@ BOOL __shouldExitOnCheckResultFail = YES;
     NSLog (@"  Bits per Channel:    %10d",    (unsigned int)asbd.mBitsPerChannel);
 }
 
++ (NSString *)displayTimeStringFromSeconds:(NSTimeInterval)seconds
+{
+    int totalSeconds = (int)ceil(seconds);
+    int secondsComponent = totalSeconds % 60;
+    int minutesComponent = (totalSeconds / 60) % 60;
+    return [NSString stringWithFormat:@"%02d:%02d", minutesComponent, secondsComponent];
+}
+
 +(NSString *)stringForAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd
 {
     char formatIDString[5];
@@ -275,7 +284,8 @@ BOOL __shouldExitOnCheckResultFail = YES;
             @"Bytes per Frame:     %10d,\n"
             @"Channels per Frame:  %10d,\n"
             @"Bits per Channel:    %10d,\n"
-            @"IsInterleaved:       %i",
+            @"IsInterleaved:       %i,\n"
+            @"IsFloat:             %i,",
             asbd.mSampleRate,
             formatIDString,
             (unsigned int)asbd.mFormatFlags,
@@ -284,7 +294,8 @@ BOOL __shouldExitOnCheckResultFail = YES;
             (unsigned int)asbd.mBytesPerFrame,
             (unsigned int)asbd.mChannelsPerFrame,
             (unsigned int)asbd.mBitsPerChannel,
-            [self isInterleaved:asbd]];
+            [self isInterleaved:asbd],
+            [self isFloatFormat:asbd]];
 }
 
 +(void)setCanonicalAudioStreamBasicDescription:(AudioStreamBasicDescription*)asbd

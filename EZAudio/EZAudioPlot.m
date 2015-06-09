@@ -24,6 +24,22 @@
 //  THE SOFTWARE.
 
 #import "EZAudioPlot.h"
+#import "EZAudioDisplayLink.h"
+
+//------------------------------------------------------------------------------
+#pragma mark - Structures
+//------------------------------------------------------------------------------
+
+typedef struct
+{
+    float            *buffer;
+    int               bufferSize;
+    TPCircularBuffer  circularBuffer;
+} EZAudioPlotHistoryInfo;
+
+//------------------------------------------------------------------------------
+#pragma mark - Types
+//------------------------------------------------------------------------------
 
 #if TARGET_OS_IPHONE
 typedef CGRect EZRect;
@@ -31,27 +47,13 @@ typedef CGRect EZRect;
 typedef NSRect EZRect;
 #endif
 
-#if TARGET_OS_IPHONE
-#elif TARGET_OS_MAC
-static CVReturn EZAudioPlotDisplayLinkCallback(CVDisplayLinkRef displayLink,
-                                               const CVTimeStamp *now,
-                                               const CVTimeStamp *outputTime,
-                                               CVOptionFlags flagsIn,
-                                               CVOptionFlags *flagsOut,
-                                               void   *displayLinkContext)
-{
-    EZAudioPlot *plot = (__bridge EZAudioPlot*)displayLinkContext;
-    [plot redraw];
-    return kCVReturnSuccess;
-}
-#endif
+//------------------------------------------------------------------------------
+#pragma mark - EZAudioPlot
+//------------------------------------------------------------------------------
 
-@interface EZAudioPlot ()
-#if TARGET_OS_IPHONE
-@property (nonatomic, strong) CADisplayLink *displayLink;
-#elif TARGET_OS_MAC
-@property (nonatomic, assign) CVDisplayLinkRef displayLink;
-#endif
+@interface EZAudioPlot () <EZAudioDisplayLinkDelegate>
+@property (nonatomic, strong) EZAudioDisplayLink *displayLink;
+@property (nonatomic, assign) EZAudioPlotHistoryInfo *historyInfo;
 @property (nonatomic, assign) CGPoint *points;
 @property (nonatomic, assign) UInt32 pointCount;
 @end
@@ -64,7 +66,8 @@ static CVReturn EZAudioPlotDisplayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)dealloc
 {
-    free(self.history);
+    TPCircularBufferCleanup(&self.historyInfo->circularBuffer);
+    free(self.historyInfo);
     free(self.points);
 }
 
@@ -138,75 +141,28 @@ static CVReturn EZAudioPlotDisplayLinkCallback(CVDisplayLinkRef displayLink,
     self.shouldFill = NO;
     
     // Setup history window
-    self.history = (EZPlotHistoryInfo *)malloc(sizeof(EZPlotHistoryInfo));
-    self.history->buffer = calloc(kEZAudioPlotMaxHistoryBufferLength, sizeof(float));
-    self.history->bufferSize = 1024;
-    self.history->changingHistorySize = NO;
-    self.history->index = 0;
+    self.historyInfo = (EZAudioPlotHistoryInfo *)malloc(sizeof(EZAudioPlotHistoryInfo));
+    self.historyInfo->bufferSize = kEZAudioPlotDefaultHistoryBufferLength;
+    self.historyInfo->buffer = calloc(self.rollingHistoryLength, sizeof(float));
+    TPCircularBufferInit(&self.historyInfo->circularBuffer, kEZAudioPlotDefaultHistoryBufferLength);
     
     self.waveformLayer = [CAShapeLayer layer];
     self.waveformLayer.frame = self.bounds; // TODO: account for resizing view
-    self.waveformLayer.lineWidth = 1.0f;
+    self.waveformLayer.lineWidth = 0.5f;
     self.waveformLayer.fillColor = nil;
     self.waveformLayer.backgroundColor = nil;
     
     self.points = calloc(kEZAudioPlotMaxHistoryBufferLength, sizeof(CGPoint));
     self.pointCount = 0;
 #if TARGET_OS_IPHONE
-    self.backgroundColor = [UIColor blackColor];
     self.color = [UIColor colorWithHue:0 saturation:1.0 brightness:1.0 alpha:1.0];
 #elif TARGET_OS_MAC
-    self.backgroundColor = [NSColor blackColor];
     self.color = [NSColor colorWithCalibratedHue:0 saturation:1.0 brightness:1.0 alpha:1.0];
     self.wantsLayer = YES;
 #endif
+    self.backgroundColor = nil;
     [self.layer addSublayer:self.waveformLayer];
 }
-
-- (void)addDisplayLink
-{
-#if TARGET_OS_IPHONE
-    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(redraw)];
-    [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-#elif TARGET_OS_MAC
-    CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
-    CVDisplayLinkSetOutputCallback(self.displayLink,
-                                   EZAudioPlotDisplayLinkCallback,
-                                   (__bridge void *)(self));
-    CVDisplayLinkStart(self.displayLink);
-#endif
-}
-
-- (void)removeDisplayLink
-{
-#if TARGET_OS_IPHONE
-    [self.displayLink invalidate];
-    self.displayLink = nil;
-#elif TARGET_OS_MAC
-    CVDisplayLinkStop(self.displayLink);
-    CVDisplayLinkRelease(self.displayLink);
-#endif
-}
-
-//------------------------------------------------------------------------------
-#pragma mark - Getters
-//------------------------------------------------------------------------------
-
-//- (CGPoint)waveformLayerCenter
-//{
-//    CGPoint anchorPoint = self.waveformLayer.anchorPoint;
-//    CGFloat x = [EZAudioUtilities MAP:anchorPoint.x
-//                              leftMin:0.0f
-//                              leftMax:1.0f
-//                             rightMin:0.0f
-//                             rightMax:self.frame.size.width];
-//    CGFloat y = [EZAudioUtilities MAP:anchorPoint.y
-//                              leftMin:0.0f
-//                              leftMax:1.0f
-//                             rightMin:0.0f
-//                             rightMax:self.frame.size.height];
-//    return CGPointMake(x, y);
-//}
 
 //------------------------------------------------------------------------------
 #pragma mark - Setters
@@ -218,56 +174,37 @@ static CVReturn EZAudioPlotDisplayLinkCallback(CVDisplayLinkRef displayLink,
     self.layer.backgroundColor = [backgroundColor CGColor];
 }
 
+//------------------------------------------------------------------------------
+
 - (void)setColor:(id)color
 {
     [super setColor:color];
     self.waveformLayer.strokeColor = [color CGColor];
+    if (self.shouldFill)
+    {
+        self.waveformLayer.fillColor = [color CGColor];
+    }
 }
+
+//------------------------------------------------------------------------------
 
 - (void)setOptimizeForRealtimePlot:(BOOL)optimizeForRealtimePlot
 {
     _optimizeForRealtimePlot = optimizeForRealtimePlot;
-    [self removeDisplayLink];
-    if (optimizeForRealtimePlot)
+    if (optimizeForRealtimePlot && !self.displayLink)
     {
-        [self addDisplayLink];
+        self.displayLink = [EZAudioDisplayLink displayLinkWithDelegate:self];
     }
+    optimizeForRealtimePlot ? [self.displayLink start] : [self.displayLink stop];
 }
+
+//------------------------------------------------------------------------------
 
 - (void)setShouldFill:(BOOL)shouldFill
 {
     [super setShouldFill:shouldFill];
     self.waveformLayer.fillColor = shouldFill ? [self.color CGColor] : nil;
 }
-
-//- (void)setWaveformLayerCenter:(CGPoint)waveformLayerCenter
-//{
-//    CGFloat x = [EZAudioUtilities MAP:waveformLayerCenter.x
-//                              leftMin:0.0f
-//                              leftMax:self.frame.size.width
-//                             rightMin:0.0f
-//                             rightMax:1.0f];
-//    CGFloat y = [EZAudioUtilities MAP:waveformLayerCenter.y
-//                              leftMin:0.0f
-//                              leftMax:self.frame.size.height
-//                             rightMin:0.0f
-//                             rightMax:1.0f];
-//    self.waveformLayer.anchorPoint = CGPointMake(x, y);
-//}
-
-#warning RESET THIS TRANSFORM FOR iOS ZOOMING
-//- (void)setTransform:(CGAffineTransform)transform
-//{
-////    [super setTransform:transform];
-//    transform.d = 1.0f;
-//    CATransform3D transform3D = CATransform3DMakeAffineTransform(transform);
-//    [CATransaction begin];
-//    [CATransaction setDisableActions:YES];
-//    self.waveformLayer.transform = transform3D;
-//    [CATransaction commit];
-//    
-//    [super setTransform:transform];
-//}
 
 //------------------------------------------------------------------------------
 #pragma mark - Drawing
@@ -289,8 +226,12 @@ static CVReturn EZAudioPlotDisplayLinkCallback(CVDisplayLinkRef displayLink,
         CGPathAddLines(path, &xf, self.points, self.pointCount);
         if (self.shouldMirror)
         {
-            xf = CGAffineTransformScale(xf, 1.0, -1.0);
+            xf = CGAffineTransformScale(xf, 1.0f, -1.0f);
             CGPathAddLines(path, &xf, self.points, self.pointCount);
+        }
+        if (self.shouldFill)
+        {
+            CGPathCloseSubpath(path);
         }
         [CATransaction begin];
         [CATransaction setDisableActions:YES];
@@ -308,9 +249,19 @@ static CVReturn EZAudioPlotDisplayLinkCallback(CVDisplayLinkRef displayLink,
 {
     // update the scroll history datasource
     float rms = [EZAudioUtilities RMS:buffer length:bufferSize];
-    [EZAudioUtilities appendValue:rms
-                  toScrollHistory:self.history->buffer
-            withScrollHistorySize:self.history->bufferSize];
+    float src[1];
+    src[0] = rms == NAN ? 0.0 : rms;
+    TPCircularBufferProduceBytes(&self.historyInfo->circularBuffer, src, sizeof(src));
+
+    int32_t targetBytes = self.rollingHistoryLength * sizeof(float);
+    int32_t availableBytes = 0;
+    float *historyBuffer = TPCircularBufferTail(&self.historyInfo->circularBuffer, &availableBytes);
+    int32_t bytes = MIN(targetBytes, availableBytes);
+    memcpy(self.historyInfo->buffer, historyBuffer, bytes);
+    if (targetBytes <= availableBytes)
+    {
+        TPCircularBufferConsume(&self.historyInfo->circularBuffer, sizeof(src));
+    }
     
     // copy samples
     switch (self.plotType)
@@ -320,8 +271,9 @@ static CVReturn EZAudioPlotDisplayLinkCallback(CVDisplayLinkRef displayLink,
                          length:bufferSize];
             break;
         case EZPlotTypeRolling:
-            [self setSampleData:self.history->buffer
-                         length:self.history->bufferSize];
+            
+            [self setSampleData:self.historyInfo->buffer
+                         length:self.historyInfo->bufferSize];
             break;
         default:
             break;
@@ -345,8 +297,34 @@ static CVReturn EZAudioPlotDisplayLinkCallback(CVDisplayLinkRef displayLink,
         points[i].x = i;
         points[i].y = data[i] * self.gain;
     }
-    points[0].y = points[length-1].y = 0.0f;
+    points[0].y = points[length - 1].y = 0.0f;
     self.pointCount = length;
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Adjusting History Resolution
+//------------------------------------------------------------------------------
+
+- (int)rollingHistoryLength
+{
+    return self.historyInfo->bufferSize;
+}
+
+//------------------------------------------------------------------------------
+
+- (int)setRollingHistoryLength:(int)historyLength
+{
+    self.historyInfo->bufferSize = MIN(kEZAudioPlotMaxHistoryBufferLength, historyLength);
+    return self.historyInfo->bufferSize;
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - EZAudioDisplayLinkDelegate
+//------------------------------------------------------------------------------
+
+- (void)displayLinkNeedsDisplay:(EZAudioDisplayLink *)displayLink
+{
+    [self redraw];
 }
 
 //------------------------------------------------------------------------------

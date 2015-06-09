@@ -232,7 +232,7 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 
 + (AudioStreamBasicDescription)defaultStreamFormat
 {
-    return [EZAudioUtilities floatFormatWithNumberOfChannels:2 sampleRate:44100.0f];
+    return [EZAudioUtilities stereoFloatNonInterleavedFormatWithSampleRate:44100.0f];
 }
 
 //------------------------------------------------------------------------------
@@ -276,6 +276,12 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
     EZAudioDevice *defaultMicrophone = [inputDevices lastObject];
     [self setDevice:defaultMicrophone];
 #endif
+    
+//    AudioStreamBasicDescription streamFormat = self.info->streamFormat;
+//    if (streamFormat.mSampleRate == 0)
+//    {
+//        streamFormat = [self.class defaultStreamFormat];
+//    }
     [self setAudioStreamBasicDescription:[self.class defaultStreamFormat]];
     
     // render callback
