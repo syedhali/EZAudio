@@ -47,7 +47,7 @@
 /**
  The CoreGraphics based audio plot
  */
-@property (nonatomic,weak) IBOutlet EZAudioPlot *audioPlotLeft;
+@property (nonatomic,weak) IBOutlet EZAudioPlotGL *audioPlotLeft;
 @property (nonatomic,weak) IBOutlet EZAudioPlot *audioPlotRight;
 
 #pragma mark - UI Extras

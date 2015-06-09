@@ -274,7 +274,7 @@
 - (void)microphone:(EZMicrophone *)microphone changedDevice:(EZAudioDevice *)device
 {
     NSLog(@"Microphone changed device: %@", device.name);
-
+    
     // Called anytime the microphone's device changes
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{

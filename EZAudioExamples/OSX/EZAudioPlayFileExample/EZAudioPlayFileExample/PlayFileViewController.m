@@ -47,8 +47,6 @@
     self.audioPlotRight.plotType = EZPlotTypeBuffer;
     self.audioPlotRight.shouldFill = YES;
     self.audioPlotRight.shouldMirror = YES;
-    self.audioPlotLeft.wantsLayer = YES;
-    self.audioPlotRight.wantsLayer = YES;
     
     /**
      Setup an output
@@ -161,6 +159,8 @@
                                         permission:EZAudioFilePermissionRead
                                         fileFormat:asbd];
     
+    [EZAudioUtilities printASBD:self.audioFile.fileFormat];
+    
     //
     self.filePathLabel.stringValue = filePathURL.lastPathComponent;
     self.framePositionSlider.minValue = 0.0;
@@ -216,10 +216,11 @@ withNumberOfChannels:(UInt32)numberOfChannels
 -(void)audioFile:(EZAudioFile *)audioFile
  updatedPosition:(SInt64)framePosition
 {
+    __weak typeof (self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if( ![self.framePositionSlider.cell isHighlighted] )
+        if (![weakSelf.framePositionSlider.cell isHighlighted])
         {
-            self.framePositionSlider.floatValue = (float)framePosition;
+            weakSelf.framePositionSlider.floatValue = (float)framePosition;
         }
     });
 }

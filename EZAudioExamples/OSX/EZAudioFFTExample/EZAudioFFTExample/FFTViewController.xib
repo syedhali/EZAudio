@@ -18,7 +18,7 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <splitView dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="78b-rz-Bpl">
+                <splitView wantsLayer="YES" dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="78b-rz-Bpl">
                     <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
                     <subviews>
                         <customView fixedFrame="YES" id="Zcc-CT-67u" customClass="EZAudioPlot">

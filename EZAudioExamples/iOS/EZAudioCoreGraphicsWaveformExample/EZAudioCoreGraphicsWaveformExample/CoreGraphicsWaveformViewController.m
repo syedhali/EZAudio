@@ -30,7 +30,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-  
+    
     //
     // Setup the AVAudioSession. EZMicrophone will not work properly on iOS
     // if you don't do this!
@@ -59,7 +59,7 @@
     
     // Plot type
     self.audioPlot.plotType = EZPlotTypeBuffer;
-
+    
     //
     // Create the microphone
     //
@@ -96,7 +96,7 @@
              titleForRow:(NSInteger)row
             forComponent:(NSInteger)component
 {
-    EZAudioDevice *device = self.inputs[row];    
+    EZAudioDevice *device = self.inputs[row];
     return device.name;
 }
 
@@ -168,8 +168,6 @@
 
 - (void)toggleMicrophonePickerView:(id)sender
 {
-    [self.microphone stopFetchingAudio];
-    self.microphoneTextLabel.text = @"Microphone Off";
     BOOL isHidden = self.microphoneInputPickerViewTopConstraint.constant != 0.0;
     [self setMicrophonePickerViewHidden:!isHidden];
 }
@@ -188,9 +186,9 @@
                                  UIViewAnimationOptionCurveEaseInOut|
                                  UIViewAnimationOptionLayoutSubviews)
                      animations:^{
-        weakSelf.microphoneInputPickerViewTopConstraint.constant = hidden ? -pickerHeight : 0.0f;
-        [weakSelf.view layoutSubviews];
-    } completion:nil];
+                         weakSelf.microphoneInputPickerViewTopConstraint.constant = hidden ? -pickerHeight : 0.0f;
+                         [weakSelf.view layoutSubviews];
+                     } completion:nil];
 }
 
 //------------------------------------------------------------------------------
@@ -229,7 +227,7 @@
 - (void)microphone:(EZMicrophone *)microphone
   hasAudioReceived:(float **)buffer
     withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels
+withNumberOfChannels:(UInt32)numberOfChannels
 {
     // Getting audio data as an array of float buffer arrays. What does that mean?
     // Because the audio is coming in as a stereo signal the data is split into
@@ -265,7 +263,7 @@
 - (void)microphone:(EZMicrophone *)microphone
      hasBufferList:(AudioBufferList *)bufferList
     withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels
+withNumberOfChannels:(UInt32)numberOfChannels
 {
     // Getting audio data as a buffer list that can be directly fed into the
     // EZRecorder or EZOutput. Say whattt...
@@ -292,9 +290,6 @@
         weakSelf.inputs = [EZAudioDevice inputDevices];
         [weakSelf.microphoneInputPickerView reloadAllComponents];
         [weakSelf setMicrophonePickerViewHidden:YES];
-        
-        [weakSelf.microphone startFetchingAudio];
-        weakSelf.microphoneTextLabel.text = @"Microphone On";
     });
 }
 

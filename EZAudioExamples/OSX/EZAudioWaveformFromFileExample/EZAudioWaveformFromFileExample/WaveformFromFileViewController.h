@@ -33,9 +33,19 @@
  */
 #define kAudioFileDefault [[NSBundle mainBundle] pathForResource:@"simple-drum-beat" ofType:@"wav"]
 
+// By default this will write the audio plot's snapshot into the document's directory to a waveform.png file
+#define kSnapshotFileDefault [NSString stringWithFormat:@"%@%@",NSHomeDirectory(),@"/Documents/waveform.png"]
+
+//------------------------------------------------------------------------------
+#pragma mark - WaveformFromFileViewController
+//------------------------------------------------------------------------------
+
 @interface WaveformFromFileViewController : NSViewController <NSOpenSavePanelDelegate>
 
+//------------------------------------------------------------------------------
 #pragma mark - Components
+//------------------------------------------------------------------------------
+
 /**
  The EZAudioFile representing of the currently selected audio file
  */
@@ -47,22 +57,22 @@
 @property (nonatomic,weak) IBOutlet EZAudioPlot *audioPlot;
 
 /**
- A BOOL indicating whether or not we've reached the end of the file
- */
-@property (nonatomic,assign) BOOL eof;
-
-#pragma mark - UI Extras
-/**
  A label to display the current file path with the waveform shown
  */
 @property (nonatomic,weak) IBOutlet NSTextField *filePathLabel;
 
+//------------------------------------------------------------------------------
 #pragma mark - Actions
+//------------------------------------------------------------------------------
+
 /**
  Prompts the file manager and loads in a new audio file into the EZAudioFile representation.
  */
 -(IBAction)openFile:(id)sender;
 
+/**
+ Takes a snapshot of the current waveform.
+ */
 -(IBAction)snapshot:(id)sender;
 
 @end

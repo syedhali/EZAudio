@@ -40,7 +40,6 @@
 @synthesize isRecording;
 @synthesize microphone;
 @synthesize microphoneToggle;
-@synthesize recorder;
 @synthesize recordingToggle;
 
 #pragma mark - Initialization
@@ -102,8 +101,8 @@
 }
 
 #pragma mark - Actions
--(void)playFile:(id)sender {
-  
+-(void)playFile:(id)sender
+{
     // Update microphone state
     [self.microphone stopFetchingAudio];
     self.microphoneToggle.state = NSOffState;
@@ -121,11 +120,11 @@
         self.audioPlayer = nil;
     }
     
-    // Close the audio file
-    if( self.recorder )
-    {
-        [self.recorder closeAudioFile];
-    }
+//    // Close the audio file
+//    if( self.recorder )
+//    {
+//        [self.recorder closeAudioFile];
+//    }
 
     NSError *err;
     self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:kAudioFilePath]
@@ -133,7 +132,6 @@
 
     [self.audioPlayer play];
     self.audioPlayer.delegate = self;
-  
 }
 
 -(void)toggleMicrophone:(id)sender {
@@ -152,24 +150,22 @@
 -(void)toggleRecording:(id)sender
 {
     [self.playButton setHidden:NO];
-    switch( [sender state] )
-    {
-        case NSOffState:
-            [self.recorder closeAudioFile];
-            break;
-            
-        case NSOnState:
-            /*
-             Create the recorder
-             */
-            self.recorder = [EZRecorder recorderWithDestinationURL:[NSURL fileURLWithPath:kAudioFilePath]
-                                                      sourceFormat:self.microphone.audioStreamBasicDescription
-                                               destinationFileType:EZRecorderFileTypeM4A];
-            break;
-            
-        default:
-            break;
-    }
+    
+//    switch( [sender state] )
+//    {
+//        case NSOffState:
+////            [self.recorder closeAudioFile];
+//            break;
+//            
+//        case NSOnState:
+//            /*
+//             Create the recorder
+//             */
+//            break;
+//            
+//        default:
+//            break;
+//    }
     self.isRecording = (BOOL)[sender state];
 }
 
@@ -179,44 +175,66 @@
 -(void)microphone:(EZMicrophone *)microphone
  hasAudioReceived:(float **)buffer
    withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
-  // Getting audio data as an array of float buffer arrays. What does that mean? Because the audio is coming in as a stereo signal the data is split into a left and right channel. So buffer[0] corresponds to the float* data for the left channel while buffer[1] corresponds to the float* data for the right channel.
+withNumberOfChannels:(UInt32)numberOfChannels
+{
+    // Getting audio data as an array of float buffer arrays. What does that mean? Because the audio is coming in as a stereo signal the data is split into a left and right channel. So buffer[0] corresponds to the float* data for the left channel while buffer[1] corresponds to the float* data for the right channel.
   
-  // See the Thread Safety warning above, but in a nutshell these callbacks happen on a separate audio thread. We wrap any UI updating in a GCD block on the main thread to avoid blocking that audio flow.
-  dispatch_async(dispatch_get_main_queue(),^{
+    // See the Thread Safety warning above, but in a nutshell these callbacks happen on a separate audio thread. We wrap any UI updating in a GCD block on the main thread to avoid blocking that audio flow.
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(),^{
     // All the audio plot needs is the buffer data (float*) and the size. Internally the audio plot will handle all the drawing related code, history management, and freeing its own resources. Hence, one badass line of code gets you a pretty plot :)
-    [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
-  });
+        [weakSelf.audioPlot updateBuffer:buffer[0]
+                          withBufferSize:bufferSize];
+    });
 }
 
 // Append the microphone data coming as a AudioBufferList with the specified buffer size to the recorder
 -(void)microphone:(EZMicrophone *)microphone
     hasBufferList:(AudioBufferList *)bufferList
    withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
-  
-  // Getting audio data as a buffer list that can be directly fed into the EZRecorder. This is happening on the audio thread - any UI updating needs a GCD main queue block.
-  if( self.isRecording ){
-    [self.recorder appendDataFromBufferList:bufferList
-                             withBufferSize:bufferSize];
-  }
-  
+withNumberOfChannels:(UInt32)numberOfChannels
+{
+//    // Getting audio data as a buffer list that can be directly fed into the EZRecorder. This is happening on the audio thread - any UI updating needs a GCD main queue block.
+    if( self.isRecording )
+    {
+//        [self.recorder appendDataFromBufferList:bufferList
+//                                 withBufferSize:bufferSize];
+        [self.recordedFile writeFrames:bufferSize fromAudioBufferList:bufferList];
+    }
+}
+
+- (void)microphone:(EZMicrophone *)microphone hasAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription
+{
+//    AudioStreamBasicDescription clientFormat, fileFormat;
+//    self.recordedFile = [EZAudioFile audioFileWithURL:[NSURL fileURLWithPath:kAudioFilePath] delegate:self permission:EZAudioFilePermissionWrite fileFormat:fileFormat clientFormat:clientFormat];
+    NSLog(@"microphone asbd: %@", [EZAudioUtilities stringForAudioStreamBasicDescription:audioStreamBasicDescription]);
+//    kAudioFileBadPropertySizeError
+    AudioStreamBasicDescription clientFormat = audioStreamBasicDescription;
+    AudioStreamBasicDescription fileFormat   = [EZAudioUtilities AIFFFormatWithNumberOfChannels:clientFormat.mChannelsPerFrame
+                                                                                     sampleRate:clientFormat.mSampleRate];
+    self.recordedFile = [EZAudioFile audioFileWithURL:[NSURL fileURLWithPath:kAudioFilePath]
+                                             delegate:self
+                                           permission:EZAudioFilePermissionReadWrite
+                                           fileFormat:fileFormat
+                                         clientFormat:clientFormat];
 }
 
 #pragma mark - AVAudioPlayerDelegate
 /*
  Occurs when the audio player instance completes playback
  */
--(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
-  // Update microphone state
-  self.microphoneToggle.state = NSOnState;
-  [self.microphoneToggle setEnabled:YES];
-  [self.microphone startFetchingAudio];
-  
-  // Update recording state
-  self.isRecording = NO;
-  self.recordingToggle.state = NSOffState;
-  [self.recordingToggle setEnabled:YES];
+-(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player
+                      successfully:(BOOL)flag
+{
+    // Update microphone state
+    self.microphoneToggle.state = NSOnState;
+    [self.microphoneToggle setEnabled:YES];
+    [self.microphone startFetchingAudio];
+
+    // Update recording state
+    self.isRecording = NO;
+    self.recordingToggle.state = NSOffState;
+    [self.recordingToggle setEnabled:YES];
 }
 
 @end
