@@ -148,7 +148,7 @@ typedef NSRect EZRect;
     
     self.waveformLayer = [CAShapeLayer layer];
     self.waveformLayer.frame = self.bounds; // TODO: account for resizing view
-    self.waveformLayer.lineWidth = 0.5f;
+    self.waveformLayer.lineWidth = 1.0f;
     self.waveformLayer.fillColor = nil;
     self.waveformLayer.backgroundColor = nil;
     

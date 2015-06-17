@@ -34,10 +34,7 @@
     self.audioPlot.plotType        = EZPlotTypeBuffer;
     self.audioPlot.shouldFill      = YES;
     self.audioPlot.shouldMirror    = YES;
-    self.audioPlot.color           = [NSColor colorWithCalibratedRed:0
-                                                               green:0.676
-                                                                blue:0.575
-                                                               alpha:1];
+    self.audioPlot.color           = [NSColor whiteColor];
     [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
 }
 
@@ -73,7 +70,8 @@
     self.filePathLabel.stringValue = filePathURL.lastPathComponent;
     
     __weak typeof(self) weakSelf = self;
-    [self.audioFile getWaveformDataWithCompletionBlock:^(EZAudioFloatData *waveformData)
+    [self.audioFile getWaveformDataWithNumberOfPoints:512
+                                           completion:^(EZAudioFloatData *waveformData)
     {
         [weakSelf.audioPlot updateBuffer:waveformData.buffers[0]
                           withBufferSize:waveformData.bufferSize];

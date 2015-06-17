@@ -14,7 +14,7 @@
 
 #if TARGET_OS_IPHONE
 #elif TARGET_OS_MAC
-static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLink,
+static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLinkRef,
                                            const CVTimeStamp *now,
                                            const CVTimeStamp *outputTime,
                                            CVOptionFlags flagsIn,
@@ -110,7 +110,6 @@ static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLink,
     self.displayLink.paused = NO;
 #elif TARGET_OS_MAC
     CVDisplayLinkStart(self.displayLink);
-    cvdisplay
 #endif
     self.stopped = NO;
 }
@@ -150,14 +149,14 @@ static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLink,
 
 #if TARGET_OS_IPHONE
 #elif TARGET_OS_MAC
-static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLink,
+static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLinkRef,
                                            const CVTimeStamp *now,
                                            const CVTimeStamp *outputTime,
                                            CVOptionFlags flagsIn,
                                            CVOptionFlags *flagsOut,
-                                           void   *displayLinkContext);
+                                           void   *displayLinkContext)
 {
-    EZAudioDisplayLink *displayLink = (__bridge EZAudioDisplayLink*)displayLink;
+    EZAudioDisplayLink *displayLink = (__bridge EZAudioDisplayLink*)displayLinkContext;
     [displayLink update];
     return kCVReturnSuccess;
 }
