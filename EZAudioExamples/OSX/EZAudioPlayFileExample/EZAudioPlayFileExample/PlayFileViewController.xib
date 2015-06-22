@@ -84,7 +84,7 @@
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="kKR-UQ-0CX" userLabel="Plots Container">
                     <rect key="frame" x="0.0" y="0.0" width="480" height="308"/>
                     <subviews>
-                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="Lz1-Gs-1lD" customClass="EZAudioPlotGL">
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="Lz1-Gs-1lD" customClass="EZAudioPlot">
                             <rect key="frame" x="20" y="12" width="440" height="284"/>
                             <subviews>
                                 <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="ASF-7j-bsr">
