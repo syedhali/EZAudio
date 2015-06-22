@@ -654,6 +654,7 @@ typedef struct
     [EZAudioUtilities freeFloatBuffers:self.floatData numberOfChannels:self.clientFormat.mChannelsPerFrame];
     [EZAudioUtilities checkResult:AudioFileClose(self.info->audioFileID) operation:"Failed to close audio file"];
     [EZAudioUtilities checkResult:ExtAudioFileDispose(self.info->extAudioFileRef) operation:"Failed to dispose of ext audio file"];
+    free(self.info);
 }
 
 //------------------------------------------------------------------------------
