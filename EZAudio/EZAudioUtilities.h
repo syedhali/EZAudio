@@ -1,67 +1,27 @@
 //
-//  EZAudio.h
-//  EZAudio
+//  EZAudioUtilities.h
+//  EZAudioOpenGLWaveformExample
 //
-//  Created by Syed Haris Ali on 11/21/13.
-//  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
+//  Created by Syed Haris Ali on 4/2/15.
+//  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
-//  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
-//  furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//  THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-
-#pragma mark - 3rd Party Utilties
+#import <AudioToolbox/AudioToolbox.h>
 #import "TPCircularBuffer.h"
 
-#pragma mark - Core Components
-#import "EZAudioFile.h"
-#import "EZAudioFloatData.h"
-#import "EZMicrophone.h"
-#import "EZOutput.h"
-#import "EZRecorder.h"
-#import "EZAudioUtilities.h"
-
-#pragma mark - Extended Components
-#import "EZAudioPlayer.h"
-
-#pragma mark - Interface Components
-#import "EZPlot.h"
-#import "EZAudioPlot.h"
-#import "EZAudioPlotGL.h"
-#import "EZAudioPlotGLKViewController.h"
-
+//------------------------------------------------------------------------------
+#pragma mark - EZAudioUtilities
 //------------------------------------------------------------------------------
 
-/**
- EZAudio is a simple, intuitive framework for iOS and OSX. The goal of EZAudio was to provide a modular, cross-platform framework to simplify performing everyday audio operations like getting microphone input, creating audio waveforms, recording/playing audio files, etc. The visualization tools like the EZAudioPlot and EZAudioPlotGL were created to plug right into the framework's various components and provide highly optimized drawing routines that work in harmony with audio callback loops. All components retain the same namespace whether you're on an iOS device or a Mac computer so an EZAudioPlot understands it will subclass an UIView on an iOS device or an NSView on a Mac.
- 
- Class methods for EZAudio are provided as utility methods used throughout the other modules within the framework. For instance, these methods help make sense of error codes (checkResult:operation:), map values betwen coordinate systems (MAP:leftMin:leftMax:rightMin:rightMax:), calculate root mean squared values for buffers (RMS:length:), etc.
- 
- @warning As of 1.0 these methods have been moved over to `EZAudioUtilities` to allow using modules without requiring the whole library.
- */
-@interface EZAudio : NSObject
+@interface EZAudioUtilities : NSObject
 
 //------------------------------------------------------------------------------
 #pragma mark - Debugging
 //------------------------------------------------------------------------------
 
 // TODO: document
-+ (void)setShouldExitOnCheckResultFail:(BOOL)shouldExitOnCheckResultFail __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
++ (void)setShouldExitOnCheckResultFail:(BOOL)shouldExitOnCheckResultFail;
 
 #pragma mark - AudioBufferList Utility
 ///-----------------------------------------------------------
@@ -77,12 +37,12 @@
  */
 +(AudioBufferList *)audioBufferListWithNumberOfFrames:(UInt32)frames
                                      numberOfChannels:(UInt32)channels
-                                          interleaved:(BOOL)interleaved __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
+                                          interleaved:(BOOL)interleaved;
 
 //------------------------------------------------------------------------------
 
 +(float **)floatBuffersWithNumberOfFrames:(UInt32)frames
-                         numberOfChannels:(UInt32)channels __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
+                         numberOfChannels:(UInt32)channels;
 
 //------------------------------------------------------------------------------
 
@@ -90,12 +50,12 @@
  Deallocates an AudioBufferList structure from memory.
  @param bufferList A pointer to the buffer list you would like to free
  */
-+(void)freeBufferList:(AudioBufferList*)bufferList __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
++(void)freeBufferList:(AudioBufferList*)bufferList;
 
 //------------------------------------------------------------------------------
 
 +(void)freeFloatBuffers:(float **)buffers
-       numberOfChannels:(UInt32)channels __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
+       numberOfChannels:(UInt32)channels;
 
 #pragma mark - AudioStreamBasicDescription Utilties
 ///-----------------------------------------------------------
@@ -109,7 +69,7 @@
  @return A new AudioStreamBasicDescription with the specified format.
  */
 +(AudioStreamBasicDescription)AIFFFormatWithNumberOfChannels:(UInt32)channels
-                                                  sampleRate:(float)sampleRate __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
+                                                  sampleRate:(float)sampleRate;
 
 //------------------------------------------------------------------------------
 
@@ -118,11 +78,11 @@
  @param sampleRate The desired sample rate
  @return A new AudioStreamBasicDescription with the specified format.
  */
-+(AudioStreamBasicDescription)iLBCFormatWithSampleRate:(float)sampleRate __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
++(AudioStreamBasicDescription)iLBCFormatWithSampleRate:(float)sampleRate;
 
 //------------------------------------------------------------------------------
 
-+ (BOOL) isFloatFormat:(AudioStreamBasicDescription)asbd __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
++ (BOOL)isFloatFormat:(AudioStreamBasicDescription)asbd;
 
 //------------------------------------------------------------------------------
 
@@ -132,16 +92,16 @@
  @param asbd A valid AudioStreamBasicDescription
  @return A BOOL indicating whether or not the AudioStreamBasicDescription is interleaved
  */
-+ (BOOL) isInterleaved:(AudioStreamBasicDescription)asbd __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
++ (BOOL)isInterleaved:(AudioStreamBasicDescription)asbd;
 
 //------------------------------------------------------------------------------
 
-+ (BOOL) isLinearPCM:(AudioStreamBasicDescription)asbd __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
++ (BOOL)isLinearPCM:(AudioStreamBasicDescription)asbd;
 
 //------------------------------------------------------------------------------
 
 +(AudioStreamBasicDescription)floatFormatWithNumberOfChannels:(UInt32)channels
-                                                   sampleRate:(float)sampleRate __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
+                                                   sampleRate:(float)sampleRate;
 
 //------------------------------------------------------------------------------
 
@@ -152,7 +112,7 @@
  @return A new AudioStreamBasicDescription with the specified format.
  */
 +(AudioStreamBasicDescription)M4AFormatWithNumberOfChannels:(UInt32)channels
-                                                 sampleRate:(float)sampleRate __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
+                                                 sampleRate:(float)sampleRate;
 
 //------------------------------------------------------------------------------
 
@@ -161,7 +121,7 @@
  @param sampleRate The desired sample rate
  @return A new AudioStreamBasicDescription with the specified format.
  */
-+(AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)sampleRate __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
++(AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)sampleRate;
 
 //------------------------------------------------------------------------------
 
@@ -170,7 +130,7 @@
  @param sampleRate The desired sample rate
  @return A new AudioStreamBasicDescription with the specified format.
  */
-+(AudioStreamBasicDescription)monoCanonicalFormatWithSampleRate:(float)sampleRate __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
++(AudioStreamBasicDescription)monoCanonicalFormatWithSampleRate:(float)sampleRate;
 
 //------------------------------------------------------------------------------
 
@@ -179,7 +139,7 @@
  @param sampleRate The desired sample rate
  @return A new AudioStreamBasicDescription with the specified format.
  */
-+(AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)sampleRate __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
++(AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)sampleRate;
 
 //------------------------------------------------------------------------------
 
@@ -188,7 +148,7 @@
  @param sampleRate The desired sample rate
  @return A new AudioStreamBasicDescription with the specified format.
  */
-+(AudioStreamBasicDescription)stereoFloatInterleavedFormatWithSampleRate:(float)sampleRate __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
++(AudioStreamBasicDescription)stereoFloatInterleavedFormatWithSampleRate:(float)sampleRate;
 
 //------------------------------------------------------------------------------
 
@@ -197,7 +157,7 @@
  @param sampleRate The desired sample rate
  @return A new AudioStreamBasicDescription with the specified format.
  */
-+(AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sameRate __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
++(AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sameRate;
 
 ///-----------------------------------------------------------
 /// @name AudioStreamBasicDescription Utilities
@@ -207,7 +167,15 @@
  Nicely logs out the contents of an AudioStreamBasicDescription struct
  @param 	asbd 	The AudioStreamBasicDescription struct with content to print out
  */
-+(void)printASBD:(AudioStreamBasicDescription)asbd __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
++(void)printASBD:(AudioStreamBasicDescription)asbd;
+
+//------------------------------------------------------------------------------
+
++ (NSString *)displayTimeStringFromSeconds:(NSTimeInterval)seconds;
+
+//------------------------------------------------------------------------------
+
++(NSString *)stringForAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd;
 
 //------------------------------------------------------------------------------
 
@@ -219,7 +187,7 @@
  */
 +(void)setCanonicalAudioStreamBasicDescription:(AudioStreamBasicDescription*)asbd
                               numberOfChannels:(UInt32)nChannels
-                                   interleaved:(BOOL)interleaved __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
+                                   interleaved:(BOOL)interleaved;
 
 #pragma mark - Math Utilities
 ///-----------------------------------------------------------
@@ -236,7 +204,7 @@
 +(void)appendBufferAndShift:(float*)buffer
              withBufferSize:(int)bufferLength
             toScrollHistory:(float*)scrollHistory
-      withScrollHistorySize:(int)scrollHistoryLength __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
+      withScrollHistorySize:(int)scrollHistoryLength;
 
 //------------------------------------------------------------------------------
 
@@ -248,7 +216,7 @@
  */
 +(void)    appendValue:(float)value
        toScrollHistory:(float*)scrollHistory
- withScrollHistorySize:(int)scrollHistoryLength __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
+ withScrollHistorySize:(int)scrollHistoryLength;
 
 //------------------------------------------------------------------------------
 
@@ -265,7 +233,7 @@
     leftMin:(float)leftMin
     leftMax:(float)leftMax
    rightMin:(float)rightMin
-   rightMax:(float)rightMax __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
+   rightMax:(float)rightMax;
 
 //------------------------------------------------------------------------------
 
@@ -276,7 +244,7 @@
  @return	The root mean squared of the buffer
  */
 +(float)RMS:(float*)buffer
-     length:(int)bufferSize __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
+     length:(int)bufferSize;
 
 //------------------------------------------------------------------------------
 
@@ -288,7 +256,7 @@
  @param value The float value for which to use as x
  @return The float sign value
  */
-+(float)SGN:(float)value __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
++(float)SGN:(float)value;
 
 #pragma mark - OSStatus Utility
 ///-----------------------------------------------------------
@@ -301,7 +269,9 @@
  @param operation A string (const char, not NSString) describing the operation taking place (will print if fails)
  */
 +(void)checkResult:(OSStatus)result
-         operation:(const char*)operation __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
+         operation:(const char*)operation;
+
++(NSString *)stringFromUInt32Code:(UInt32)code;
 
 #pragma mark - Plot Utility
 ///-----------------------------------------------------------
@@ -313,7 +283,7 @@
                    atIndex:(int*)index
                 withBuffer:(float*)buffer
             withBufferSize:(int)bufferSize
-      isResolutionChanging:(BOOL*)isChanging __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
+      isResolutionChanging:(BOOL*)isChanging;
 
 #pragma mark - TPCircularBuffer Utility
 ///-----------------------------------------------------------
@@ -326,7 +296,7 @@
  @param audioBufferList Pointer to the instance of the AudioBufferList with the audio data
  */
 +(void)appendDataToCircularBuffer:(TPCircularBuffer*)circularBuffer
-              fromAudioBufferList:(AudioBufferList*)audioBufferList __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
+              fromAudioBufferList:(AudioBufferList*)audioBufferList;
 
 //------------------------------------------------------------------------------
 
@@ -336,7 +306,7 @@
  *  @param size           The length of the TPCircularBuffer (usually 1024)
  */
 +(void)circularBuffer:(TPCircularBuffer*)circularBuffer
-             withSize:(int)size __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
+             withSize:(int)size;
 
 //------------------------------------------------------------------------------
 
@@ -344,7 +314,7 @@
  Frees a circular buffer
  @param circularBuffer Pointer to the circular buffer to clear
  */
-+(void)freeCircularBuffer:(TPCircularBuffer*)circularBuffer __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
++(void)freeCircularBuffer:(TPCircularBuffer*)circularBuffer;
 
 //------------------------------------------------------------------------------
 
