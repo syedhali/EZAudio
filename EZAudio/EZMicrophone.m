@@ -277,11 +277,6 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
     [self setDevice:defaultMicrophone];
 #endif
     
-//    AudioStreamBasicDescription streamFormat = self.info->streamFormat;
-//    if (streamFormat.mSampleRate == 0)
-//    {
-//        streamFormat = [self.class defaultStreamFormat];
-//    }
     [self setAudioStreamBasicDescription:[self.class defaultStreamFormat]];
     
     // render callback
