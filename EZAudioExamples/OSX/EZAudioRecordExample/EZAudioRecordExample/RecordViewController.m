@@ -199,8 +199,7 @@ withNumberOfChannels:(UInt32)numberOfChannels {
   if( self.isRecording ){
     [self.recorder appendDataFromBufferList:bufferList
                              withBufferSize:bufferSize];
-  }
-  
+  }  
 }
 
 #pragma mark - AVAudioPlayerDelegate
