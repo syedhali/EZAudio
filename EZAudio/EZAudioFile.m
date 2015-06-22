@@ -25,6 +25,7 @@
 
 #import "EZAudioFile.h"
 
+#import "AEFloatConverter.h"
 #import "EZAudio.h"
 
 #define kEZAudioFileWaveformDefaultResolution (1024)
