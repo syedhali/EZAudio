@@ -358,8 +358,31 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 
 - (void)microphoneWasInterrupted:(NSNotification *)notification
 {
-    
+    AVAudioSessionInterruptionType type = [notification.userInfo[AVAudioSessionInterruptionTypeKey] unsignedIntegerValue];
+    switch (type)
+    {
+        case AVAudioSessionInterruptionTypeBegan:
+        {
+            [self stopFetchingAudio];
+            break;
+        }
+        case AVAudioSessionInterruptionTypeEnded:
+        {
+            AVAudioSessionInterruptionOptions option = [notification.userInfo[AVAudioSessionInterruptionOptionKey] unsignedIntegerValue];
+            if (option == AVAudioSessionInterruptionOptionShouldResume)
+            {
+                [self startFetchingAudio];
+            }
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
 }
+
+//------------------------------------------------------------------------------
 
 - (void)microphoneRouteChanged:(NSNotification *)notification
 {
