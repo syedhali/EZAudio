@@ -45,28 +45,55 @@
 {
     [super viewDidLoad];
 
-    /*
-    Customizing the audio plot's look
-    */
-    // Background color
+    //
+    // Setup the AVAudioSession. EZMicrophone will not work properly on iOS
+    // if you don't do this!
+    //
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error;
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session category: %@", error.localizedDescription);
+    }
+    [session setActive:YES error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session active: %@", error.localizedDescription);
+    }
+    
+    //
+    // Customizing the audio plot's look
+    //
+    
     self.audioPlot.backgroundColor = [UIColor colorWithRed: 0.569 green: 0.82 blue: 0.478 alpha: 1];
-    // Waveform color
-    self.audioPlot.color           = [UIColor colorWithRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
-    // Plot type
-    self.audioPlot.plotType        = EZPlotTypeBuffer;
+    self.audioPlot.color = [UIColor colorWithRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
+    self.audioPlot.plotType = EZPlotTypeBuffer;
 
-    /*
-    Start the microphone
-    */
+    //
+    // Start the microphone
+    //
     [EZMicrophone sharedMicrophone].delegate = self;
     [[EZMicrophone sharedMicrophone] startFetchingAudio];
     self.microphoneTextLabel.text = @"Microphone On";
   
+    //
+    // Use the microphone as the EZOutputDataSource
+    //
     [[EZMicrophone sharedMicrophone] setOutput:[EZOutput sharedOutput]];
     
-    /**
-    Start the output
-    */
+    //
+    // Make sure we override the output to the speaker
+    //
+    [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:NULL];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session active: %@", error.localizedDescription);
+    }
+    
+    //
+    // Start the EZOutput
+    //
     [[EZOutput sharedOutput] startPlayback];
   
 }
