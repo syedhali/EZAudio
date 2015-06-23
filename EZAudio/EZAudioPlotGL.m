@@ -278,11 +278,6 @@
     NSOpenGLContext     *context = [[NSOpenGLContext alloc] initWithFormat:pf
                                                               shareContext:nil];
     
-//    if( !__sharedContext__ )
-//    {
-//        __sharedContext__ = context;
-//    }
-    
 	if (!pf)
 	{
 		NSLog(@"No OpenGL pixel format");
@@ -290,8 +285,6 @@
   
     // Debug only
     CGLEnable([context CGLContextObj], kCGLCECrashOnRemovedFunctions);
-    
-    NSLog(@"open gl context: %@",context);
     
     self.pixelFormat = pf;
     self.openGLContext = context;

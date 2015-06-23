@@ -50,6 +50,11 @@
     [[EZMicrophone sharedMicrophone] startFetchingAudio];
 
     //
+    // Print out the input device being used
+    //
+    NSLog(@"Using input device: %@", [[EZMicrophone sharedMicrophone] device]);
+    
+    //
     // Use the microphone as the EZOutputDataSource
     //
     [[EZMicrophone sharedMicrophone] setOutput:[EZOutput sharedOutput]];
