@@ -177,7 +177,7 @@
     [[EZOutput sharedOutput] stopPlayback];
   
     //
-    // Customize the UI elements for the new file
+    // Load the audio file and customize the UI
     //
     self.audioFile                          = [EZAudioFile audioFileWithURL:filePathURL andDelegate:self];
     self.eof                                = NO;
