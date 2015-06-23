@@ -579,5 +579,29 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 }
 
 //------------------------------------------------------------------------------
+#pragma mark - Output
+//------------------------------------------------------------------------------
+
+- (void)setOutput:(EZOutput *)output
+{
+    _output = output;
+    [_output setAudioStreamBasicDescription:self.audioStreamBasicDescription];
+    _output.outputDataSource = self;
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - EZOutputDataSource
+//------------------------------------------------------------------------------
+
+- (void)            output:(EZOutput *)output
+ shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
+        withNumberOfFrames:(UInt32)frames
+{
+    memcpy(audioBufferList,
+           self.info->audioBufferList,
+           sizeof(AudioBufferList) + (self.info->audioBufferList->mNumberBuffers - 1)*sizeof(AudioBuffer));
+}
+
+//------------------------------------------------------------------------------
 
 @end

@@ -27,6 +27,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "TargetConditionals.h"
 #import "EZAudioDevice.h"
+#import "EZOutput.h"
 
 @class EZMicrophone;
 
@@ -112,7 +113,7 @@
 /**
  The EZMicrophone provides a component to get audio data from the default device microphone. On OSX this is the default selected input device in the system preferences while on iOS this defaults to use the default RemoteIO audio unit. The microphone data is converted to a float buffer array and returned back to the caller via the EZMicrophoneDelegate protocol.
  */
-@interface EZMicrophone : NSObject
+@interface EZMicrophone : NSObject <EZOutputDataSource>
 
 /**
  The EZMicrophoneDelegate for which to handle the microphone callbacks
@@ -131,6 +132,11 @@
  A BOOL describing whether the microphone is on and passing back audio data to its delegate.
  */
 @property (nonatomic, assign) BOOL microphoneOn;
+
+/**
+ An EZOutput to use for porting the microphone input out (passthrough).
+ */
+@property (nonatomic, strong) EZOutput *output;
 
 //------------------------------------------------------------------------------
 #pragma mark - Initializers
@@ -308,6 +314,12 @@
  */
 - (AudioStreamBasicDescription)defaultStreamFormat;
 - (UInt32)numberOfChannels;
+
+//------------------------------------------------------------------------------
+#pragma mark - Output
+//------------------------------------------------------------------------------
+
+- (void)setOutput:(EZOutput *)output;
 
 //------------------------------------------------------------------------------
 

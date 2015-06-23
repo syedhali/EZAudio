@@ -43,36 +43,31 @@
 #pragma mark - Customize the Audio Plot
 - (void)viewDidLoad
 {
-  [super viewDidLoad];
+    [super viewDidLoad];
+
+    /*
+    Customizing the audio plot's look
+    */
+    // Background color
+    self.audioPlot.backgroundColor = [UIColor colorWithRed: 0.569 green: 0.82 blue: 0.478 alpha: 1];
+    // Waveform color
+    self.audioPlot.color           = [UIColor colorWithRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
+    // Plot type
+    self.audioPlot.plotType        = EZPlotTypeBuffer;
+
+    /*
+    Start the microphone
+    */
+    [EZMicrophone sharedMicrophone].delegate = self;
+    [[EZMicrophone sharedMicrophone] startFetchingAudio];
+    self.microphoneTextLabel.text = @"Microphone On";
   
-  /*
-   Customizing the audio plot's look
-   */
-  // Background color
-  self.audioPlot.backgroundColor = [UIColor colorWithRed: 0.569 green: 0.82 blue: 0.478 alpha: 1];
-  // Waveform color
-  self.audioPlot.color           = [UIColor colorWithRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
-  // Plot type
-  self.audioPlot.plotType        = EZPlotTypeBuffer;
-  
-  /**
-   Initialize the circular buffer
-   */
-  [EZAudio circularBuffer:&_circularBuffer
-                 withSize:1024];
-  
-  /*
-   Start the microphone
-   */
-  [EZMicrophone sharedMicrophone].delegate = self;
-  [[EZMicrophone sharedMicrophone] startFetchingAudio];
-  self.microphoneTextLabel.text = @"Microphone On";
-  
-  /**
-   Start the output
-   */
-  [EZOutput sharedOutput].outputDataSource = self;
-  [[EZOutput sharedOutput] startPlayback];
+    [[EZMicrophone sharedMicrophone] setOutput:[EZOutput sharedOutput]];
+    
+    /**
+    Start the output
+    */
+    [[EZOutput sharedOutput] startPlayback];
   
 }
 
@@ -132,28 +127,6 @@ withNumberOfChannels:(UInt32)numberOfChannels {
   dispatch_async(dispatch_get_main_queue(), ^{
     [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
   });
-}
-
-// Append the AudioBufferList from the microphone callback to a global circular buffer
--(void)microphone:(EZMicrophone *)microphone
-    hasBufferList:(AudioBufferList *)bufferList
-   withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
-  /**
-   Append the audio data to a circular buffer
-   */
-  [EZAudio appendDataToCircularBuffer:&_circularBuffer
-                  fromAudioBufferList:bufferList];
-}
-
-#pragma mark - EZOutputDataSource
--(TPCircularBuffer *)outputShouldUseCircularBuffer:(EZOutput *)output {
-  return [EZMicrophone sharedMicrophone].microphoneOn ? &_circularBuffer : nil;
-}
-
-#pragma mark - Cleanup
--(void)dealloc {
-  TPCircularBufferClear(&_circularBuffer);
 }
 
 @end
