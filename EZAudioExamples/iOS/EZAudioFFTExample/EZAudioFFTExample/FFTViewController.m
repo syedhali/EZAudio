@@ -44,7 +44,6 @@
     return UIStatusBarStyleLightContent;
 }
 
-
 #pragma mark - Customize the Audio Plot
 - (void)viewDidLoad
 {

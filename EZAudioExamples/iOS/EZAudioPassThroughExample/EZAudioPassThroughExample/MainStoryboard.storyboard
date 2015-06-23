@@ -1,7 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="zGs-8g-w7u">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
     </dependencies>
-    <scenes/>
+    <scenes>
+        <!--Pass Through View Controller-->
+        <scene sceneID="a7w-O0-Vvx">
+            <objects>
+                <viewController id="zGs-8g-w7u" customClass="PassThroughViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="3Cc-yc-bc8"/>
+                        <viewControllerLayoutGuide type="bottom" id="bkU-Es-3bC"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="0bx-O5-4rf">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wUz-CX-9EC" customClass="EZAudioPlotGL">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="wUz-CX-9EC" secondAttribute="trailing" id="GF8-xi-yrO"/>
+                            <constraint firstItem="wUz-CX-9EC" firstAttribute="top" secondItem="0bx-O5-4rf" secondAttribute="top" id="MxL-yK-2IK"/>
+                            <constraint firstItem="wUz-CX-9EC" firstAttribute="leading" secondItem="0bx-O5-4rf" secondAttribute="leading" id="W0l-ap-iWW"/>
+                            <constraint firstItem="bkU-Es-3bC" firstAttribute="top" secondItem="wUz-CX-9EC" secondAttribute="bottom" id="xb4-rs-BpT"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="audioPlot" destination="wUz-CX-9EC" id="qdC-ha-nLj"/>
+                        <outlet property="view" destination="0bx-O5-4rf" id="4aR-1E-cQg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jeJ-4F-JvT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="120" y="339"/>
+        </scene>
+    </scenes>
 </document>

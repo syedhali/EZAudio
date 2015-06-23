@@ -22,25 +22,10 @@
 @synthesize eof = _eof;
 @synthesize framePositionSlider = _framePositionSlider;
 
-#pragma mark - Initialization
--(id)init {
-  self = [super init];
-  if(self){
-    [self initializeViewController];
-  }
-  return self;
-}
-
--(id)initWithCoder:(NSCoder *)aDecoder {
-  self = [super initWithCoder:aDecoder];
-  if(self){
-    [self initializeViewController];
-  }
-  return self;
-}
-
-#pragma mark - Initialize View Controller Here
--(void)initializeViewController {
+#pragma mark - Status Bar Style
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 #pragma mark - Customize the Audio Plot
