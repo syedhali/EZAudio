@@ -28,6 +28,10 @@
 #import "EZAudioUtilities.h"
 #import "EZAudioDevice.h"
 
+//------------------------------------------------------------------------------
+#pragma mark - Data Structures
+//------------------------------------------------------------------------------
+
 typedef struct EZMicrophoneInfo
 {
     AudioUnit audioUnit;
@@ -36,9 +40,13 @@ typedef struct EZMicrophoneInfo
     AudioStreamBasicDescription streamFormat;
 } EZMicrophoneInfo;
 
+//------------------------------------------------------------------------------
+#pragma mark - EZMicrophone (Interface Extension)
+//------------------------------------------------------------------------------
+
 @interface EZMicrophone ()
 @property (nonatomic, strong) EZAudioFloatConverter *floatConverter;
-@property (nonatomic) EZMicrophoneInfo *info;
+@property (nonatomic)         EZMicrophoneInfo      *info;
 @end
 
 @implementation EZMicrophone
@@ -232,7 +240,7 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 
 + (AudioStreamBasicDescription)defaultStreamFormat
 {
-    return [EZAudioUtilities stereoFloatInterleavedFormatWithSampleRate:44100.0f];
+    return [EZAudioUtilities floatFormatWithNumberOfChannels:1 sampleRate:44100.0f];
 }
 
 //------------------------------------------------------------------------------
