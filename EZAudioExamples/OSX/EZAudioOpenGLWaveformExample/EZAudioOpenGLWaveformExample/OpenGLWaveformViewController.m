@@ -128,12 +128,6 @@
 
 //------------------------------------------------------------------------------
 
-- (void)changedInputChannel:(id)sender
-{
-}
-
-//------------------------------------------------------------------------------
-
 - (void)changePlotType:(id)sender
 {
     NSInteger selectedSegment = [sender selectedSegment];
@@ -167,10 +161,13 @@
     }
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - Action Extensions
-/*
- Give the visualization of the current buffer (this is almost exactly the openFrameworks audio input eample)
- */
+//------------------------------------------------------------------------------
+
+//
+// Give the visualization of the current buffer (this is almost exactly the openFrameworks audio input example)
+//
 - (void)drawBufferPlot
 {
     self.audioPlot.plotType = EZPlotTypeBuffer;
@@ -180,9 +177,9 @@
 
 //------------------------------------------------------------------------------
 
-/*
- Give the classic mirrored, rolling waveform look
- */
+//
+// Give the classic mirrored, rolling waveform look
+//
 - (void)drawRollingPlot
 {
     self.audioPlot.plotType = EZPlotTypeRolling;
@@ -190,7 +187,10 @@
     self.audioPlot.shouldMirror = YES;
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - EZMicrophoneDelegate
+//------------------------------------------------------------------------------
+
 #warning Thread Safety
 // Note that any callback that provides streamed audio data (like streaming microphone input) happens on a separate audio thread that should not be blocked. When we feed audio data into any of the UI components we need to explicity create a GCD block on the main thread to properly get the UI to work.
 - (void)microphone:(EZMicrophone *)microphone

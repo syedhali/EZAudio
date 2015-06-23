@@ -65,7 +65,6 @@
     //
     // Customizing the audio plot's look
     //
-    
     self.audioPlot.backgroundColor = [UIColor colorWithRed: 0.569 green: 0.82 blue: 0.478 alpha: 1];
     self.audioPlot.color = [UIColor colorWithRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
     self.audioPlot.plotType = EZPlotTypeBuffer;
