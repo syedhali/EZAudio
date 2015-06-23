@@ -271,12 +271,12 @@ static OSStatus OutputRenderCallback(void                        *inRefCon,
   outputcd.componentManufacturer = kAudioUnitManufacturer_Apple;
   
   //
-  AudioComponent comp = AudioComponentFindNext(NULL,&outputcd);
+  AudioComponent comp = AudioComponentFindNext(NULL, &outputcd);
   if( comp == NULL ){
     NSLog(@"Failed to get output unit");
     exit(-1);
   }
-  [EZAudio checkResult:AudioComponentInstanceNew(comp,&_outputUnit)
+  [EZAudio checkResult:AudioComponentInstanceNew(comp, &_outputUnit)
              operation:"Failed to open component for output unit"];
 
   

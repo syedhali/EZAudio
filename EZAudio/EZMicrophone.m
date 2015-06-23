@@ -59,8 +59,10 @@ typedef struct EZMicrophoneInfo
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [EZAudioUtilities checkResult:AudioUnitUninitialize(self.info->audioUnit) operation:"Failed to unintialize audio unit for microphone"];
     [EZAudioUtilities freeBufferList:self.info->audioBufferList];
-    
+    [EZAudioUtilities freeFloatBuffers:self.info->floatData
+                      numberOfChannels:self.info->streamFormat.mChannelsPerFrame];
     free(self.info);
 }
 
