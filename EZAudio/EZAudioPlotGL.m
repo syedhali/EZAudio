@@ -297,30 +297,30 @@
 
 #pragma mark - Prepare
 -(void)prepareOpenGL {
-  [super prepareOpenGL];
-  
-  GLint swapInt = 1;
-  [self.openGLContext setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
-  
-  ////////////////////////////////////////////////////////////////////////////
-  //                          Setup VABs and VBOs                           //
-  ////////////////////////////////////////////////////////////////////////////
-  // Buffer
-  glGenVertexArrays(1,&_bufferPlotVAB);
-  glBindVertexArray(_bufferPlotVAB);
-  glGenBuffers(1,&_bufferPlotVBO);
-  glBindBuffer(GL_ARRAY_BUFFER,_bufferPlotVBO);
-  
-  // Rolling
-  glGenVertexArrays(1,&_rollingPlotVAB);
-  glBindVertexArray(_rollingPlotVAB);
-  glGenBuffers(1,&_rollingPlotVBO);
-  glBindBuffer(GL_ARRAY_BUFFER,_rollingPlotVBO);
-  
-  if( self.shouldFill ){
+    [super prepareOpenGL];
+
+    GLint swapInt = 1;
+    [self.openGLContext setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                          Setup VABs and VBOs                           //
+    ////////////////////////////////////////////////////////////////////////////
+    // Buffer
+    glGenVertexArrays(1,&_bufferPlotVAB);
+    glBindVertexArray(_bufferPlotVAB);
+    glGenBuffers(1,&_bufferPlotVBO);
+    glBindBuffer(GL_ARRAY_BUFFER,_bufferPlotVBO);
+
+    // Rolling
+    glGenVertexArrays(1,&_rollingPlotVAB);
     glBindVertexArray(_rollingPlotVAB);
+    glGenBuffers(1,&_rollingPlotVBO);
     glBindBuffer(GL_ARRAY_BUFFER,_rollingPlotVBO);
-  }
+
+    if( self.shouldFill ){
+        glBindVertexArray(_rollingPlotVAB);
+        glBindBuffer(GL_ARRAY_BUFFER,_rollingPlotVBO);
+    }
   
     // Enable anti-aliasing
     glEnable(GL_MULTISAMPLE);
@@ -328,14 +328,14 @@
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glClearColor(0, 0, 0, 0);
     self.layer = nil;
+    self.wantsBestResolutionOpenGLSurface = YES;
     
-  // Set the background color
-  [self _refreshWithBackgroundColor:self.backgroundColor];
-  [self _refreshWithColor:self.color];
-  
-  // Setup the display link (rendering loop)
-  [self _setupDisplayLink];
-  
+    // Set the background color
+    [self _refreshWithBackgroundColor:self.backgroundColor];
+    [self _refreshWithColor:self.color];
+
+    // Setup the display link (rendering loop)
+    [self _setupDisplayLink];
 }
 
 -(void)_setupDisplayLink {
