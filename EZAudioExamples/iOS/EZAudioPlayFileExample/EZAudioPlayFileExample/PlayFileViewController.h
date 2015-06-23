@@ -19,7 +19,8 @@
 /**
  Using the EZOutputDataSource to provide output data to the EZOutput component.
  */
-@interface PlayFileViewController : UIViewController <EZAudioFileDelegate,EZOutputDataSource>
+@interface PlayFileViewController : UIViewController <EZAudioFileDelegate,
+                                                      EZOutputDataSource>
 
 #pragma mark - Components
 /**
