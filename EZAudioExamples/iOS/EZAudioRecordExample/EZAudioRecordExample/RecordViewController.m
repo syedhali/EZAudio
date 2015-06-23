@@ -30,6 +30,12 @@
 @synthesize recordSwitch;
 @synthesize recordingTextField;
 
+#pragma mark - Status Bar Style
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 #pragma mark - Initialization
 -(id)init {
   self = [super init];
