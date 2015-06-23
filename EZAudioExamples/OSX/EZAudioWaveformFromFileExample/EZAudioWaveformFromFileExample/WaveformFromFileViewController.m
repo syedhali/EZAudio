@@ -27,7 +27,10 @@
 
 @implementation WaveformFromFileViewController
 
+//------------------------------------------------------------------------------
 #pragma mark - Customize the Audio Plot
+//------------------------------------------------------------------------------
+
 -(void)awakeFromNib
 {
     //
@@ -50,16 +53,21 @@
     [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - Actions
--(void)openFile:(id)sender {
-  NSOpenPanel* openDlg = [NSOpenPanel openPanel];
-  openDlg.canChooseFiles = YES;
-  openDlg.canChooseDirectories = NO;
-  openDlg.delegate = self;
-  if( [openDlg runModal] == NSOKButton ){
-    NSArray *selectedFiles = [openDlg URLs];
-    [self openFileWithFilePathURL:selectedFiles.firstObject];
-  }
+//------------------------------------------------------------------------------
+
+- (void)openFile:(id)sender
+{
+    NSOpenPanel *openDlg = [NSOpenPanel openPanel];
+    openDlg.canChooseFiles = YES;
+    openDlg.canChooseDirectories = NO;
+    openDlg.delegate = self;
+    if ([openDlg runModal] == NSOKButton)
+    {
+        NSArray *selectedFiles = [openDlg URLs];
+        [self openFileWithFilePathURL:selectedFiles.firstObject];
+    }
 }
 
 //------------------------------------------------------------------------------
