@@ -38,7 +38,6 @@
   self.openGLWaveformViewController.view.autoresizingMask = (NSViewWidthSizable|NSViewHeightSizable);
   // Add in the core graphics view controller as subview
   [self.window.contentView addSubview:self.openGLWaveformViewController.view];
-  
 }
 
 @end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6628E2351B3A121A00020E56 /* simple-drum-beat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6628E2341B3A121A00020E56 /* simple-drum-beat.wav */; };
 		6659578A1B38B352003E97A1 /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 665957681B38B352003E97A1 /* AEFloatConverter.m */; };
 		6659578B1B38B352003E97A1 /* EZAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 6659576A1B38B352003E97A1 /* EZAudio.m */; };
 		6659578C1B38B352003E97A1 /* EZAudioDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 6659576C1B38B352003E97A1 /* EZAudioDevice.m */; };
@@ -44,7 +45,6 @@
 		94056F65185BDB4700EB94BA /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056F62185BDB4700EB94BA /* AudioToolbox.framework */; };
 		94056F66185BDB4700EB94BA /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056F63185BDB4700EB94BA /* AudioUnit.framework */; };
 		94056F67185BDB4700EB94BA /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056F64185BDB4700EB94BA /* CoreAudio.framework */; };
-		9417A6D51865928C00D9D37B /* simple-drum-beat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9417A6D41865928C00D9D37B /* simple-drum-beat.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +58,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6628E2341B3A121A00020E56 /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "simple-drum-beat.wav"; path = "../../../simple-drum-beat.wav"; sourceTree = "<group>"; };
 		665957671B38B352003E97A1 /* AEFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEFloatConverter.h; sourceTree = "<group>"; };
 		665957681B38B352003E97A1 /* AEFloatConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEFloatConverter.m; sourceTree = "<group>"; };
 		665957691B38B352003E97A1 /* EZAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudio.h; sourceTree = "<group>"; };
@@ -120,7 +121,6 @@
 		94056F62185BDB4700EB94BA /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		94056F63185BDB4700EB94BA /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		94056F64185BDB4700EB94BA /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
-		9417A6D41865928C00D9D37B /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "simple-drum-beat.wav"; path = "../../../simple-drum-beat.wav"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -254,8 +254,8 @@
 				94056F2E185BD86D00EB94BA /* PlayFileViewController.h */,
 				94056F2F185BD86D00EB94BA /* PlayFileViewController.m */,
 				94056F30185BD86D00EB94BA /* PlayFileViewController.xib */,
-				9417A6D41865928C00D9D37B /* simple-drum-beat.wav */,
 				94056F0F185BD83400EB94BA /* MainMenu.xib */,
+				6628E2341B3A121A00020E56 /* simple-drum-beat.wav */,
 				94056F12185BD83400EB94BA /* Images.xcassets */,
 				94056F01185BD83400EB94BA /* Supporting Files */,
 			);
@@ -368,10 +368,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6628E2351B3A121A00020E56 /* simple-drum-beat.wav in Resources */,
 				94056F05185BD83400EB94BA /* InfoPlist.strings in Resources */,
 				94056F13185BD83400EB94BA /* Images.xcassets in Resources */,
 				6659579A1B38B352003E97A1 /* CHANGELOG in Resources */,
-				9417A6D51865928C00D9D37B /* simple-drum-beat.wav in Resources */,
 				94056F0B185BD83400EB94BA /* Credits.rtf in Resources */,
 				6659579B1B38B352003E97A1 /* VERSION in Resources */,
 				94056F32185BD86D00EB94BA /* PlayFileViewController.xib in Resources */,
