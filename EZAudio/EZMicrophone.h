@@ -30,7 +30,10 @@
 
 @class EZMicrophone;
 
+//------------------------------------------------------------------------------
 #pragma mark - EZMicrophoneDelegate
+//------------------------------------------------------------------------------
+
 /**
  The delegate for the EZMicrophone provides a receiver for the incoming audio data events. When the microphone has been successfully internally configured it will try to send its delegate an AudioStreamBasicDescription describing the format of the incoming audio data. 
  
@@ -58,6 +61,8 @@
  */
 - (void)microphone:(EZMicrophone *)microphone changedDevice:(EZAudioDevice *)device;
 
+//------------------------------------------------------------------------------
+
 /**
  Returns back the audio stream basic description as soon as it has been initialized. This is guaranteed to occur before the stream callbacks, `microphone:hasBufferList:withBufferSize:withNumberOfChannels:` or `microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:`
  @param microphone The instance of the EZMicrophone that triggered the event.
@@ -83,6 +88,8 @@
         withBufferSize:(UInt32)bufferSize
   withNumberOfChannels:(UInt32)numberOfChannels;
 
+//------------------------------------------------------------------------------
+
 /**
  Returns back the buffer list containing the audio received. This occurs on the background thread so any drawing code must explicity perform its functions on the main thread.
  @param microphone       The instance of the EZMicrophone that triggered the event.
@@ -98,7 +105,10 @@
 
 @end
 
+//------------------------------------------------------------------------------
 #pragma mark - EZMicrophone
+//------------------------------------------------------------------------------
+
 /**
  The EZMicrophone provides a component to get audio data from the default device microphone. On OSX this is the default selected input device in the system preferences while on iOS this defaults to use the default RemoteIO audio unit. The microphone data is converted to a float buffer array and returned back to the caller via the EZMicrophoneDelegate protocol.
  */
@@ -109,11 +119,16 @@
  */
 @property (nonatomic, weak) id<EZMicrophoneDelegate> delegate;
 
-// TODO: document this
+/**
+ The EZAudioDevice being used to pull the microphone data.
+ - On iOS this can be any of the available microphones on the iPhone/iPad devices (usually there are 3). Defaults to the first microphone found (bottom mic)
+ - On OSX this can be any of the plugged in devices that Core Audio can detect (see kAudioUnitSubType_HALOutput for more information)
+ System Preferences -> Sound for the available inputs)
+ */
 @property (nonatomic, strong) EZAudioDevice *device;
 
 /**
- A bool describing whether the microphone is on and passing back audio data to its delegate.
+ A BOOL describing whether the microphone is on and passing back audio data to its delegate.
  */
 @property (nonatomic, assign) BOOL microphoneOn;
 
@@ -275,7 +290,24 @@
 
 //------------------------------------------------------------------------------
 
+/**
+ <#Description#>
+ 
+ @param device <#device description#>
+ */
 - (void)setDevice:(EZAudioDevice *)device;
+
+//------------------------------------------------------------------------------
+#pragma mark - Subclass Methods
+//------------------------------------------------------------------------------
+
+/**
+ <#Description#>
+ 
+ @return <#return value description#>
+ */
+- (AudioStreamBasicDescription)defaultStreamFormat;
+- (UInt32)numberOfChannels;
 
 //------------------------------------------------------------------------------
 

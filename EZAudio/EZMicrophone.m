@@ -34,10 +34,11 @@
 
 typedef struct EZMicrophoneInfo
 {
-    AudioUnit audioUnit;
-    AudioBufferList *audioBufferList;
-    float **floatData;
-    AudioStreamBasicDescription streamFormat;
+    AudioUnit                     audioUnit;
+    AudioBufferList              *audioBufferList;
+    float                       **floatData;
+    AudioStreamBasicDescription   inputFormat;
+    AudioStreamBasicDescription   streamFormat;
 } EZMicrophoneInfo;
 
 //------------------------------------------------------------------------------
@@ -57,9 +58,10 @@ typedef struct EZMicrophoneInfo
 
 - (void)dealloc
 {
-    free(self.info);
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [EZAudioUtilities freeBufferList:self.info->audioBufferList];
+    
+    free(self.info);
 }
 
 //------------------------------------------------------------------------------
@@ -235,12 +237,20 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 }
 
 //------------------------------------------------------------------------------
-#pragma mark - Defaults
+#pragma mark - Subclass
 //------------------------------------------------------------------------------
 
-+ (AudioStreamBasicDescription)defaultStreamFormat
+- (AudioStreamBasicDescription)defaultStreamFormat
 {
-    return [EZAudioUtilities floatFormatWithNumberOfChannels:1 sampleRate:44100.0f];
+    return [EZAudioUtilities floatFormatWithNumberOfChannels:[self numberOfChannels]
+                                                  sampleRate:self.info->inputFormat.mSampleRate];
+}
+
+//------------------------------------------------------------------------------
+
+- (UInt32)numberOfChannels
+{
+    return 1;
 }
 
 //------------------------------------------------------------------------------
@@ -285,7 +295,16 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
     [self setDevice:defaultMicrophone];
 #endif
     
-    [self setAudioStreamBasicDescription:[self.class defaultStreamFormat]];
+    UInt32 propSize = sizeof(self.info->inputFormat);
+    [EZAudioUtilities checkResult:AudioUnitGetProperty(self.info->audioUnit,
+                                                       kAudioUnitProperty_StreamFormat,
+                                                       kAudioUnitScope_Input,
+                                                       1,
+                                                       &self.info->inputFormat,
+                                                       &propSize)
+                        operation:"Failed to get stream format of microphone input scope"];
+    
+    [self setAudioStreamBasicDescription:[self defaultStreamFormat]];
     
     // render callback
     AURenderCallbackStruct renderCallbackStruct;
