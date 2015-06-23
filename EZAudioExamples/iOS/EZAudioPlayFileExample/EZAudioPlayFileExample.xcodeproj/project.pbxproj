@@ -25,6 +25,7 @@
 		6628E2271B39D98600020E56 /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 6628E2131B39D98600020E56 /* TPCircularBuffer.c */; };
 		6628E2281B39D98600020E56 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 6628E2161B39D98600020E56 /* CHANGELOG */; };
 		6628E2291B39D98600020E56 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 6628E2171B39D98600020E56 /* VERSION */; };
+		6628E22B1B39F7A800020E56 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6628E22A1B39F7A800020E56 /* MainStoryboard.storyboard */; };
 		9417A6C718658FB500D9D37B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A6C618658FB500D9D37B /* AudioToolbox.framework */; };
 		9417A6C918658FC000D9D37B /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A6C818658FC000D9D37B /* GLKit.framework */; };
 		9417A6D1186591CA00D9D37B /* simple-drum-beat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9417A6D0186591CA00D9D37B /* simple-drum-beat.wav */; };
@@ -34,8 +35,6 @@
 		944D03E7186038A60076EF7A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 944D03E5186038A60076EF7A /* InfoPlist.strings */; };
 		944D03E9186038A60076EF7A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D03E8186038A60076EF7A /* main.m */; };
 		944D03ED186038A60076EF7A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D03EC186038A60076EF7A /* AppDelegate.m */; };
-		944D03F0186038A60076EF7A /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 944D03EE186038A60076EF7A /* Main_iPhone.storyboard */; };
-		944D03F3186038A60076EF7A /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 944D03F1186038A60076EF7A /* Main_iPad.storyboard */; };
 		944D03F8186038A60076EF7A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 944D03F7186038A60076EF7A /* Images.xcassets */; };
 		944D03FF186038A60076EF7A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 944D03FE186038A60076EF7A /* XCTest.framework */; };
 		944D0400186038A60076EF7A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 944D03DC186038A60076EF7A /* Foundation.framework */; };
@@ -91,6 +90,7 @@
 		6628E2141B39D98600020E56 /* TPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPCircularBuffer.h; sourceTree = "<group>"; };
 		6628E2161B39D98600020E56 /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		6628E2171B39D98600020E56 /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
+		6628E22A1B39F7A800020E56 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		9417A6C618658FB500D9D37B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9417A6C818658FC000D9D37B /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		9417A6D0186591CA00D9D37B /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "simple-drum-beat.wav"; path = "../../../simple-drum-beat.wav"; sourceTree = "<group>"; };
@@ -104,8 +104,6 @@
 		944D03EA186038A60076EF7A /* EZAudioPlayFileExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EZAudioPlayFileExample-Prefix.pch"; sourceTree = "<group>"; };
 		944D03EB186038A60076EF7A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		944D03EC186038A60076EF7A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		944D03EF186038A60076EF7A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		944D03F2186038A60076EF7A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		944D03F7186038A60076EF7A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		944D03FD186038A60076EF7A /* EZAudioPlayFileExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EZAudioPlayFileExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		944D03FE186038A60076EF7A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -233,8 +231,7 @@
 				6628E1F41B39D98600020E56 /* EZAudio */,
 				944D03EB186038A60076EF7A /* AppDelegate.h */,
 				944D03EC186038A60076EF7A /* AppDelegate.m */,
-				944D03EE186038A60076EF7A /* Main_iPhone.storyboard */,
-				944D03F1186038A60076EF7A /* Main_iPad.storyboard */,
+				6628E22A1B39F7A800020E56 /* MainStoryboard.storyboard */,
 				944D043B1860398A0076EF7A /* PlayFileViewController.h */,
 				944D043C1860398A0076EF7A /* PlayFileViewController.m */,
 				9417A6D0186591CA00D9D37B /* simple-drum-beat.wav */,
@@ -349,11 +346,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6628E22B1B39F7A800020E56 /* MainStoryboard.storyboard in Resources */,
 				9417A6D1186591CA00D9D37B /* simple-drum-beat.wav in Resources */,
 				6628E2291B39D98600020E56 /* VERSION in Resources */,
-				944D03F3186038A60076EF7A /* Main_iPad.storyboard in Resources */,
 				944D03F8186038A60076EF7A /* Images.xcassets in Resources */,
-				944D03F0186038A60076EF7A /* Main_iPhone.storyboard in Resources */,
 				944D03E7186038A60076EF7A /* InfoPlist.strings in Resources */,
 				6628E2281B39D98600020E56 /* CHANGELOG in Resources */,
 			);
@@ -421,22 +417,6 @@
 				944D03E6186038A60076EF7A /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		944D03EE186038A60076EF7A /* Main_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				944D03EF186038A60076EF7A /* Base */,
-			);
-			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		944D03F1186038A60076EF7A /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				944D03F2186038A60076EF7A /* Base */,
-			);
-			name = Main_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 		944D0407186038A60076EF7A /* InfoPlist.strings */ = {

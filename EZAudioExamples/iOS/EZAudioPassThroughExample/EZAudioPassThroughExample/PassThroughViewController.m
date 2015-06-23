@@ -58,7 +58,7 @@
   /*
    Start the microphone
    */
-  [EZMicrophone sharedMicrophone].microphoneDelegate = self;
+  [EZMicrophone sharedMicrophone].delegate = self;
   [[EZMicrophone sharedMicrophone] startFetchingAudio];
   self.microphoneTextLabel.text = @"Microphone On";
   

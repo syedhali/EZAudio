@@ -25,14 +25,13 @@
 		6628E14F1B39D96500020E56 /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 6628E13B1B39D96500020E56 /* TPCircularBuffer.c */; };
 		6628E1501B39D96500020E56 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 6628E13E1B39D96500020E56 /* CHANGELOG */; };
 		6628E1511B39D96500020E56 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 6628E13F1B39D96500020E56 /* VERSION */; };
+		6628E2331B39F7CC00020E56 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6628E2321B39F7CC00020E56 /* MainStoryboard.storyboard */; };
 		9417A96C1871E88300D9D37B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A96B1871E88300D9D37B /* Foundation.framework */; };
 		9417A96E1871E88300D9D37B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A96D1871E88300D9D37B /* CoreGraphics.framework */; };
 		9417A9701871E88300D9D37B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A96F1871E88300D9D37B /* UIKit.framework */; };
 		9417A9761871E88300D9D37B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9417A9741871E88300D9D37B /* InfoPlist.strings */; };
 		9417A9781871E88300D9D37B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A9771871E88300D9D37B /* main.m */; };
 		9417A97C1871E88300D9D37B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A97B1871E88300D9D37B /* AppDelegate.m */; };
-		9417A97F1871E88300D9D37B /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9417A97D1871E88300D9D37B /* Main_iPhone.storyboard */; };
-		9417A9821871E88300D9D37B /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9417A9801871E88300D9D37B /* Main_iPad.storyboard */; };
 		9417A9871871E88300D9D37B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9417A9861871E88300D9D37B /* Images.xcassets */; };
 		9417A98E1871E88300D9D37B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A98D1871E88300D9D37B /* XCTest.framework */; };
 		9417A98F1871E88300D9D37B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A96B1871E88300D9D37B /* Foundation.framework */; };
@@ -91,6 +90,7 @@
 		6628E13C1B39D96500020E56 /* TPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPCircularBuffer.h; sourceTree = "<group>"; };
 		6628E13E1B39D96500020E56 /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		6628E13F1B39D96500020E56 /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
+		6628E2321B39F7CC00020E56 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		9417A9681871E88300D9D37B /* EZAudioFFTExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EZAudioFFTExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9417A96B1871E88300D9D37B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9417A96D1871E88300D9D37B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -101,8 +101,6 @@
 		9417A9791871E88300D9D37B /* EZAudioFFTExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EZAudioFFTExample-Prefix.pch"; sourceTree = "<group>"; };
 		9417A97A1871E88300D9D37B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9417A97B1871E88300D9D37B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		9417A97E1871E88300D9D37B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		9417A9811871E88300D9D37B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		9417A9861871E88300D9D37B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9417A98C1871E88300D9D37B /* EZAudioFFTExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EZAudioFFTExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9417A98D1871E88300D9D37B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -235,8 +233,7 @@
 				6628E11C1B39D96500020E56 /* EZAudio */,
 				9417A97A1871E88300D9D37B /* AppDelegate.h */,
 				9417A97B1871E88300D9D37B /* AppDelegate.m */,
-				9417A97D1871E88300D9D37B /* Main_iPhone.storyboard */,
-				9417A9801871E88300D9D37B /* Main_iPad.storyboard */,
+				6628E2321B39F7CC00020E56 /* MainStoryboard.storyboard */,
 				9417A9CE1871E97D00D9D37B /* FFTViewController.h */,
 				9417A9CF1871E97D00D9D37B /* FFTViewController.m */,
 				9417A9861871E88300D9D37B /* Images.xcassets */,
@@ -350,9 +347,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9417A9821871E88300D9D37B /* Main_iPad.storyboard in Resources */,
 				9417A9871871E88300D9D37B /* Images.xcassets in Resources */,
-				9417A97F1871E88300D9D37B /* Main_iPhone.storyboard in Resources */,
+				6628E2331B39F7CC00020E56 /* MainStoryboard.storyboard in Resources */,
 				6628E1511B39D96500020E56 /* VERSION in Resources */,
 				9417A9761871E88300D9D37B /* InfoPlist.strings in Resources */,
 				6628E1501B39D96500020E56 /* CHANGELOG in Resources */,
@@ -421,22 +417,6 @@
 				9417A9751871E88300D9D37B /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		9417A97D1871E88300D9D37B /* Main_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9417A97E1871E88300D9D37B /* Base */,
-			);
-			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		9417A9801871E88300D9D37B /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9417A9811871E88300D9D37B /* Base */,
-			);
-			name = Main_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 		9417A9961871E88300D9D37B /* InfoPlist.strings */ = {
