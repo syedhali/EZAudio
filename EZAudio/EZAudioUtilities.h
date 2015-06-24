@@ -31,6 +31,9 @@
 #pragma mark - EZAudioUtilities
 //------------------------------------------------------------------------------
 
+/**
+ <#Description#>
+ */
 @interface EZAudioUtilities : NSObject
 
 //------------------------------------------------------------------------------
@@ -68,6 +71,12 @@
 
 //------------------------------------------------------------------------------
 
+/**
+ Allocates an array of float arrays given the number of frames needed to store in each float array.
+ @param frames   A UInt32 representing the number of frames to store in each float buffer
+ @param channels A UInt32 representing the number of channels (i.e. the number of float arrays to allocate)
+ @return An array of float arrays, each the length of the number of frames specified
+ */
 + (float **)floatBuffersWithNumberOfFrames:(UInt32)frames
                           numberOfChannels:(UInt32)channels;
 
@@ -99,7 +108,7 @@
 /**
  
  @param channels   The desired number of channels
- @param sampleRate The desired sample rate as a float.
+ @param sampleRate A float representing the sample rate.
  @return A new AudioStreamBasicDescription with the specified format.
  */
 + (AudioStreamBasicDescription)AIFFFormatWithNumberOfChannels:(UInt32)channels
@@ -108,8 +117,8 @@
 //------------------------------------------------------------------------------
 
 /**
- 
- @param sampleRate The desired sample rate as a float.
+ <#Description#>
+ @param sampleRate A float representing the sample rate.
  @return A new AudioStreamBasicDescription with the specified format.
  */
 + (AudioStreamBasicDescription)iLBCFormatWithSampleRate:(float)sampleRate;
@@ -117,20 +126,20 @@
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
- @param channels   <#channels description#>
- @param sampleRate The desired sample rate as a float.
- @return <#return value description#>
+ Creates a float-based, non-interleaved AudioStreamBasicDescription for the number of channels specified.
+ @param channels   A UInt32 representing the number of channels.
+ @param sampleRate A float representing the sample rate.
+ @return A float-based AudioStreamBasicDescription with the number of channels specified.
  */
 + (AudioStreamBasicDescription)floatFormatWithNumberOfChannels:(UInt32)channels
-                                                   sampleRate:(float)sampleRate;
+                                                    sampleRate:(float)sampleRate;
 
 //------------------------------------------------------------------------------
 
 /**
- 
+ <#Description#>
  @param channels   The desired number of channels
- @param sampleRate The desired sample rate as a float.
+ @param sampleRate A float representing the sample rate.
  @return A new AudioStreamBasicDescription with the specified format.
  */
 + (AudioStreamBasicDescription)M4AFormatWithNumberOfChannels:(UInt32)channels
@@ -139,8 +148,8 @@
 //------------------------------------------------------------------------------
 
 /**
- 
- @param sampleRate The desired sample rate as a float.
+ Creates a single-channel, float-based AudioStreamBasicDescription.
+ @param sampleRate A float representing the sample rate.
  @return A new AudioStreamBasicDescription with the specified format.
  */
 + (AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)sampleRate;
@@ -148,8 +157,8 @@
 //------------------------------------------------------------------------------
 
 /**
- 
- @param sampleRate The desired sample rate as a float.
+ <#Description#>
+ @param sampleRate A float representing the sample rate.
  @return A new AudioStreamBasicDescription with the specified format.
  */
 + (AudioStreamBasicDescription)monoCanonicalFormatWithSampleRate:(float)sampleRate;
@@ -157,8 +166,8 @@
 //------------------------------------------------------------------------------
 
 /**
- 
- @param sampleRate The desired sample rate as a float.
+ <#Description#>
+ @param sampleRate A float representing the sample rate.
  @return A new AudioStreamBasicDescription with the specified format.
  */
 + (AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)sampleRate;
@@ -166,8 +175,8 @@
 //------------------------------------------------------------------------------
 
 /**
- 
- @param sampleRate The desired sample rate as a float.
+ Creates a two-channel, interleaved, float-based AudioStreamBasicDescription.
+ @param sampleRate A float representing the sample rate.
  @return A new AudioStreamBasicDescription with the specified format.
  */
 + (AudioStreamBasicDescription)stereoFloatInterleavedFormatWithSampleRate:(float)sampleRate;
@@ -175,8 +184,8 @@
 //------------------------------------------------------------------------------
 
 /**
- 
- @param sampleRate The desired sample rate as a float.
+ Creates a two-channel, non-interleaved, float-based AudioStreamBasicDescription.
+ @param sampleRate A float representing the sample rate.
  @return A new AudioStreamBasicDescription with the specified format.
  */
 + (AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sameRate;
@@ -355,12 +364,21 @@
 /// @name Plot Utility
 ///-----------------------------------------------------------
 
-+ (void)updateScrollHistory:(float**)scrollHistory
+/**
+ <#Description#>
+ @param scrollHistory       <#scrollHistory description#>
+ @param scrollHistoryLength <#scrollHistoryLength description#>
+ @param index               <#index description#>
+ @param buffer              <#buffer description#>
+ @param bufferSize          <#bufferSize description#>
+ @param isChanging          <#isChanging description#>
+ */
++ (void)updateScrollHistory:(float **)scrollHistory
                  withLength:(int)scrollHistoryLength
-                    atIndex:(int*)index
-                 withBuffer:(float*)buffer
+                    atIndex:(int *)index
+                 withBuffer:(float *)buffer
              withBufferSize:(int)bufferSize
-       isResolutionChanging:(BOOL*)isChanging;
+       isResolutionChanging:(BOOL *)isChanging;
 
 //------------------------------------------------------------------------------
 #pragma mark - TPCircularBuffer Utility
