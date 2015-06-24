@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 
-FOUNDATION_EXPORT UInt32 EZAudioFloatConverterDefaultPacketSize;
+FOUNDATION_EXPORT UInt32 const EZAudioFloatConverterDefaultPacketSize;
 
 @interface EZAudioFloatConverter : NSObject
 

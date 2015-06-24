@@ -37,7 +37,7 @@
                                  buffers:(float **)buffers
                               bufferSize:(UInt32)bufferSize
 {
-    id waveformData = [[self alloc] init];
+    id data = [[self alloc] init];
     
     size_t size = sizeof(float) * bufferSize;
     float **buffersCopy = [EZAudioUtilities floatBuffersWithNumberOfFrames:bufferSize
@@ -47,11 +47,11 @@
         memcpy(buffersCopy[i], buffers[i], size);
     }
     
-    ((EZAudioFloatData *)waveformData).buffers = buffersCopy;
-    ((EZAudioFloatData *)waveformData).bufferSize = bufferSize;
-    ((EZAudioFloatData *)waveformData).numberOfChannels = numberOfChannels;
+    ((EZAudioFloatData *)data).buffers = buffersCopy;
+    ((EZAudioFloatData *)data).bufferSize = bufferSize;
+    ((EZAudioFloatData *)data).numberOfChannels = numberOfChannels;
     
-    return waveformData;
+    return data;
 }
 
 //------------------------------------------------------------------------------

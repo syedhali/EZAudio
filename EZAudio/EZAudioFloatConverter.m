@@ -7,29 +7,34 @@
 //
 
 #import "EZAudioFloatConverter.h"
-
 #import "EZAudioUtilities.h"
 
 //------------------------------------------------------------------------------
+#pragma mark - Constants
+//------------------------------------------------------------------------------
 
 static UInt32 EZAudioFloatConverterDefaultOutputBufferSize = 128 * 32;
-UInt32 EZAudioFloatConverterDefaultPacketSize = 2048;
+UInt32 const EZAudioFloatConverterDefaultPacketSize = 2048;
 
+//------------------------------------------------------------------------------
+#pragma mark - Data Structures
 //------------------------------------------------------------------------------
 
 typedef struct
 {
-    AudioConverterRef converterRef;
-    AudioBufferList *floatAudioBufferList;
-    AudioStreamBasicDescription inputFormat;
-    AudioStreamBasicDescription outputFormat;
+    AudioConverterRef             converterRef;
+    AudioBufferList              *floatAudioBufferList;
+    AudioStreamBasicDescription   inputFormat;
+    AudioStreamBasicDescription   outputFormat;
     AudioStreamPacketDescription *packetDescriptions;
     UInt32 packetsPerBuffer;
 } EZAudioFloatConverterInfo;
 
 //------------------------------------------------------------------------------
+#pragma mark - Callbacks
+//------------------------------------------------------------------------------
 
-OSStatus EZAudioFloatConverterCallback(AudioConverterRef            inAudioConverter,
+OSStatus EZAudioFloatConverterCallback(AudioConverterRef             inAudioConverter,
                                        UInt32                       *ioNumberDataPackets,
                                        AudioBufferList              *ioData,
                                        AudioStreamPacketDescription **outDataPacketDescription,
@@ -43,10 +48,16 @@ OSStatus EZAudioFloatConverterCallback(AudioConverterRef            inAudioConve
 }
 
 //------------------------------------------------------------------------------
+#pragma mark - EZAudioFloatConverter (Interface Extension)
+//------------------------------------------------------------------------------
 
 @interface EZAudioFloatConverter ()
 @property (nonatomic, assign) EZAudioFloatConverterInfo info;
 @end
+
+//------------------------------------------------------------------------------
+#pragma mark - EZAudioFloatConverter (Implementation)
+//------------------------------------------------------------------------------
 
 @implementation EZAudioFloatConverter
 
@@ -159,6 +170,8 @@ OSStatus EZAudioFloatConverterCallback(AudioConverterRef            inAudioConve
                           toFloatBuffers:buffers
                       packetDescriptions:self.info.packetDescriptions];
 }
+
+//------------------------------------------------------------------------------
 
 - (void)convertDataFromAudioBufferList:(AudioBufferList *)audioBufferList
                     withNumberOfFrames:(UInt32)frames
