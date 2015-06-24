@@ -38,7 +38,6 @@
                               bufferSize:(UInt32)bufferSize
 {
     id data = [[self alloc] init];
-    
     size_t size = sizeof(float) * bufferSize;
     float **buffersCopy = [EZAudioUtilities floatBuffersWithNumberOfFrames:bufferSize
                                                           numberOfChannels:numberOfChannels];
@@ -46,11 +45,9 @@
     {
         memcpy(buffersCopy[i], buffers[i], size);
     }
-    
     ((EZAudioFloatData *)data).buffers = buffersCopy;
     ((EZAudioFloatData *)data).bufferSize = bufferSize;
     ((EZAudioFloatData *)data).numberOfChannels = numberOfChannels;
-    
     return data;
 }
 
