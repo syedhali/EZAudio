@@ -6,9 +6,6 @@ A simple, intuitive audio framework for iOS and OSX.
 *The Official EZAudio Page:*
 http://syedharisali.com/projects/EZAudio/getting-started
 
-## Update
-Thank you everyone for using EZAudio! Just an update - I'm working on a 1.0.0 production version of EZAudio that will contain a bunch of improvements in the API, feature an EZAudioPlayer, and hooks for the DOUAudioStreamer for visualizing remote streaming audio. To make the next version of EZAudio even better I encourage you all to email me your feedback, feature requests, and experiences using the framework. Thanks!
-
 ##Features
 ![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/EZAudioSummary.png "EZAudioFeatures")
 
