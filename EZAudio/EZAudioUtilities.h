@@ -1,10 +1,27 @@
 //
 //  EZAudioUtilities.h
-//  EZAudioOpenGLWaveformExample
+//  EZAudio
 //
-//  Created by Syed Haris Ali on 4/2/15.
-//  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
+//  Created by Syed Haris Ali on 6/23/15.
+//  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
 //
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
@@ -20,13 +37,20 @@
 #pragma mark - Debugging
 //------------------------------------------------------------------------------
 
+///-----------------------------------------------------------
+/// @name Debugging EZAudio
+///-----------------------------------------------------------
+
 /**
  Globally sets whether or not the program should exit if a `checkResult:operation:` operation fails. Currently the behavior on EZAudio is to quit if a `checkResult:operation:` fails, but this is not desirable in any production environment. Internally there are a lot of `checkResult:operation:` operations used on all the core classes. This should only ever be set to NO in production environments since a `checkResult:operation:` failing means something breaking has likely happened.
  @param shouldExitOnCheckResultFail A BOOL indicating whether or not the running program should exist due to a `checkResult:operation:` fail.
  */
 + (void)setShouldExitOnCheckResultFail:(BOOL)shouldExitOnCheckResultFail;
 
+//------------------------------------------------------------------------------
 #pragma mark - AudioBufferList Utility
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name AudioBufferList Utility
 ///-----------------------------------------------------------
@@ -38,14 +62,14 @@
  @param interleaved Whether the samples will be interleaved (if not it will be assumed to be non-interleaved and each channel will have an AudioBuffer allocated)
  @return An AudioBufferList struct that has been allocated in memory
  */
-+(AudioBufferList *)audioBufferListWithNumberOfFrames:(UInt32)frames
-                                     numberOfChannels:(UInt32)channels
-                                          interleaved:(BOOL)interleaved;
++ (AudioBufferList *)audioBufferListWithNumberOfFrames:(UInt32)frames
+                                      numberOfChannels:(UInt32)channels
+                                           interleaved:(BOOL)interleaved;
 
 //------------------------------------------------------------------------------
 
-+(float **)floatBuffersWithNumberOfFrames:(UInt32)frames
-                         numberOfChannels:(UInt32)channels;
++ (float **)floatBuffersWithNumberOfFrames:(UInt32)frames
+                          numberOfChannels:(UInt32)channels;
 
 //------------------------------------------------------------------------------
 
@@ -53,14 +77,21 @@
  Deallocates an AudioBufferList structure from memory.
  @param bufferList A pointer to the buffer list you would like to free
  */
-+(void)freeBufferList:(AudioBufferList*)bufferList;
++ (void)freeBufferList:(AudioBufferList *)bufferList;
 
 //------------------------------------------------------------------------------
 
-+(void)freeFloatBuffers:(float **)buffers
-       numberOfChannels:(UInt32)channels;
+/**
+ Deallocates an array of float buffers
+ @param buffers  An array of float arrays
+ @param channels A UInt32 representing the number of channels (i.e. the number of float arrays to deallocate)
+ */
++ (void)freeFloatBuffers:(float **)buffers numberOfChannels:(UInt32)channels;
 
+//------------------------------------------------------------------------------
 #pragma mark - AudioStreamBasicDescription Utilties
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Creating An AudioStreamBasicDescription
 ///-----------------------------------------------------------
@@ -68,23 +99,97 @@
 /**
  
  @param channels   The desired number of channels
- @param sampleRate The desired sample rate
+ @param sampleRate The desired sample rate as a float.
  @return A new AudioStreamBasicDescription with the specified format.
  */
-+(AudioStreamBasicDescription)AIFFFormatWithNumberOfChannels:(UInt32)channels
++ (AudioStreamBasicDescription)AIFFFormatWithNumberOfChannels:(UInt32)channels
+                                                   sampleRate:(float)sampleRate;
+
+//------------------------------------------------------------------------------
+
+/**
+ 
+ @param sampleRate The desired sample rate as a float.
+ @return A new AudioStreamBasicDescription with the specified format.
+ */
++ (AudioStreamBasicDescription)iLBCFormatWithSampleRate:(float)sampleRate;
+
+//------------------------------------------------------------------------------
+
+/**
+ <#Description#>
+ @param channels   <#channels description#>
+ @param sampleRate The desired sample rate as a float.
+ @return <#return value description#>
+ */
++ (AudioStreamBasicDescription)floatFormatWithNumberOfChannels:(UInt32)channels
+                                                   sampleRate:(float)sampleRate;
+
+//------------------------------------------------------------------------------
+
+/**
+ 
+ @param channels   The desired number of channels
+ @param sampleRate The desired sample rate as a float.
+ @return A new AudioStreamBasicDescription with the specified format.
+ */
++ (AudioStreamBasicDescription)M4AFormatWithNumberOfChannels:(UInt32)channels
                                                   sampleRate:(float)sampleRate;
 
 //------------------------------------------------------------------------------
 
 /**
  
- @param sampleRate The desired sample rate
+ @param sampleRate The desired sample rate as a float.
  @return A new AudioStreamBasicDescription with the specified format.
  */
-+(AudioStreamBasicDescription)iLBCFormatWithSampleRate:(float)sampleRate;
++ (AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)sampleRate;
 
 //------------------------------------------------------------------------------
 
+/**
+ 
+ @param sampleRate The desired sample rate as a float.
+ @return A new AudioStreamBasicDescription with the specified format.
+ */
++ (AudioStreamBasicDescription)monoCanonicalFormatWithSampleRate:(float)sampleRate;
+
+//------------------------------------------------------------------------------
+
+/**
+ 
+ @param sampleRate The desired sample rate as a float.
+ @return A new AudioStreamBasicDescription with the specified format.
+ */
++ (AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)sampleRate;
+
+//------------------------------------------------------------------------------
+
+/**
+ 
+ @param sampleRate The desired sample rate as a float.
+ @return A new AudioStreamBasicDescription with the specified format.
+ */
++ (AudioStreamBasicDescription)stereoFloatInterleavedFormatWithSampleRate:(float)sampleRate;
+
+//------------------------------------------------------------------------------
+
+/**
+ 
+ @param sampleRate The desired sample rate as a float.
+ @return A new AudioStreamBasicDescription with the specified format.
+ */
++ (AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sameRate;
+
+//------------------------------------------------------------------------------
+// @name AudioStreamBasicDescription Helper Functions
+//------------------------------------------------------------------------------
+
+/**
+ Checks an AudioStreamBasicDescription to see if it is a float-based format (as opposed to a signed integer based format).
+ @param asbd A valid AudioStreamBasicDescription
+ @return A BOOL indicating whether or not the AudioStreamBasicDescription is a float format.
+ */
 + (BOOL)isFloatFormat:(AudioStreamBasicDescription)asbd;
 
 //------------------------------------------------------------------------------
@@ -99,68 +204,13 @@
 
 //------------------------------------------------------------------------------
 
+/**
+ Checks an AudioStreamBasicDescription to see if it is a linear PCM format (uncompressed, 
+ 1 frame per packet)
+ @param asbd A valid AudioStreamBasicDescription
+ @return A BOOL indicating whether or not the AudioStreamBasicDescription is linear PCM.
+ */
 + (BOOL)isLinearPCM:(AudioStreamBasicDescription)asbd;
-
-//------------------------------------------------------------------------------
-
-+(AudioStreamBasicDescription)floatFormatWithNumberOfChannels:(UInt32)channels
-                                                   sampleRate:(float)sampleRate;
-
-//------------------------------------------------------------------------------
-
-/**
- 
- @param channels   The desired number of channels
- @param sampleRate The desired sample rate
- @return A new AudioStreamBasicDescription with the specified format.
- */
-+(AudioStreamBasicDescription)M4AFormatWithNumberOfChannels:(UInt32)channels
-                                                 sampleRate:(float)sampleRate;
-
-//------------------------------------------------------------------------------
-
-/**
- 
- @param sampleRate The desired sample rate
- @return A new AudioStreamBasicDescription with the specified format.
- */
-+(AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)sampleRate;
-
-//------------------------------------------------------------------------------
-
-/**
- 
- @param sampleRate The desired sample rate
- @return A new AudioStreamBasicDescription with the specified format.
- */
-+(AudioStreamBasicDescription)monoCanonicalFormatWithSampleRate:(float)sampleRate;
-
-//------------------------------------------------------------------------------
-
-/**
- 
- @param sampleRate The desired sample rate
- @return A new AudioStreamBasicDescription with the specified format.
- */
-+(AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)sampleRate;
-
-//------------------------------------------------------------------------------
-
-/**
- 
- @param sampleRate The desired sample rate
- @return A new AudioStreamBasicDescription with the specified format.
- */
-+(AudioStreamBasicDescription)stereoFloatInterleavedFormatWithSampleRate:(float)sampleRate;
-
-//------------------------------------------------------------------------------
-
-/**
- 
- @param sampleRate The desired sample rate
- @return A new AudioStreamBasicDescription with the specified format.
- */
-+(AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sameRate;
 
 ///-----------------------------------------------------------
 /// @name AudioStreamBasicDescription Utilities
@@ -168,17 +218,27 @@
 
 /**
  Nicely logs out the contents of an AudioStreamBasicDescription struct
- @param 	asbd 	The AudioStreamBasicDescription struct with content to print out
+ @param asbd The AudioStreamBasicDescription struct with content to print out
  */
-+(void)printASBD:(AudioStreamBasicDescription)asbd;
++ (void)printASBD:(AudioStreamBasicDescription)asbd;
 
 //------------------------------------------------------------------------------
 
+/**
+ <#Description#>
+ @param seconds <#seconds description#>
+ @return <#return value description#>
+ */
 + (NSString *)displayTimeStringFromSeconds:(NSTimeInterval)seconds;
 
 //------------------------------------------------------------------------------
 
-+(NSString *)stringForAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd;
+/**
+ <#Description#>
+ @param asbd <#asbd description#>
+ @return <#return value description#>
+ */
++ (NSString *)stringForAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd;
 
 //------------------------------------------------------------------------------
 
@@ -188,11 +248,14 @@
  @param nChannels   The number of expected channels on the description
  @param interleaved A flag indicating whether the stereo samples should be interleaved in the buffer
  */
-+(void)setCanonicalAudioStreamBasicDescription:(AudioStreamBasicDescription*)asbd
-                              numberOfChannels:(UInt32)nChannels
-                                   interleaved:(BOOL)interleaved;
++ (void)setCanonicalAudioStreamBasicDescription:(AudioStreamBasicDescription*)asbd
+                               numberOfChannels:(UInt32)nChannels
+                                    interleaved:(BOOL)interleaved;
 
+//------------------------------------------------------------------------------
 #pragma mark - Math Utilities
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Math Utilities
 ///-----------------------------------------------------------
@@ -204,10 +267,10 @@
  @param scrollHistory       The target history buffer in which to append the values
  @param scrollHistoryLength The length of the target history buffer
  */
-+(void)appendBufferAndShift:(float*)buffer
-             withBufferSize:(int)bufferLength
-            toScrollHistory:(float*)scrollHistory
-      withScrollHistorySize:(int)scrollHistoryLength;
++ (void)appendBufferAndShift:(float*)buffer
+              withBufferSize:(int)bufferLength
+             toScrollHistory:(float*)scrollHistory
+       withScrollHistorySize:(int)scrollHistoryLength;
 
 //------------------------------------------------------------------------------
 
@@ -232,11 +295,11 @@
  @param 	rightMax 	The maximum of the second coordinate system
  @return	The mapped value in terms of the second coordinate system
  */
-+(float)MAP:(float)value
-    leftMin:(float)leftMin
-    leftMax:(float)leftMax
-   rightMin:(float)rightMin
-   rightMax:(float)rightMax;
++ (float)MAP:(float)value
+     leftMin:(float)leftMin
+     leftMax:(float)leftMax
+    rightMin:(float)rightMin
+    rightMax:(float)rightMax;
 
 //------------------------------------------------------------------------------
 
@@ -246,8 +309,7 @@
  @param 	bufferSize 	The size of the float buffer
  @return	The root mean squared of the buffer
  */
-+(float)RMS:(float*)buffer
-     length:(int)bufferSize;
++ (float)RMS:(float*)buffer length:(int)bufferSize;
 
 //------------------------------------------------------------------------------
 
@@ -259,9 +321,12 @@
  @param value The float value for which to use as x
  @return The float sign value
  */
-+(float)SGN:(float)value;
++ (float)SGN:(float)value;
 
+//------------------------------------------------------------------------------
 #pragma mark - OSStatus Utility
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name OSStatus Utility
 ///-----------------------------------------------------------
@@ -271,24 +336,36 @@
  @param result    The OSStatus representing the result of an operation
  @param operation A string (const char, not NSString) describing the operation taking place (will print if fails)
  */
-+(void)checkResult:(OSStatus)result
-         operation:(const char*)operation;
++ (void)checkResult:(OSStatus)result operation:(const char *)operation;
 
-+(NSString *)stringFromUInt32Code:(UInt32)code;
+//------------------------------------------------------------------------------
 
+/**
+ <#Description#>
+ @param code <#code description#>
+ @return <#return value description#>
+ */
++ (NSString *)stringFromUInt32Code:(UInt32)code;
+
+//------------------------------------------------------------------------------
 #pragma mark - Plot Utility
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Plot Utility
 ///-----------------------------------------------------------
 
-+(void)updateScrollHistory:(float**)scrollHistory
-                withLength:(int)scrollHistoryLength
-                   atIndex:(int*)index
-                withBuffer:(float*)buffer
-            withBufferSize:(int)bufferSize
-      isResolutionChanging:(BOOL*)isChanging;
++ (void)updateScrollHistory:(float**)scrollHistory
+                 withLength:(int)scrollHistoryLength
+                    atIndex:(int*)index
+                 withBuffer:(float*)buffer
+             withBufferSize:(int)bufferSize
+       isResolutionChanging:(BOOL*)isChanging;
 
+//------------------------------------------------------------------------------
 #pragma mark - TPCircularBuffer Utility
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name TPCircularBuffer Utility
 ///-----------------------------------------------------------
@@ -298,8 +375,8 @@
  @param circularBuffer  Pointer to the instance of the TPCircularBuffer to add the audio data to
  @param audioBufferList Pointer to the instance of the AudioBufferList with the audio data
  */
-+(void)appendDataToCircularBuffer:(TPCircularBuffer*)circularBuffer
-              fromAudioBufferList:(AudioBufferList*)audioBufferList;
++ (void)appendDataToCircularBuffer:(TPCircularBuffer*)circularBuffer
+               fromAudioBufferList:(AudioBufferList*)audioBufferList;
 
 //------------------------------------------------------------------------------
 
@@ -308,8 +385,8 @@
  *  @param circularBuffer Pointer to an instance of the TPCircularBuffer
  *  @param size           The length of the TPCircularBuffer (usually 1024)
  */
-+(void)circularBuffer:(TPCircularBuffer*)circularBuffer
-             withSize:(int)size;
++ (void)circularBuffer:(TPCircularBuffer*)circularBuffer
+              withSize:(int)size;
 
 //------------------------------------------------------------------------------
 
@@ -317,7 +394,7 @@
  Frees a circular buffer
  @param circularBuffer Pointer to the circular buffer to clear
  */
-+(void)freeCircularBuffer:(TPCircularBuffer*)circularBuffer;
++ (void)freeCircularBuffer:(TPCircularBuffer*)circularBuffer;
 
 //------------------------------------------------------------------------------
 

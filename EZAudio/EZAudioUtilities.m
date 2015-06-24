@@ -1,10 +1,27 @@
 //
 //  EZAudioUtilities.m
-//  EZAudioOpenGLWaveformExample
+//  EZAudio
 //
-//  Created by Syed Haris Ali on 4/2/15.
-//  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
+//  Created by Syed Haris Ali on 6/23/15.
+//  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
 //
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 
 #import "EZAudioUtilities.h"
 
@@ -21,22 +38,27 @@ BOOL __shouldExitOnCheckResultFail = YES;
     __shouldExitOnCheckResultFail = shouldExitOnCheckResultFail;
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - AudioBufferList Utility
-+(AudioBufferList *)audioBufferListWithNumberOfFrames:(UInt32)frames
-                                     numberOfChannels:(UInt32)channels
-                                          interleaved:(BOOL)interleaved
+//------------------------------------------------------------------------------
+
++ (AudioBufferList *)audioBufferListWithNumberOfFrames:(UInt32)frames
+                                      numberOfChannels:(UInt32)channels
+                                           interleaved:(BOOL)interleaved
 {
-    AudioBufferList *audioBufferList = (AudioBufferList*)malloc(sizeof(AudioBufferList) + sizeof(AudioBuffer)*(channels-1));
+    AudioBufferList *audioBufferList = (AudioBufferList*)malloc(sizeof(AudioBufferList) + sizeof(AudioBuffer) * (channels-1));
     UInt32 outputBufferSize = 32 * frames; // 32 KB
     audioBufferList->mNumberBuffers = interleaved ? 1 : channels;
-    for( int i = 0; i < audioBufferList->mNumberBuffers; i++ )
+    for(int i = 0; i < audioBufferList->mNumberBuffers; i++)
     {
         audioBufferList->mBuffers[i].mNumberChannels = channels;
         audioBufferList->mBuffers[i].mDataByteSize = channels * outputBufferSize;
-        audioBufferList->mBuffers[i].mData = (float*)malloc(channels * sizeof(float) *outputBufferSize);
+        audioBufferList->mBuffers[i].mData = (float *)malloc(channels * sizeof(float) *outputBufferSize);
     }
     return audioBufferList;
 }
+
+//------------------------------------------------------------------------------
 
 + (float **)floatBuffersWithNumberOfFrames:(UInt32)frames
                           numberOfChannels:(UInt32)channels
@@ -51,7 +73,9 @@ BOOL __shouldExitOnCheckResultFail = YES;
     return buffers;
 }
 
-+(void)freeBufferList:(AudioBufferList *)bufferList
+//------------------------------------------------------------------------------
+
++ (void)freeBufferList:(AudioBufferList *)bufferList
 {
     if( bufferList )
     {
@@ -70,8 +94,9 @@ BOOL __shouldExitOnCheckResultFail = YES;
     bufferList = NULL;
 }
 
-+(void)freeFloatBuffers:(float **)buffers
-       numberOfChannels:(UInt32)channels
+//------------------------------------------------------------------------------
+
++ (void)freeFloatBuffers:(float **)buffers numberOfChannels:(UInt32)channels
 {
     for (int i = 0; i < channels; i++)
     {
@@ -80,9 +105,12 @@ BOOL __shouldExitOnCheckResultFail = YES;
     free(buffers);
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - AudioStreamBasicDescription Utility
-+(AudioStreamBasicDescription)AIFFFormatWithNumberOfChannels:(UInt32)channels
-                                                  sampleRate:(float)sampleRate
+//------------------------------------------------------------------------------
+
++ (AudioStreamBasicDescription)AIFFFormatWithNumberOfChannels:(UInt32)channels
+                                                   sampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
     memset(&asbd, 0, sizeof(asbd));
@@ -97,7 +125,9 @@ BOOL __shouldExitOnCheckResultFail = YES;
     return asbd;
 }
 
-+(AudioStreamBasicDescription)iLBCFormatWithSampleRate:(float)sampleRate
+//------------------------------------------------------------------------------
+
++ (AudioStreamBasicDescription)iLBCFormatWithSampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
     memset(&asbd, 0, sizeof(asbd));
@@ -117,23 +147,10 @@ BOOL __shouldExitOnCheckResultFail = YES;
     return asbd;
 }
 
-+ (BOOL)isFloatFormat:(AudioStreamBasicDescription)asbd
-{
-    return asbd.mFormatFlags & kAudioFormatFlagIsFloat;
-}
+//------------------------------------------------------------------------------
 
-+ (BOOL)isInterleaved:(AudioStreamBasicDescription)asbd
-{
-    return !(asbd.mFormatFlags & kAudioFormatFlagIsNonInterleaved);
-}
-
-+ (BOOL)isLinearPCM:(AudioStreamBasicDescription)asbd
-{
-    return asbd.mFormatID == kAudioFormatLinearPCM;
-}
-
-+(AudioStreamBasicDescription)floatFormatWithNumberOfChannels:(UInt32)channels
-                                                   sampleRate:(float)sampleRate
++ (AudioStreamBasicDescription)floatFormatWithNumberOfChannels:(UInt32)channels
+                                                    sampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
     UInt32 floatByteSize   = sizeof(float);
@@ -148,8 +165,10 @@ BOOL __shouldExitOnCheckResultFail = YES;
     return asbd;
 }
 
-+(AudioStreamBasicDescription)M4AFormatWithNumberOfChannels:(UInt32)channels
-                                                 sampleRate:(float)sampleRate
+//------------------------------------------------------------------------------
+
++ (AudioStreamBasicDescription)M4AFormatWithNumberOfChannels:(UInt32)channels
+                                                  sampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
     memset(&asbd, 0, sizeof(asbd));
@@ -169,7 +188,9 @@ BOOL __shouldExitOnCheckResultFail = YES;
     return asbd;
 }
 
-+(AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)sampleRate
+//------------------------------------------------------------------------------
+
++ (AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
     UInt32 byteSize = sizeof(float);
@@ -184,7 +205,9 @@ BOOL __shouldExitOnCheckResultFail = YES;
     return asbd;
 }
 
-+(AudioStreamBasicDescription)monoCanonicalFormatWithSampleRate:(float)sampleRate
+//------------------------------------------------------------------------------
+
++ (AudioStreamBasicDescription)monoCanonicalFormatWithSampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
     UInt32 byteSize = sizeof(float);
@@ -199,7 +222,9 @@ BOOL __shouldExitOnCheckResultFail = YES;
     return asbd;
 }
 
-+(AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)sampleRate
+//------------------------------------------------------------------------------
+
++ (AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
     UInt32 byteSize = sizeof(float);
@@ -214,7 +239,9 @@ BOOL __shouldExitOnCheckResultFail = YES;
     return asbd;
 }
 
-+(AudioStreamBasicDescription)stereoFloatInterleavedFormatWithSampleRate:(float)sampleRate
+//------------------------------------------------------------------------------
+
++ (AudioStreamBasicDescription)stereoFloatInterleavedFormatWithSampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
     UInt32 floatByteSize   = sizeof(float);
@@ -230,7 +257,9 @@ BOOL __shouldExitOnCheckResultFail = YES;
     return asbd;
 }
 
-+(AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sampleRate
+//------------------------------------------------------------------------------
+
++ (AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
     UInt32 floatByteSize   = sizeof(float);
@@ -245,7 +274,30 @@ BOOL __shouldExitOnCheckResultFail = YES;
     return asbd;
 }
 
-+(void)printASBD:(AudioStreamBasicDescription)asbd
+//------------------------------------------------------------------------------
+
++ (BOOL)isFloatFormat:(AudioStreamBasicDescription)asbd
+{
+    return asbd.mFormatFlags & kAudioFormatFlagIsFloat;
+}
+
+//------------------------------------------------------------------------------
+
++ (BOOL)isInterleaved:(AudioStreamBasicDescription)asbd
+{
+    return !(asbd.mFormatFlags & kAudioFormatFlagIsNonInterleaved);
+}
+
+//------------------------------------------------------------------------------
+
++ (BOOL)isLinearPCM:(AudioStreamBasicDescription)asbd
+{
+    return asbd.mFormatID == kAudioFormatLinearPCM;
+}
+
+//------------------------------------------------------------------------------
+
++ (void)printASBD:(AudioStreamBasicDescription)asbd
 {
     char formatIDString[5];
     UInt32 formatID = CFSwapInt32HostToBig(asbd.mFormatID);
@@ -261,6 +313,8 @@ BOOL __shouldExitOnCheckResultFail = YES;
     NSLog (@"  Bits per Channel:    %10d",    (unsigned int)asbd.mBitsPerChannel);
 }
 
+//------------------------------------------------------------------------------
+
 + (NSString *)displayTimeStringFromSeconds:(NSTimeInterval)seconds
 {
     int totalSeconds = (int)ceil(seconds);
@@ -269,7 +323,9 @@ BOOL __shouldExitOnCheckResultFail = YES;
     return [NSString stringWithFormat:@"%02d:%02d", minutesComponent, secondsComponent];
 }
 
-+(NSString *)stringForAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd
+//------------------------------------------------------------------------------
+
++ (NSString *)stringForAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd
 {
     char formatIDString[5];
     UInt32 formatID = CFSwapInt32HostToBig(asbd.mFormatID);
@@ -298,9 +354,12 @@ BOOL __shouldExitOnCheckResultFail = YES;
             [self isFloatFormat:asbd]];
 }
 
-+(void)setCanonicalAudioStreamBasicDescription:(AudioStreamBasicDescription*)asbd
-                              numberOfChannels:(UInt32)nChannels
-                                   interleaved:(BOOL)interleaved {
+//------------------------------------------------------------------------------
+
++ (void)setCanonicalAudioStreamBasicDescription:(AudioStreamBasicDescription*)asbd
+                               numberOfChannels:(UInt32)nChannels
+                                    interleaved:(BOOL)interleaved
+{
     
     asbd->mFormatID = kAudioFormatLinearPCM;
 #if TARGET_OS_IPHONE
@@ -321,15 +380,84 @@ BOOL __shouldExitOnCheckResultFail = YES;
     }
 }
 
+//------------------------------------------------------------------------------
+#pragma mark - Math Utilities
+//------------------------------------------------------------------------------
+
++ (void)appendBufferAndShift:(float*)buffer
+              withBufferSize:(int)bufferLength
+             toScrollHistory:(float*)scrollHistory
+       withScrollHistorySize:(int)scrollHistoryLength
+{
+    int    shiftLength    = scrollHistoryLength - bufferLength;
+    size_t floatByteSize  = sizeof(float);
+    size_t shiftByteSize  = shiftLength  * floatByteSize;
+    size_t bufferByteSize = bufferLength * floatByteSize;
+    memmove(&scrollHistory[0],
+            &scrollHistory[bufferLength],
+            shiftByteSize);
+    memmove(&scrollHistory[shiftLength],
+            &buffer[0],
+            bufferByteSize);
+}
+
+//------------------------------------------------------------------------------
+
++ (void)   appendValue:(float)value
+       toScrollHistory:(float*)scrollHistory
+ withScrollHistorySize:(int)scrollHistoryLength
+{
+    float val[1]; val[0] = value;
+    [self appendBufferAndShift:val
+                withBufferSize:1
+               toScrollHistory:scrollHistory
+         withScrollHistorySize:scrollHistoryLength];
+}
+
+//------------------------------------------------------------------------------
+
++(float)MAP:(float)value
+    leftMin:(float)leftMin
+    leftMax:(float)leftMax
+   rightMin:(float)rightMin
+   rightMax:(float)rightMax
+{
+    float leftSpan    = leftMax  - leftMin;
+    float rightSpan   = rightMax - rightMin;
+    float valueScaled = ( value  - leftMin ) / leftSpan;
+    return rightMin + (valueScaled * rightSpan);
+}
+
+//------------------------------------------------------------------------------
+
++(float)RMS:(float *)buffer
+     length:(int)bufferSize
+{
+    float sum = 0.0;
+    for(int i = 0; i < bufferSize; i++)
+        sum += buffer[i] * buffer[i];
+    return sqrtf( sum / bufferSize );
+}
+
+//------------------------------------------------------------------------------
+
++(float)SGN:(float)value
+{
+    return value < 0 ? -1.0f : ( value > 0 ? 1.0f : 0.0f );
+}
+
+//------------------------------------------------------------------------------
 #pragma mark - OSStatus Utility
-+(void)checkResult:(OSStatus)result
-         operation:(const char *)operation
+//------------------------------------------------------------------------------
+
++ (void)checkResult:(OSStatus)result operation:(const char *)operation
 {
     if (result == noErr) return;
     char errorString[20];
     // see if it appears to be a 4-char-code
     *(UInt32 *)(errorString + 1) = CFSwapInt32HostToBig(result);
-    if (isprint(errorString[1]) && isprint(errorString[2]) && isprint(errorString[3]) && isprint(errorString[4])) {
+    if (isprint(errorString[1]) && isprint(errorString[2]) && isprint(errorString[3]) && isprint(errorString[4]))
+    {
         errorString[0] = errorString[5] = '\'';
         errorString[6] = '\0';
     } else
@@ -341,6 +469,8 @@ BOOL __shouldExitOnCheckResultFail = YES;
         exit(-1);
     }
 }
+
+//------------------------------------------------------------------------------
 
 + (NSString *)stringFromUInt32Code:(UInt32)code
 {
@@ -358,109 +488,71 @@ BOOL __shouldExitOnCheckResultFail = YES;
     return [NSString stringWithUTF8String:errorString];
 }
 
-#pragma mark - Math Utility
-+(void)appendBufferAndShift:(float*)buffer
-             withBufferSize:(int)bufferLength
-            toScrollHistory:(float*)scrollHistory
-      withScrollHistorySize:(int)scrollHistoryLength {
-//    NSAssert(scrollHistoryLength>=bufferLength,@"Scroll history array length must be greater buffer length");
-//    NSAssert(scrollHistoryLength>0,@"Scroll history array length must be greater than 0");
-//    NSAssert(bufferLength>0,@"Buffer array length must be greater than 0");
-    int    shiftLength    = scrollHistoryLength - bufferLength;
-    size_t floatByteSize  = sizeof(float);
-    size_t shiftByteSize  = shiftLength  * floatByteSize;
-    size_t bufferByteSize = bufferLength * floatByteSize;
-    memmove(&scrollHistory[0],
-            &scrollHistory[bufferLength],
-            shiftByteSize);
-    memmove(&scrollHistory[shiftLength],
-            &buffer[0],
-            bufferByteSize);
-}
-
-+(void)    appendValue:(float)value
-       toScrollHistory:(float*)scrollHistory
- withScrollHistorySize:(int)scrollHistoryLength {
-    float val[1]; val[0] = value;
-    [self appendBufferAndShift:val
-                withBufferSize:1
-               toScrollHistory:scrollHistory
-         withScrollHistorySize:scrollHistoryLength];
-}
-
-+(float)MAP:(float)value
-    leftMin:(float)leftMin
-    leftMax:(float)leftMax
-   rightMin:(float)rightMin
-   rightMax:(float)rightMax {
-    float leftSpan    = leftMax  - leftMin;
-    float rightSpan   = rightMax - rightMin;
-    float valueScaled = ( value  - leftMin ) / leftSpan;
-    return rightMin + (valueScaled * rightSpan);
-}
-
-+(float)RMS:(float *)buffer
-     length:(int)bufferSize {
-    float sum = 0.0;
-    for(int i = 0; i < bufferSize; i++)
-        sum += buffer[i] * buffer[i];
-    return sqrtf( sum / bufferSize );
-}
-
-+(float)SGN:(float)value
-{
-    return value < 0 ? -1.0f : ( value > 0 ? 1.0f : 0.0f );
-}
-
+//------------------------------------------------------------------------------
 #pragma mark - Plot Utility
-+(void)updateScrollHistory:(float **)scrollHistory
-                withLength:(int)scrollHistoryLength
-                   atIndex:(int*)index
-                withBuffer:(float *)buffer
-            withBufferSize:(int)bufferSize
-      isResolutionChanging:(BOOL*)isChanging {
-    
+//------------------------------------------------------------------------------
+
++ (void)updateScrollHistory:(float **)scrollHistory
+                 withLength:(int)scrollHistoryLength
+                    atIndex:(int *)index
+                 withBuffer:(float *)buffer
+             withBufferSize:(int)bufferSize
+       isResolutionChanging:(BOOL *)isChanging
+{
     //
     size_t floatByteSize = sizeof(float);
-    
-    //
-    if( *scrollHistory == NULL ){
+    if(*scrollHistory == NULL)
+    {
         // Create the history buffer
-        *scrollHistory = (float*)calloc(8192,floatByteSize);
+        *scrollHistory = (float *)calloc(8192, floatByteSize);
     }
     
     //
-    if( !*isChanging ){
+    if(!*isChanging)
+    {
         float rms = [EZAudioUtilities RMS:buffer length:bufferSize];
-        if( *index < scrollHistoryLength ){
+        if(*index < scrollHistoryLength)
+        {
             float *hist = *scrollHistory;
             hist[*index] = rms;
             (*index)++;
         }
-        else {
+        else
+        {
             [EZAudioUtilities appendValue:rms
                           toScrollHistory:*scrollHistory
                     withScrollHistorySize:scrollHistoryLength];
         }
     }
-    
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - TPCircularBuffer Utility
-+(void)circularBuffer:(TPCircularBuffer *)circularBuffer withSize:(int)size {
-    TPCircularBufferInit(circularBuffer,size);
-}
+//------------------------------------------------------------------------------
 
-+(void)appendDataToCircularBuffer:(TPCircularBuffer*)circularBuffer
-              fromAudioBufferList:(AudioBufferList*)audioBufferList {
++ (void)appendDataToCircularBuffer:(TPCircularBuffer *)circularBuffer
+               fromAudioBufferList:(AudioBufferList *)audioBufferList
+{
     TPCircularBufferProduceBytes(circularBuffer,
                                  audioBufferList->mBuffers[0].mData,
                                  audioBufferList->mBuffers[0].mDataByteSize);
 }
 
-+(void)freeCircularBuffer:(TPCircularBuffer *)circularBuffer {
+//------------------------------------------------------------------------------
+
++ (void)circularBuffer:(TPCircularBuffer *)circularBuffer withSize:(int)size
+{
+    TPCircularBufferInit(circularBuffer, size);
+}
+
+//------------------------------------------------------------------------------
+
++ (void)freeCircularBuffer:(TPCircularBuffer *)circularBuffer
+{
     TPCircularBufferClear(circularBuffer);
     TPCircularBufferCleanup(circularBuffer);
 }
+
+//------------------------------------------------------------------------------
 
 @end
