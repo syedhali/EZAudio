@@ -27,6 +27,7 @@
 
 #import "EZAudioPlotGLKViewController.h"
 #import "EZAudioUtilities.h"
+#import "EZAudioPlot.h"
 
 @interface EZAudioPlotGLKViewController () {
   

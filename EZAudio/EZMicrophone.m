@@ -123,7 +123,7 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
     if(self)
     {
         self.info = (EZMicrophoneInfo *)malloc(sizeof(EZMicrophoneInfo));
-        memset(&self.info->streamFormat, 0, sizeof(AudioStreamBasicDescription));
+        memset(self.info, 0, sizeof(EZMicrophoneInfo));
         [self setup];
     }
     return self;
@@ -137,7 +137,7 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
     if(self)
     {
         self.info = (EZMicrophoneInfo *)malloc(sizeof(EZMicrophoneInfo));
-        memset(&self.info->streamFormat, 0, sizeof(AudioStreamBasicDescription));
+        memset(self.info, 0, sizeof(EZMicrophoneInfo));
         _delegate = delegate;
         [self setup];
     }
@@ -153,6 +153,7 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
     if(self)
     {
         self.info = (EZMicrophoneInfo *)malloc(sizeof(EZMicrophoneInfo));
+        memset(self.info, 0, sizeof(EZMicrophoneInfo));
         self.info->streamFormat = audioStreamBasicDescription;
         _delegate = delegate;
         [self setup];

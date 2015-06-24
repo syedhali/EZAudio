@@ -52,7 +52,7 @@ OSStatus EZAudioFloatConverterCallback(AudioConverterRef             inAudioConv
 //------------------------------------------------------------------------------
 
 @interface EZAudioFloatConverter ()
-@property (nonatomic, assign) EZAudioFloatConverterInfo info;
+@property (nonatomic, assign) EZAudioFloatConverterInfo *info;
 @end
 
 //------------------------------------------------------------------------------
@@ -76,8 +76,10 @@ OSStatus EZAudioFloatConverterCallback(AudioConverterRef             inAudioConv
 
 - (void)dealloc
 {
-    free(self.info.packetDescriptions);
-    [EZAudioUtilities freeBufferList:self.info.floatAudioBufferList];
+    AudioConverterDispose(self.info->converterRef);
+    [EZAudioUtilities freeBufferList:self.info->floatAudioBufferList];
+    free(self.info->packetDescriptions);
+    free(self.info);
 }
 
 //------------------------------------------------------------------------------
@@ -89,56 +91,9 @@ OSStatus EZAudioFloatConverterCallback(AudioConverterRef             inAudioConv
     self = [super init];
     if (self)
     {
-        EZAudioFloatConverterInfo info;
-        memset(&info, 0, sizeof(info));
-        info.inputFormat = inputFormat;
-        info.outputFormat = [EZAudioUtilities floatFormatWithNumberOfChannels:inputFormat.mChannelsPerFrame
-                                                                   sampleRate:inputFormat.mSampleRate];
-        
-        // get max packets per buffer so you can allocate a proper AudioBufferList
-        UInt32 packetsPerBuffer = 0;
-        UInt32 outputBufferSize = EZAudioFloatConverterDefaultOutputBufferSize;
-        UInt32 sizePerPacket = info.inputFormat.mBytesPerPacket;
-        BOOL isVBR = sizePerPacket == 0;
-        
-        // VBR
-        if (isVBR)
-        {
-            // determine the max output buffer size
-            UInt32 maxOutputPacketSize;
-            UInt32 propSize = sizeof(maxOutputPacketSize);
-            OSStatus result = AudioConverterGetProperty(info.converterRef,
-                                                        kAudioConverterPropertyMaximumOutputPacketSize,
-                                                        &propSize,
-                                                        &maxOutputPacketSize);
-            if (result != noErr)
-            {
-                maxOutputPacketSize = EZAudioFloatConverterDefaultPacketSize;
-            }
-            
-            // set the output buffer size to at least the max output size
-            if (maxOutputPacketSize > outputBufferSize)
-            {
-                outputBufferSize = maxOutputPacketSize;
-            }
-            packetsPerBuffer = outputBufferSize / maxOutputPacketSize;
-            
-            // allocate memory for the packet descriptions
-            info.packetDescriptions = (AudioStreamPacketDescription *)malloc(sizeof(AudioStreamPacketDescription) * packetsPerBuffer);
-        }
-        else
-        {
-            packetsPerBuffer = outputBufferSize / sizePerPacket;
-        }
-        info.packetsPerBuffer = packetsPerBuffer;
-        
-        // allocate the AudioBufferList to hold the float values
-        BOOL isInterleaved = [EZAudioUtilities isInterleaved:info.outputFormat];
-        info.floatAudioBufferList = [EZAudioUtilities audioBufferListWithNumberOfFrames:packetsPerBuffer
-                                                                       numberOfChannels:info.outputFormat.mChannelsPerFrame
-                                                                            interleaved:isInterleaved];
-
-        self.info = info;
+        self.info = (EZAudioFloatConverterInfo *)malloc(sizeof(EZAudioFloatConverterInfo));
+        memset(self.info, 0, sizeof(EZAudioFloatConverterInfo));
+        self.info->inputFormat = inputFormat;
         [self setup];
     }
     return self;
@@ -150,11 +105,58 @@ OSStatus EZAudioFloatConverterCallback(AudioConverterRef             inAudioConv
 
 - (void)setup
 {
+    // create output format
+    self.info->outputFormat = [EZAudioUtilities floatFormatWithNumberOfChannels:self.info->inputFormat.mChannelsPerFrame
+                                                                     sampleRate:self.info->inputFormat.mSampleRate];
+    
     // create a new instance of the audio converter
-    [EZAudioUtilities checkResult:AudioConverterNew(&_info.inputFormat,
-                                                    &_info.outputFormat,
-                                                    &_info.converterRef)
+    [EZAudioUtilities checkResult:AudioConverterNew(&self.info->inputFormat,
+                                                    &self.info->outputFormat,
+                                                    &self.info->converterRef)
                         operation:"Failed to create new audio converter"];
+    
+    // get max packets per buffer so you can allocate a proper AudioBufferList
+    UInt32 packetsPerBuffer = 0;
+    UInt32 outputBufferSize = EZAudioFloatConverterDefaultOutputBufferSize;
+    UInt32 sizePerPacket = self.info->inputFormat.mBytesPerPacket;
+    BOOL isVBR = sizePerPacket == 0;
+    
+    // VBR
+    if (isVBR)
+    {
+        // determine the max output buffer size
+        UInt32 maxOutputPacketSize;
+        UInt32 propSize = sizeof(maxOutputPacketSize);
+        OSStatus result = AudioConverterGetProperty(self.info->converterRef,
+                                                    kAudioConverterPropertyMaximumOutputPacketSize,
+                                                    &propSize,
+                                                    &maxOutputPacketSize);
+        if (result != noErr)
+        {
+            maxOutputPacketSize = EZAudioFloatConverterDefaultPacketSize;
+        }
+        
+        // set the output buffer size to at least the max output size
+        if (maxOutputPacketSize > outputBufferSize)
+        {
+            outputBufferSize = maxOutputPacketSize;
+        }
+        packetsPerBuffer = outputBufferSize / maxOutputPacketSize;
+        
+        // allocate memory for the packet descriptions
+        self.info->packetDescriptions = (AudioStreamPacketDescription *)malloc(sizeof(AudioStreamPacketDescription) * packetsPerBuffer);
+    }
+    else
+    {
+        packetsPerBuffer = outputBufferSize / sizePerPacket;
+    }
+    self.info->packetsPerBuffer = packetsPerBuffer;
+    
+    // allocate the AudioBufferList to hold the float values
+    BOOL isInterleaved = [EZAudioUtilities isInterleaved:self.info->outputFormat];
+    self.info->floatAudioBufferList = [EZAudioUtilities audioBufferListWithNumberOfFrames:packetsPerBuffer
+                                                                         numberOfChannels:self.info->outputFormat.mChannelsPerFrame
+                                                                              interleaved:isInterleaved];
 }
 
 //------------------------------------------------------------------------------
@@ -168,7 +170,7 @@ OSStatus EZAudioFloatConverterCallback(AudioConverterRef             inAudioConv
     [self convertDataFromAudioBufferList:audioBufferList
                       withNumberOfFrames:frames
                           toFloatBuffers:buffers
-                      packetDescriptions:self.info.packetDescriptions];
+                      packetDescriptions:self.info->packetDescriptions];
 }
 
 //------------------------------------------------------------------------------
@@ -178,25 +180,24 @@ OSStatus EZAudioFloatConverterCallback(AudioConverterRef             inAudioConv
                         toFloatBuffers:(float **)buffers
                     packetDescriptions:(AudioStreamPacketDescription *)packetDescriptions
 {
-    EZAudioFloatConverterInfo info = self.info;
     if (frames == 0)
     {
         
     }
     else
     {
-        [EZAudioUtilities checkResult:AudioConverterFillComplexBuffer(info.converterRef,
+        [EZAudioUtilities checkResult:AudioConverterFillComplexBuffer(self.info->converterRef,
                                                                       EZAudioFloatConverterCallback,
                                                                       audioBufferList,
                                                                       &frames,
-                                                                      info.floatAudioBufferList,
-                                                                      packetDescriptions ? packetDescriptions : info.packetDescriptions)
+                                                                      self.info->floatAudioBufferList,
+                                                                      packetDescriptions ? packetDescriptions : self.info->packetDescriptions)
                             operation:"Failed to fill complex buffer in float converter"];
-        for (int i = 0; i < info.floatAudioBufferList->mNumberBuffers; i++)
+        for (int i = 0; i < self.info->floatAudioBufferList->mNumberBuffers; i++)
         {
             memcpy(buffers[i],
-                   info.floatAudioBufferList->mBuffers[i].mData,
-                   info.floatAudioBufferList->mBuffers[i].mDataByteSize);
+                   self.info->floatAudioBufferList->mBuffers[i].mData,
+                   self.info->floatAudioBufferList->mBuffers[i].mDataByteSize);
         }
     }
 }
