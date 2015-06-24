@@ -51,6 +51,14 @@
 + (void)setShouldExitOnCheckResultFail:(BOOL)shouldExitOnCheckResultFail;
 
 //------------------------------------------------------------------------------
+
+/**
+ Provides a flag indicating whether or not the program will exit if a `checkResult:operation:` fails.
+ @return A BOOL indicating whether or not the program will exit if a `checkResult:operation:` fails.
+ */
++ (BOOL)shouldExitOnCheckResultFail;
+
+//------------------------------------------------------------------------------
 #pragma mark - AudioBufferList Utility
 //------------------------------------------------------------------------------
 

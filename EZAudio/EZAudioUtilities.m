@@ -39,6 +39,13 @@ BOOL __shouldExitOnCheckResultFail = YES;
 }
 
 //------------------------------------------------------------------------------
+
++ (BOOL)shouldExitOnCheckResultFail
+{
+    return __shouldExitOnCheckResultFail;
+}
+
+//------------------------------------------------------------------------------
 #pragma mark - AudioBufferList Utility
 //------------------------------------------------------------------------------
 

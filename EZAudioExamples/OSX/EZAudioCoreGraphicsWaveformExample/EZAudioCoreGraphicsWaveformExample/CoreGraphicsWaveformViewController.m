@@ -233,7 +233,7 @@ withNumberOfChannels:(UInt32)numberOfChannels
         // between different microphone inputs
         //
         [self reloadMicrophoneInputPopUpButtonMenu];
-        
+
         //
         // Set up the microphone input popup button's items to select
         // between different microphone input channels
