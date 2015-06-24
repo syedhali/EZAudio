@@ -20,7 +20,10 @@
 #pragma mark - Debugging
 //------------------------------------------------------------------------------
 
-// TODO: document
+/**
+ Globally sets whether or not the program should exit if a `checkResult:operation:` operation fails. Currently the behavior on EZAudio is to quit if a `checkResult:operation:` fails, but this is not desirable in any production environment. Internally there are a lot of `checkResult:operation:` operations used on all the core classes. This should only ever be set to NO in production environments since a `checkResult:operation:` failing means something breaking has likely happened.
+ @param shouldExitOnCheckResultFail A BOOL indicating whether or not the running program should exist due to a `checkResult:operation:` fail.
+ */
 + (void)setShouldExitOnCheckResultFail:(BOOL)shouldExitOnCheckResultFail;
 
 #pragma mark - AudioBufferList Utility
