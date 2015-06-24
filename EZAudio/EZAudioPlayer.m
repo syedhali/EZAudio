@@ -24,6 +24,7 @@
 //  THE SOFTWARE.
 
 #import "EZAudioPlayer.h"
+#import "EZAudioUtilities.h"
 
 #if TARGET_OS_IPHONE
 #elif TARGET_OS_MAC
@@ -124,11 +125,11 @@
   AVAudioSession *audioSession = [AVAudioSession sharedInstance];
   NSError *err = NULL;
   [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&err];
-  if( err ){
+  if (err){
     NSLog(@"There was an error creating the audio session");
   }
   [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:NULL];
-  if( err ){
+  if (err){
     NSLog(@"There was an error sending the audio to the speakers");
   }
 #elif TARGET_OS_MAC
@@ -143,7 +144,7 @@
 
 -(float)currentTime {
   NSAssert(_audioFile,@"No audio file to perform the seek on, check that EZAudioFile is not nil");
-  return [EZAudio MAP:self.audioFile.frameIndex
+  return [EZAudioUtilities MAP:self.audioFile.frameIndex
               leftMin:0
               leftMax:self.audioFile.totalFrames
              rightMin:0
@@ -185,7 +186,7 @@
 
 #pragma mark - Setters
 -(void)setAudioFile:(EZAudioFile *)audioFile {
-  if( _audioFile ){
+  if (_audioFile){
     _audioFile.audioFileDelegate = nil;
   }
   _eof       = NO;
@@ -202,13 +203,13 @@
 #pragma mark - Methods
 -(void)play {
   NSAssert(_audioFile,@"No audio file to perform the seek on, check that EZAudioFile is not nil");
-  if( _audioFile ){
+  if (_audioFile){
     [_output startPlayback];
-    if( self.frameIndex != self.totalFrames ){
+    if (self.frameIndex != self.totalFrames){
       _eof = NO;
     }
-    if( self.audioPlayerDelegate ){
-      if( [self.audioPlayerDelegate respondsToSelector:@selector(audioPlayer:didResumePlaybackOnAudioFile:)] ){
+    if (self.audioPlayerDelegate){
+      if ([self.audioPlayerDelegate respondsToSelector:@selector(audioPlayer:didResumePlaybackOnAudioFile:)]){
         // Notify the delegate we're starting playback
         [self.audioPlayerDelegate audioPlayer:self didResumePlaybackOnAudioFile:_audioFile];
       }
@@ -218,10 +219,10 @@
 
 -(void)pause {
   NSAssert(self.audioFile,@"No audio file to perform the seek on, check that EZAudioFile is not nil");
-  if( _audioFile ){
+  if (_audioFile){
     [_output stopPlayback];
-    if( self.audioPlayerDelegate ){
-      if( [self.audioPlayerDelegate respondsToSelector:@selector(audioPlayer:didPausePlaybackOnAudioFile:)] ){
+    if (self.audioPlayerDelegate){
+      if ([self.audioPlayerDelegate respondsToSelector:@selector(audioPlayer:didPausePlaybackOnAudioFile:)]){
         // Notify the delegate we're pausing playback
         [self.audioPlayerDelegate audioPlayer:self didPausePlaybackOnAudioFile:_audioFile];
       }
@@ -231,17 +232,17 @@
 
 -(void)seekToFrame:(SInt64)frame {
   NSAssert(_audioFile,@"No audio file to perform the seek on, check that EZAudioFile is not nil");
-  if( _audioFile ){
+  if (_audioFile){
     [_audioFile seekToFrame:frame];
   }
-  if( self.frameIndex != self.totalFrames ){
+  if (self.frameIndex != self.totalFrames){
     _eof = NO;
   }
 }
 
 -(void)stop {
   NSAssert(_audioFile,@"No audio file to perform the seek on, check that EZAudioFile is not nil");
-  if( _audioFile ){
+  if (_audioFile){
     [_output stopPlayback];
     [_audioFile seekToFrame:0];
     _eof = NO;
@@ -253,8 +254,8 @@
        readAudio:(float **)buffer
   withBufferSize:(UInt32)bufferSize
 withNumberOfChannels:(UInt32)numberOfChannels {
-  if( self.audioPlayerDelegate ){
-    if( [self.audioPlayerDelegate respondsToSelector:@selector(audioPlayer:readAudio:withBufferSize:withNumberOfChannels:inAudioFile:)] ){
+  if (self.audioPlayerDelegate){
+    if ([self.audioPlayerDelegate respondsToSelector:@selector(audioPlayer:readAudio:withBufferSize:withNumberOfChannels:inAudioFile:)]){
       [self.audioPlayerDelegate audioPlayer:self
                                   readAudio:buffer
                              withBufferSize:bufferSize
@@ -265,8 +266,8 @@ withNumberOfChannels:(UInt32)numberOfChannels {
 }
 
 -(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition {
-  if( self.audioPlayerDelegate ){
-    if( [self.audioPlayerDelegate respondsToSelector:@selector(audioPlayer:updatedPosition:inAudioFile:)] ){
+  if (self.audioPlayerDelegate){
+    if ([self.audioPlayerDelegate respondsToSelector:@selector(audioPlayer:updatedPosition:inAudioFile:)]){
       [self.audioPlayerDelegate audioPlayer:self
                             updatedPosition:framePosition
                                 inAudioFile:audioFile];
@@ -279,14 +280,14 @@ withNumberOfChannels:(UInt32)numberOfChannels {
  shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
         withNumberOfFrames:(UInt32)frames
 {
-    if( self.audioFile )
+    if (self.audioFile)
     {
         UInt32 bufferSize;
         [self.audioFile readFrames:frames
                    audioBufferList:audioBufferList
                         bufferSize:&bufferSize
                                eof:&_eof];
-        if( _eof && self.shouldLoop )
+        if (_eof && self.shouldLoop)
         {
             [self seekToFrame:0];
         }

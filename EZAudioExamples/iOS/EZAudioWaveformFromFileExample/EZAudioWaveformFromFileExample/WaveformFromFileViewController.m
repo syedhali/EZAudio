@@ -19,6 +19,12 @@
 @synthesize eof = _eof;
 @synthesize filePathLabel = _filePathLabel;
 
+#pragma mark - Status Bar Style
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 #pragma mark - Customize the Audio Plot
 -(void)viewDidLoad {
   

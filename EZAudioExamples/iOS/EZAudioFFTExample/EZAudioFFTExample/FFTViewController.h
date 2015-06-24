@@ -44,12 +44,12 @@
 /**
  EZAudioPlot for frequency plot
  */
-@property (nonatomic,weak) IBOutlet EZAudioPlot *audioPlotFreq;
+@property (nonatomic,weak) IBOutlet EZAudioPlotGL *audioPlotFreq;
 
 /**
  EZAudioPlot for time plot
  */
-@property (nonatomic,weak) IBOutlet EZAudioPlotGL *audioPlotTime;
+@property (nonatomic,weak) IBOutlet EZAudioPlot *audioPlotTime;
 
 /**
  Microphone

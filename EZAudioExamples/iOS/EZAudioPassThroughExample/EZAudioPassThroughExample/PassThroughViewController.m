@@ -34,39 +34,66 @@
 
 @implementation PassThroughViewController
 
+#pragma mark - Status Bar Style
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 #pragma mark - Customize the Audio Plot
 - (void)viewDidLoad
 {
-  [super viewDidLoad];
+    [super viewDidLoad];
+
+    //
+    // Setup the AVAudioSession. EZMicrophone will not work properly on iOS
+    // if you don't do this!
+    //
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error;
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session category: %@", error.localizedDescription);
+    }
+    [session setActive:YES error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session active: %@", error.localizedDescription);
+    }
+    
+    //
+    // Customizing the audio plot's look
+    //
+    self.audioPlot.backgroundColor = [UIColor colorWithRed: 0.569 green: 0.82 blue: 0.478 alpha: 1];
+    self.audioPlot.color = [UIColor colorWithRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
+    self.audioPlot.plotType = EZPlotTypeBuffer;
+
+    //
+    // Start the microphone
+    //
+    [EZMicrophone sharedMicrophone].delegate = self;
+    [[EZMicrophone sharedMicrophone] startFetchingAudio];
+    self.microphoneTextLabel.text = @"Microphone On";
   
-  /*
-   Customizing the audio plot's look
-   */
-  // Background color
-  self.audioPlot.backgroundColor = [UIColor colorWithRed: 0.569 green: 0.82 blue: 0.478 alpha: 1];
-  // Waveform color
-  self.audioPlot.color           = [UIColor colorWithRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
-  // Plot type
-  self.audioPlot.plotType        = EZPlotTypeBuffer;
-  
-  /**
-   Initialize the circular buffer
-   */
-  [EZAudio circularBuffer:&_circularBuffer
-                 withSize:1024];
-  
-  /*
-   Start the microphone
-   */
-  [EZMicrophone sharedMicrophone].microphoneDelegate = self;
-  [[EZMicrophone sharedMicrophone] startFetchingAudio];
-  self.microphoneTextLabel.text = @"Microphone On";
-  
-  /**
-   Start the output
-   */
-  [EZOutput sharedOutput].outputDataSource = self;
-  [[EZOutput sharedOutput] startPlayback];
+    //
+    // Use the microphone as the EZOutputDataSource
+    //
+    [[EZMicrophone sharedMicrophone] setOutput:[EZOutput sharedOutput]];
+    
+    //
+    // Make sure we override the output to the speaker
+    //
+    [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:NULL];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session active: %@", error.localizedDescription);
+    }
+    
+    //
+    // Start the EZOutput
+    //
+    [[EZOutput sharedOutput] startPlayback];
   
 }
 
@@ -126,28 +153,6 @@ withNumberOfChannels:(UInt32)numberOfChannels {
   dispatch_async(dispatch_get_main_queue(), ^{
     [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
   });
-}
-
-// Append the AudioBufferList from the microphone callback to a global circular buffer
--(void)microphone:(EZMicrophone *)microphone
-    hasBufferList:(AudioBufferList *)bufferList
-   withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
-  /**
-   Append the audio data to a circular buffer
-   */
-  [EZAudio appendDataToCircularBuffer:&_circularBuffer
-                  fromAudioBufferList:bufferList];
-}
-
-#pragma mark - EZOutputDataSource
--(TPCircularBuffer *)outputShouldUseCircularBuffer:(EZOutput *)output {
-  return [EZMicrophone sharedMicrophone].microphoneOn ? &_circularBuffer : nil;
-}
-
-#pragma mark - Cleanup
--(void)dealloc {
-  TPCircularBufferClear(&_circularBuffer);
 }
 
 @end

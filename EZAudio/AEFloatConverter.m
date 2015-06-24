@@ -27,7 +27,7 @@
 
 #define checkResult(result,operation) (_checkResult((result),(operation),strrchr(__FILE__, '/')+1,__LINE__))
 static inline BOOL _checkResult(OSStatus result, const char *operation, const char* file, int line) {
-    if ( result != noErr ) {
+    if (result != noErr) {
         NSLog(@"%s:%d: %s result %d %08X %4.4s", file, line, operation, (int)result, (int)result, (char*)&result);
         return NO;
     }
@@ -59,7 +59,7 @@ static OSStatus complexInputDataProc(AudioConverterRef             inAudioConver
 @synthesize sourceFormat = _sourceAudioDescription;
 
 -(id)initWithSourceFormat:(AudioStreamBasicDescription)sourceFormat {
-    if ( !(self = [super init]) ) return nil;
+    if (!(self = [super init])) return nil;
 
     _floatAudioDescription.mFormatID          = kAudioFormatLinearPCM;
     _floatAudioDescription.mFormatFlags       = kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked | kAudioFormatFlagIsNonInterleaved;
@@ -72,12 +72,12 @@ static OSStatus complexInputDataProc(AudioConverterRef             inAudioConver
     
     _sourceAudioDescription = sourceFormat;
     
-    if ( memcmp(&sourceFormat, &_floatAudioDescription, sizeof(AudioStreamBasicDescription)) != 0 ) {
+    if (memcmp(&sourceFormat, &_floatAudioDescription, sizeof(AudioStreamBasicDescription)) != 0) {
         checkResult(AudioConverterNew(&sourceFormat, &_floatAudioDescription, &_toFloatConverter), "AudioConverterNew");
         checkResult(AudioConverterNew(&_floatAudioDescription, &sourceFormat, &_fromFloatConverter), "AudioConverterNew");
         _scratchFloatBufferList = (AudioBufferList*)malloc(sizeof(AudioBufferList) + (_floatAudioDescription.mChannelsPerFrame-1)*sizeof(AudioBuffer));
         _scratchFloatBufferList->mNumberBuffers = _floatAudioDescription.mChannelsPerFrame;
-        for ( int i=0; i<_scratchFloatBufferList->mNumberBuffers; i++ ) {
+        for ( int i=0; i<_scratchFloatBufferList->mNumberBuffers; i++) {
             _scratchFloatBufferList->mBuffers[i].mNumberChannels = 1;
         }
     }
@@ -86,23 +86,23 @@ static OSStatus complexInputDataProc(AudioConverterRef             inAudioConver
 }
 
 -(void)dealloc {
-    if ( _toFloatConverter ) AudioConverterDispose(_toFloatConverter);
-    if ( _fromFloatConverter ) AudioConverterDispose(_fromFloatConverter);
-    if ( _scratchFloatBufferList ) free(_scratchFloatBufferList);
+    if (_toFloatConverter) AudioConverterDispose(_toFloatConverter);
+    if (_fromFloatConverter) AudioConverterDispose(_fromFloatConverter);
+    if (_scratchFloatBufferList) free(_scratchFloatBufferList);
 //    [super dealloc];
 }
 
 
 BOOL AEFloatConverterToFloat(AEFloatConverter* THIS, AudioBufferList *sourceBuffer, float * const * targetBuffers, UInt32 frames) {
-    if ( frames == 0 ) return YES;
+    if (frames == 0) return YES;
     
-    if ( THIS->_toFloatConverter ) {
+    if (THIS->_toFloatConverter) {
         UInt32 priorDataByteSize = sourceBuffer->mBuffers[0].mDataByteSize;
-        for ( int i=0; i<sourceBuffer->mNumberBuffers; i++ ) {
+        for ( int i=0; i<sourceBuffer->mNumberBuffers; i++) {
             sourceBuffer->mBuffers[i].mDataByteSize = frames * THIS->_sourceAudioDescription.mBytesPerFrame;
         }
         
-        for ( int i=0; i<THIS->_scratchFloatBufferList->mNumberBuffers; i++ ) {
+        for ( int i=0; i<THIS->_scratchFloatBufferList->mNumberBuffers; i++) {
             THIS->_scratchFloatBufferList->mBuffers[i].mData = targetBuffers[i];
             THIS->_scratchFloatBufferList->mBuffers[i].mDataByteSize = frames * sizeof(float);
         }
@@ -114,16 +114,16 @@ BOOL AEFloatConverterToFloat(AEFloatConverter* THIS, AudioBufferList *sourceBuff
                                                           THIS->_scratchFloatBufferList,
                                                           NULL);
         
-        for ( int i=0; i<sourceBuffer->mNumberBuffers; i++ ) {
+        for ( int i=0; i<sourceBuffer->mNumberBuffers; i++) {
             sourceBuffer->mBuffers[i].mDataByteSize = priorDataByteSize;
         }
         
-        if ( !checkResult(result, "AudioConverterConvertComplexBuffer") ) {
+        if (!checkResult(result, "AudioConverterConvertComplexBuffer")) {
             return NO;
         }
         
     } else {
-        for ( int i=0; i<sourceBuffer->mNumberBuffers; i++ ) {
+        for ( int i=0; i<sourceBuffer->mNumberBuffers; i++) {
             memcpy(targetBuffers[i], sourceBuffer->mBuffers[i].mData, frames * sizeof(float));
         }
     }
@@ -135,23 +135,23 @@ BOOL AEFloatConverterToFloatBufferList(AEFloatConverter* converter, AudioBufferL
     assert(targetBuffer->mNumberBuffers == converter->_floatAudioDescription.mChannelsPerFrame);
     
     float *targetBuffers[targetBuffer->mNumberBuffers];
-    for ( int i=0; i<targetBuffer->mNumberBuffers; i++ ) {
+    for ( int i=0; i<targetBuffer->mNumberBuffers; i++) {
         targetBuffers[i] = (float*)targetBuffer->mBuffers[i].mData;
     }
     return AEFloatConverterToFloat(converter, sourceBuffer, targetBuffers, frames);
 }
 
 BOOL AEFloatConverterFromFloat(AEFloatConverter* THIS, float * const * sourceBuffers, AudioBufferList *targetBuffer, UInt32 frames) {
-    if ( frames == 0 ) return YES;
+    if (frames == 0) return YES;
     
-    if ( THIS->_fromFloatConverter ) {
-        for ( int i=0; i<THIS->_scratchFloatBufferList->mNumberBuffers; i++ ) {
+    if (THIS->_fromFloatConverter) {
+        for ( int i=0; i<THIS->_scratchFloatBufferList->mNumberBuffers; i++) {
             THIS->_scratchFloatBufferList->mBuffers[i].mData = sourceBuffers[i];
             THIS->_scratchFloatBufferList->mBuffers[i].mDataByteSize = frames * sizeof(float);
         }
         
         UInt32 priorDataByteSize = targetBuffer->mBuffers[0].mDataByteSize;
-        for ( int i=0; i<targetBuffer->mNumberBuffers; i++ ) {
+        for ( int i=0; i<targetBuffer->mNumberBuffers; i++) {
             targetBuffer->mBuffers[i].mDataByteSize = frames * THIS->_sourceAudioDescription.mBytesPerFrame;
         }
         
@@ -162,15 +162,15 @@ BOOL AEFloatConverterFromFloat(AEFloatConverter* THIS, float * const * sourceBuf
                                                           targetBuffer,
                                                           NULL);
         
-        for ( int i=0; i<targetBuffer->mNumberBuffers; i++ ) {
+        for ( int i=0; i<targetBuffer->mNumberBuffers; i++) {
             targetBuffer->mBuffers[i].mDataByteSize = priorDataByteSize;
         }
         
-        if ( !checkResult(result, "AudioConverterConvertComplexBuffer") ) {
+        if (!checkResult(result, "AudioConverterConvertComplexBuffer")) {
             return NO;
         }
     } else {
-        for ( int i=0; i<targetBuffer->mNumberBuffers; i++ ) {
+        for ( int i=0; i<targetBuffer->mNumberBuffers; i++) {
             memcpy(targetBuffer->mBuffers[i].mData, sourceBuffers[i], frames * sizeof(float));
         }
     }
@@ -182,7 +182,7 @@ BOOL AEFloatConverterFromFloatBufferList(AEFloatConverter* converter, AudioBuffe
     assert(sourceBuffer->mNumberBuffers == converter->_floatAudioDescription.mChannelsPerFrame);
     
     float *sourceBuffers[sourceBuffer->mNumberBuffers];
-    for ( int i=0; i<sourceBuffer->mNumberBuffers; i++ ) {
+    for ( int i=0; i<sourceBuffer->mNumberBuffers; i++) {
         sourceBuffers[i] = (float*)sourceBuffer->mBuffers[i].mData;
     }
     return AEFloatConverterFromFloat(converter, sourceBuffers, targetBuffer, frames);
@@ -194,7 +194,7 @@ static OSStatus complexInputDataProc(AudioConverterRef             inAudioConver
                                      AudioStreamPacketDescription  **outDataPacketDescription,
                                      void                          *inUserData) {
     struct complexInputDataProc_t *arg = (struct complexInputDataProc_t*)inUserData;
-    if ( !arg->sourceBuffer ) {
+    if (!arg->sourceBuffer) {
         return kNoMoreDataErr;
     }
     

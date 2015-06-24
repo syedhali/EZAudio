@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="d7h-J5-hmC">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+    </dependencies>
+    <scenes>
+        <!--Waveform From File View Controller-->
+        <scene sceneID="FiY-KF-BWE">
+            <objects>
+                <viewController id="d7h-J5-hmC" customClass="WaveformFromFileViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="LeV-Es-7rm"/>
+                        <viewControllerLayoutGuide type="bottom" id="lNq-4k-NPr"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="xKj-lE-fhV">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r5l-PU-Pmd" customClass="EZAudioPlot">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="lNq-4k-NPr" firstAttribute="top" secondItem="r5l-PU-Pmd" secondAttribute="bottom" id="6hF-qR-Lyt"/>
+                            <constraint firstAttribute="trailing" secondItem="r5l-PU-Pmd" secondAttribute="trailing" id="Ss7-Ii-zLz"/>
+                            <constraint firstItem="r5l-PU-Pmd" firstAttribute="leading" secondItem="xKj-lE-fhV" secondAttribute="leading" id="qFr-IR-6ZL"/>
+                            <constraint firstItem="r5l-PU-Pmd" firstAttribute="top" secondItem="xKj-lE-fhV" secondAttribute="top" id="sFZ-aE-7zT"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="audioPlot" destination="r5l-PU-Pmd" id="Rgs-5i-FHj"/>
+                        <outlet property="view" destination="xKj-lE-fhV" id="EYu-k3-OGb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="akp-Xw-TgN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="235" y="405"/>
+        </scene>
+    </scenes>
+</document>

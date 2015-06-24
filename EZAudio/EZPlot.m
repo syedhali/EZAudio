@@ -25,10 +25,6 @@
 
 #import "EZPlot.h"
 
-@interface EZPlot ()
-
-@end
-
 @implementation EZPlot
 
 #pragma mark - Clearing

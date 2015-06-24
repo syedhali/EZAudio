@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="scx-fQ-Cxi">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+    </dependencies>
+    <scenes>
+        <!--Play File View Controller-->
+        <scene sceneID="IY2-cH-c1i">
+            <objects>
+                <viewController id="scx-fQ-Cxi" customClass="PlayFileViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="izT-G0-XMn"/>
+                        <viewControllerLayoutGuide type="bottom" id="taw-H2-la1"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="PED-9r-Xub">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kt3-hw-eFY" customClass="EZAudioPlotGL">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="X0b-lY-wCz">
+                                        <rect key="frame" x="469" y="554" width="113" height="29"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="28" id="fbk-Sv-x4v"/>
+                                            <constraint firstAttribute="width" constant="113" id="wKO-Te-KwI"/>
+                                        </constraints>
+                                        <segments>
+                                            <segment title="Buffer"/>
+                                            <segment title="Rolling"/>
+                                        </segments>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <action selector="changePlotType:" destination="scx-fQ-Cxi" eventType="valueChanged" id="Xg4-nc-gcP"/>
+                                        </connections>
+                                    </segmentedControl>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i5r-ex-ukW">
+                                        <rect key="frame" x="18" y="522" width="564" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="ZjK-w5-X90"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MLt-5E-p8a">
+                                        <rect key="frame" x="2" y="552" width="59" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="MpT-G0-TLO"/>
+                                            <constraint firstAttribute="width" constant="59" id="mxq-4g-Aib"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <state key="normal" title="Play">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="play:" destination="scx-fQ-Cxi" eventType="touchUpInside" id="jDx-hA-MSg"/>
+                                        </connections>
+                                    </button>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Oc2-kU-kAJ">
+                                        <rect key="frame" x="16" y="483" width="568" height="31"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <action selector="seekToFrame:" destination="scx-fQ-Cxi" eventType="valueChanged" id="6ZA-4m-9I2"/>
+                                        </connections>
+                                    </slider>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="MLt-5E-p8a" secondAttribute="bottom" constant="18" id="46R-jP-jcZ"/>
+                                    <constraint firstItem="Oc2-kU-kAJ" firstAttribute="leading" secondItem="kt3-hw-eFY" secondAttribute="leading" constant="18" id="Dp8-Eh-avH"/>
+                                    <constraint firstItem="i5r-ex-ukW" firstAttribute="leading" secondItem="kt3-hw-eFY" secondAttribute="leading" constant="18" id="FaC-cD-IeU"/>
+                                    <constraint firstAttribute="bottom" secondItem="X0b-lY-wCz" secondAttribute="bottom" constant="18" id="Iag-wG-Qnw"/>
+                                    <constraint firstItem="MLt-5E-p8a" firstAttribute="leading" secondItem="kt3-hw-eFY" secondAttribute="leading" constant="2" id="QrQ-cc-2uX"/>
+                                    <constraint firstAttribute="trailing" secondItem="X0b-lY-wCz" secondAttribute="trailing" constant="18" id="c1r-xy-Yfx"/>
+                                    <constraint firstAttribute="trailing" secondItem="i5r-ex-ukW" secondAttribute="trailing" constant="18" id="dg1-88-zag"/>
+                                    <constraint firstItem="MLt-5E-p8a" firstAttribute="top" secondItem="i5r-ex-ukW" secondAttribute="bottom" constant="9" id="dmj-r9-1sQ"/>
+                                    <constraint firstItem="i5r-ex-ukW" firstAttribute="top" secondItem="Oc2-kU-kAJ" secondAttribute="bottom" constant="9" id="fJ8-zg-O02"/>
+                                    <constraint firstAttribute="trailing" secondItem="Oc2-kU-kAJ" secondAttribute="trailing" constant="18" id="h2G-4L-LQN"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="taw-H2-la1" firstAttribute="top" secondItem="kt3-hw-eFY" secondAttribute="bottom" id="1UW-bG-y4g"/>
+                            <constraint firstItem="kt3-hw-eFY" firstAttribute="leading" secondItem="PED-9r-Xub" secondAttribute="leading" id="2Xw-WE-fdr"/>
+                            <constraint firstItem="kt3-hw-eFY" firstAttribute="top" secondItem="PED-9r-Xub" secondAttribute="top" id="6Yc-Bh-dEt"/>
+                            <constraint firstAttribute="trailing" secondItem="kt3-hw-eFY" secondAttribute="trailing" id="XPu-eh-5gF"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="audioPlot" destination="kt3-hw-eFY" id="9mm-d1-vJk"/>
+                        <outlet property="filePathLabel" destination="i5r-ex-ukW" id="GRl-ld-nWi"/>
+                        <outlet property="framePositionSlider" destination="Oc2-kU-kAJ" id="z0M-Q9-JAb"/>
+                        <outlet property="view" destination="PED-9r-Xub" id="Xxb-En-D2X"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="g7v-Xp-r3F" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="455" y="71"/>
+        </scene>
+    </scenes>
+</document>

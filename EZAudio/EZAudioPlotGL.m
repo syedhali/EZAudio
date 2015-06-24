@@ -24,8 +24,8 @@
 //  THE SOFTWARE.
 
 #import "EZAudioPlotGL.h"
-
-#import "EZAudio.h"
+#import "EZAudioUtilities.h"
+#import "EZAudioPlot.h"
 
 #if TARGET_OS_IPHONE
   #import "EZAudioPlotGLKViewController.h"
@@ -210,7 +210,7 @@
     
     
     
-  if( _copiedBuffer == NULL ){
+  if (_copiedBuffer == NULL){
     _copiedBuffer = (float*)malloc(bufferSize*sizeof(float));
   }
   _copiedBufferSize = bufferSize;
@@ -262,7 +262,8 @@
 }
 
 -(void)_setupProfile {
-  NSOpenGLPixelFormatAttribute attrs[] =
+    
+    NSOpenGLPixelFormatAttribute attrs[] =
 	{
 		NSOpenGLPFADoubleBuffer,
         NSOpenGLPFAMultisample,
@@ -273,20 +274,20 @@
 		NSOpenGLProfileVersion3_2Core, 0
 	};
 	
-	NSOpenGLPixelFormat *pf = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
-	
+	NSOpenGLPixelFormat *pf      = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
+    NSOpenGLContext     *context = [[NSOpenGLContext alloc] initWithFormat:pf
+                                                              shareContext:nil];
+    
 	if (!pf)
 	{
 		NSLog(@"No OpenGL pixel format");
 	}
   
-    NSOpenGLContext* context = [[NSOpenGLContext alloc] initWithFormat:pf shareContext:nil];
-  
-  // Debug only
-  CGLEnable([context CGLContextObj], kCGLCECrashOnRemovedFunctions);
-	
-  self.pixelFormat   = pf;
-  self.openGLContext = context;
+    // Debug only
+    CGLEnable([context CGLContextObj], kCGLCECrashOnRemovedFunctions);
+    
+    self.pixelFormat = pf;
+    self.openGLContext = context;
 }
 
 -(void)_setupView {
@@ -296,30 +297,30 @@
 
 #pragma mark - Prepare
 -(void)prepareOpenGL {
-  [super prepareOpenGL];
-  
-  GLint swapInt = 1;
-  [self.openGLContext setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
-  
-  ////////////////////////////////////////////////////////////////////////////
-  //                          Setup VABs and VBOs                           //
-  ////////////////////////////////////////////////////////////////////////////
-  // Buffer
-  glGenVertexArrays(1,&_bufferPlotVAB);
-  glBindVertexArray(_bufferPlotVAB);
-  glGenBuffers(1,&_bufferPlotVBO);
-  glBindBuffer(GL_ARRAY_BUFFER,_bufferPlotVBO);
-  
-  // Rolling
-  glGenVertexArrays(1,&_rollingPlotVAB);
-  glBindVertexArray(_rollingPlotVAB);
-  glGenBuffers(1,&_rollingPlotVBO);
-  glBindBuffer(GL_ARRAY_BUFFER,_rollingPlotVBO);
-  
-  if( self.shouldFill ){
+    [super prepareOpenGL];
+
+    GLint swapInt = 1;
+    [self.openGLContext setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                          Setup VABs and VBOs                           //
+    ////////////////////////////////////////////////////////////////////////////
+    // Buffer
+    glGenVertexArrays(1,&_bufferPlotVAB);
+    glBindVertexArray(_bufferPlotVAB);
+    glGenBuffers(1,&_bufferPlotVBO);
+    glBindBuffer(GL_ARRAY_BUFFER,_bufferPlotVBO);
+
+    // Rolling
+    glGenVertexArrays(1,&_rollingPlotVAB);
     glBindVertexArray(_rollingPlotVAB);
+    glGenBuffers(1,&_rollingPlotVBO);
     glBindBuffer(GL_ARRAY_BUFFER,_rollingPlotVBO);
-  }
+
+    if (self.shouldFill){
+        glBindVertexArray(_rollingPlotVAB);
+        glBindBuffer(GL_ARRAY_BUFFER,_rollingPlotVBO);
+    }
   
     // Enable anti-aliasing
     glEnable(GL_MULTISAMPLE);
@@ -327,14 +328,14 @@
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glClearColor(0, 0, 0, 0);
     self.layer = nil;
+    self.wantsBestResolutionOpenGLSurface = YES;
     
-  // Set the background color
-  [self _refreshWithBackgroundColor:self.backgroundColor];
-  [self _refreshWithColor:self.color];
-  
-  // Setup the display link (rendering loop)
-  [self _setupDisplayLink];
-  
+    // Set the background color
+    [self _refreshWithBackgroundColor:self.backgroundColor];
+    [self _refreshWithColor:self.color];
+
+    // Setup the display link (rendering loop)
+    [self _setupDisplayLink];
 }
 
 -(void)_setupDisplayLink {
@@ -403,9 +404,9 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   
   // If starting with a VBO of half of our max size make sure we initialize it to anticipate
   // a filled graph (which needs 2 * bufferSize) to allocate its resources properly
-  if( !_hasBufferPlotData && _drawingType == EZAudioPlotGLDrawTypeLineStrip ){
+  if (!_hasBufferPlotData && _drawingType == EZAudioPlotGLDrawTypeLineStrip){
     EZAudioPlotGLPoint maxGraph[2*bufferSize];
-    glBufferData(GL_ARRAY_BUFFER, sizeof(maxGraph), maxGraph, GL_STREAM_DRAW );
+    glBufferData(GL_ARRAY_BUFFER, sizeof(maxGraph), maxGraph, GL_STREAM_DRAW);
     _hasBufferPlotData = YES;
   }
   
@@ -425,7 +426,7 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
                    withGain:self.gain];
   
   // Update the drawing
-  if( !_hasBufferPlotData ){
+  if (!_hasBufferPlotData){
     glBufferData(GL_ARRAY_BUFFER, sizeof(graph) , graph, GL_STREAM_DRAW);
     _hasBufferPlotData = YES;
     
@@ -452,9 +453,9 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   
   // If starting with a VBO of half of our max size make sure we initialize it to anticipate
   // a filled graph (which needs 2 * bufferSize) to allocate its resources properly
-  if( !_hasRollingPlotData ){
+  if (!_hasRollingPlotData){
     EZAudioPlotGLPoint maxGraph[2*kEZAudioPlotMaxHistoryBufferLength];
-    glBufferData(GL_ARRAY_BUFFER, sizeof(maxGraph), maxGraph, GL_STREAM_DRAW );
+    glBufferData(GL_ARRAY_BUFFER, sizeof(maxGraph), maxGraph, GL_STREAM_DRAW);
     _hasRollingPlotData = YES;
   }
   
@@ -468,7 +469,7 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   
   
   // Update the scroll history datasource
-  [EZAudio updateScrollHistory:&_scrollHistory
+  [EZAudioUtilities updateScrollHistory:&_scrollHistory
                     withLength:_scrollHistoryLength
                        atIndex:&_scrollHistoryIndex
                     withBuffer:buffer
@@ -484,7 +485,7 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
                    withGain:self.gain];
   
   // Update the drawing
-  if( !_hasRollingPlotData ){
+  if (!_hasRollingPlotData){
     glBufferData(GL_ARRAY_BUFFER, sizeof(graph), graph, GL_STREAM_DRAW);
     _hasRollingPlotData = YES;
   }
@@ -507,9 +508,9 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
 	CGLLockContext([[self openGLContext] CGLContextObj]);
   
   // Draw frame
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   
-  if( _hasBufferPlotData || _hasRollingPlotData ){  
+  if (_hasBufferPlotData || _hasRollingPlotData){  
     // Plot either a buffer plot or a rolling plot
     switch(_plotType) {
       case EZPlotTypeBuffer:
@@ -545,7 +546,7 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   glDrawArrays(_drawingType,0,_bufferPlotGraphSize);
   
   // Mirrored
-  if( self.shouldMirror ){
+  if (self.shouldMirror){
     [self.baseEffect prepareToDraw];
     self.baseEffect.transform.modelviewMatrix = GLKMatrix4MakeXRotation(M_PI);
     
@@ -575,7 +576,7 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   glDrawArrays(_drawingType, 0,_rollingPlotGraphSize);
   
   // Mirrored
-  if( self.shouldMirror ){
+  if (self.shouldMirror){
     [self.baseEffect prepareToDraw];
     self.baseEffect.transform.modelviewMatrix = GLKMatrix4MakeXRotation(M_PI);
     
@@ -649,8 +650,8 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
 	CVDisplayLinkStop(_displayLink);
 	CVDisplayLinkRelease(_displayLink);
   
-  if( _copiedBuffer != NULL ){
-    free( _copiedBuffer );
+  if (_copiedBuffer != NULL){
+    free( _copiedBuffer);
   }
 }
 #endif
@@ -664,11 +665,11 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   historyLength = MIN(historyLength,kEZAudioPlotMaxHistoryBufferLength);
   size_t floatByteSize = sizeof(float);
   _changingHistorySize = YES;
-  if( _scrollHistoryLength != historyLength ){
+  if (_scrollHistoryLength != historyLength){
     _scrollHistoryLength = historyLength;
   }
   _scrollHistory = realloc(_scrollHistory,_scrollHistoryLength*floatByteSize);
-  if( _scrollHistoryIndex < _scrollHistoryLength ){
+  if (_scrollHistoryIndex < _scrollHistoryLength){
     memset(&_scrollHistory[_scrollHistoryIndex],
            0,
            (_scrollHistoryLength-_scrollHistoryIndex)*floatByteSize);
@@ -705,10 +706,10 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
       withBuffer:(float*)buffer
   withBufferSize:(UInt32)bufferSize
         withGain:(float)gain {
-  if( drawingType == EZAudioPlotGLDrawTypeLineStrip ){
+  if (drawingType == EZAudioPlotGLDrawTypeLineStrip){
     // graph size = buffer size to stroke waveform
     for(int i = 0; i < graphSize; i++){
-      float x = [EZAudio MAP:i
+      float x = [EZAudioUtilities MAP:i
                       leftMin:0
                       leftMax:bufferSize
                      rightMin:-1.0
@@ -717,15 +718,15 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
       graph[i].y = gain*buffer[i];
     }
   }
-  else if( drawingType == EZAudioPlotGLDrawTypeTriangleStrip ) {
+  else if (drawingType == EZAudioPlotGLDrawTypeTriangleStrip) {
     // graph size = 2 * buffer size to draw triangles and fill regions properly
     for(int i = 0; i < graphSize; i+=2){
-      int bufferIndex = (int)[EZAudio MAP:i
+      int bufferIndex = (int)[EZAudioUtilities MAP:i
                               leftMin:0
                               leftMax:graphSize
                               rightMin:0
                               rightMax:bufferSize];
-      float x = [EZAudio MAP:bufferIndex
+      float x = [EZAudioUtilities MAP:bufferIndex
                       leftMin:0
                       leftMax:bufferSize
                      rightMin:-1.0
@@ -734,13 +735,13 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
       graph[i].y = 0.0f;
     }
     for(int i = 0; i < graphSize; i+=2){
-      int bufferIndex = (int)[EZAudio
+      int bufferIndex = (int)[EZAudioUtilities
                               MAP:i
                               leftMin:0
                               leftMax:graphSize
                               rightMin:0
                               rightMax:bufferSize];
-      float x = [EZAudio MAP:bufferIndex
+      float x = [EZAudioUtilities MAP:bufferIndex
                       leftMin:0
                       leftMax:bufferSize
                      rightMin:-1.0

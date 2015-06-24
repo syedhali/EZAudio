@@ -38,6 +38,12 @@
 @synthesize audioPlotTime;
 @synthesize microphone;
 
+#pragma mark - Status Bar Style
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 #pragma mark - Customize the Audio Plot
 - (void)viewDidLoad
 {
@@ -121,7 +127,7 @@
     // Calculate the magnitude
     float mag = _A.realp[i]*_A.realp[i]+_A.imagp[i]*_A.imagp[i];
     // Bind the value to be less than 1.0 to fit in the graph
-    amp[i] = [EZAudio MAP:mag leftMin:0.0 leftMax:maxMag rightMin:0.0 rightMax:1.0];
+    amp[i] = [EZAudioUtilities MAP:mag leftMin:0.0 leftMax:maxMag rightMin:0.0 rightMax:1.0];
   }
   
   // Update the frequency domain plot

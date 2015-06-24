@@ -35,34 +35,54 @@
 
 @interface WaveformFromFileViewController : NSViewController <NSOpenSavePanelDelegate>
 
+//------------------------------------------------------------------------------
 #pragma mark - Components
+//------------------------------------------------------------------------------
+
 /**
  The EZAudioFile representing of the currently selected audio file
  */
 @property (nonatomic,strong) EZAudioFile *audioFile;
+
+//------------------------------------------------------------------------------
 
 /**
  The CoreGraphics based audio plot
  */
 @property (nonatomic,weak) IBOutlet EZAudioPlot *audioPlot;
 
+//------------------------------------------------------------------------------
+
 /**
  A BOOL indicating whether or not we've reached the end of the file
  */
 @property (nonatomic,assign) BOOL eof;
 
+//------------------------------------------------------------------------------
 #pragma mark - UI Extras
+//------------------------------------------------------------------------------
+
 /**
  A label to display the current file path with the waveform shown
  */
 @property (nonatomic,weak) IBOutlet NSTextField *filePathLabel;
 
+//------------------------------------------------------------------------------
 #pragma mark - Actions
+//------------------------------------------------------------------------------
+
 /**
  Prompts the file manager and loads in a new audio file into the EZAudioFile representation.
  */
 -(IBAction)openFile:(id)sender;
 
+//------------------------------------------------------------------------------
+
+/**
+ Shows how to take a snapshot of the Core Graphics based waveform and save it to the file path: ~/Documents/waveform.png
+ */
 -(IBAction)snapshot:(id)sender;
+
+//------------------------------------------------------------------------------
 
 @end

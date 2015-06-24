@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Weo-wK-GIV">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="JgX-xL-1L8">
+            <objects>
+                <viewController id="Weo-wK-GIV" customClass="FFTViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Gb6-mY-qlI"/>
+                        <viewControllerLayoutGuide type="bottom" id="YgU-XB-3Wp"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="qdz-w1-Fnd">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rTC-r5-1nY" customClass="EZAudioPlotGL">
+                                <rect key="frame" x="0.0" y="300" width="600" height="300"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OQU-xT-TSP" customClass="EZAudioPlot">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="300"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="rTC-r5-1nY" firstAttribute="top" secondItem="OQU-xT-TSP" secondAttribute="bottom" id="Gvx-p5-QUo"/>
+                            <constraint firstAttribute="trailing" secondItem="OQU-xT-TSP" secondAttribute="trailing" id="Jas-mw-vJx"/>
+                            <constraint firstItem="rTC-r5-1nY" firstAttribute="leading" secondItem="qdz-w1-Fnd" secondAttribute="leading" id="L4g-Ae-9tj"/>
+                            <constraint firstItem="rTC-r5-1nY" firstAttribute="leading" secondItem="qdz-w1-Fnd" secondAttribute="leading" id="R76-NA-7Bd"/>
+                            <constraint firstAttribute="trailing" secondItem="rTC-r5-1nY" secondAttribute="trailing" id="SD1-rQ-K9f"/>
+                            <constraint firstItem="OQU-xT-TSP" firstAttribute="leading" secondItem="qdz-w1-Fnd" secondAttribute="leading" id="Ylv-YL-VNN"/>
+                            <constraint firstItem="rTC-r5-1nY" firstAttribute="height" secondItem="OQU-xT-TSP" secondAttribute="height" id="c8v-Wf-j6b"/>
+                            <constraint firstItem="OQU-xT-TSP" firstAttribute="leading" secondItem="qdz-w1-Fnd" secondAttribute="leading" id="cky-9G-OUa"/>
+                            <constraint firstItem="YgU-XB-3Wp" firstAttribute="top" secondItem="rTC-r5-1nY" secondAttribute="bottom" id="diI-fy-02O"/>
+                            <constraint firstAttribute="trailing" secondItem="OQU-xT-TSP" secondAttribute="trailing" id="eU7-t0-VFY"/>
+                            <constraint firstItem="OQU-xT-TSP" firstAttribute="top" secondItem="qdz-w1-Fnd" secondAttribute="top" id="vV1-yG-7ff"/>
+                            <constraint firstAttribute="trailing" secondItem="rTC-r5-1nY" secondAttribute="trailing" id="whu-w2-7Ne"/>
+                            <constraint firstItem="OQU-xT-TSP" firstAttribute="top" secondItem="qdz-w1-Fnd" secondAttribute="top" id="zIe-GV-q0c"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="audioPlotFreq" destination="rTC-r5-1nY" id="CRN-vl-avP"/>
+                        <outlet property="audioPlotTime" destination="OQU-xT-TSP" id="zfe-04-ywd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xe6-rr-s1W" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="537" y="40"/>
+        </scene>
+    </scenes>
+</document>

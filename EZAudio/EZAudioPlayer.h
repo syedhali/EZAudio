@@ -25,8 +25,8 @@
 
 #import <Foundation/Foundation.h>
 #import "TargetConditionals.h"
-
-#import "EZAudio.h"
+#import "EZAudioFile.h"
+#import "EZOutput.h"
 
 #if TARGET_OS_IPHONE
   #import <AVFoundation/AVFoundation.h>
@@ -34,6 +34,7 @@
 #endif
 
 @class EZAudioPlayer;
+
 
 /**
  The EZAudioPlayerDelegate provides event callbacks for the EZAudioPlayer. These type of events are triggered by changes in the EZAudioPlayer's state and allow someone implementing the EZAudioPlayer to more easily update their user interface. Events are triggered anytime the EZAudioPlayer resumes/pauses playback, reaches the end of the file, reads audio data and converts it to float data visualizations (using the EZAudioFile), and updates its cursor position within the audio file during playback (use this for the play position on a slider on the user interface).

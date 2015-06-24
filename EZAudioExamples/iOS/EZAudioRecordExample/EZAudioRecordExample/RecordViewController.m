@@ -30,6 +30,12 @@
 @synthesize recordSwitch;
 @synthesize recordingTextField;
 
+#pragma mark - Status Bar Style
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 #pragma mark - Initialization
 -(id)init {
   self = [super init];
@@ -49,10 +55,25 @@
 
 #pragma mark - Initialize View Controller Here
 -(void)initializeViewController {
+    //
+    // Setup the AVAudioSession. EZMicrophone will not work properly on iOS
+    // if you don't do this!
+    //
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error;
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session category: %@", error.localizedDescription);
+    }
+    [session setActive:YES error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session active: %@", error.localizedDescription);
+    }
+    
     // Create an instance of the microphone and tell it to use this view controller instance as the delegate
     self.microphone = [EZMicrophone microphoneWithDelegate:self];
-    
-    
 }
 
 #pragma mark - Customize the Audio Plot
@@ -167,6 +188,7 @@
         /*
          Create the recorder
          */
+        [EZAudioUtilities printASBD:self.microphone.audioStreamBasicDescription];
         self.recorder = [EZRecorder recorderWithDestinationURL:[self testFilePathURL]
                                                   sourceFormat:self.microphone.audioStreamBasicDescription
                                            destinationFileType:EZRecorderFileTypeM4A];

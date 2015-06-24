@@ -47,23 +47,28 @@
 /**
  The CoreGraphics based audio plot
  */
-@property (nonatomic,weak) IBOutlet EZAudioPlotGL *audioPlot;
+@property (nonatomic, weak) IBOutlet EZAudioPlotGL *audioPlot;
 
 #pragma mark - UI Extras
 /**
  A label to display the current file path with the waveform shown
  */
-@property (nonatomic,weak) IBOutlet NSTextField *filePathLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *filePathLabel;
 
 /**
  A slider to indicate the current frame position in the audio file
  */
-@property (nonatomic,weak) IBOutlet NSSlider *framePositionSlider;
+@property (nonatomic, weak) IBOutlet NSSlider *framePositionSlider;
 
 /**
  A slider to adjust the sample rate.
  */
-@property (nonatomic,weak) IBOutlet NSSlider *sampleRateSlider;
+@property (nonatomic, weak) IBOutlet NSSlider *sampleRateSlider;
+
+/**
+ A slider to adjust the sample rate.
+ */
+@property (nonatomic, weak) IBOutlet NSTextField *sampleRateLabel;
 
 /**
  A BOOL indicating whether or not we've reached the end of the file
