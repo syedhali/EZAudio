@@ -45,6 +45,10 @@
 #import "EZAudioPlotGL.h"
 #import "EZAudioPlotGLKViewController.h"
 
+/*
+ __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio")
+ */
+
 //------------------------------------------------------------------------------
 
 /**
@@ -52,7 +56,7 @@
  
  Class methods for EZAudio are provided as utility methods used throughout the other modules within the framework. For instance, these methods help make sense of error codes (checkResult:operation:), map values betwen coordinate systems (MAP:leftMin:leftMax:rightMin:rightMax:), calculate root mean squared values for buffers (RMS:length:), etc.
  
- @warning As of 1.0 these methods have been moved over to `EZAudioUtilities` to allow using modules without requiring the whole library.
+ @warning As of 1.0 these methods have been moved over to `EZAudioUtilities` to allow using specific modules without requiring the whole library.
  */
 @interface EZAudio : NSObject
 
@@ -60,7 +64,10 @@
 #pragma mark - Debugging
 //------------------------------------------------------------------------------
 
-// TODO: document
+/**
+ Globally sets whether or not the program should exit if a `checkResult:operation:` operation fails. Currently the behavior on EZAudio is to quit if a `checkResult:operation:` fails, but this is not desirable in any production environment. Internally there are a lot of `checkResult:operation:` operations used on all the core classes. This should only ever be set to NO in production environments since a `checkResult:operation:` failing means something breaking has likely happened.
+ @param shouldExitOnCheckResultFail A BOOL indicating whether or not the running program should exist due to a `checkResult:operation:` fail.
+ */
 + (void)setShouldExitOnCheckResultFail:(BOOL)shouldExitOnCheckResultFail __deprecated_msg("Utility methods such as this have moved to the `EZAudioUtilities` class. This method is supported for now, but will be removed in a future version of EZAudio");
 
 #pragma mark - AudioBufferList Utility

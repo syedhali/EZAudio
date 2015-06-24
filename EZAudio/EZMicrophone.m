@@ -274,7 +274,7 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 #endif
     
     // get the first matching component
-    AudioComponent inputComponent = AudioComponentFindNext( NULL , &inputComponentDescription );
+    AudioComponent inputComponent = AudioComponentFindNext( NULL , &inputComponentDescription);
     NSAssert(inputComponent, @"Couldn't get input component unit!");
     
     // create new instance of component
@@ -452,7 +452,7 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 - (void)setMicrophoneOn:(BOOL)microphoneOn
 {
     _microphoneOn = microphoneOn;
-    if( microphoneOn )
+    if (microphoneOn)
     {
         [self startFetchingAudio];
     }

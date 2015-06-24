@@ -77,13 +77,13 @@ BOOL __shouldExitOnCheckResultFail = YES;
 
 + (void)freeBufferList:(AudioBufferList *)bufferList
 {
-    if( bufferList )
+    if (bufferList)
     {
-        if( bufferList->mNumberBuffers )
+        if (bufferList->mNumberBuffers)
         {
-            for( int i = 0; i < bufferList->mNumberBuffers; i++ )
+            for( int i = 0; i < bufferList->mNumberBuffers; i++)
             {
-                if( bufferList->mBuffers[i].mData )
+                if (bufferList->mBuffers[i].mData)
                 {
                     free(bufferList->mBuffers[i].mData);
                 }
@@ -424,7 +424,7 @@ BOOL __shouldExitOnCheckResultFail = YES;
 {
     float leftSpan    = leftMax  - leftMin;
     float rightSpan   = rightMax - rightMin;
-    float valueScaled = ( value  - leftMin ) / leftSpan;
+    float valueScaled = ( value  - leftMin) / leftSpan;
     return rightMin + (valueScaled * rightSpan);
 }
 
@@ -436,14 +436,14 @@ BOOL __shouldExitOnCheckResultFail = YES;
     float sum = 0.0;
     for(int i = 0; i < bufferSize; i++)
         sum += buffer[i] * buffer[i];
-    return sqrtf( sum / bufferSize );
+    return sqrtf( sum / bufferSize);
 }
 
 //------------------------------------------------------------------------------
 
 +(float)SGN:(float)value
 {
-    return value < 0 ? -1.0f : ( value > 0 ? 1.0f : 0.0f );
+    return value < 0 ? -1.0f : ( value > 0 ? 1.0f : 0.0f);
 }
 
 //------------------------------------------------------------------------------

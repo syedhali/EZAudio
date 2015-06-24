@@ -26,7 +26,7 @@
 #if TARGET_OS_IPHONE
 
 #import "EZAudioPlotGLKViewController.h"
-#import "EZAudio.h"
+#import "EZAudioUtilities.h"
 
 @interface EZAudioPlotGLKViewController () {
   
@@ -100,7 +100,7 @@
   [super viewDidLoad];
   
   // Setup the context
-  if( ![EAGLContext currentContext] )
+  if (![EAGLContext currentContext])
   {
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
   }
@@ -140,11 +140,11 @@
   _changingHistorySize = YES;
   historyLength = MIN(historyLength,kEZAudioPlotMaxHistoryBufferLength);
   size_t floatByteSize = sizeof(float);
-  if( _scrollHistoryLength != historyLength ){
+  if (_scrollHistoryLength != historyLength){
     _scrollHistoryLength = historyLength;
   }
   _scrollHistory = realloc(_scrollHistory,_scrollHistoryLength*floatByteSize);
-  if( _scrollHistoryIndex < _scrollHistoryLength ){
+  if (_scrollHistoryIndex < _scrollHistoryLength){
     memset(&_scrollHistory[_scrollHistoryIndex],
            0,
            (_scrollHistoryLength-_scrollHistoryIndex)*floatByteSize);
@@ -171,10 +171,10 @@
 
 -(void)_clearBufferPlot
 {
-  if( _hasBufferPlotData )
+  if (_hasBufferPlotData)
   {
     float empty[_bufferPlotGraphSize];
-    memset( empty, 0.0f, sizeof(float) );
+    memset( empty, 0.0f, sizeof(float));
     [self _updateBufferPlotBufferWithAudioReceived:empty
                                     withBufferSize:_bufferPlotGraphSize];
   }
@@ -182,12 +182,12 @@
 
 -(void)_clearRollingPlot
 {
-  if( _hasRollingPlotData )
+  if (_hasRollingPlotData)
   {
     float              empty[_rollingPlotGraphSize];
     EZAudioPlotGLPoint graph[_rollingPlotGraphSize];
     // Figure out better way to do this
-    for(int i = 0; i < _rollingPlotGraphSize; i++ )
+    for(int i = 0; i < _rollingPlotGraphSize; i++)
     {
       empty[i] = 0.0f;
     }
@@ -196,7 +196,7 @@
       _scrollHistory[i] = 0.0f;
     }
     // Update the scroll history datasource
-    [EZAudio updateScrollHistory:&_scrollHistory
+    [EZAudioUtilities updateScrollHistory:&_scrollHistory
                       withLength:_scrollHistoryLength
                          atIndex:&_scrollHistoryIndex
                       withBuffer:empty
@@ -219,7 +219,7 @@
      withBufferSize:(UInt32)bufferSize {
   
   // Make sure the update render loop is active
-  if( self.paused ) self.paused = NO;
+  if (self.paused) self.paused = NO;
   
   // Make sure we are updating the buffers on the correct gl context.
   EAGLContext.currentContext = self.context;
@@ -248,9 +248,9 @@
   
   // If starting with a VBO of half of our max size make sure we initialize it to anticipate
   // a filled graph (which needs 2 * bufferSize) to allocate its resources properly
-  if( !_hasBufferPlotData && _drawingType == EZAudioPlotGLDrawTypeLineStrip ){
+  if (!_hasBufferPlotData && _drawingType == EZAudioPlotGLDrawTypeLineStrip){
     EZAudioPlotGLPoint maxGraph[2*bufferSize];
-    glBufferData(GL_ARRAY_BUFFER, sizeof(maxGraph), maxGraph, GL_STREAM_DRAW );
+    glBufferData(GL_ARRAY_BUFFER, sizeof(maxGraph), maxGraph, GL_STREAM_DRAW);
     _hasBufferPlotData = YES;
   }
   
@@ -269,8 +269,8 @@
              withBufferSize:bufferSize
                    withGain:self.gain];
   
-  if( !_hasBufferPlotData ){
-    glBufferData( GL_ARRAY_BUFFER, sizeof(graph), graph, GL_STREAM_DRAW );
+  if (!_hasBufferPlotData){
+    glBufferData( GL_ARRAY_BUFFER, sizeof(graph), graph, GL_STREAM_DRAW);
     _hasBufferPlotData = YES;
   }
   else {
@@ -290,9 +290,9 @@
   
   // If starting with a VBO of half of our max size make sure we initialize it to anticipate
   // a filled graph (which needs 2 * bufferSize) to allocate its resources properly
-  if( !_hasRollingPlotData ){
+  if (!_hasRollingPlotData){
     EZAudioPlotGLPoint maxGraph[2*kEZAudioPlotMaxHistoryBufferLength];
-    glBufferData( GL_ARRAY_BUFFER, sizeof(maxGraph), maxGraph, GL_STREAM_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, sizeof(maxGraph), maxGraph, GL_STREAM_DRAW);
     _hasRollingPlotData = YES;
   }
   
@@ -304,7 +304,7 @@
   EZAudioPlotGLPoint graph[_rollingPlotGraphSize];
   
   // Update the scroll history datasource
-  [EZAudio updateScrollHistory:&_scrollHistory
+  [EZAudioUtilities updateScrollHistory:&_scrollHistory
                     withLength:_scrollHistoryLength
                        atIndex:&_scrollHistoryIndex
                     withBuffer:buffer
@@ -320,8 +320,8 @@
                   withGain:self.gain];
   
   // Update the drawing
-  if( !_hasRollingPlotData ){
-    glBufferData( GL_ARRAY_BUFFER, sizeof(graph) , graph, GL_STREAM_DRAW );
+  if (!_hasRollingPlotData){
+    glBufferData( GL_ARRAY_BUFFER, sizeof(graph) , graph, GL_STREAM_DRAW);
     _hasRollingPlotData = YES;
   }
   else {
@@ -349,7 +349,7 @@
                   withGain:self.gain];
   
   // Update the drawing
-  if( _hasRollingPlotData ){
+  if (_hasRollingPlotData){
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(graph), graph);
   }
 }
@@ -362,7 +362,7 @@
   // Clear the context
   glClear(GL_COLOR_BUFFER_BIT);
   
-  if( _hasBufferPlotData || _hasRollingPlotData ){
+  if (_hasBufferPlotData || _hasRollingPlotData){
     // Prepare the effect for drawing
     [self.baseEffect prepareToDraw];
     
@@ -385,7 +385,7 @@
 
 #pragma mark - Private Drawing
 -(void)_drawBufferPlotWithView:(GLKView*)view drawInRect:(CGRect)rect {
-  if( _hasBufferPlotData ){
+  if (_hasBufferPlotData){
     
     glBindBuffer(GL_ARRAY_BUFFER, _bufferPlotVBO);
     glEnableVertexAttribArray(GLKVertexAttribPosition);
@@ -397,7 +397,7 @@
     glDrawArrays(_drawingType, 0, _bufferPlotGraphSize);
     
     
-    if( self.shouldMirror ){
+    if (self.shouldMirror){
       // Mirrored plot
       [self.baseEffect prepareToDraw];
       
@@ -413,7 +413,7 @@
 }
 
 -(void)_drawRollingPlotWithView:(GLKView*)view drawInRect:(CGRect)rect {
-  if( _hasRollingPlotData ){
+  if (_hasRollingPlotData){
     
     // Normal plot
     glBindBuffer(GL_ARRAY_BUFFER, _rollingPlotVBO);
@@ -426,7 +426,7 @@
     glDrawArrays(_drawingType, 0, _rollingPlotGraphSize);
     
     
-    if( self.shouldMirror ){
+    if (self.shouldMirror){
       // Mirrored plot
       [self.baseEffect prepareToDraw];
       

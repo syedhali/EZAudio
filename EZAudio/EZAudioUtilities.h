@@ -32,7 +32,7 @@
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
+ The EZAudioUtilities class provides a set of class-level utility methods used throughout EZAudio to handle common operations such as allocating audio buffers and structures, creating various types of AudioStreamBasicDescription structures, string helpers for formatting and debugging, various math utilities, a very handy check result function (used everywhere!), and helpers for dealing with circular buffers. These were previously on the EZAudio class, but as of the 0.1.0 release have been moved here so the whole EZAudio is not needed when using only certain modules.
  */
 @interface EZAudioUtilities : NSObject
 
@@ -106,7 +106,7 @@
 ///-----------------------------------------------------------
 
 /**
- 
+ Creates a signed-integer, interleaved AudioStreamBasicDescription for the number of channels specified for an AIFF format.
  @param channels   The desired number of channels
  @param sampleRate A float representing the sample rate.
  @return A new AudioStreamBasicDescription with the specified format.
@@ -117,7 +117,7 @@
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
+ Creates an AudioStreamBasicDescription for the iLBC narrow band speech codec.
  @param sampleRate A float representing the sample rate.
  @return A new AudioStreamBasicDescription with the specified format.
  */
@@ -137,7 +137,7 @@
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
+ Creates an AudioStreamBasicDescription for an M4A AAC format.
  @param channels   The desired number of channels
  @param sampleRate A float representing the sample rate.
  @return A new AudioStreamBasicDescription with the specified format.
@@ -157,7 +157,7 @@
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
+ Creates a single-channel, float-based AudioStreamBasicDescription (as of 0.0.6 this is the same as `monoFloatFormatWithSampleRate:`).
  @param sampleRate A float representing the sample rate.
  @return A new AudioStreamBasicDescription with the specified format.
  */
@@ -166,7 +166,7 @@
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
+ Creates a two-channel, non-interleaved, float-based AudioStreamBasicDescription (as of 0.0.6 this is the same as `stereoFloatNonInterleavedFormatWithSampleRate:`).
  @param sampleRate A float representing the sample rate.
  @return A new AudioStreamBasicDescription with the specified format.
  */
@@ -234,18 +234,18 @@
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
- @param seconds <#seconds description#>
- @return <#return value description#>
+ Converts seconds into a string formatted as MM:SS
+ @param seconds An NSTimeInterval representing the number of seconds
+ @return An NSString instance formatted as MM:SS from the seconds provided.
  */
 + (NSString *)displayTimeStringFromSeconds:(NSTimeInterval)seconds;
 
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
- @param asbd <#asbd description#>
- @return <#return value description#>
+ Creates a string to use when logging out the contents of an AudioStreamBasicDescription
+ @param asbd A valid AudioStreamBasicDescription struct.
+ @return An NSString representing the contents of the AudioStreamBasicDescription.
  */
 + (NSString *)stringForAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd;
 
@@ -350,9 +350,9 @@
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
- @param code <#code description#>
- @return <#return value description#>
+ Provides a string representation of the often cryptic Core Audio error codes
+ @param code A UInt32 representing an error code
+ @return An NSString with a human readable version of the error code.
  */
 + (NSString *)stringFromUInt32Code:(UInt32)code;
 
@@ -365,13 +365,13 @@
 ///-----------------------------------------------------------
 
 /**
- <#Description#>
- @param scrollHistory       <#scrollHistory description#>
- @param scrollHistoryLength <#scrollHistoryLength description#>
- @param index               <#index description#>
- @param buffer              <#buffer description#>
- @param bufferSize          <#bufferSize description#>
- @param isChanging          <#isChanging description#>
+ Given a buffer representing a window of float history data this append the RMS of a buffer of incoming float data...This will likely be deprecated in a future version of EZAudio for a circular buffer based approach.
+ @param scrollHistory       An array of float arrays being used to hold the history values for each channel.
+ @param scrollHistoryLength An int representing the length of the history window.
+ @param index               An int pointer to the index of the current read index of the history buffer.
+ @param buffer              A float array representing the incoming audio data.
+ @param bufferSize          An int representing the length of the incoming audio data.
+ @param isChanging          A BOOL pointer representing whether the resolution (length of the history window) is currently changing.
  */
 + (void)updateScrollHistory:(float **)scrollHistory
                  withLength:(int)scrollHistoryLength

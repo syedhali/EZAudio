@@ -24,8 +24,7 @@
 //  THE SOFTWARE.
 
 #import "EZAudioPlot.h"
-
-#import "EZAudio.h"
+#import "EZAudioUtilities.h"
 
 @interface EZAudioPlot () {
 //  BOOL             _hasData;
@@ -136,7 +135,7 @@
 #pragma mark - Get Data
 -(void)setSampleData:(float *)data
               length:(int)length {
-  if( plotData != nil ){
+  if (plotData != nil){
     free(plotData);
   }
   
@@ -153,10 +152,10 @@
   
 #pragma mark - Update
 -(void)updateBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize {
-  if( _plotType == EZPlotTypeRolling ){
+  if (_plotType == EZPlotTypeRolling){
     
     // Update the scroll history datasource
-    [EZAudio updateScrollHistory:&_scrollHistory
+    [EZAudioUtilities updateScrollHistory:&_scrollHistory
                       withLength:_scrollHistoryLength
                          atIndex:&_scrollHistoryIndex
                       withBuffer:buffer
@@ -169,7 +168,7 @@
     _setMaxLength = YES;
     
   }
-  else if( _plotType == EZPlotTypeBuffer ){
+  else if (_plotType == EZPlotTypeBuffer){
     
     [self setSampleData:buffer
                  length:bufferSize];
@@ -221,7 +220,7 @@
       CGMutablePathRef path = CGPathCreateMutable();
       
       double xscale = (frame.size.width) / (float)plotLength;
-      double halfHeight = floor( frame.size.height / 2.0 );
+      double halfHeight = floor( frame.size.height / 2.0);
       
       // iOS drawing origin is flipped by default so make sure we account for that
       int deviceOriginFlipped = 1;
@@ -232,23 +231,23 @@
 #endif
       
       CGAffineTransform xf = CGAffineTransformIdentity;
-      xf = CGAffineTransformTranslate( xf, frame.origin.x , halfHeight + frame.origin.y );
-      xf = CGAffineTransformScale( xf, xscale, deviceOriginFlipped*halfHeight );
-      CGPathAddPath( path, &xf, halfPath );
+      xf = CGAffineTransformTranslate( xf, frame.origin.x , halfHeight + frame.origin.y);
+      xf = CGAffineTransformScale( xf, xscale, deviceOriginFlipped*halfHeight);
+      CGPathAddPath( path, &xf, halfPath);
       
-      if( self.shouldMirror ){
+      if (self.shouldMirror){
         xf = CGAffineTransformIdentity;
         xf = CGAffineTransformTranslate( xf, frame.origin.x , halfHeight + frame.origin.y);
         xf = CGAffineTransformScale( xf, xscale, -deviceOriginFlipped*(halfHeight));
-        CGPathAddPath( path, &xf, halfPath );
+        CGPathAddPath( path, &xf, halfPath);
       }
-      CGPathRelease( halfPath );
+      CGPathRelease( halfPath);
       
       // Now, path contains the full waveform path.
       CGContextAddPath(ctx, path);
       
       // Make this color customizable
-      if( self.shouldFill ){
+      if (self.shouldFill){
         CGContextFillPath(ctx);
       }
       else {
@@ -269,11 +268,11 @@
   historyLength = MIN(historyLength,kEZAudioPlotMaxHistoryBufferLength);
   size_t floatByteSize = sizeof(float);
   _changingHistorySize = YES;
-  if( _scrollHistoryLength != historyLength ){
+  if (_scrollHistoryLength != historyLength){
     _scrollHistoryLength = historyLength;
   }
   _scrollHistory = realloc(_scrollHistory,_scrollHistoryLength*floatByteSize);
-  if( _scrollHistoryIndex < _scrollHistoryLength ){
+  if (_scrollHistoryIndex < _scrollHistoryLength){
     memset(&_scrollHistory[_scrollHistoryIndex],
            0,
            (_scrollHistoryLength-_scrollHistoryIndex)*floatByteSize);
@@ -290,7 +289,7 @@
 }
     
 -(void)dealloc {
-  if( plotData ){
+  if (plotData){
     free(plotData);
   }
 }
