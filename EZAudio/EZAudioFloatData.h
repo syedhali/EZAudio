@@ -16,9 +16,9 @@
 
 //------------------------------------------------------------------------------
 
-+ (instancetype) dataWithNumberOfChannels:(int)numberOfChannels
-                                  buffers:(float **)buffers
-                               bufferSize:(UInt32)bufferSize;
++ (instancetype)dataWithNumberOfChannels:(int)numberOfChannels
+                                 buffers:(float **)buffers
+                              bufferSize:(UInt32)bufferSize;
 
 //------------------------------------------------------------------------------
 
@@ -28,7 +28,7 @@
 
 //------------------------------------------------------------------------------
 
-- (float *) bufferForChannel:(int)channel;
+- (float *)bufferForChannel:(int)channel;
 
 //------------------------------------------------------------------------------
 

@@ -168,12 +168,12 @@
     
     // fill in the devices
     [EZAudioUtilities checkResult:AudioObjectGetPropertyData(kAudioObjectSystemObject,
-                                                 &address,
-                                                 0,
-                                                 NULL,
-                                                 &devicesDataSize,
-                                                 deviceIDs)
-            operation:""];
+                                                             &address,
+                                                             0,
+                                                             NULL,
+                                                             &devicesDataSize,
+                                                             deviceIDs)
+                        operation:"Failed to get device IDs for available devices on OSX"];
 
     BOOL stop = NO;
     for (UInt32 i = 0; i < count; i++)
