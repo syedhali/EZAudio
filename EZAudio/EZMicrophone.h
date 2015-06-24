@@ -115,10 +115,14 @@
  */
 @interface EZMicrophone : NSObject <EZOutputDataSource>
 
+//------------------------------------------------------------------------------
+
 /**
  The EZMicrophoneDelegate for which to handle the microphone callbacks
  */
 @property (nonatomic, weak) id<EZMicrophoneDelegate> delegate;
+
+//------------------------------------------------------------------------------
 
 /**
  The EZAudioDevice being used to pull the microphone data.
@@ -128,10 +132,14 @@
  */
 @property (nonatomic, strong) EZAudioDevice *device;
 
+//------------------------------------------------------------------------------
+
 /**
  A BOOL describing whether the microphone is on and passing back audio data to its delegate.
  */
 @property (nonatomic, assign) BOOL microphoneOn;
+
+//------------------------------------------------------------------------------
 
 /**
  An EZOutput to use for porting the microphone input out (passthrough).
@@ -153,6 +161,8 @@
  */
 - (EZMicrophone *)initWithMicrophoneDelegate:(id<EZMicrophoneDelegate>)delegate;
 
+//------------------------------------------------------------------------------
+
 /**
  Creates an instance of the EZMicrophone with a custom AudioStreamBasicDescription and provides the caller to specify a delegate to respond to the audioReceived callback. This will not start fetching the audio until startFetchingAudio has been called. Use initWithMicrophoneDelegate:startsImmediately: to instantiate this class and immediately start fetching audio data.
  @param 	microphoneDelegate 	        A EZMicrophoneDelegate delegate that will receive the audioReceived callback.
@@ -162,6 +172,8 @@
 -(EZMicrophone *)initWithMicrophoneDelegate:(id<EZMicrophoneDelegate>)delegate
             withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
 
+//------------------------------------------------------------------------------
+
 /**
  Creates an instance of the EZMicrophone with a delegate to respond to the audioReceived callback and allows the caller to specify whether they'd immediately like to start fetching the audio data.
  @param 	delegate 	A EZMicrophoneDelegate delegate that will receive the audioReceived callback.
@@ -170,6 +182,8 @@
  */
 - (EZMicrophone *)initWithMicrophoneDelegate:(id<EZMicrophoneDelegate>)delegate
                            startsImmediately:(BOOL)startsImmediately;
+
+//------------------------------------------------------------------------------
 
 /**
  Creates an instance of the EZMicrophone with a custom AudioStreamBasicDescription and provides the caller with a delegate to respond to the audioReceived callback and allows the caller to specify whether they'd immediately like to start fetching the audio data.
@@ -197,6 +211,8 @@
  */
 + (EZMicrophone *)microphoneWithDelegate:(id<EZMicrophoneDelegate>)delegate;
 
+//------------------------------------------------------------------------------
+
 /**
  Creates an instance of the EZMicrophone with a delegate to respond to the audioReceived callback. This will not start fetching the audio until startFetchingAudio has been called. Use microphoneWithDelegate:startsImmediately: to instantiate this class and immediately start fetching audio data.
  @param 	delegate 	A EZMicrophoneDelegate delegate that will receive the audioReceived callback.
@@ -205,6 +221,8 @@
  */
 + (EZMicrophone *)microphoneWithDelegate:(id<EZMicrophoneDelegate>)delegate
          withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
+
+//------------------------------------------------------------------------------
 
 /**
  Creates an instance of the EZMicrophone with a delegate to respond to the audioReceived callback and allows the caller to specify whether they'd immediately like to start fetching the audio data.
@@ -215,6 +233,8 @@
  */
 + (EZMicrophone *)microphoneWithDelegate:(id<EZMicrophoneDelegate>)delegate
                         startsImmediately:(BOOL)startsImmediately;
+
+//------------------------------------------------------------------------------
 
 /**
  Creates an instance of the EZMicrophone with a delegate to respond to the audioReceived callback and allows the caller to specify whether they'd immediately like to start fetching the audio data.
@@ -276,6 +296,8 @@
  */
 - (AudioStreamBasicDescription)audioStreamBasicDescription;
 
+//------------------------------------------------------------------------------
+
 /**
  Provides the underlying Audio Unit that is being used to fetch the audio.
  @return The AudioUnit used for the microphone
@@ -283,43 +305,66 @@
 - (AudioUnit *)audioUnit;
 
 #pragma mark - Setters
+
 ///-----------------------------------------------------------
-/// @name Customizing The Microphone Input Format
+/// @name Customizing The Microphone Stream Format
 ///-----------------------------------------------------------
 
 /**
- Sets the AudioStreamBasicDescription on the microphone input.
+ Sets the AudioStreamBasicDescription on the microphone input. Must be linear PCM and must be the same sample rate as the stream format coming in (check the current `audioStreamBasicDescription` before setting).
  @warning Do not set this while fetching audio (startFetchingAudio)
  @param asbd The new AudioStreamBasicDescription to use in place of the current audio format description.
  */
 - (void)setAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd;
 
-//------------------------------------------------------------------------------
+///-----------------------------------------------------------
+/// @name Setting The Microphone's Hardware Device
+///-----------------------------------------------------------
 
 /**
- <#Description#>
- 
- @param device <#device description#>
+ Sets the EZAudioDevice being used to pull the microphone data.
+ - On iOS this can be any of the available microphones on the iPhone/iPad devices (usually there are 3). Defaults to the first microphone found (bottom mic)
+ - On OSX this can be any of the plugged in devices that Core Audio can detect (see kAudioUnitSubType_HALOutput for more information)
+ System Preferences -> Sound for the available inputs)
+ @param device An EZAudioDevice instance that should be used to fetch the microphone data.
  */
 - (void)setDevice:(EZAudioDevice *)device;
+
+//------------------------------------------------------------------------------
+#pragma mark - Direct Output
+//------------------------------------------------------------------------------
+
+///-----------------------------------------------------------
+/// @name Setting The Microphone's Output (Direct Out)
+///-----------------------------------------------------------
+
+/**
+ When set this will pipe out the contents of the microphone into an EZOutput. This is known as a passthrough or direct out that will simply pipe the microphone input to an output.
+ @param output An EZOutput instance that the microphone will use to output its audio data to the speaker.
+ */
+- (void)setOutput:(EZOutput *)output;
 
 //------------------------------------------------------------------------------
 #pragma mark - Subclass Methods
 //------------------------------------------------------------------------------
 
+///-----------------------------------------------------------
+/// @name Subclass
+///-----------------------------------------------------------
+
 /**
- <#Description#>
- 
- @return <#return value description#>
+ The default AudioStreamBasicDescription set as the stream format of the microphone if no custom description is set. Defaults to a non-interleaved float format with the number of channels specified by the `numberOfChannels` method.
+ @return An AudioStreamBasicDescription that will be used as the default stream format.
  */
 - (AudioStreamBasicDescription)defaultStreamFormat;
+
+//------------------------------------------------------------------------------
+
+/**
+ The number of channels the input microphone is expected to have. Defaults to 1 (assumes microphone is mono).
+ @return A UInt32 representing the number of channels expected for the microphone.
+ */
 - (UInt32)numberOfChannels;
-
-//------------------------------------------------------------------------------
-#pragma mark - Output
-//------------------------------------------------------------------------------
-
-- (void)setOutput:(EZOutput *)output;
 
 //------------------------------------------------------------------------------
 

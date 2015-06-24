@@ -47,7 +47,7 @@ typedef struct EZMicrophoneInfo
 
 @interface EZMicrophone ()
 @property (nonatomic, strong) EZAudioFloatConverter *floatConverter;
-@property (nonatomic)         EZMicrophoneInfo      *info;
+@property (nonatomic, assign) EZMicrophoneInfo      *info;
 @end
 
 @implementation EZMicrophone
@@ -239,23 +239,6 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
         _sharedMicrophone = [[EZMicrophone alloc] init];
     });
     return _sharedMicrophone;
-}
-
-//------------------------------------------------------------------------------
-#pragma mark - Subclass
-//------------------------------------------------------------------------------
-
-- (AudioStreamBasicDescription)defaultStreamFormat
-{
-    return [EZAudioUtilities floatFormatWithNumberOfChannels:[self numberOfChannels]
-                                                  sampleRate:self.info->inputFormat.mSampleRate];
-}
-
-//------------------------------------------------------------------------------
-
-- (UInt32)numberOfChannels
-{
-    return 1;
 }
 
 //------------------------------------------------------------------------------
@@ -603,6 +586,23 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
     memcpy(audioBufferList,
            self.info->audioBufferList,
            sizeof(AudioBufferList) + (self.info->audioBufferList->mNumberBuffers - 1)*sizeof(AudioBuffer));
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Subclass
+//------------------------------------------------------------------------------
+
+- (AudioStreamBasicDescription)defaultStreamFormat
+{
+    return [EZAudioUtilities floatFormatWithNumberOfChannels:[self numberOfChannels]
+                                                  sampleRate:self.info->inputFormat.mSampleRate];
+}
+
+//------------------------------------------------------------------------------
+
+- (UInt32)numberOfChannels
+{
+    return 1;
 }
 
 //------------------------------------------------------------------------------
