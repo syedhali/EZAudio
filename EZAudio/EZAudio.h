@@ -76,9 +76,11 @@
 
 /**
  Provides a flag indicating whether or not the program will exit if a `checkResult:operation:` fails.
+ @deprecated This method is deprecated starting in version 0.1.0.
+ @note Please use same method in EZAudioUtilities class instead.
  @return A BOOL indicating whether or not the program will exit if a `checkResult:operation:` fails.
  */
-+ (BOOL)shouldExitOnCheckResultFail;
++ (BOOL)shouldExitOnCheckResultFail __attribute__((deprecated));
 
 //------------------------------------------------------------------------------
 #pragma mark - AudioBufferList Utility
@@ -93,9 +95,9 @@
  @param frames The number of frames that will be stored within each audio buffer
  @param channels The number of channels (e.g. 2 for stereo, 1 for mono, etc.)
  @param interleaved Whether the samples will be interleaved (if not it will be assumed to be non-interleaved and each channel will have an AudioBuffer allocated)
- @return An AudioBufferList struct that has been allocated in memory
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return An AudioBufferList struct that has been allocated in memory
  */
 + (AudioBufferList *)audioBufferListWithNumberOfFrames:(UInt32)frames
                                       numberOfChannels:(UInt32)channels
@@ -107,6 +109,8 @@
  Allocates an array of float arrays given the number of frames needed to store in each float array.
  @param frames   A UInt32 representing the number of frames to store in each float buffer
  @param channels A UInt32 representing the number of channels (i.e. the number of float arrays to allocate)
+ @deprecated This method is deprecated starting in version 0.1.0.
+ @note Please use same method in EZAudioUtilities class instead.
  @return An array of float arrays, each the length of the number of frames specified
  */
 + (float **)floatBuffersWithNumberOfFrames:(UInt32)frames
@@ -145,9 +149,9 @@
  Creates a signed-integer, interleaved AudioStreamBasicDescription for the number of channels specified for an AIFF format.
  @param channels   The desired number of channels
  @param sampleRate A float representing the sample rate.
- @return A new AudioStreamBasicDescription with the specified format.
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return A new AudioStreamBasicDescription with the specified format.
  */
 + (AudioStreamBasicDescription)AIFFFormatWithNumberOfChannels:(UInt32)channels
                                                    sampleRate:(float)sampleRate __attribute__((deprecated));
@@ -157,9 +161,9 @@
 /**
  Creates an AudioStreamBasicDescription for the iLBC narrow band speech codec.
  @param sampleRate A float representing the sample rate.
- @return A new AudioStreamBasicDescription with the specified format.
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return A new AudioStreamBasicDescription with the specified format.
  */
 + (AudioStreamBasicDescription)iLBCFormatWithSampleRate:(float)sampleRate __attribute__((deprecated));
 
@@ -169,9 +173,9 @@
  Creates a float-based, non-interleaved AudioStreamBasicDescription for the number of channels specified.
  @param channels   A UInt32 representing the number of channels.
  @param sampleRate A float representing the sample rate.
- @return A float-based AudioStreamBasicDescription with the number of channels specified.
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return A float-based AudioStreamBasicDescription with the number of channels specified.
  */
 + (AudioStreamBasicDescription)floatFormatWithNumberOfChannels:(UInt32)channels
                                                     sampleRate:(float)sampleRate __attribute__((deprecated));
@@ -182,9 +186,9 @@
  Creates an AudioStreamBasicDescription for an M4A AAC format.
  @param channels   The desired number of channels
  @param sampleRate A float representing the sample rate.
- @return A new AudioStreamBasicDescription with the specified format.
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return A new AudioStreamBasicDescription with the specified format.
  */
 + (AudioStreamBasicDescription)M4AFormatWithNumberOfChannels:(UInt32)channels
                                                   sampleRate:(float)sampleRate __attribute__((deprecated));
@@ -194,9 +198,9 @@
 /**
  Creates a single-channel, float-based AudioStreamBasicDescription.
  @param sampleRate A float representing the sample rate.
- @return A new AudioStreamBasicDescription with the specified format.
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return A new AudioStreamBasicDescription with the specified format.
  */
 + (AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)sampleRate __attribute__((deprecated));
 
@@ -216,9 +220,9 @@
 /**
  Creates a two-channel, non-interleaved, float-based AudioStreamBasicDescription (as of 0.0.6 this is the same as `stereoFloatNonInterleavedFormatWithSampleRate:`).
  @param sampleRate A float representing the sample rate.
- @return A new AudioStreamBasicDescription with the specified format.
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return A new AudioStreamBasicDescription with the specified format.
  */
 + (AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)sampleRate __attribute__((deprecated));
 
@@ -227,9 +231,9 @@
 /**
  Creates a two-channel, interleaved, float-based AudioStreamBasicDescription.
  @param sampleRate A float representing the sample rate.
- @return A new AudioStreamBasicDescription with the specified format.
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return A new AudioStreamBasicDescription with the specified format.
  */
 + (AudioStreamBasicDescription)stereoFloatInterleavedFormatWithSampleRate:(float)sampleRate __attribute__((deprecated));
 
@@ -238,9 +242,9 @@
 /**
  Creates a two-channel, non-interleaved, float-based AudioStreamBasicDescription.
  @param sampleRate A float representing the sample rate.
- @return A new AudioStreamBasicDescription with the specified format.
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return A new AudioStreamBasicDescription with the specified format.
  */
 + (AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sameRate __attribute__((deprecated));
 
@@ -251,9 +255,9 @@
 /**
  Checks an AudioStreamBasicDescription to see if it is a float-based format (as opposed to a signed integer based format).
  @param asbd A valid AudioStreamBasicDescription
- @return A BOOL indicating whether or not the AudioStreamBasicDescription is a float format.
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return A BOOL indicating whether or not the AudioStreamBasicDescription is a float format.
  */
 + (BOOL)isFloatFormat:(AudioStreamBasicDescription)asbd __attribute__((deprecated));
 
@@ -263,9 +267,9 @@
  Checks an AudioStreamBasicDescription to check for an interleaved flag (samples are
  stored in one buffer one after another instead of two (or n channels) parallel buffers
  @param asbd A valid AudioStreamBasicDescription
- @return A BOOL indicating whether or not the AudioStreamBasicDescription is interleaved
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return A BOOL indicating whether or not the AudioStreamBasicDescription is interleaved
  */
 + (BOOL)isInterleaved:(AudioStreamBasicDescription)asbd __attribute__((deprecated));
 
@@ -275,9 +279,9 @@
  Checks an AudioStreamBasicDescription to see if it is a linear PCM format (uncompressed,
  1 frame per packet)
  @param asbd A valid AudioStreamBasicDescription
- @return A BOOL indicating whether or not the AudioStreamBasicDescription is linear PCM.
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return A BOOL indicating whether or not the AudioStreamBasicDescription is linear PCM.
  */
 + (BOOL)isLinearPCM:(AudioStreamBasicDescription)asbd __attribute__((deprecated));
 
@@ -298,9 +302,9 @@
 /**
  Converts seconds into a string formatted as MM:SS
  @param seconds An NSTimeInterval representing the number of seconds
- @return An NSString instance formatted as MM:SS from the seconds provided.
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return An NSString instance formatted as MM:SS from the seconds provided.
  */
 + (NSString *)displayTimeStringFromSeconds:(NSTimeInterval)seconds __attribute__((deprecated));
 
@@ -309,9 +313,9 @@
 /**
  Creates a string to use when logging out the contents of an AudioStreamBasicDescription
  @param asbd A valid AudioStreamBasicDescription struct.
- @return An NSString representing the contents of the AudioStreamBasicDescription.
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return An NSString representing the contents of the AudioStreamBasicDescription.
  */
 + (NSString *)stringForAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd __attribute__((deprecated));
 
@@ -374,9 +378,9 @@
  @param 	leftMax 	The maximum of the first coordinate system
  @param 	rightMin 	The minimum of the second coordindate system
  @param 	rightMax 	The maximum of the second coordinate system
- @return	The mapped value in terms of the second coordinate system
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return	The mapped value in terms of the second coordinate system
  */
 + (float)MAP:(float)value
      leftMin:(float)leftMin
@@ -390,9 +394,9 @@
  Calculates the root mean squared for a buffer.
  @param 	buffer 	A float buffer array of values whose root mean squared to calculate
  @param 	bufferSize 	The size of the float buffer
- @return	The root mean squared of the buffer
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return	The root mean squared of the buffer
  */
 + (float)RMS:(float*)buffer length:(int)bufferSize __attribute__((deprecated));
 
@@ -404,9 +408,9 @@
  {   0 , x = 0,
  {   1 , x > 0
  @param value The float value for which to use as x
- @return The float sign value
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return The float sign value
  */
 + (float)SGN:(float)value __attribute__((deprecated));
 
@@ -432,9 +436,9 @@
 /**
  Provides a string representation of the often cryptic Core Audio error codes
  @param code A UInt32 representing an error code
- @return An NSString with a human readable version of the error code.
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
+ @return An NSString with a human readable version of the error code.
  */
 + (NSString *)stringFromUInt32Code:(UInt32)code __attribute__((deprecated));
 
