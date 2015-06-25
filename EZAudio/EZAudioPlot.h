@@ -23,14 +23,22 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#import <QuartzCore/QuartzCore.h>
 #import "TargetConditionals.h"
+#import "EZAudioUtilities.h"
 #import "EZPlot.h"
 
 @class EZAudio;
 
 #define kEZAudioPlotMaxHistoryBufferLength (8192)
-
 #define kEZAudioPlotDefaultHistoryBufferLength (1024)
+
+//------------------------------------------------------------------------------
+#pragma mark - EZAudioPlotWaveformLayer
+//------------------------------------------------------------------------------
+
+@interface EZAudioPlotWaveformLayer : CAShapeLayer
+@end
 
 /**
  `EZAudioPlot`, a subclass of `EZPlot`, is a cross-platform (iOS and OSX) class that plots an audio waveform using Core Graphics. 
@@ -46,18 +54,24 @@
  
  */
 @interface EZAudioPlot : EZPlot
-{
-    CGPoint *plotData;
-    UInt32   plotLength;
-}
 
+/**
+ This property optimizes the audio plot drawing for real-time displays. Since the update function may be updating the plot's data very quickly (over 60 frames per second) this property will throttle the drawing calls to be 60 frames per second (or whatever the screen rate is).
+ */
+@property (nonatomic, assign) BOOL optimizeForRealtimePlot;
+@property (nonatomic, assign) BOOL centerYAxis;
+@property (nonatomic, strong) EZAudioPlotWaveformLayer *waveformLayer;
+
+//------------------------------------------------------------------------------
 #pragma mark - Adjust Resolution
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Adjusting The Resolution
 ///-----------------------------------------------------------
 
 /**
- Sets the length of the rolling history display. Can grow or shrink the display up to the maximum size specified by the kEZAudioPlotMaxHistoryBufferLength macro. Will return the actual set value, which will be either the given value if smaller than the kEZAudioPlotMaxHistoryBufferLength or kEZAudioPlotMaxHistoryBufferLength if a larger value is attempted to be set. 
+ The length of the rolling history display. Can grow or shrink the display up to the maximum size specified by the kEZAudioPlotMaxHistoryBufferLength macro. Will return the actual set value, which will be either the given value if smaller than the kEZAudioPlotMaxHistoryBufferLength or kEZAudioPlotMaxHistoryBufferLength if a larger value is attempted to be set.
  @param  historyLength The new length of the rolling history buffer.
  @return The new value equal to the historyLength or the kEZAudioPlotMaxHistoryBufferLength.
  */
@@ -69,12 +83,21 @@
  */
 -(int)rollingHistoryLength;
 
+//------------------------------------------------------------------------------
 #pragma mark - Subclass Methods
+//------------------------------------------------------------------------------
+
+///-----------------------------------------------------------
+/// @name Subclass Methods
+///-----------------------------------------------------------
+
+- (void)redraw;
 
 /**
- <#Description#>
- @param data   <#theplotData description#>
- @param length <#length description#>
+ Main method used to copy the sample data from the source buffer and update the 
+ plot. Subclasses can overwrite this method for custom behavior.
+ @param data   A float array of the sample data. Subclasses should copy this data to a separate array to avoid threading issues.
+ @param length The length of the float array as an int.
  */
 -(void)setSampleData:(float *)data
               length:(int)length;

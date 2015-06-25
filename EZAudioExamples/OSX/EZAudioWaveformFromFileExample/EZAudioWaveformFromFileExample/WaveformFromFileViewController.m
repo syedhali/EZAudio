@@ -34,18 +34,27 @@
 -(void)awakeFromNib
 {
     //
-    //Customizing the audio plot's look
+    // Customizing the audio plot's look
     //
+    
     // Background color
     self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.169 green: 0.643 blue: 0.675 alpha: 1];
+    
     // Waveform color
     self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
+    
     // Plot type
     self.audioPlot.plotType        = EZPlotTypeBuffer;
+    
     // Fill
     self.audioPlot.shouldFill      = YES;
+    
     // Mirror
     self.audioPlot.shouldMirror    = YES;
+    
+    // Don't optimze for real-time because we don't need to re-render
+    // the view 60 frames per second
+    self.audioPlot.optimizeForRealtimePlot = NO;
     
     //
     // Open the default file included with the example

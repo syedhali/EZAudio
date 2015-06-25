@@ -80,11 +80,11 @@
     {
         case EZRecorderFileTypeAIFF:
             asbd = [EZAudioUtilities AIFFFormatWithNumberOfChannels:sourceFormat.mChannelsPerFrame
-                                                sampleRate:sourceFormat.mSampleRate];
+                                                         sampleRate:sourceFormat.mSampleRate];
             break;
         case EZRecorderFileTypeM4A:
             asbd = [EZAudioUtilities M4AFormatWithNumberOfChannels:sourceFormat.mChannelsPerFrame
-                                               sampleRate:sourceFormat.mSampleRate];
+                                                        sampleRate:sourceFormat.mSampleRate];
             break;
             
         case EZRecorderFileTypeWAV:
@@ -128,27 +128,27 @@
     // Finish filling out the destination format description
     UInt32 propSize = sizeof(_destinationFormat);
     [EZAudioUtilities checkResult:AudioFormatGetProperty(kAudioFormatProperty_FormatInfo,
-                                                0,
-                                                NULL,
-                                                &propSize,
-                                                &_destinationFormat)
-               operation:"Failed to fill out rest of destination format"];
+                                                         0,
+                                                         NULL,
+                                                         &propSize,
+                                                         &_destinationFormat)
+                        operation:"Failed to fill out rest of destination format"];
     
     // Create the audio file
     [EZAudioUtilities checkResult:ExtAudioFileCreateWithURL(_destinationFileURL,
-                                                   _destinationFileTypeID,
-                                                   &_destinationFormat,
-                                                   NULL,
-                                                   kAudioFileFlags_EraseFile,
-                                                   &_destinationFile)
-               operation:"Failed to create audio file"];
+                                                            _destinationFileTypeID,
+                                                            &_destinationFormat,
+                                                            NULL,
+                                                            kAudioFileFlags_EraseFile,
+                                                            &_destinationFile)
+                        operation:"Failed to create audio file"];
     
     // Set the client format (which should be equal to the source format)
     [EZAudioUtilities checkResult:ExtAudioFileSetProperty(_destinationFile,
-                                                 kExtAudioFileProperty_ClientDataFormat,
-                                                 sizeof(_sourceFormat),
-                                                 &_sourceFormat)
-               operation:"Failed to set client format on recorded audio file"];
+                                                          kExtAudioFileProperty_ClientDataFormat,
+                                                          sizeof(_sourceFormat),
+                                                          &_sourceFormat)
+                        operation:"Failed to set client format on recorded audio file"];
     
 }
 
@@ -159,8 +159,8 @@
     if (_destinationFile)
     {
         [EZAudioUtilities checkResult:ExtAudioFileWriteAsync(_destinationFile,
-                                                    bufferSize,
-                                                    bufferList)
+                                                             bufferSize,
+                                                             bufferList)
                    operation:"Failed to write audio data to recorded audio file"];
     }
 }
@@ -171,7 +171,7 @@
     {
         // Dispose of the audio file reference
         [EZAudioUtilities checkResult:ExtAudioFileDispose(_destinationFile)
-                   operation:"Failed to close audio file"];
+                            operation:"Failed to close audio file"];
         
         // Null out the file reference
         _destinationFile = NULL;

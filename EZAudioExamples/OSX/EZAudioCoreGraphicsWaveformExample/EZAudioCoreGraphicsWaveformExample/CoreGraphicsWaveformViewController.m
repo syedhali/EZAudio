@@ -227,18 +227,19 @@ withNumberOfChannels:(UInt32)numberOfChannels
 - (void)microphone:(EZMicrophone *)microphone
      changedDevice:(EZAudioDevice *)device
 {
+    __weak typeof (self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         //
         // Set up the microphone input popup button's items to select
         // between different microphone inputs
         //
-        [self reloadMicrophoneInputPopUpButtonMenu];
+        [weakSelf reloadMicrophoneInputPopUpButtonMenu];
         
         //
         // Set up the microphone input popup button's items to select
         // between different microphone input channels
         //
-        [self reloadMicrophoneInputChannelPopUpButtonMenu];
+        [weakSelf reloadMicrophoneInputChannelPopUpButtonMenu];
     });
 }
 

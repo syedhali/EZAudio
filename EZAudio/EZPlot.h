@@ -24,8 +24,33 @@
 //  THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "TPCircularBuffer.h"
 
+//------------------------------------------------------------------------------
+#pragma mark - Data Structures
+//------------------------------------------------------------------------------
+
+typedef struct
+{
+    float            *buffer;
+    int               bufferSize;
+    TPCircularBuffer  circularBuffer;
+} EZAudioPlotHistoryInfo;
+
+//------------------------------------------------------------------------------
+#pragma mark - Types
+//------------------------------------------------------------------------------
+
+#if TARGET_OS_IPHONE
+typedef CGRect EZRect;
+#elif TARGET_OS_MAC
+typedef NSRect EZRect;
+#endif
+
+//------------------------------------------------------------------------------
 #pragma mark - Enumerations
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Plot Types
 ///-----------------------------------------------------------
@@ -33,15 +58,16 @@
 /**
  The types of plots that can be displayed in the view using the data.
  */
-typedef NS_ENUM(NSInteger,EZPlotType){
-  /**
-   Plot that displays only the samples of the current buffer
-   */
-  EZPlotTypeBuffer,
-  /**
-   Plot that displays a rolling history of values using the RMS calculated for each incoming buffer
-   */
-  EZPlotTypeRolling
+typedef NS_ENUM(NSInteger, EZPlotType)
+{
+    /**
+     Plot that displays only the samples of the current buffer
+     */
+    EZPlotTypeBuffer,
+    /**
+     Plot that displays a rolling history of values using the RMS calculated for each incoming buffer
+     */
+    EZPlotTypeRolling
 };
 
 /**
@@ -59,7 +85,10 @@ typedef NS_ENUM(NSInteger,EZPlotType){
 @interface EZPlot : NSView
 #endif
 
+//------------------------------------------------------------------------------
 #pragma mark - Properties
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Customizing The Plot's Appearance
 ///-----------------------------------------------------------
@@ -93,7 +122,10 @@ typedef NS_ENUM(NSInteger,EZPlotType){
  */
 @property (nonatomic,assign,setter=setShouldMirror:) BOOL shouldMirror;
 
+//------------------------------------------------------------------------------
 #pragma mark - Clearing
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Clearing The Plot
 ///-----------------------------------------------------------
@@ -103,7 +135,10 @@ typedef NS_ENUM(NSInteger,EZPlotType){
  */
 -(void)clear;
 
+//------------------------------------------------------------------------------
 #pragma mark - Get Samples
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Updating The Plot
 ///-----------------------------------------------------------

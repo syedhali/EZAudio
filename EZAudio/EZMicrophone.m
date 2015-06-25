@@ -602,7 +602,11 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 
 - (UInt32)numberOfChannels
 {
+#if TARGET_OS_IPHONE
     return 1;
+#elif TARGET_OS_MAC
+    return (UInt32)self.device.inputChannelCount;
+#endif
 }
 
 //------------------------------------------------------------------------------

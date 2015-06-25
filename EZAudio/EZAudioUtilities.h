@@ -27,6 +27,11 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "TPCircularBuffer.h"
 
+#if TARGET_OS_IPHONE
+#import <AVFoundation/AVFoundation.h>
+#elif TARGET_OS_MAC
+#endif
+
 //------------------------------------------------------------------------------
 #pragma mark - EZAudioUtilities
 //------------------------------------------------------------------------------

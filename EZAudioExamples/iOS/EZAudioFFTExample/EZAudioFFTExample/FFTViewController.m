@@ -64,6 +64,7 @@
   self.audioPlotFreq.color           = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
   self.audioPlotFreq.shouldFill      = YES;
   self.audioPlotFreq.plotType        = EZPlotTypeBuffer;
+    self.audioPlotFreq.centerYAxis = NO;
   
   /*
    Start the microphone

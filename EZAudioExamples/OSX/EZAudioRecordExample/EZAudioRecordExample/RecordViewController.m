@@ -135,16 +135,14 @@
         case NSOffState:
             [self.recorder closeAudioFile];
             break;
-            
         case NSOnState:
             /*
              Create the recorder
              */
             self.recorder = [EZRecorder recorderWithDestinationURL:[NSURL fileURLWithPath:kAudioFilePath]
-                                                      sourceFormat:self.microphone.audioStreamBasicDescription
+                                                      sourceFormat:[self.microphone audioStreamBasicDescription]
                                                destinationFileType:EZRecorderFileTypeM4A];
             break;
-            
         default:
             break;
     }

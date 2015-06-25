@@ -61,6 +61,7 @@ BOOL __shouldExitOnCheckResultFail = YES;
         audioBufferList->mBuffers[i].mNumberChannels = channels;
         audioBufferList->mBuffers[i].mDataByteSize = channels * outputBufferSize;
         audioBufferList->mBuffers[i].mData = (float *)malloc(channels * sizeof(float) *outputBufferSize);
+        memset(audioBufferList->mBuffers[i].mData, 0, frames);
     }
     return audioBufferList;
 }
