@@ -30,8 +30,12 @@
 
 @class EZAudio;
 
-#define kEZAudioPlotMaxHistoryBufferLength (8192)
-#define kEZAudioPlotDefaultHistoryBufferLength (1024)
+//------------------------------------------------------------------------------
+#pragma mark - Constants
+//------------------------------------------------------------------------------
+
+FOUNDATION_EXPORT UInt32 const kEZAudioPlotMaxHistoryBufferLength;
+FOUNDATION_EXPORT UInt32 const kEZAudioPlotDefaultHistoryBufferLength;
 
 //------------------------------------------------------------------------------
 #pragma mark - EZAudioPlotWaveformLayer
@@ -56,10 +60,22 @@
 @interface EZAudioPlot : EZPlot
 
 /**
- This property optimizes the audio plot drawing for real-time displays. Since the update function may be updating the plot's data very quickly (over 60 frames per second) this property will throttle the drawing calls to be 60 frames per second (or whatever the screen rate is).
+ A BOOL that allows optimizing the audio plot's drawing for real-time displays. Since the update function may be updating the plot's data very quickly (over 60 frames per second) this property will throttle the drawing calls to be 60 frames per second (or whatever the screen rate is). Specifically, it disables implicit path change animations on the `waveformLayer` and sets up a display link to render 60 fps (audio updating the plot at 44.1 kHz causes it to re-render 86 fps - far greater than what is needed for a visual display).
  */
-@property (nonatomic, assign) BOOL optimizeForRealtimePlot;
-@property (nonatomic, assign) BOOL centerYAxis;
+@property (nonatomic, assign) BOOL shouldOptimizeForRealtimePlot;
+
+//------------------------------------------------------------------------------
+
+/**
+ A BOOL indicating whether the plot should center itself vertically.
+ */
+@property (nonatomic, assign) BOOL shouldCenterYAxis;
+
+//------------------------------------------------------------------------------
+
+/**
+ An `EZAudioPlotWaveformLayer` that is used to render the actual waveform. By switching the drawing code to Core Animation layers in version 0.2.0 most work, specifically the compositing step, is now done on the GPU. Hence, multiple EZAudioPlot instances can be used simultaneously with very low CPU overhead so these are now practical for table and collection views.
+ */
 @property (nonatomic, strong) EZAudioPlotWaveformLayer *waveformLayer;
 
 //------------------------------------------------------------------------------
@@ -77,6 +93,8 @@
  */
 -(int)setRollingHistoryLength:(int)historyLength;
 
+//------------------------------------------------------------------------------
+
 /**
  Provides the length of the rolling history buffer
  *  @return An int representing the length of the rolling history buffer
@@ -91,7 +109,37 @@
 /// @name Subclass Methods
 ///-----------------------------------------------------------
 
+/**
+ <#Description#>
+ @param points     <#points description#>
+ @param pointCount <#pointCount description#>
+ @param rect       <#rect description#>
+ @return <#return value description#>
+ */
+- (CGPathRef)createPathWithPoints:(CGPoint *)points
+                       pointCount:(UInt32)pointCount
+                           inRect:(EZRect)rect;
+
+//------------------------------------------------------------------------------
+
+/**
+ <#Description#>
+ @return <#return value description#>
+ */
+- (UInt32)initialPointCount;
+
+//------------------------------------------------------------------------------
+
+- (UInt32)maximumRollingHistoryLength;
+
+//------------------------------------------------------------------------------
+
+/**
+ <#Description#>
+ */
 - (void)redraw;
+
+//------------------------------------------------------------------------------
 
 /**
  Main method used to copy the sample data from the source buffer and update the 
@@ -101,5 +149,7 @@
  */
 -(void)setSampleData:(float *)data
               length:(int)length;
+
+//------------------------------------------------------------------------------
 
 @end

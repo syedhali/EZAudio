@@ -25,7 +25,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="480" height="132"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </customView>
-                        <customView fixedFrame="YES" id="4V2-1I-w64" customClass="EZAudioPlotGL">
+                        <customView fixedFrame="YES" id="4V2-1I-w64" customClass="EZAudioPlot">
                             <rect key="frame" x="0.0" y="133" width="480" height="139"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </customView>

@@ -54,7 +54,7 @@
     
     // Don't optimze for real-time because we don't need to re-render
     // the view 60 frames per second
-    self.audioPlot.optimizeForRealtimePlot = NO;
+    self.audioPlot.shouldOptimizeForRealtimePlot = NO;
     
     //
     // Open the default file included with the example
@@ -119,6 +119,10 @@
     {
         [weakSelf.audioPlot updateBuffer:waveformData
                           withBufferSize:length];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.audioPlot clear];
+        });
     }];
 }
 

@@ -26,36 +26,15 @@
 #import "EZAudioPlot.h"
 #import "EZAudioDisplayLink.h"
 
-////------------------------------------------------------------------------------
-//#pragma mark - EZAudioPlotWaveformLayer
-////------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+#pragma mark - Constants
+//------------------------------------------------------------------------------
 
-@implementation EZAudioPlotWaveformLayer
-
-- (id<CAAction>)actionForKey:(NSString *)event
-{
-    if ([event isEqualToString:@"path"])
-    {
-        if ([CATransaction disableActions])
-        {
-            return nil;
-        }
-        else
-        {
-            CABasicAnimation *animation = [CABasicAnimation animation];
-            animation.timingFunction = [CATransaction animationTimingFunction];
-            animation.duration = [CATransaction animationDuration];
-            return animation;
-        }
-        return nil;
-    }
-    return [super actionForKey:event];
-}
-
-@end
+UInt32 const kEZAudioPlotMaxHistoryBufferLength     = 8192;
+UInt32 const kEZAudioPlotDefaultHistoryBufferLength = 256;
 
 //------------------------------------------------------------------------------
-#pragma mark - EZAudioPlot
+#pragma mark - EZAudioPlot (Interface Extension)
 //------------------------------------------------------------------------------
 
 @interface EZAudioPlot () <EZAudioDisplayLinkDelegate>
@@ -64,6 +43,10 @@
 @property (nonatomic, assign) CGPoint *points;
 @property (nonatomic, assign) UInt32 pointCount;
 @end
+
+//------------------------------------------------------------------------------
+#pragma mark - EZAudioPlot (Implementation)
+//------------------------------------------------------------------------------
 
 @implementation EZAudioPlot
 
@@ -74,6 +57,7 @@
 - (void)dealloc
 {
     TPCircularBufferCleanup(&self.historyInfo->circularBuffer);
+    free(self.historyInfo->buffer);
     free(self.historyInfo);
     free(self.points);
 }
@@ -140,27 +124,30 @@
 
 - (void)initPlot
 {
-    self.centerYAxis = YES;
-    self.optimizeForRealtimePlot = YES;
+    self.shouldCenterYAxis = YES;
+    self.shouldOptimizeForRealtimePlot = YES;
     self.gain = 1.0;
     self.plotType = EZPlotTypeBuffer;
-    self.shouldMirror = YES;
-    self.shouldFill = YES;
+    self.shouldMirror = NO;
+    self.shouldFill = NO;
     
     // Setup history window
     self.historyInfo = (EZAudioPlotHistoryInfo *)malloc(sizeof(EZAudioPlotHistoryInfo));
     self.historyInfo->bufferSize = kEZAudioPlotDefaultHistoryBufferLength;
     self.historyInfo->buffer = calloc(self.rollingHistoryLength, sizeof(float));
-    TPCircularBufferInit(&self.historyInfo->circularBuffer, kEZAudioPlotDefaultHistoryBufferLength);
+    TPCircularBufferInit(&self.historyInfo->circularBuffer, kEZAudioPlotMaxHistoryBufferLength);
+    
+    float src[kEZAudioPlotMaxHistoryBufferLength];
+    memset(src, 0, kEZAudioPlotMaxHistoryBufferLength * sizeof(float));
+    TPCircularBufferProduceBytes(&self.historyInfo->circularBuffer, src, sizeof(src));
     
     self.waveformLayer = [EZAudioPlotWaveformLayer layer];
     self.waveformLayer.frame = self.bounds;
     self.waveformLayer.lineWidth = 1.0f;
     self.waveformLayer.fillColor = nil;
     self.waveformLayer.backgroundColor = nil;
+    self.waveformLayer.opaque = YES;
     
-    self.points = calloc(kEZAudioPlotMaxHistoryBufferLength, sizeof(CGPoint));
-    self.pointCount = 0;
 #if TARGET_OS_IPHONE
     self.color = [UIColor colorWithHue:0 saturation:1.0 brightness:1.0 alpha:1.0]; 
 #elif TARGET_OS_MAC
@@ -169,6 +156,10 @@
 #endif
     self.backgroundColor = nil;
     [self.layer addSublayer:self.waveformLayer];
+    
+    self.points = calloc(kEZAudioPlotMaxHistoryBufferLength, sizeof(CGPoint));
+    self.pointCount = [self initialPointCount];
+    [self redraw];
 }
 
 //------------------------------------------------------------------------------
@@ -195,10 +186,10 @@
 
 //------------------------------------------------------------------------------
 
-- (void)setOptimizeForRealtimePlot:(BOOL)optimizeForRealtimePlot
+- (void)setShouldOptimizeForRealtimePlot:(BOOL)shouldOptimizeForRealtimePlot
 {
-    _optimizeForRealtimePlot = optimizeForRealtimePlot;
-    if (optimizeForRealtimePlot && !self.displayLink)
+    _shouldOptimizeForRealtimePlot = shouldOptimizeForRealtimePlot;
+    if (shouldOptimizeForRealtimePlot && !self.displayLink)
     {
         self.displayLink = [EZAudioDisplayLink displayLinkWithDelegate:self];
         [self.displayLink start];
@@ -222,37 +213,73 @@
 #pragma mark - Drawing
 //------------------------------------------------------------------------------
 
+- (void)clear
+{
+    if (self.pointCount > 0)
+    {
+        float data[self.pointCount];
+        memset(data, 0, self.pointCount * sizeof(float));
+        [self setSampleData:data length:self.pointCount];
+        [self redraw];
+    }
+}
+
+//------------------------------------------------------------------------------
+
 - (void)redraw
 {
     EZRect frame = [self.waveformLayer frame];
-    if (self.pointCount > 0)
+    CGPathRef path = [self createPathWithPoints:self.points
+                                     pointCount:self.pointCount
+                                         inRect:frame];
+    if (self.shouldOptimizeForRealtimePlot)
     {
-        CGContextRef context = [self context];
-        CGContextSetAllowsAntialiasing(context, NO);
-        CGMutablePathRef path = CGPathCreateMutable();
-        double xscale = (frame.size.width) / ((float)self.pointCount / 2.0f);
-        double halfHeight = floor(frame.size.height / 2.0);
-        int deviceOriginFlipped = 1;
-#if TARGET_OS_IPHONE
-        deviceOriginFlipped = -1;
-#elif TARGET_OS_MAC
-#endif
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
+        self.waveformLayer.path = path;
+        [CATransaction commit];
+    }
+    else
+    {
+        self.waveformLayer.path = path;
+    }
+    CGPathRelease(path);
+}
+
+//------------------------------------------------------------------------------
+
+- (CGPathRef)createPathWithPoints:(CGPoint *)points
+                  pointCount:(UInt32)pointCount
+                      inRect:(EZRect)rect
+{
+    CGMutablePathRef path = NULL;
+    if (pointCount > 0)
+    {
+        path = CGPathCreateMutable();
+        double xscale = (rect.size.width) / ((float)self.pointCount);
+        double halfHeight = floor(rect.size.height / 2.0);
+        int deviceOriginFlipped = [self isDeviceOriginFlipped] ? -1 : 1;
         CGAffineTransform xf = CGAffineTransformIdentity;
         CGFloat translateY = 0.0f;
-        if (!self.centerYAxis)
+        if (!self.shouldCenterYAxis)
         {
 #if TARGET_OS_IPHONE
-            translateY = CGRectGetHeight(frame);
+            translateY = CGRectGetHeight(rect);
 #elif TARGET_OS_MAC
             translateY = 0.0f;
 #endif
         }
         else
         {
-            translateY = halfHeight + frame.origin.y;
+            translateY = halfHeight + rect.origin.y;
         }
         xf = CGAffineTransformTranslate(xf, 0.0, translateY);
-        xf = CGAffineTransformScale(xf, xscale, deviceOriginFlipped * halfHeight);
+        double yScaleFactor = halfHeight;
+        if (!self.shouldCenterYAxis)
+        {
+            yScaleFactor = 2.0 * halfHeight;
+        }
+        xf = CGAffineTransformScale(xf, xscale, deviceOriginFlipped * yScaleFactor);
         CGPathAddLines(path, &xf, self.points, self.pointCount);
         if (self.shouldMirror)
         {
@@ -263,19 +290,8 @@
         {
             CGPathCloseSubpath(path);
         }
-        if (self.optimizeForRealtimePlot)
-        {
-            [CATransaction begin];
-            [CATransaction setDisableActions:YES];
-            self.waveformLayer.path = path;
-            [CATransaction commit];
-        }
-        else
-        {
-            self.waveformLayer.path = path;
-        }
-        CGPathRelease(path);
     }
+    return path;
 }
 
 //------------------------------------------------------------------------------
@@ -316,7 +332,7 @@
     }
     
     // update drawing
-    if (!self.optimizeForRealtimePlot)
+    if (!self.shouldOptimizeForRealtimePlot)
     {
         [self redraw];
     }
@@ -354,6 +370,36 @@
 }
 
 //------------------------------------------------------------------------------
+#pragma mark - Subclass
+//------------------------------------------------------------------------------
+
+- (UInt32)initialPointCount
+{
+    return 100;
+}
+
+//------------------------------------------------------------------------------
+
+- (UInt32)maximumRollingHistoryLength
+{
+    return kEZAudioPlotMaxHistoryBufferLength;
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Utility
+//------------------------------------------------------------------------------
+
+- (BOOL)isDeviceOriginFlipped
+{
+    BOOL isDeviceOriginFlipped = NO;
+#if TARGET_OS_IPHONE
+    isDeviceOriginFlipped = YES;
+#elif TARGET_OS_MAC
+#endif
+    return isDeviceOriginFlipped;
+}
+
+//------------------------------------------------------------------------------
 #pragma mark - EZAudioDisplayLinkDelegate
 //------------------------------------------------------------------------------
 
@@ -363,18 +409,33 @@
 }
 
 //------------------------------------------------------------------------------
-#pragma mark - Utility
-//------------------------------------------------------------------------------
 
-- (CGContextRef)context
+@end
+
+////------------------------------------------------------------------------------
+#pragma mark - EZAudioPlotWaveformLayer (Implementation)
+////------------------------------------------------------------------------------
+
+@implementation EZAudioPlotWaveformLayer
+
+- (id<CAAction>)actionForKey:(NSString *)event
 {
-#if TARGET_OS_IPHONE
-    return UIGraphicsGetCurrentContext();
-#elif TARGET_OS_MAC
-    return [[NSGraphicsContext currentContext] CGContext];
-#endif
+    if ([event isEqualToString:@"path"])
+    {
+        if ([CATransaction disableActions])
+        {
+            return nil;
+        }
+        else
+        {
+            CABasicAnimation *animation = [CABasicAnimation animation];
+            animation.timingFunction = [CATransaction animationTimingFunction];
+            animation.duration = [CATransaction animationDuration];
+            return animation;
+        }
+        return nil;
+    }
+    return [super actionForKey:event];
 }
-
-//------------------------------------------------------------------------------
 
 @end

@@ -41,7 +41,7 @@
     // Mirror
     self.audioPlot.shouldMirror    = YES;
     // No need to optimze for realtime
-    self.audioPlot.optimizeForRealtimePlot = NO;
+    self.audioPlot.shouldOptimizeForRealtimePlot = NO;
   
     //
     // Load in the sample file

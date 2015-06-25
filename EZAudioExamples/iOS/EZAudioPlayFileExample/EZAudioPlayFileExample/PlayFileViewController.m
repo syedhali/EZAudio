@@ -8,14 +8,6 @@
 
 #import "PlayFileViewController.h"
 
-@interface PlayFileViewController (){
-  float  *_waveformData;
-  UInt32 _waveformDrawingIndex;
-  UInt32 _waveformFrameRate;
-  UInt32 _waveformTotalBuffers;
-}
-@end
-
 @implementation PlayFileViewController
 @synthesize audioFile = _audioFile;
 @synthesize audioPlot = _audioPlot;
@@ -67,6 +59,12 @@
     default:
       break;
   }
+}
+
+- (void)changeRollingHistoryLength:(id)sender
+{
+    float value = [(UISlider *)sender value];
+    [self.audioPlot setRollingHistoryLength:(int)value];
 }
 
 -(void)play:(id)sender {

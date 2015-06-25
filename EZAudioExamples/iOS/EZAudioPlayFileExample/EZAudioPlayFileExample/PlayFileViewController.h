@@ -53,16 +53,18 @@
 /**
  Switches the plot drawing type between a buffer plot (visualizes the current stream of audio data from the update function) or a rolling plot (visualizes the audio data over time, this is the classic waveform look)
  */
--(IBAction)changePlotType:(id)sender;
+- (IBAction)changePlotType:(id)sender;
+
+- (IBAction)changeRollingHistoryLength:(id)sender;
 
 /**
  Begins playback if a file is loaded. Pauses if the file is already playing.
  */
--(IBAction)play:(id)sender;
+- (IBAction)play:(id)sender;
 
 /**
  Seeks to a specific frame in the audio file.
  */
--(IBAction)seekToFrame:(id)sender;
+- (IBAction)seekToFrame:(id)sender;
 
 @end

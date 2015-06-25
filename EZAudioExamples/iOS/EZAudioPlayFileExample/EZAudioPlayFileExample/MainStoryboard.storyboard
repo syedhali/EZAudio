@@ -66,17 +66,26 @@
                                             <action selector="seekToFrame:" destination="scx-fQ-Cxi" eventType="valueChanged" id="6ZA-4m-9I2"/>
                                         </connections>
                                     </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="128" minValue="128" maxValue="1024" translatesAutoresizingMaskIntoConstraints="NO" id="2qJ-Va-Qht">
+                                        <rect key="frame" x="16" y="444" width="568" height="31"/>
+                                        <connections>
+                                            <action selector="changeRollingHistoryLength:" destination="scx-fQ-Cxi" eventType="valueChanged" id="u97-4p-2XN"/>
+                                        </connections>
+                                    </slider>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="2qJ-Va-Qht" firstAttribute="leading" secondItem="kt3-hw-eFY" secondAttribute="leading" constant="18" id="00p-wq-fKY"/>
                                     <constraint firstAttribute="bottom" secondItem="MLt-5E-p8a" secondAttribute="bottom" constant="18" id="46R-jP-jcZ"/>
                                     <constraint firstItem="Oc2-kU-kAJ" firstAttribute="leading" secondItem="kt3-hw-eFY" secondAttribute="leading" constant="18" id="Dp8-Eh-avH"/>
                                     <constraint firstItem="i5r-ex-ukW" firstAttribute="leading" secondItem="kt3-hw-eFY" secondAttribute="leading" constant="18" id="FaC-cD-IeU"/>
                                     <constraint firstAttribute="bottom" secondItem="X0b-lY-wCz" secondAttribute="bottom" constant="18" id="Iag-wG-Qnw"/>
                                     <constraint firstItem="MLt-5E-p8a" firstAttribute="leading" secondItem="kt3-hw-eFY" secondAttribute="leading" constant="2" id="QrQ-cc-2uX"/>
+                                    <constraint firstItem="Oc2-kU-kAJ" firstAttribute="top" secondItem="2qJ-Va-Qht" secondAttribute="bottom" constant="9" id="Rhw-Tg-uc0"/>
                                     <constraint firstAttribute="trailing" secondItem="X0b-lY-wCz" secondAttribute="trailing" constant="18" id="c1r-xy-Yfx"/>
                                     <constraint firstAttribute="trailing" secondItem="i5r-ex-ukW" secondAttribute="trailing" constant="18" id="dg1-88-zag"/>
                                     <constraint firstItem="MLt-5E-p8a" firstAttribute="top" secondItem="i5r-ex-ukW" secondAttribute="bottom" constant="9" id="dmj-r9-1sQ"/>
+                                    <constraint firstAttribute="trailing" secondItem="2qJ-Va-Qht" secondAttribute="trailing" constant="18" id="e9z-Gb-blv"/>
                                     <constraint firstItem="i5r-ex-ukW" firstAttribute="top" secondItem="Oc2-kU-kAJ" secondAttribute="bottom" constant="9" id="fJ8-zg-O02"/>
                                     <constraint firstAttribute="trailing" secondItem="Oc2-kU-kAJ" secondAttribute="trailing" constant="18" id="h2G-4L-LQN"/>
                                 </constraints>
