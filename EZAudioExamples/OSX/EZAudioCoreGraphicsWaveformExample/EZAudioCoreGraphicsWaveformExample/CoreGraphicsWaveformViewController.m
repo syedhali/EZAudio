@@ -102,10 +102,8 @@
     for (int i = 0; i < self.microphone.device.inputChannelCount; i++)
     {
         NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:@(i).stringValue
-                                                      action:@selector(changedInputChannel:)
+                                                      action:nil
                                                keyEquivalent:@""];
-        item.representedObject = @(i);
-        item.target = self;
         [menu addItem:item];
     }
     self.microphoneInputChannelPopUpButton.menu = menu;
