@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   s.name         = "EZAudio"
   s.version      = "0.2.0"
   s.summary      = "A simple, intuitive audio framework for iOS and OSX useful for anyone doing audio processing and/or audio-based visualizations."
-  s.homepage     = ""
+  s.homepage     = "https://github.com/syedhali/EZAudio"
   s.screenshots  = "https://s3-us-west-1.amazonaws.com/ezaudio-media/EZAudioSummary.png"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.author       = { "Syed Haris Ali" => "syedhali07@gmail.com" }
