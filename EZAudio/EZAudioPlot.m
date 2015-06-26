@@ -150,7 +150,7 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
     self.wantsLayer = YES;
 #endif
     self.backgroundColor = nil;
-    [self.layer addSublayer:self.waveformLayer];
+    [self.layer insertSublayer:self.waveformLayer atIndex:0];
     
     self.points = calloc(EZAudioPlotDefaultMaxHistoryBufferLength, sizeof(CGPoint));
     self.pointCount = [self initialPointCount];
