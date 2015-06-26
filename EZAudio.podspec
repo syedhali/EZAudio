@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "EZAudio"
-  s.version      = "0.1.0"
+  s.version      = "0.2.0"
   s.summary      = "A simple, intuitive audio framework for iOS and OSX useful for anyone doing audio processing and/or audio-based visualizations."
   s.homepage     = "http://syedharisali.com/projects/EZAudio/getting-started"
   s.screenshots  = "https://s3-us-west-1.amazonaws.com/ezaudio-media/EZAudioSummary.png"
