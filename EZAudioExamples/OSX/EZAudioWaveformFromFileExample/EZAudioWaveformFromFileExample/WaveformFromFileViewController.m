@@ -56,6 +56,12 @@
     // the view 60 frames per second
     self.audioPlot.shouldOptimizeForRealtimePlot = NO;
     
+    // Customize the layer with a shadow for fun
+    self.audioPlot.waveformLayer.shadowOffset = CGSizeMake(0.0, -1.0);
+    self.audioPlot.waveformLayer.shadowRadius = 0.0;
+    self.audioPlot.waveformLayer.shadowColor = [NSColor colorWithCalibratedRed: 0.069 green: 0.543 blue: 0.575 alpha: 1].CGColor;
+    self.audioPlot.waveformLayer.shadowOpacity = 1.0;
+    
     //
     // Open the default file included with the example
     //

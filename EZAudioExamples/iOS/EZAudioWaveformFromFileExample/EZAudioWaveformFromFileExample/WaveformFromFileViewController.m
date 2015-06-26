@@ -42,6 +42,11 @@
     self.audioPlot.shouldMirror    = YES;
     // No need to optimze for realtime
     self.audioPlot.shouldOptimizeForRealtimePlot = NO;
+    // Customize the layer with a shadow for fun
+    self.audioPlot.waveformLayer.shadowOffset = CGSizeMake(0.0, 1.0);
+    self.audioPlot.waveformLayer.shadowRadius = 0.0;
+    self.audioPlot.waveformLayer.shadowColor = [UIColor colorWithRed: 0.069 green: 0.543 blue: 0.575 alpha: 1].CGColor;
+    self.audioPlot.waveformLayer.shadowOpacity = 1.0;
   
     //
     // Load in the sample file
