@@ -570,12 +570,17 @@ BOOL __shouldExitOnCheckResultFail = YES;
             toHistoryInfo:(EZPlotHistoryInfo *)historyInfo
  withRollingHistoryLength:(int)length
 {
+    //
+    // Do nothing if there is no buffer
+    //
     if (bufferSize == 0)
     {
         return;
     }
     
-    // update the scroll history datasource
+    //
+    // Update the scroll history datasource
+    //
     float rms = [EZAudioUtilities RMS:buffer length:bufferSize];
     float src[1];
     src[0] = isnan(rms) ? 0.0 : rms;
