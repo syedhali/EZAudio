@@ -30,8 +30,10 @@
 #pragma mark - Constants
 //------------------------------------------------------------------------------
 
-UInt32 const kEZAudioPlotMaxHistoryBufferLength     = 8192;
-UInt32 const kEZAudioPlotDefaultHistoryBufferLength = 256;
+UInt32 const kEZAudioPlotMaxHistoryBufferLength = 8192;
+UInt32 const kEZAudioPlotDefaultHistoryBufferLength = 512;
+UInt32 const EZAudioPlotDefaultHistoryBufferLength = 512;
+UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
 
 //------------------------------------------------------------------------------
 #pragma mark - EZAudioPlot (Interface Extension)
@@ -132,14 +134,7 @@ UInt32 const kEZAudioPlotDefaultHistoryBufferLength = 256;
     self.shouldFill = NO;
     
     // Setup history window
-    self.historyInfo = (EZAudioPlotHistoryInfo *)malloc(sizeof(EZAudioPlotHistoryInfo));
-    self.historyInfo->bufferSize = kEZAudioPlotDefaultHistoryBufferLength;
-    self.historyInfo->buffer = calloc(self.rollingHistoryLength, sizeof(float));
-    TPCircularBufferInit(&self.historyInfo->circularBuffer, kEZAudioPlotMaxHistoryBufferLength);
-    
-    float src[kEZAudioPlotMaxHistoryBufferLength];
-    memset(src, 0, kEZAudioPlotMaxHistoryBufferLength * sizeof(float));
-    TPCircularBufferProduceBytes(&self.historyInfo->circularBuffer, src, sizeof(src));
+    [self resetHistoryBuffers];
     
     self.waveformLayer = [EZAudioPlotWaveformLayer layer];
     self.waveformLayer.frame = self.bounds;
@@ -157,9 +152,44 @@ UInt32 const kEZAudioPlotDefaultHistoryBufferLength = 256;
     self.backgroundColor = nil;
     [self.layer addSublayer:self.waveformLayer];
     
-    self.points = calloc(kEZAudioPlotMaxHistoryBufferLength, sizeof(CGPoint));
+    self.points = calloc(EZAudioPlotDefaultMaxHistoryBufferLength, sizeof(CGPoint));
     self.pointCount = [self initialPointCount];
     [self redraw];
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Setup
+//------------------------------------------------------------------------------
+
+- (void)resetHistoryBuffers
+{
+    //
+    // Clear any existing data
+    //
+    if (self.historyInfo)
+    {
+        free(self.historyInfo->buffer);
+        free(self.historyInfo);
+        TPCircularBufferClear(&self.historyInfo->circularBuffer);
+    }
+    
+    //
+    // Setup buffers
+    //
+    int maximumRollingHistoryLength = [self maximumRollingHistoryLength];
+    self.historyInfo = (EZAudioPlotHistoryInfo *)malloc(sizeof(EZAudioPlotHistoryInfo));
+    self.historyInfo->bufferSize = EZAudioPlotDefaultHistoryBufferLength;
+    self.historyInfo->buffer = calloc(maximumRollingHistoryLength, sizeof(float));
+    TPCircularBufferInit(&self.historyInfo->circularBuffer, maximumRollingHistoryLength);
+    
+    //
+    // Zero out circular buffer
+    //
+    float emptyBuffer[maximumRollingHistoryLength];
+    memset(emptyBuffer, 0, sizeof(emptyBuffer));
+    TPCircularBufferProduceBytes(&self.historyInfo->circularBuffer,
+                                 emptyBuffer,
+                                 (int32_t)sizeof(emptyBuffer));
 }
 
 //------------------------------------------------------------------------------
@@ -217,6 +247,7 @@ UInt32 const kEZAudioPlotDefaultHistoryBufferLength = 256;
 {
     if (self.pointCount > 0)
     {
+        [self resetHistoryBuffers];
         float data[self.pointCount];
         memset(data, 0, self.pointCount * sizeof(float));
         [self setSampleData:data length:self.pointCount];
@@ -300,6 +331,11 @@ UInt32 const kEZAudioPlotDefaultHistoryBufferLength = 256;
 
 - (void)updateBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize
 {
+    if (bufferSize == 0)
+    {
+        return;
+    }
+    
     // update the scroll history datasource
     float rms = [EZAudioUtilities RMS:buffer length:bufferSize];
     float src[1];
@@ -309,7 +345,7 @@ UInt32 const kEZAudioPlotDefaultHistoryBufferLength = 256;
     int32_t availableBytes = 0;
     float *historyBuffer = TPCircularBufferTail(&self.historyInfo->circularBuffer, &availableBytes);
     int32_t bytes = MIN(targetBytes, availableBytes);
-    memcpy(self.historyInfo->buffer, historyBuffer, bytes);
+    memmove(self.historyInfo->buffer, historyBuffer, bytes);
     if (targetBytes <= availableBytes)
     {
         TPCircularBufferConsume(&self.historyInfo->circularBuffer, sizeof(src));
@@ -365,7 +401,7 @@ UInt32 const kEZAudioPlotDefaultHistoryBufferLength = 256;
 
 - (int)setRollingHistoryLength:(int)historyLength
 {
-    self.historyInfo->bufferSize = MIN(kEZAudioPlotMaxHistoryBufferLength, historyLength);
+    self.historyInfo->bufferSize = MIN(EZAudioPlotDefaultMaxHistoryBufferLength, historyLength);
     return self.historyInfo->bufferSize;
 }
 
@@ -373,16 +409,23 @@ UInt32 const kEZAudioPlotDefaultHistoryBufferLength = 256;
 #pragma mark - Subclass
 //------------------------------------------------------------------------------
 
-- (UInt32)initialPointCount
+- (int)defaultRollingHistoryLength
+{
+    return EZAudioPlotDefaultHistoryBufferLength;
+}
+
+//------------------------------------------------------------------------------
+
+- (int)initialPointCount
 {
     return 100;
 }
 
 //------------------------------------------------------------------------------
 
-- (UInt32)maximumRollingHistoryLength
+- (int)maximumRollingHistoryLength
 {
-    return kEZAudioPlotMaxHistoryBufferLength;
+    return EZAudioPlotDefaultMaxHistoryBufferLength;
 }
 
 //------------------------------------------------------------------------------

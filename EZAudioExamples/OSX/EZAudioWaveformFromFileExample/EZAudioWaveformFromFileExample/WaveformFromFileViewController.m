@@ -109,6 +109,10 @@
     self.audioPlot.plotType     = EZPlotTypeBuffer;
     self.audioPlot.shouldFill   = YES;
     self.audioPlot.shouldMirror = YES;
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:0.11f];
+    [self.audioPlot clear];
+    [CATransaction commit];
     
     //
     // Plot the whole waveform
@@ -119,10 +123,6 @@
     {
         [weakSelf.audioPlot updateBuffer:waveformData
                           withBufferSize:length];
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf.audioPlot clear];
-        });
     }];
 }
 

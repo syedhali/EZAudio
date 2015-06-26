@@ -55,6 +55,9 @@
  */
 - (IBAction)changePlotType:(id)sender;
 
+/**
+ Changes the length of the rolling history of the audio plot.
+ */
 - (IBAction)changeRollingHistoryLength:(id)sender;
 
 /**

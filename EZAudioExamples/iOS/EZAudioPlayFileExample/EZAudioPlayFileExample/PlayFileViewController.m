@@ -68,7 +68,8 @@
 }
 
 -(void)play:(id)sender {
-  if( ![[EZOutput sharedOutput] isPlaying] ){
+  if( ![[EZOutput sharedOutput] isPlaying] )
+  {
     if( self.eof ){
       [self.audioFile seekToFrame:0];
     }

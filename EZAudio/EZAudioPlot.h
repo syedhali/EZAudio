@@ -34,8 +34,29 @@
 #pragma mark - Constants
 //------------------------------------------------------------------------------
 
-FOUNDATION_EXPORT UInt32 const kEZAudioPlotMaxHistoryBufferLength;
-FOUNDATION_EXPORT UInt32 const kEZAudioPlotDefaultHistoryBufferLength;
+/**
+ The default value used for the maximum rolling history buffer length of any EZAudioPlot.
+ @deprecated This constant is deprecated starting in version 0.2.0.
+ @note Please use EZAudioPlotDefaultMaxHistoryBufferLength instead.
+ */
+FOUNDATION_EXPORT UInt32 const kEZAudioPlotMaxHistoryBufferLength __attribute__((deprecated));
+
+/**
+ The default value used for the default rolling history buffer length of any EZAudioPlot.
+ @deprecated This constant is deprecated starting in version 0.2.0.
+ @note Please use EZAudioPlotDefaultHistoryBufferLength instead.
+ */
+FOUNDATION_EXPORT UInt32 const kEZAudioPlotDefaultHistoryBufferLength __attribute__((deprecated));
+
+/**
+ The default value used for the default rolling history buffer length of any EZAudioPlot.
+ */
+FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultHistoryBufferLength;
+
+/**
+ The default value used for the maximum rolling history buffer length of any EZAudioPlot.
+ */
+FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength;
 
 //------------------------------------------------------------------------------
 #pragma mark - EZAudioPlotWaveformLayer
@@ -124,13 +145,27 @@ FOUNDATION_EXPORT UInt32 const kEZAudioPlotDefaultHistoryBufferLength;
 
 /**
  <#Description#>
+ 
  @return <#return value description#>
  */
-- (UInt32)initialPointCount;
+- (int)defaultRollingHistoryLength;
 
 //------------------------------------------------------------------------------
 
-- (UInt32)maximumRollingHistoryLength;
+/**
+ <#Description#>
+ @return <#return value description#>
+ */
+- (int)initialPointCount;
+
+//------------------------------------------------------------------------------
+
+/**
+ <#Description#>
+ 
+ @return <#return value description#>
+ */
+- (int)maximumRollingHistoryLength;
 
 //------------------------------------------------------------------------------
 
