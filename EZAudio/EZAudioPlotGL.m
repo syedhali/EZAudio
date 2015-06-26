@@ -3,7 +3,7 @@
 //  EZAudio
 //
 //  Created by Syed Haris Ali on 11/22/13.
-//  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
+//  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -129,7 +129,7 @@
   self.color = [UIColor colorWithRed:0.481 green:0.548 blue:0.637 alpha:1];
 #elif TARGET_OS_MAC
   _scrollHistory       = NULL;
-  _scrollHistoryLength = kEZAudioPlotDefaultHistoryBufferLength;
+  _scrollHistoryLength = EZAudioPlotDefaultHistoryBufferLength;
 #endif
   self.shouldFill   = NO;
   self.shouldMirror = NO;
@@ -454,7 +454,7 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   // If starting with a VBO of half of our max size make sure we initialize it to anticipate
   // a filled graph (which needs 2 * bufferSize) to allocate its resources properly
   if (!_hasRollingPlotData){
-    EZAudioPlotGLPoint maxGraph[2*kEZAudioPlotMaxHistoryBufferLength];
+    EZAudioPlotGLPoint maxGraph[2*EZAudioPlotDefaultMaxHistoryBufferLength];
     glBufferData(GL_ARRAY_BUFFER, sizeof(maxGraph), maxGraph, GL_STREAM_DRAW);
     _hasRollingPlotData = YES;
   }
@@ -662,7 +662,7 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   int result = [self.glViewController setRollingHistoryLength:historyLength];
   return result;
 #elif TARGET_OS_MAC
-  historyLength = MIN(historyLength,kEZAudioPlotMaxHistoryBufferLength);
+  historyLength = MIN(historyLength, EZAudioPlotDefaultMaxHistoryBufferLength);
   size_t floatByteSize = sizeof(float);
   _changingHistorySize = YES;
   if (_scrollHistoryLength != historyLength){
@@ -680,7 +680,7 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink,
   _changingHistorySize = NO;
   return historyLength;
 #endif
-  return kEZAudioPlotDefaultHistoryBufferLength;
+  return EZAudioPlotDefaultHistoryBufferLength;
 }
 
 -(int)rollingHistoryLength {

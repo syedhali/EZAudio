@@ -3,7 +3,7 @@
 //  EZAudio
 //
 //  Created by Syed Haris Ali on 9/2/13.
-//  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
+//  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -42,6 +42,17 @@ typedef struct EZMicrophoneInfo
 } EZMicrophoneInfo;
 
 //------------------------------------------------------------------------------
+#pragma mark - Callbacks
+//------------------------------------------------------------------------------
+
+static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
+                                          AudioUnitRenderActionFlags *ioActionFlags,
+                                          const AudioTimeStamp       *inTimeStamp,
+                                          UInt32                      inBusNumber,
+                                          UInt32                      inNumberFrames,
+                                          AudioBufferList            *ioData);
+
+//------------------------------------------------------------------------------
 #pragma mark - EZMicrophone (Interface Extension)
 //------------------------------------------------------------------------------
 
@@ -64,53 +75,6 @@ typedef struct EZMicrophoneInfo
     [EZAudioUtilities freeFloatBuffers:self.info->floatData
                       numberOfChannels:self.info->streamFormat.mChannelsPerFrame];
     free(self.info);
-}
-
-//------------------------------------------------------------------------------
-#pragma mark - Callbacks
-//------------------------------------------------------------------------------
-
-static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
-                                          AudioUnitRenderActionFlags *ioActionFlags,
-                                          const AudioTimeStamp       *inTimeStamp,
-                                          UInt32                     inBusNumber,
-                                          UInt32                     inNumberFrames,
-                                          AudioBufferList            *ioData)
-{
-    EZMicrophone *microphone = (__bridge EZMicrophone *)inRefCon;
-    EZMicrophoneInfo *info = (EZMicrophoneInfo *)microphone.info;
-    
-    // render audio into buffer
-    OSStatus result = AudioUnitRender(info->audioUnit,
-                                      ioActionFlags,
-                                      inTimeStamp,
-                                      inBusNumber,
-                                      inNumberFrames,
-                                      info->audioBufferList);
-    
-    // notify delegate of new buffer list to process
-    if ([microphone.delegate respondsToSelector:@selector(microphone:hasBufferList:withBufferSize:withNumberOfChannels:)])
-    {
-        [microphone.delegate microphone:microphone
-                          hasBufferList:info->audioBufferList
-                         withBufferSize:inNumberFrames
-                   withNumberOfChannels:info->streamFormat.mChannelsPerFrame];
-    }
-    
-    // notify delegate of new float data processed
-    if ([microphone.delegate respondsToSelector:@selector(microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:)])
-    {
-        // convert to float
-        [microphone.floatConverter convertDataFromAudioBufferList:info->audioBufferList
-                                               withNumberOfFrames:inNumberFrames
-                                                   toFloatBuffers:info->floatData];
-        [microphone.delegate microphone:microphone
-                       hasAudioReceived:info->floatData
-                         withBufferSize:inNumberFrames
-                   withNumberOfChannels:info->streamFormat.mChannelsPerFrame];
-    }
-    
-    return result;
 }
 
 //------------------------------------------------------------------------------
@@ -602,9 +566,60 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 
 - (UInt32)numberOfChannels
 {
+#if TARGET_OS_IPHONE
     return 1;
+#elif TARGET_OS_MAC
+    return (UInt32)self.device.inputChannelCount;
+#endif
 }
 
 //------------------------------------------------------------------------------
 
 @end
+
+//------------------------------------------------------------------------------
+#pragma mark - Callbacks
+//------------------------------------------------------------------------------
+
+static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
+                                          AudioUnitRenderActionFlags *ioActionFlags,
+                                          const AudioTimeStamp       *inTimeStamp,
+                                          UInt32                      inBusNumber,
+                                          UInt32                      inNumberFrames,
+                                          AudioBufferList            *ioData)
+{
+    EZMicrophone *microphone = (__bridge EZMicrophone *)inRefCon;
+    EZMicrophoneInfo *info = (EZMicrophoneInfo *)microphone.info;
+    
+    // render audio into buffer
+    OSStatus result = AudioUnitRender(info->audioUnit,
+                                      ioActionFlags,
+                                      inTimeStamp,
+                                      inBusNumber,
+                                      inNumberFrames,
+                                      info->audioBufferList);
+    
+    // notify delegate of new buffer list to process
+    if ([microphone.delegate respondsToSelector:@selector(microphone:hasBufferList:withBufferSize:withNumberOfChannels:)])
+    {
+        [microphone.delegate microphone:microphone
+                          hasBufferList:info->audioBufferList
+                         withBufferSize:inNumberFrames
+                   withNumberOfChannels:info->streamFormat.mChannelsPerFrame];
+    }
+    
+    // notify delegate of new float data processed
+    if ([microphone.delegate respondsToSelector:@selector(microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:)])
+    {
+        // convert to float
+        [microphone.floatConverter convertDataFromAudioBufferList:info->audioBufferList
+                                               withNumberOfFrames:inNumberFrames
+                                                   toFloatBuffers:info->floatData];
+        [microphone.delegate microphone:microphone
+                       hasAudioReceived:info->floatData
+                         withBufferSize:inNumberFrames
+                   withNumberOfChannels:info->streamFormat.mChannelsPerFrame];
+    }
+    
+    return result;
+}

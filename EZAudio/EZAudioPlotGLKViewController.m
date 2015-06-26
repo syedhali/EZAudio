@@ -3,7 +3,7 @@
 //  EZAudio
 //
 //  Created by Syed Haris Ali on 11/22/13.
-//  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
+//  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -93,7 +93,7 @@
   self.baseEffect.useConstantColor = GL_TRUE;
   self.preferredFramesPerSecond = 60;
   _scrollHistory       = NULL;
-  _scrollHistoryLength = kEZAudioPlotDefaultHistoryBufferLength;
+  _scrollHistoryLength = EZAudioPlotDefaultHistoryBufferLength;
 }
 
 #pragma mark - View Did Load
@@ -139,7 +139,7 @@
 #pragma mark - Adjust Resolution
 -(int)setRollingHistoryLength:(int)historyLength {
   _changingHistorySize = YES;
-  historyLength = MIN(historyLength,kEZAudioPlotMaxHistoryBufferLength);
+  historyLength = MIN(historyLength, EZAudioPlotDefaultMaxHistoryBufferLength);
   size_t floatByteSize = sizeof(float);
   if (_scrollHistoryLength != historyLength){
     _scrollHistoryLength = historyLength;
@@ -292,7 +292,7 @@
   // If starting with a VBO of half of our max size make sure we initialize it to anticipate
   // a filled graph (which needs 2 * bufferSize) to allocate its resources properly
   if (!_hasRollingPlotData){
-    EZAudioPlotGLPoint maxGraph[2*kEZAudioPlotMaxHistoryBufferLength];
+    EZAudioPlotGLPoint maxGraph[2*EZAudioPlotDefaultMaxHistoryBufferLength];
     glBufferData( GL_ARRAY_BUFFER, sizeof(maxGraph), maxGraph, GL_STREAM_DRAW);
     _hasRollingPlotData = YES;
   }

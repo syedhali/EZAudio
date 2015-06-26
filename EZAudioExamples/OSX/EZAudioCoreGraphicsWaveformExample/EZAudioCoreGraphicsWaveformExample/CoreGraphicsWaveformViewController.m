@@ -102,10 +102,8 @@
     for (int i = 0; i < self.microphone.device.inputChannelCount; i++)
     {
         NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:@(i).stringValue
-                                                      action:@selector(changedInputChannel:)
+                                                      action:nil
                                                keyEquivalent:@""];
-        item.representedObject = @(i);
-        item.target = self;
         [menu addItem:item];
     }
     self.microphoneInputChannelPopUpButton.menu = menu;
@@ -120,12 +118,6 @@
 {
     EZAudioDevice *device = [sender representedObject];
     [self.microphone setDevice:device];
-}
-
-//------------------------------------------------------------------------------
-
-- (void)changedInputChannel:(id)sender
-{
 }
 
 //------------------------------------------------------------------------------
@@ -163,7 +155,10 @@
     }
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - Action Extensions
+//------------------------------------------------------------------------------
+
 /*
  Give the visualization of the current buffer (this is almost exactly the openFrameworks audio input eample)
  */
@@ -189,10 +184,10 @@
 #pragma mark - EZMicrophoneDelegate
 #warning Thread Safety
 // Note that any callback that provides streamed audio data (like streaming microphone input) happens on a separate audio thread that should not be blocked. When we feed audio data into any of the UI components we need to explicity create a GCD block on the main thread to properly get the UI to work.
-- (void)microphone:(EZMicrophone *)microphone
-  hasAudioReceived:(float **)buffer
-    withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels
+- (void)   microphone:(EZMicrophone *)microphone
+     hasAudioReceived:(float **)buffer
+       withBufferSize:(UInt32)bufferSize
+ withNumberOfChannels:(UInt32)numberOfChannels
 {
     // See the Thread Safety warning above, but in a nutshell these callbacks happen on a separate audio thread. We wrap any UI updating in a GCD block on the main thread to avoid blocking that audio flow.
     __weak typeof(self) weakSelf = self;
@@ -227,18 +222,19 @@ withNumberOfChannels:(UInt32)numberOfChannels
 - (void)microphone:(EZMicrophone *)microphone
      changedDevice:(EZAudioDevice *)device
 {
+    __weak typeof (self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         //
         // Set up the microphone input popup button's items to select
         // between different microphone inputs
         //
-        [self reloadMicrophoneInputPopUpButtonMenu];
+        [weakSelf reloadMicrophoneInputPopUpButtonMenu];
         
         //
         // Set up the microphone input popup button's items to select
         // between different microphone input channels
         //
-        [self reloadMicrophoneInputChannelPopUpButtonMenu];
+        [weakSelf reloadMicrophoneInputChannelPopUpButtonMenu];
     });
 }
 

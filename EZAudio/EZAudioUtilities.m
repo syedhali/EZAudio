@@ -3,7 +3,7 @@
 //  EZAudio
 //
 //  Created by Syed Haris Ali on 6/23/15.
-//  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
+//  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -61,6 +61,7 @@ BOOL __shouldExitOnCheckResultFail = YES;
         audioBufferList->mBuffers[i].mNumberChannels = channels;
         audioBufferList->mBuffers[i].mDataByteSize = channels * outputBufferSize;
         audioBufferList->mBuffers[i].mData = (float *)malloc(channels * sizeof(float) *outputBufferSize);
+        memset(audioBufferList->mBuffers[i].mData, 0, frames);
     }
     return audioBufferList;
 }
@@ -558,6 +559,74 @@ BOOL __shouldExitOnCheckResultFail = YES;
 {
     TPCircularBufferClear(circularBuffer);
     TPCircularBufferCleanup(circularBuffer);
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - EZPlotHistoryInfo Utility
+//------------------------------------------------------------------------------
+
++ (void)appendBuffer:(float *)buffer
+      withBufferSize:(UInt32)bufferSize
+       toHistoryInfo:(EZPlotHistoryInfo *)historyInfo
+{
+    //
+    // Do nothing if there is no buffer
+    //
+    if (bufferSize == 0)
+    {
+        return;
+    }
+    
+    //
+    // Update the scroll history datasource
+    //
+    float rms = [EZAudioUtilities RMS:buffer length:bufferSize];
+    float src[1];
+    src[0] = isnan(rms) ? 0.0 : rms;
+    TPCircularBufferProduceBytes(&historyInfo->circularBuffer, src, sizeof(src));
+    int32_t targetBytes = historyInfo->bufferSize * sizeof(float);
+    int32_t availableBytes = 0;
+    float *historyBuffer = TPCircularBufferTail(&historyInfo->circularBuffer, &availableBytes);
+    int32_t bytes = MIN(targetBytes, availableBytes);
+    memmove(historyInfo->buffer, historyBuffer, bytes);
+    if (targetBytes <= availableBytes)
+    {
+        TPCircularBufferConsume(&historyInfo->circularBuffer, sizeof(src));
+    }
+}
+
+//------------------------------------------------------------------------------
+
++ (void)freeHistoryInfo:(EZPlotHistoryInfo *)historyInfo
+{
+    free(historyInfo->buffer);
+    free(historyInfo);
+    TPCircularBufferClear(&historyInfo->circularBuffer);
+}
+
+//------------------------------------------------------------------------------
+
++ (EZPlotHistoryInfo *)historyInfoWithDefaultLength:(int)defaultLength
+                                      maximumLength:(int)maximumLength
+{
+    //
+    // Setup buffers
+    //
+    EZPlotHistoryInfo *historyInfo = (EZPlotHistoryInfo *)malloc(sizeof(EZPlotHistoryInfo));
+    historyInfo->bufferSize = defaultLength;
+    historyInfo->buffer = calloc(maximumLength, sizeof(float));
+    TPCircularBufferInit(&historyInfo->circularBuffer, maximumLength);
+    
+    //
+    // Zero out circular buffer
+    //
+    float emptyBuffer[maximumLength];
+    memset(emptyBuffer, 0, sizeof(emptyBuffer));
+    TPCircularBufferProduceBytes(&historyInfo->circularBuffer,
+                                 emptyBuffer,
+                                 (int32_t)sizeof(emptyBuffer));
+    
+    return historyInfo;
 }
 
 //------------------------------------------------------------------------------

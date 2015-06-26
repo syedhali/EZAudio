@@ -3,7 +3,7 @@
 //  EZAudio
 //
 //  Created by Syed Haris Ali on 6/23/15.
-//  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
+//  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,35 @@
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import "TPCircularBuffer.h"
+
+#if TARGET_OS_IPHONE
+#import <AVFoundation/AVFoundation.h>
+#elif TARGET_OS_MAC
+#endif
+
+//------------------------------------------------------------------------------
+#pragma mark - Data Structures
+//------------------------------------------------------------------------------
+
+/**
+ A data structure that holds information about audio data over time. It contains a circular buffer to incrementally write the audio data to and a scratch buffer to hold a window of audio data relative to the whole circular buffer. In use, this will provide a way to continuously append data while having an adjustable viewable window described by the bufferSize.
+ */
+typedef struct
+{
+    float            *buffer;
+    int               bufferSize;
+    TPCircularBuffer  circularBuffer;
+} EZPlotHistoryInfo;
+
+//------------------------------------------------------------------------------
+#pragma mark - Types
+//------------------------------------------------------------------------------
+
+#if TARGET_OS_IPHONE
+typedef CGRect EZRect;
+#elif TARGET_OS_MAC
+typedef NSRect EZRect;
+#endif
 
 //------------------------------------------------------------------------------
 #pragma mark - EZAudioUtilities
@@ -421,6 +450,39 @@
  @param circularBuffer Pointer to the circular buffer to clear
  */
 + (void)freeCircularBuffer:(TPCircularBuffer*)circularBuffer;
+
+//------------------------------------------------------------------------------
+#pragma mark - EZPlotHistoryInfo Utility
+//------------------------------------------------------------------------------
+
+/**
+ Calculates the RMS of a float array containing audio data and appends it to the tail of a EZPlotHistoryInfo data structure. Thread-safe.
+ @param buffer      A float array containing the incoming audio buffer to append to the history buffer
+ @param bufferSize  A UInt32 representing the length of the incoming audio buffer
+ @param historyInfo A pointer to a EZPlotHistoryInfo structure to use for managing the history buffers
+ */
++ (void)appendBuffer:(float *)buffer
+      withBufferSize:(UInt32)bufferSize
+       toHistoryInfo:(EZPlotHistoryInfo *)historyInfo;
+
+//------------------------------------------------------------------------------
+
+/**
+ Frees a EZPlotHistoryInfo data structure
+ @param historyInfo A pointer to a EZPlotHistoryInfo data structure
+ */
++ (void)freeHistoryInfo:(EZPlotHistoryInfo *)historyInfo;
+
+//------------------------------------------------------------------------------
+
+/**
+ Creates an EZPlotHistoryInfo data structure with a default length for the window buffer and a maximum length capacity for the internal circular buffer that holds all the audio data.
+ @param defaultLength An int representing the default length (i.e. the number of points that will be displayed on screen) of the history window.
+ @param maximumLength An int representing the default maximum length that is the absolute maximum amount of values that can be held in the history's circular buffer.
+ @return A pointer to the EZPlotHistoryInfo created. The caller is responsible for freeing this structure using the `freeHistoryInfo` method above.
+ */
++ (EZPlotHistoryInfo *)historyInfoWithDefaultLength:(int)defaultLength
+                                      maximumLength:(int)maximumLength;
 
 //------------------------------------------------------------------------------
 

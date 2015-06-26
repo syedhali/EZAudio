@@ -47,7 +47,7 @@
 /**
  The CoreGraphics based audio plot
  */
-@property (nonatomic, weak) IBOutlet EZAudioPlotGL *audioPlot;
+@property (nonatomic, weak) IBOutlet EZAudioPlot *audioPlot;
 
 #pragma mark - UI Extras
 /**
@@ -56,9 +56,24 @@
 @property (nonatomic, weak) IBOutlet NSTextField *filePathLabel;
 
 /**
+ <#Description#>
+ */
+@property (nonatomic, weak) IBOutlet NSTextField *positionLabel;
+
+/**
  A slider to indicate the current frame position in the audio file
  */
-@property (nonatomic, weak) IBOutlet NSSlider *framePositionSlider;
+@property (nonatomic, weak) IBOutlet NSSlider *positionSlider;
+
+/**
+ <#Description#>
+ */
+@property (nonatomic, weak) IBOutlet NSTextField *rollingHistoryLengthLabel;
+
+/**
+ <#Description#>
+ */
+@property (nonatomic, weak) IBOutlet NSSlider *rollingHistoryLengthSlider;
 
 /**
  A slider to adjust the sample rate.
@@ -85,6 +100,11 @@
  Switches the plot drawing type between a buffer plot (visualizes the current stream of audio data from the update function) or a rolling plot (visualizes the audio data over time, this is the classic waveform look)
  */
 -(IBAction)changePlotType:(id)sender;
+
+/**
+ Changes the length of the rolling history of the audio plot.
+ */
+- (IBAction)changeRollingHistoryLength:(id)sender;
 
 /**
  Prompts the file manager and loads in a new audio file into the EZAudioFile representation.

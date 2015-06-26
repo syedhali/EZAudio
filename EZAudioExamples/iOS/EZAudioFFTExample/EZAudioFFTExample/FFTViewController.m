@@ -3,7 +3,7 @@
 //  EZAudioFFTExample
 //
 //  Created by Syed Haris Ali on 12/30/13.
-//  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
+//  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -47,28 +47,29 @@
 #pragma mark - Customize the Audio Plot
 - (void)viewDidLoad
 {
-  [super viewDidLoad];
+    [super viewDidLoad];
+
+    /*
+    Customizing the audio plot's look
+    */
+    // Setup time domain audio plot
+    self.audioPlotTime.backgroundColor = [UIColor colorWithRed: 0.569 green: 0.82 blue: 0.478 alpha: 1];
+    self.audioPlotTime.color           = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+    self.audioPlotTime.shouldFill      = YES;
+    self.audioPlotTime.shouldMirror    = YES;
+    self.audioPlotTime.plotType        = EZPlotTypeRolling;
+
+    // Setup frequency domain audio plot
+    self.audioPlotFreq.backgroundColor = [UIColor colorWithRed: 0.984 green: 0.471 blue: 0.525 alpha: 1];
+    self.audioPlotFreq.color           = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+    self.audioPlotFreq.shouldFill      = YES;
+    self.audioPlotFreq.plotType        = EZPlotTypeBuffer;
+    self.audioPlotFreq.shouldCenterYAxis = NO;
   
-  /*
-   Customizing the audio plot's look
-   */
-  // Setup time domain audio plot
-  self.audioPlotTime.backgroundColor = [UIColor colorWithRed: 0.569 green: 0.82 blue: 0.478 alpha: 1];
-  self.audioPlotTime.color           = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
-  self.audioPlotTime.shouldFill      = YES;
-  self.audioPlotTime.shouldMirror    = YES;
-  self.audioPlotTime.plotType        = EZPlotTypeRolling;
-  
-  // Setup frequency domain audio plot
-  self.audioPlotFreq.backgroundColor = [UIColor colorWithRed: 0.984 green: 0.471 blue: 0.525 alpha: 1];
-  self.audioPlotFreq.color           = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
-  self.audioPlotFreq.shouldFill      = YES;
-  self.audioPlotFreq.plotType        = EZPlotTypeBuffer;
-  
-  /*
-   Start the microphone
-   */
-  self.microphone = [EZMicrophone microphoneWithDelegate:self
+    /*
+    Start the microphone
+    */
+    self.microphone = [EZMicrophone microphoneWithDelegate:self
                                        startsImmediately:YES];
   
 }

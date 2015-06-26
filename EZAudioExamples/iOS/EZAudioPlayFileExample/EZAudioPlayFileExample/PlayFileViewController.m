@@ -3,18 +3,10 @@
 //  EZAudioPlayFileExample
 //
 //  Created by Syed Haris Ali on 12/16/13.
-//  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
+//  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
 
 #import "PlayFileViewController.h"
-
-@interface PlayFileViewController (){
-  float  *_waveformData;
-  UInt32 _waveformDrawingIndex;
-  UInt32 _waveformFrameRate;
-  UInt32 _waveformTotalBuffers;
-}
-@end
 
 @implementation PlayFileViewController
 @synthesize audioFile = _audioFile;
@@ -69,8 +61,15 @@
   }
 }
 
+- (void)changeRollingHistoryLength:(id)sender
+{
+    float value = [(UISlider *)sender value];
+    [self.audioPlot setRollingHistoryLength:(int)value];
+}
+
 -(void)play:(id)sender {
-  if( ![[EZOutput sharedOutput] isPlaying] ){
+  if( ![[EZOutput sharedOutput] isPlaying] )
+  {
     if( self.eof ){
       [self.audioFile seekToFrame:0];
     }

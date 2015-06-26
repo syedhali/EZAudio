@@ -3,7 +3,7 @@
 //  EZAudioFFTExample
 //
 //  Created by Syed Haris Ali on 12/30/13.
-//  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
+//  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

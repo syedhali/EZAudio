@@ -3,7 +3,7 @@
 //  EZAudio
 //
 //  Created by Syed Haris Ali on 11/24/13.
-//  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
+//  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,12 @@
 //  THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "EZAudioUtilities.h"
 
+//------------------------------------------------------------------------------
 #pragma mark - Enumerations
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Plot Types
 ///-----------------------------------------------------------
@@ -33,15 +37,16 @@
 /**
  The types of plots that can be displayed in the view using the data.
  */
-typedef NS_ENUM(NSInteger,EZPlotType){
-  /**
-   Plot that displays only the samples of the current buffer
-   */
-  EZPlotTypeBuffer,
-  /**
-   Plot that displays a rolling history of values using the RMS calculated for each incoming buffer
-   */
-  EZPlotTypeRolling
+typedef NS_ENUM(NSInteger, EZPlotType)
+{
+    /**
+     Plot that displays only the samples of the current buffer
+     */
+    EZPlotTypeBuffer,
+    /**
+     Plot that displays a rolling history of values using the RMS calculated for each incoming buffer
+     */
+    EZPlotTypeRolling
 };
 
 /**
@@ -59,7 +64,10 @@ typedef NS_ENUM(NSInteger,EZPlotType){
 @interface EZPlot : NSView
 #endif
 
+//------------------------------------------------------------------------------
 #pragma mark - Properties
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Customizing The Plot's Appearance
 ///-----------------------------------------------------------
@@ -93,7 +101,10 @@ typedef NS_ENUM(NSInteger,EZPlotType){
  */
 @property (nonatomic,assign,setter=setShouldMirror:) BOOL shouldMirror;
 
+//------------------------------------------------------------------------------
 #pragma mark - Clearing
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Clearing The Plot
 ///-----------------------------------------------------------
@@ -103,7 +114,10 @@ typedef NS_ENUM(NSInteger,EZPlotType){
  */
 -(void)clear;
 
+//------------------------------------------------------------------------------
 #pragma mark - Get Samples
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Updating The Plot
 ///-----------------------------------------------------------

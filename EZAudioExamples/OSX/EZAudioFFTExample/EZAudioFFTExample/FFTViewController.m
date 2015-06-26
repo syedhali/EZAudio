@@ -62,10 +62,11 @@
     //
     // Setup frequency domain audio plot
     //
-    self.audioPlotFreq.backgroundColor = [NSColor colorWithCalibratedRed: 0.984 green: 0.471 blue: 0.525 alpha: 1];
-    self.audioPlotFreq.color           = [NSColor colorWithCalibratedRed:1.0 green:1.0 blue:1.0 alpha:1.0];
-    self.audioPlotFreq.shouldFill      = YES;
-    self.audioPlotFreq.plotType        = EZPlotTypeBuffer;
+    self.audioPlotFreq.backgroundColor   = [NSColor colorWithCalibratedRed: 0.984 green: 0.471 blue: 0.525 alpha: 1];
+    self.audioPlotFreq.color             = [NSColor colorWithCalibratedRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+    self.audioPlotFreq.shouldFill        = YES;
+    self.audioPlotFreq.plotType          = EZPlotTypeBuffer;
+    self.audioPlotFreq.shouldCenterYAxis = NO;
   
     //
     // Create an instance of the microphone and tell it to use this view controller instance as the delegate

@@ -34,18 +34,33 @@
 -(void)awakeFromNib
 {
     //
-    //Customizing the audio plot's look
+    // Customizing the audio plot's look
     //
+    
     // Background color
     self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.169 green: 0.643 blue: 0.675 alpha: 1];
+    
     // Waveform color
     self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
+    
     // Plot type
     self.audioPlot.plotType        = EZPlotTypeBuffer;
+    
     // Fill
     self.audioPlot.shouldFill      = YES;
+    
     // Mirror
     self.audioPlot.shouldMirror    = YES;
+    
+    // Don't optimze for real-time because we don't need to re-render
+    // the view 60 frames per second
+    self.audioPlot.shouldOptimizeForRealtimePlot = NO;
+    
+    // Customize the layer with a shadow for fun
+    self.audioPlot.waveformLayer.shadowOffset = CGSizeMake(0.0, -1.0);
+    self.audioPlot.waveformLayer.shadowRadius = 0.0;
+    self.audioPlot.waveformLayer.shadowColor = [NSColor colorWithCalibratedRed: 0.069 green: 0.543 blue: 0.575 alpha: 1].CGColor;
+    self.audioPlot.waveformLayer.shadowOpacity = 1.0;
     
     //
     // Open the default file included with the example
@@ -100,6 +115,10 @@
     self.audioPlot.plotType     = EZPlotTypeBuffer;
     self.audioPlot.shouldFill   = YES;
     self.audioPlot.shouldMirror = YES;
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:0.11f];
+    [self.audioPlot clear];
+    [CATransaction commit];
     
     //
     // Plot the whole waveform

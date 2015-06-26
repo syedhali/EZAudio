@@ -51,6 +51,12 @@
     self.audioPlot.shouldFill      = YES;
     // Mirror
     self.audioPlot.shouldMirror    = YES;
+    
+    //
+    // Configure UI components
+    //
+    self.rollingHistoryLengthSlider.intValue = self.audioPlot.rollingHistoryLength;
+    self.rollingHistoryLengthLabel.intValue = self.audioPlot.rollingHistoryLength;
 
     //
     // Try opening the sample file
@@ -87,6 +93,15 @@
     asbd.mSampleRate = sampleRate;
     [[EZOutput sharedOutput] setAudioStreamBasicDescription:asbd];
     self.sampleRateLabel.floatValue = sampleRate;
+}
+
+//------------------------------------------------------------------------------
+
+- (void)changeRollingHistoryLength:(id)sender
+{
+    float value = [(NSSlider *)sender floatValue];
+    self.audioPlot.rollingHistoryLength = (int)value;
+    self.rollingHistoryLengthLabel.floatValue = value;
 }
 
 //------------------------------------------------------------------------------
@@ -132,7 +147,9 @@
 
 -(void)seekToFrame:(id)sender
 {
-    [self.audioFile seekToFrame:(SInt64)[(NSSlider*)sender doubleValue]];
+    double value = [(NSSlider*)sender doubleValue];
+    [self.audioFile seekToFrame:(SInt64)value];
+    self.positionLabel.doubleValue = value;
 }
 
 //------------------------------------------------------------------------------
@@ -175,16 +192,21 @@
     // Stop playback
     //
     [[EZOutput sharedOutput] stopPlayback];
+    
+    //
+    // Clear the audio plot
+    //
+    [self.audioPlot clear];
   
     //
     // Load the audio file and customize the UI
     //
-    self.audioFile                          = [EZAudioFile audioFileWithURL:filePathURL andDelegate:self];
-    self.eof                                = NO;
-    self.filePathLabel.stringValue          = filePathURL.lastPathComponent;
-    self.framePositionSlider.minValue       = 0.0f;
-    self.framePositionSlider.maxValue       = (double)self.audioFile.totalFrames;
-    self.playButton.state                   = NSOffState;
+    self.audioFile = [EZAudioFile audioFileWithURL:filePathURL andDelegate:self];
+    self.eof = NO;
+    self.filePathLabel.stringValue = filePathURL.lastPathComponent;
+    self.positionSlider.minValue = 0.0f;
+    self.positionSlider.maxValue = (double)self.audioFile.totalFrames;
+    self.playButton.state = NSOffState;
     self.plotSegmentControl.selectedSegment = 1;
 
     //
@@ -193,7 +215,7 @@
     Float64 sampleRate = self.audioFile.clientFormat.mSampleRate;
     self.sampleRateSlider.floatValue = sampleRate;
     self.sampleRateLabel.floatValue = sampleRate;
-    [[EZOutput sharedOutput] setAudioStreamBasicDescription:[EZAudioUtilities stereoFloatInterleavedFormatWithSampleRate:44100]];
+    [[EZOutput sharedOutput] setAudioStreamBasicDescription:self.audioFile.clientFormat];
 
     //
     // Change back to a buffer plot, but mirror and fill the waveform
@@ -239,9 +261,10 @@
  updatedPosition:(SInt64)framePosition {
     __weak typeof (self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (![weakSelf.framePositionSlider.cell isHighlighted])
+        if (![weakSelf.positionSlider.cell isHighlighted])
         {
-            weakSelf.framePositionSlider.floatValue = (float)framePosition;
+            weakSelf.positionSlider.floatValue = (float)framePosition;
+            weakSelf.positionLabel.floatValue = (float)framePosition;
         }
     });
 }
