@@ -36,6 +36,9 @@
 #pragma mark - Data Structures
 //------------------------------------------------------------------------------
 
+/**
+ A data structure that holds information about audio data over time. It contains a circular buffer to incrementally write the audio data to and a scratch buffer to hold a window of audio data relative to the whole circular buffer.
+ */
 typedef struct
 {
     float            *buffer;
@@ -452,10 +455,30 @@ typedef NSRect EZRect;
 #pragma mark - EZPlotHistoryInfo Utility
 //------------------------------------------------------------------------------
 
++ (void)     appendBuffer:(float *)buffer
+           withBufferSize:(UInt32)bufferSize
+            toHistoryInfo:(EZPlotHistoryInfo *)historyInfo
+ withRollingHistoryLength:(int)length;
+
+//------------------------------------------------------------------------------
+
+/**
+ <#Description#>
+ 
+ @param historyInfo <#historyInfo description#>
+ */
 + (void)freeHistoryInfo:(EZPlotHistoryInfo *)historyInfo;
 
 //------------------------------------------------------------------------------
 
+/**
+ <#Description#>
+ 
+ @param defaultLength <#defaultLength description#>
+ @param maximumLength <#maximumLength description#>
+ 
+ @return <#return value description#>
+ */
 + (EZPlotHistoryInfo *)historyInfoWithDefaultLength:(int)defaultLength
                                       maximumLength:(int)maximumLength;
 

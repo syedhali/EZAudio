@@ -565,6 +565,34 @@ BOOL __shouldExitOnCheckResultFail = YES;
 #pragma mark - EZPlotHistoryInfo Utility
 //------------------------------------------------------------------------------
 
++ (void)     appendBuffer:(float *)buffer
+           withBufferSize:(UInt32)bufferSize
+            toHistoryInfo:(EZPlotHistoryInfo *)historyInfo
+ withRollingHistoryLength:(int)length
+{
+    if (bufferSize == 0)
+    {
+        return;
+    }
+    
+    // update the scroll history datasource
+    float rms = [EZAudioUtilities RMS:buffer length:bufferSize];
+    float src[1];
+    src[0] = isnan(rms) ? 0.0 : rms;
+    TPCircularBufferProduceBytes(&historyInfo->circularBuffer, src, sizeof(src));
+    int32_t targetBytes = length * sizeof(float);
+    int32_t availableBytes = 0;
+    float *historyBuffer = TPCircularBufferTail(&historyInfo->circularBuffer, &availableBytes);
+    int32_t bytes = MIN(targetBytes, availableBytes);
+    memmove(historyInfo->buffer, historyBuffer, bytes);
+    if (targetBytes <= availableBytes)
+    {
+        TPCircularBufferConsume(&historyInfo->circularBuffer, sizeof(src));
+    }
+}
+
+//------------------------------------------------------------------------------
+
 + (void)freeHistoryInfo:(EZPlotHistoryInfo *)historyInfo
 {
     free(historyInfo->buffer);

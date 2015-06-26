@@ -312,25 +312,11 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
 
 - (void)updateBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize
 {
-    if (bufferSize == 0)
-    {
-        return;
-    }
-    
-    // update the scroll history datasource
-    float rms = [EZAudioUtilities RMS:buffer length:bufferSize];
-    float src[1];
-    src[0] = isnan(rms) ? 0.0 : rms;
-    TPCircularBufferProduceBytes(&self.historyInfo->circularBuffer, src, sizeof(src));
-    int32_t targetBytes = self.rollingHistoryLength * sizeof(float);
-    int32_t availableBytes = 0;
-    float *historyBuffer = TPCircularBufferTail(&self.historyInfo->circularBuffer, &availableBytes);
-    int32_t bytes = MIN(targetBytes, availableBytes);
-    memmove(self.historyInfo->buffer, historyBuffer, bytes);
-    if (targetBytes <= availableBytes)
-    {
-        TPCircularBufferConsume(&self.historyInfo->circularBuffer, sizeof(src));
-    }
+    // append the buffer to the history
+    [EZAudioUtilities appendBuffer:buffer
+                    withBufferSize:bufferSize
+                     toHistoryInfo:self.historyInfo
+          withRollingHistoryLength:[self rollingHistoryLength]];
     
     // copy samples
     switch (self.plotType)
