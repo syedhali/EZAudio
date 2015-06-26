@@ -41,7 +41,7 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
 
 @interface EZAudioPlot () <EZAudioDisplayLinkDelegate>
 @property (nonatomic, strong) EZAudioDisplayLink *displayLink;
-@property (nonatomic, assign) EZAudioPlotHistoryInfo *historyInfo;
+@property (nonatomic, assign) EZPlotHistoryInfo *historyInfo;
 @property (nonatomic, assign) CGPoint *points;
 @property (nonatomic, assign) UInt32 pointCount;
 @end
@@ -58,9 +58,7 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
 
 - (void)dealloc
 {
-    TPCircularBufferCleanup(&self.historyInfo->circularBuffer);
-    free(self.historyInfo->buffer);
-    free(self.historyInfo);
+    [EZAudioUtilities freeHistoryInfo:self.historyInfo];
     free(self.points);
 }
 
@@ -168,28 +166,11 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
     //
     if (self.historyInfo)
     {
-        free(self.historyInfo->buffer);
-        free(self.historyInfo);
-        TPCircularBufferClear(&self.historyInfo->circularBuffer);
+        [EZAudioUtilities freeHistoryInfo:self.historyInfo];
     }
     
-    //
-    // Setup buffers
-    //
-    int maximumRollingHistoryLength = [self maximumRollingHistoryLength];
-    self.historyInfo = (EZAudioPlotHistoryInfo *)malloc(sizeof(EZAudioPlotHistoryInfo));
-    self.historyInfo->bufferSize = EZAudioPlotDefaultHistoryBufferLength;
-    self.historyInfo->buffer = calloc(maximumRollingHistoryLength, sizeof(float));
-    TPCircularBufferInit(&self.historyInfo->circularBuffer, maximumRollingHistoryLength);
-    
-    //
-    // Zero out circular buffer
-    //
-    float emptyBuffer[maximumRollingHistoryLength];
-    memset(emptyBuffer, 0, sizeof(emptyBuffer));
-    TPCircularBufferProduceBytes(&self.historyInfo->circularBuffer,
-                                 emptyBuffer,
-                                 (int32_t)sizeof(emptyBuffer));
+    self.historyInfo = [EZAudioUtilities historyInfoWithDefaultLength:[self defaultRollingHistoryLength]
+                                                        maximumLength:[self maximumRollingHistoryLength]];
 }
 
 //------------------------------------------------------------------------------

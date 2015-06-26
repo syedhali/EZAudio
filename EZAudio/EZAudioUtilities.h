@@ -33,6 +33,27 @@
 #endif
 
 //------------------------------------------------------------------------------
+#pragma mark - Data Structures
+//------------------------------------------------------------------------------
+
+typedef struct
+{
+    float            *buffer;
+    int               bufferSize;
+    TPCircularBuffer  circularBuffer;
+} EZPlotHistoryInfo;
+
+//------------------------------------------------------------------------------
+#pragma mark - Types
+//------------------------------------------------------------------------------
+
+#if TARGET_OS_IPHONE
+typedef CGRect EZRect;
+#elif TARGET_OS_MAC
+typedef NSRect EZRect;
+#endif
+
+//------------------------------------------------------------------------------
 #pragma mark - EZAudioUtilities
 //------------------------------------------------------------------------------
 
@@ -426,6 +447,17 @@
  @param circularBuffer Pointer to the circular buffer to clear
  */
 + (void)freeCircularBuffer:(TPCircularBuffer*)circularBuffer;
+
+//------------------------------------------------------------------------------
+#pragma mark - EZPlotHistoryInfo Utility
+//------------------------------------------------------------------------------
+
++ (void)freeHistoryInfo:(EZPlotHistoryInfo *)historyInfo;
+
+//------------------------------------------------------------------------------
+
++ (EZPlotHistoryInfo *)historyInfoWithDefaultLength:(int)defaultLength
+                                      maximumLength:(int)maximumLength;
 
 //------------------------------------------------------------------------------
 

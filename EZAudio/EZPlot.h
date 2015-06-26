@@ -24,28 +24,7 @@
 //  THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "TPCircularBuffer.h"
-
-//------------------------------------------------------------------------------
-#pragma mark - Data Structures
-//------------------------------------------------------------------------------
-
-typedef struct
-{
-    float            *buffer;
-    int               bufferSize;
-    TPCircularBuffer  circularBuffer;
-} EZAudioPlotHistoryInfo;
-
-//------------------------------------------------------------------------------
-#pragma mark - Types
-//------------------------------------------------------------------------------
-
-#if TARGET_OS_IPHONE
-typedef CGRect EZRect;
-#elif TARGET_OS_MAC
-typedef NSRect EZRect;
-#endif
+#import "EZAudioUtilities.h"
 
 //------------------------------------------------------------------------------
 #pragma mark - Enumerations

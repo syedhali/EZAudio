@@ -562,5 +562,41 @@ BOOL __shouldExitOnCheckResultFail = YES;
 }
 
 //------------------------------------------------------------------------------
+#pragma mark - EZPlotHistoryInfo Utility
+//------------------------------------------------------------------------------
+
++ (void)freeHistoryInfo:(EZPlotHistoryInfo *)historyInfo
+{
+    free(historyInfo->buffer);
+    free(historyInfo);
+    TPCircularBufferClear(&historyInfo->circularBuffer);
+}
+
+//------------------------------------------------------------------------------
+
++ (EZPlotHistoryInfo *)historyInfoWithDefaultLength:(int)defaultLength
+                                      maximumLength:(int)maximumLength
+{
+    //
+    // Setup buffers
+    //
+    EZPlotHistoryInfo *historyInfo = (EZPlotHistoryInfo *)malloc(sizeof(EZPlotHistoryInfo));
+    historyInfo->bufferSize = defaultLength;
+    historyInfo->buffer = calloc(maximumLength, sizeof(float));
+    TPCircularBufferInit(&historyInfo->circularBuffer, maximumLength);
+    
+    //
+    // Zero out circular buffer
+    //
+    float emptyBuffer[maximumLength];
+    memset(emptyBuffer, 0, sizeof(emptyBuffer));
+    TPCircularBufferProduceBytes(&historyInfo->circularBuffer,
+                                 emptyBuffer,
+                                 (int32_t)sizeof(emptyBuffer));
+    
+    return historyInfo;
+}
+
+//------------------------------------------------------------------------------
 
 @end
