@@ -37,7 +37,7 @@
 //------------------------------------------------------------------------------
 
 /**
- A data structure that holds information about audio data over time. It contains a circular buffer to incrementally write the audio data to and a scratch buffer to hold a window of audio data relative to the whole circular buffer.
+ A data structure that holds information about audio data over time. It contains a circular buffer to incrementally write the audio data to and a scratch buffer to hold a window of audio data relative to the whole circular buffer. In use, this will provide a way to continuously append data while having an adjustable viewable window described by the bufferSize.
  */
 typedef struct
 {
@@ -455,29 +455,31 @@ typedef NSRect EZRect;
 #pragma mark - EZPlotHistoryInfo Utility
 //------------------------------------------------------------------------------
 
-+ (void)     appendBuffer:(float *)buffer
-           withBufferSize:(UInt32)bufferSize
-            toHistoryInfo:(EZPlotHistoryInfo *)historyInfo
- withRollingHistoryLength:(int)length;
+/**
+ Calculates the RMS of a float array containing audio data and appends it to the tail of a EZPlotHistoryInfo data structure. Thread-safe.
+ @param buffer      A float array containing the incoming audio buffer to append to the history buffer
+ @param bufferSize  A UInt32 representing the length of the incoming audio buffer
+ @param historyInfo A pointer to a EZPlotHistoryInfo structure to use for managing the history buffers
+ */
++ (void)appendBuffer:(float *)buffer
+      withBufferSize:(UInt32)bufferSize
+       toHistoryInfo:(EZPlotHistoryInfo *)historyInfo;
 
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
- 
- @param historyInfo <#historyInfo description#>
+ Frees a EZPlotHistoryInfo data structure
+ @param historyInfo A pointer to a EZPlotHistoryInfo data structure
  */
 + (void)freeHistoryInfo:(EZPlotHistoryInfo *)historyInfo;
 
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
- 
- @param defaultLength <#defaultLength description#>
- @param maximumLength <#maximumLength description#>
- 
- @return <#return value description#>
+ Creates an EZPlotHistoryInfo data structure with a default length for the window buffer and a maximum length capacity for the internal circular buffer that holds all the audio data.
+ @param defaultLength An int representing the default length (i.e. the number of points that will be displayed on screen) of the history window.
+ @param maximumLength An int representing the default maximum length that is the absolute maximum amount of values that can be held in the history's circular buffer.
+ @return A pointer to the EZPlotHistoryInfo created. The caller is responsible for freeing this structure using the `freeHistoryInfo` method above.
  */
 + (EZPlotHistoryInfo *)historyInfoWithDefaultLength:(int)defaultLength
                                       maximumLength:(int)maximumLength;

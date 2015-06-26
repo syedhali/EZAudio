@@ -565,10 +565,9 @@ BOOL __shouldExitOnCheckResultFail = YES;
 #pragma mark - EZPlotHistoryInfo Utility
 //------------------------------------------------------------------------------
 
-+ (void)     appendBuffer:(float *)buffer
-           withBufferSize:(UInt32)bufferSize
-            toHistoryInfo:(EZPlotHistoryInfo *)historyInfo
- withRollingHistoryLength:(int)length
++ (void)appendBuffer:(float *)buffer
+      withBufferSize:(UInt32)bufferSize
+       toHistoryInfo:(EZPlotHistoryInfo *)historyInfo
 {
     //
     // Do nothing if there is no buffer
@@ -585,7 +584,7 @@ BOOL __shouldExitOnCheckResultFail = YES;
     float src[1];
     src[0] = isnan(rms) ? 0.0 : rms;
     TPCircularBufferProduceBytes(&historyInfo->circularBuffer, src, sizeof(src));
-    int32_t targetBytes = length * sizeof(float);
+    int32_t targetBytes = historyInfo->bufferSize * sizeof(float);
     int32_t availableBytes = 0;
     float *historyBuffer = TPCircularBufferTail(&historyInfo->circularBuffer, &availableBytes);
     int32_t bytes = MIN(targetBytes, availableBytes);
