@@ -62,8 +62,15 @@ FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength;
 #pragma mark - EZAudioPlotWaveformLayer
 //------------------------------------------------------------------------------
 
+/**
+ The EZAudioPlotWaveformLayer is a lightweight subclass of the CAShapeLayer that allows implicit animations on the `path` key.
+ */
 @interface EZAudioPlotWaveformLayer : CAShapeLayer
 @end
+
+//------------------------------------------------------------------------------
+#pragma mark - EZAudioPlot
+//------------------------------------------------------------------------------
 
 /**
  `EZAudioPlot`, a subclass of `EZPlot`, is a cross-platform (iOS and OSX) class that plots an audio waveform using Core Graphics. 
@@ -95,7 +102,7 @@ FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength;
 //------------------------------------------------------------------------------
 
 /**
- An `EZAudioPlotWaveformLayer` that is used to render the actual waveform. By switching the drawing code to Core Animation layers in version 0.2.0 most work, specifically the compositing step, is now done on the GPU. Hence, multiple EZAudioPlot instances can be used simultaneously with very low CPU overhead so these are now practical for table and collection views.
+ An EZAudioPlotWaveformLayer that is used to render the actual waveform. By switching the drawing code to Core Animation layers in version 0.2.0 most work, specifically the compositing step, is now done on the GPU. Hence, multiple EZAudioPlot instances can be used simultaneously with very low CPU overhead so these are now practical for table and collection views.
  */
 @property (nonatomic, strong) EZAudioPlotWaveformLayer *waveformLayer;
 
