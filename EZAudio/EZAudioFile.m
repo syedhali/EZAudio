@@ -446,7 +446,7 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-- (void)getWaveformDataWithCompletionBlock:(WaveformDataCompletionBlock)waveformDataCompletionBlock
+- (void)getWaveformDataWithCompletionBlock:(EZAudioWaveformDataCompletionBlock)waveformDataCompletionBlock
 {
     [self getWaveformDataWithNumberOfPoints:EZAudioFileWaveformDefaultResolution
                                  completion:waveformDataCompletionBlock];
@@ -455,7 +455,7 @@ typedef struct
 //------------------------------------------------------------------------------
 
 - (void)getWaveformDataWithNumberOfPoints:(UInt32)numberOfPoints
-                               completion:(WaveformDataCompletionBlock)completion
+                               completion:(EZAudioWaveformDataCompletionBlock)completion
 {
     if (!completion)
     {
@@ -564,7 +564,7 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-- (NSURL*)url
+- (NSURL *)url
 {
   return (__bridge NSURL*)self.info->sourceURL;
 }
