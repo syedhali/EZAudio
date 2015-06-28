@@ -124,10 +124,11 @@
     // Plot the whole waveform
     //
     __weak typeof (self) weakSelf = self;
-    [self.audioFile getWaveformDataWithCompletionBlock:^(float *waveformData,
-                                                         UInt32 length)
+    [self.audioFile getWaveformDataWithNumberOfPoints:1024
+                                           completion:^(float **waveformData,
+                                                        int length)
     {
-        [weakSelf.audioPlot updateBuffer:waveformData
+        [weakSelf.audioPlot updateBuffer:waveformData[0]
                           withBufferSize:length];
     }];
 }

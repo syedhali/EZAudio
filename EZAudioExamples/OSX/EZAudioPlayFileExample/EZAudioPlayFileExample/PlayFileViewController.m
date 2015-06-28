@@ -196,12 +196,12 @@
     //
     // Clear the audio plot
     //
-    [self.audioPlot clear];
+//    [self.audioPlot clear];
   
     //
     // Load the audio file and customize the UI
     //
-    self.audioFile = [EZAudioFile audioFileWithURL:filePathURL andDelegate:self];
+    self.audioFile = [EZAudioFile audioFileWithURL:filePathURL delegate:self];
     self.eof = NO;
     self.filePathLabel.stringValue = filePathURL.lastPathComponent;
     self.positionSlider.minValue = 0.0f;
@@ -223,15 +223,17 @@
     self.audioPlot.plotType     = EZPlotTypeBuffer;
     self.audioPlot.shouldFill   = YES;
     self.audioPlot.shouldMirror = YES;
+    [self.audioPlot clear];
     
     //
     // Plot the whole waveform
     //
     __weak typeof (self) weakSelf = self;
-    [self.audioFile getWaveformDataWithCompletionBlock:^(float *waveformData,
-                                                         UInt32 length)
+    [self.audioFile getWaveformDataWithNumberOfPoints:256
+                                           completion:^(float **waveformData,
+                                                        int length)
     {
-        [weakSelf.audioPlot updateBuffer:waveformData
+        [weakSelf.audioPlot updateBuffer:waveformData[0]
                           withBufferSize:length];
     }];
 }
