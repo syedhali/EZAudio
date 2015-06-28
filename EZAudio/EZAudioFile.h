@@ -70,8 +70,7 @@ typedef void (^EZAudioWaveformDataCompletionBlock)(float **waveformData, int len
  @param audioFile     The instance of the EZAudio in which the change occured
  @param framePosition The new frame index as a 64-bit signed integer
  */
-- (void) audioFile:(EZAudioFile *)audioFile
-   updatedPosition:(SInt64)framePosition;
+- (void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition;
 
 @end
 
@@ -139,7 +138,7 @@ typedef void (^EZAudioWaveformDataCompletionBlock)(float **waveformData, int len
  @param url The file path reference of the audio file as an NSURL.
  @return The newly created EZAudioFile instance.
  */
-+ (instancetype)audioFileWithURL:(NSURL*)url;
++ (instancetype)audioFileWithURL:(NSURL *)url;
 
 //------------------------------------------------------------------------------
 

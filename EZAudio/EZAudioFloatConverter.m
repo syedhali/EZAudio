@@ -60,7 +60,7 @@ OSStatus EZAudioFloatConverterCallback(AudioConverterRef             inAudioConv
     AudioBufferList *sourceBuffer = (AudioBufferList *)inUserData;
     memcpy(ioData,
            sourceBuffer,
-           sizeof(AudioBufferList) + (sourceBuffer->mNumberBuffers - 1)*sizeof(AudioBuffer));
+           sizeof(AudioBufferList) + (sourceBuffer->mNumberBuffers - 1) * sizeof(AudioBuffer));
     return noErr;
 }
 
