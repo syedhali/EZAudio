@@ -431,8 +431,8 @@ typedef struct
         pthread_mutex_unlock(&_lock);
         
         waveformData = [EZAudioFloatData dataWithNumberOfChannels:channels
-                                                             buffers:(float **)data
-                                                          bufferSize:numberOfPoints];
+                                                          buffers:(float **)data
+                                                       bufferSize:numberOfPoints];
         
         // cleanup
         for (int i = 0; i < channels; i++)
