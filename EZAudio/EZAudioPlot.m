@@ -146,6 +146,7 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
 #elif TARGET_OS_MAC
     self.color = [NSColor colorWithCalibratedHue:0 saturation:1.0 brightness:1.0 alpha:1.0];
     self.wantsLayer = YES;
+    self.layerContentsRedrawPolicy = NSViewLayerContentsRedrawOnSetNeedsDisplay;
 #endif
     self.backgroundColor = nil;
     [self.layer insertSublayer:self.waveformLayer atIndex:0];
