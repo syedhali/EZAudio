@@ -37,10 +37,10 @@
 //------------------------------------------------------------------------------
 /**
  A block used when returning back the waveform data. The waveform data itself will be an array of float arrays, one for each channel, and the length indicates the total length of each float array.
- @param waveformData <#waveformData description#>
- @param length       <#length description#>
+ @param waveformData An array of float arrays, each representing a channel of audio data from the file
+ @param length       An int representing the length of each channel of float audio data
  */
-typedef void (^WaveformDataCompletionBlock)(float **waveformData, int length);
+typedef void (^EZAudioWaveformDataCompletionBlock)(float **waveformData, int length);
 
 //------------------------------------------------------------------------------
 #pragma mark - EZAudioFileDelegate
@@ -319,19 +319,19 @@ typedef void (^WaveformDataCompletionBlock)(float **waveformData, int length);
 
 /**
  Asynchronously pulls the waveform amplitude data into a float array for the receiver. This returns a waveform with a default resolution of 1024, meaning there are 1024 data points to plot the waveform.
- @param completion A WaveformDataCompletionBlock that executes when the waveform data has been extracted. Provides a `EZAudioFloatData` instance containing the waveform data for all audio channels.
+ @param completion A EZAudioWaveformDataCompletionBlock that executes when the waveform data has been extracted. Provides a `EZAudioFloatData` instance containing the waveform data for all audio channels.
  */
-- (void)getWaveformDataWithCompletionBlock:(WaveformDataCompletionBlock)completion;
+- (void)getWaveformDataWithCompletionBlock:(EZAudioWaveformDataCompletionBlock)completion;
 
 //------------------------------------------------------------------------------
 
 /**
  Asynchronously pulls the waveform amplitude data into a float array for the receiver.
  @param numberOfPoints A UInt32 representing the number of data points you need. The higher the number of points the more detailed the waveform will be.
- @param completion A WaveformDataCompletionBlock that executes when the waveform data has been extracted. Provides a `EZAudioFloatData` instance containing the waveform data for all audio channels.
+ @param completion A EZAudioWaveformDataCompletionBlock that executes when the waveform data has been extracted. Provides a `EZAudioFloatData` instance containing the waveform data for all audio channels.
  */
 - (void)getWaveformDataWithNumberOfPoints:(UInt32)numberOfPoints
-                               completion:(WaveformDataCompletionBlock)completion;
+                               completion:(EZAudioWaveformDataCompletionBlock)completion;
 
 //------------------------------------------------------------------------------
 
