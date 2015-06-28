@@ -237,7 +237,22 @@ typedef void (^EZAudioWaveformDataCompletionBlock)(float **waveformData, int len
  @warning This must be a linear PCM format!
  @return An AudioStreamBasicDescription structure describing the format of the audio file.
  */
-@property (nonatomic, assign, readwrite) AudioStreamBasicDescription clientFormat;
+@property (readwrite) AudioStreamBasicDescription clientFormat;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the current offset in the audio file as an NSTimeInterval (i.e. in seconds).  When setting this it will determine the correct frame offset and perform a `seekToFrame` to the new time offset. 
+ @warning Make sure the new current time offset is less than the `duration` or you will receive an invalid seek assertion.
+ */
+@property (nonatomic, readwrite) NSTimeInterval currentTime;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the duration of the audio file in seconds.
+ */
+@property (readonly) NSTimeInterval duration;
 
 //------------------------------------------------------------------------------
 
@@ -245,15 +260,29 @@ typedef void (^EZAudioWaveformDataCompletionBlock)(float **waveformData, int len
  Provides the AudioStreamBasicDescription structure containing the format of the file.
  @return An AudioStreamBasicDescription structure describing the format of the audio file.
  */
-@property (nonatomic, assign, readonly) AudioStreamBasicDescription fileFormat;
+@property (readonly) AudioStreamBasicDescription fileFormat;
 
 //------------------------------------------------------------------------------
 
 /**
- Provides the frame index (a.k.a the seek positon) within the audio file as an integer. This can be helpful when seeking through the audio file.
+ Provides the current time as an NSString with the time format MM:SS.
+ */
+@property (readonly) NSString *formattedCurrentTime;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the duration as an NSString with the time format MM:SS.
+ */
+@property (readonly) NSString *formattedDuration;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the frame index (a.k.a the seek positon) within the audio file as SInt64. This can be helpful when seeking through the audio file.
  @return The current frame index within the audio file as a SInt64.
  */
-- (SInt64)frameIndex;
+@property (readonly) SInt64 frameIndex;
 
 //------------------------------------------------------------------------------
 
@@ -261,15 +290,17 @@ typedef void (^EZAudioWaveformDataCompletionBlock)(float **waveformData, int len
  Provides a dictionary containing the metadata (ID3) tags that are included in the header for the audio file. Typically this contains stuff like artist, title, release year, etc.
  @return An NSDictionary containing the metadata for the audio file.
  */
-- (NSDictionary *)metadata;
+@property (readonly) NSDictionary *metadata;
 
 //------------------------------------------------------------------------------
 
 /**
  Provides the total duration of the audio file in seconds.
+ @deprecated This property is deprecated starting in version 0.3.0.
+ @note Please use `duration` property instead.
  @return The total duration of the audio file as a Float32.
  */
-- (NSTimeInterval)totalDuration;
+@property (readonly) NSTimeInterval totalDuration __attribute__((deprecated));;
 
 //------------------------------------------------------------------------------
 
@@ -277,7 +308,7 @@ typedef void (^EZAudioWaveformDataCompletionBlock)(float **waveformData, int len
  Provides the total frame count of the audio file in the client format.
  @return The total number of frames in the audio file in the AudioStreamBasicDescription representing the client format as a SInt64.
  */
-- (SInt64)totalClientFrames;
+@property (readonly) SInt64 totalClientFrames;
 
 //------------------------------------------------------------------------------
 
@@ -285,7 +316,7 @@ typedef void (^EZAudioWaveformDataCompletionBlock)(float **waveformData, int len
  Provides the total frame count of the audio file in the file format.
  @return The total number of frames in the audio file in the AudioStreamBasicDescription representing the file format as a SInt64.
  */
-- (SInt64)totalFrames;
+@property (readonly) SInt64 totalFrames;
 
 //------------------------------------------------------------------------------
 
@@ -293,7 +324,7 @@ typedef void (^EZAudioWaveformDataCompletionBlock)(float **waveformData, int len
  Provides the NSURL for the audio file.
  @return An NSURL representing the path of the EZAudioFile instance.
  */
-- (NSURL *)url;
+@property (nonatomic, copy, readonly) NSURL *url;
 
 //------------------------------------------------------------------------------
 #pragma mark - Helpers

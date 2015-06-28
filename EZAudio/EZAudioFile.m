@@ -42,7 +42,7 @@ typedef struct
 {
     AudioFileID                 audioFileID;
     AudioStreamBasicDescription clientFormat;
-    float                       duration;
+    NSTimeInterval              duration;
     ExtAudioFileRef             extAudioFileRef;
     AudioStreamBasicDescription fileFormat;
     SInt64                      frames;
@@ -271,6 +271,17 @@ typedef struct
                                                           &self.info->fileFormat)
                         operation:"Failed to get file audio format on existing audio file"];
     
+    //
+    // Get the total frames and duration
+    //
+    propSize = sizeof(SInt64);
+    [EZAudioUtilities checkResult:ExtAudioFileGetProperty(self.info->extAudioFileRef,
+                                                          kExtAudioFileProperty_FileLengthFrames,
+                                                          &propSize,
+                                                          &self.info->frames)
+                        operation:"Failed to get total frames"];
+    self.info->duration = (NSTimeInterval) self.info->frames / self.info->fileFormat.mSampleRate;
+    
     return YES;
 }
 
@@ -296,17 +307,17 @@ typedef struct
         // notify delegate
         if ([self.delegate respondsToSelector:@selector(audioFile:updatedPosition:)])
         {
-            [self.delegate audioFile:self
-                     updatedPosition:self.frameIndex];
+            [self.delegate audioFile:self updatedPosition:self.frameIndex];
         }
-        
-        // convert into float data
-        [self.floatConverter convertDataFromAudioBufferList:audioBufferList
-                                         withNumberOfFrames:*bufferSize
-                                             toFloatBuffers:self.floatData];
         
         if ([self.delegate respondsToSelector:@selector(audioFile:readAudio:withBufferSize:withNumberOfChannels:)])
         {
+            // convert into float data
+            [self.floatConverter convertDataFromAudioBufferList:audioBufferList
+                                             withNumberOfFrames:*bufferSize
+                                                 toFloatBuffers:self.floatData];
+            
+            // notify delegate
             UInt32 channels = self.clientFormat.mChannelsPerFrame;
             [self.delegate audioFile:self
                            readAudio:self.floatData
@@ -346,7 +357,7 @@ typedef struct
 
 - (AudioStreamBasicDescription)floatFormat
 {
-    return [EZAudioUtilities stereoFloatNonInterleavedFormatWithSampleRate:44100];
+    return [EZAudioUtilities stereoFloatNonInterleavedFormatWithSampleRate:44100.0f];
 }
 
 //------------------------------------------------------------------------------
@@ -481,9 +492,41 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
+- (NSTimeInterval)currentTime
+{
+    return [EZAudioUtilities MAP:(float)[self frameIndex]
+                         leftMin:0.0f
+                         leftMax:(float)[self totalFrames]
+                        rightMin:0.0f
+                        rightMax:[self duration]];
+}
+
+//------------------------------------------------------------------------------
+
+- (NSTimeInterval)duration
+{
+    return self.info->duration;
+}
+
+//------------------------------------------------------------------------------
+
 - (AudioStreamBasicDescription)fileFormat
 {
     return self.info->fileFormat;
+}
+
+//------------------------------------------------------------------------------
+
+- (NSString *)formattedCurrentTime
+{
+    return [EZAudioUtilities displayTimeStringFromSeconds:[self currentTime]];
+}
+
+//------------------------------------------------------------------------------
+
+- (NSString *)formattedDuration
+{
+    return [EZAudioUtilities displayTimeStringFromSeconds:[self duration]];
 }
 
 //------------------------------------------------------------------------------
@@ -525,8 +568,7 @@ typedef struct
 
 - (NSTimeInterval)totalDuration
 {
-    SInt64 totalFrames = [self totalFrames];
-    return (NSTimeInterval) totalFrames / self.info->fileFormat.mSampleRate;
+    return self.info->duration;
 }
 
 //------------------------------------------------------------------------------
@@ -534,17 +576,13 @@ typedef struct
 - (SInt64)totalClientFrames
 {
     SInt64 totalFrames = [self totalFrames];
-    
-    // check sample rate of client vs file format
     AudioStreamBasicDescription clientFormat = self.info->clientFormat;
-    AudioStreamBasicDescription fileFormat   = self.info->fileFormat;
+    AudioStreamBasicDescription fileFormat = self.info->fileFormat;
     BOOL sameSampleRate = clientFormat.mSampleRate == fileFormat.mSampleRate;
     if (!sameSampleRate)
     {
-        NSTimeInterval duration = [self totalDuration];
-        totalFrames = duration * clientFormat.mSampleRate;
+        totalFrames = self.info->duration * clientFormat.mSampleRate;
     }
-    
     return totalFrames;
 }
 
@@ -552,14 +590,7 @@ typedef struct
 
 - (SInt64)totalFrames
 {
-    SInt64 totalFrames;
-    UInt32 size = sizeof(SInt64);
-    [EZAudioUtilities checkResult:ExtAudioFileGetProperty(self.info->extAudioFileRef,
-                                                          kExtAudioFileProperty_FileLengthFrames,
-                                                          &size,
-                                                          &totalFrames)
-                        operation:"Failed to get total frames"];
-    return totalFrames;
+    return self.info->frames;
 }
 
 //------------------------------------------------------------------------------
@@ -621,6 +652,19 @@ typedef struct
     
     self.floatData = [EZAudioUtilities floatBuffersWithNumberOfFrames:1024
                                                      numberOfChannels:self.clientFormat.mChannelsPerFrame];
+}
+
+//------------------------------------------------------------------------------
+
+- (void)setCurrentTime:(NSTimeInterval)currentTime
+{
+    NSAssert(currentTime < [self duration], @"Invalid seek operation, expected current time to be less than duration");
+    SInt64 frame = [EZAudioUtilities MAP:currentTime
+                                 leftMin:0.0f
+                                 leftMax:[self duration]
+                                rightMin:0.0f
+                                rightMax:[self totalFrames]];
+    [self seekToFrame:frame];
 }
 
 //------------------------------------------------------------------------------
