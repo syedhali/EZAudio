@@ -70,10 +70,11 @@
     self.audioPlot.shouldMirror = YES;
     
     __weak typeof (self) weakSelf = self;
-    [self.audioFile getWaveformDataWithCompletionBlock:^(float *waveformData,
-                                                         UInt32 length)
+    [self.audioFile getWaveformDataWithCompletionBlock:^(float **waveformData,
+                                                         int length)
     {
-        [weakSelf.audioPlot updateBuffer:waveformData withBufferSize:length];
+        [weakSelf.audioPlot updateBuffer:waveformData[0]
+                          withBufferSize:length];
     }];
 }
 

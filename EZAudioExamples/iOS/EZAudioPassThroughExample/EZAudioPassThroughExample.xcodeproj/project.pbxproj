@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6628E2311B39F7C300020E56 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6628E2301B39F7C300020E56 /* MainStoryboard.storyboard */; };
-		6675594C1B3B78790013E67E /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 667559281B3B78790013E67E /* AEFloatConverter.m */; };
 		6675594D1B3B78790013E67E /* EZAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 6675592A1B3B78790013E67E /* EZAudio.m */; };
 		6675594E1B3B78790013E67E /* EZAudioDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 6675592C1B3B78790013E67E /* EZAudioDevice.m */; };
 		6675594F1B3B78790013E67E /* EZAudioDisplayLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6675592E1B3B78790013E67E /* EZAudioDisplayLink.m */; };
@@ -57,8 +56,6 @@
 
 /* Begin PBXFileReference section */
 		6628E2301B39F7C300020E56 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
-		667559271B3B78790013E67E /* AEFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEFloatConverter.h; sourceTree = "<group>"; };
-		667559281B3B78790013E67E /* AEFloatConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEFloatConverter.m; sourceTree = "<group>"; };
 		667559291B3B78790013E67E /* EZAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudio.h; sourceTree = "<group>"; };
 		6675592A1B3B78790013E67E /* EZAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudio.m; sourceTree = "<group>"; };
 		6675592B1B3B78790013E67E /* EZAudioDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioDevice.h; sourceTree = "<group>"; };
@@ -146,8 +143,6 @@
 		667559261B3B78790013E67E /* EZAudio */ = {
 			isa = PBXGroup;
 			children = (
-				667559271B3B78790013E67E /* AEFloatConverter.h */,
-				667559281B3B78790013E67E /* AEFloatConverter.m */,
 				667559291B3B78790013E67E /* EZAudio.h */,
 				6675592A1B3B78790013E67E /* EZAudio.m */,
 				6675592B1B3B78790013E67E /* EZAudioDevice.h */,
@@ -378,7 +373,6 @@
 				667559561B3B78790013E67E /* EZAudioPlotGLKViewController.m in Sources */,
 				667559501B3B78790013E67E /* EZAudioFile.m in Sources */,
 				667559591B3B78790013E67E /* EZOutput.m in Sources */,
-				6675594C1B3B78790013E67E /* AEFloatConverter.m in Sources */,
 				667559571B3B78790013E67E /* EZAudioUtilities.m in Sources */,
 				6675595A1B3B78790013E67E /* EZPlot.m in Sources */,
 				9417A61A1864D4DC00D9D37B /* main.m in Sources */,

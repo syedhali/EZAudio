@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		66755B861B3B79380013E67E /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755B621B3B79380013E67E /* AEFloatConverter.m */; };
 		66755B871B3B79380013E67E /* EZAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755B641B3B79380013E67E /* EZAudio.m */; };
 		66755B881B3B79380013E67E /* EZAudioDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755B661B3B79380013E67E /* EZAudioDevice.m */; };
 		66755B891B3B79380013E67E /* EZAudioDisplayLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755B681B3B79380013E67E /* EZAudioDisplayLink.m */; };
@@ -59,8 +58,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		66755B611B3B79380013E67E /* AEFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEFloatConverter.h; sourceTree = "<group>"; };
-		66755B621B3B79380013E67E /* AEFloatConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEFloatConverter.m; sourceTree = "<group>"; };
 		66755B631B3B79380013E67E /* EZAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudio.h; sourceTree = "<group>"; };
 		66755B641B3B79380013E67E /* EZAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudio.m; sourceTree = "<group>"; };
 		66755B651B3B79380013E67E /* EZAudioDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioDevice.h; sourceTree = "<group>"; };
@@ -157,8 +154,6 @@
 		66755B601B3B79380013E67E /* EZAudio */ = {
 			isa = PBXGroup;
 			children = (
-				66755B611B3B79380013E67E /* AEFloatConverter.h */,
-				66755B621B3B79380013E67E /* AEFloatConverter.m */,
 				66755B631B3B79380013E67E /* EZAudio.h */,
 				66755B641B3B79380013E67E /* EZAudio.m */,
 				66755B651B3B79380013E67E /* EZAudioDevice.h */,
@@ -406,7 +401,6 @@
 				66755B901B3B79380013E67E /* EZAudioPlotGLKViewController.m in Sources */,
 				66755B8A1B3B79380013E67E /* EZAudioFile.m in Sources */,
 				66755B931B3B79380013E67E /* EZOutput.m in Sources */,
-				66755B861B3B79380013E67E /* AEFloatConverter.m in Sources */,
 				66755B911B3B79380013E67E /* EZAudioUtilities.m in Sources */,
 				66755B941B3B79380013E67E /* EZPlot.m in Sources */,
 				9417A90A1871492100D9D37B /* AppDelegate.m in Sources */,

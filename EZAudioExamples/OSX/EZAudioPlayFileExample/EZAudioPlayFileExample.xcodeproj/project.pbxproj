@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6628E2351B3A121A00020E56 /* simple-drum-beat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6628E2341B3A121A00020E56 /* simple-drum-beat.wav */; };
-		66755AA21B3B791C0013E67E /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755A7E1B3B791C0013E67E /* AEFloatConverter.m */; };
 		66755AA31B3B791C0013E67E /* EZAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755A801B3B791C0013E67E /* EZAudio.m */; };
 		66755AA41B3B791C0013E67E /* EZAudioDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755A821B3B791C0013E67E /* EZAudioDevice.m */; };
 		66755AA51B3B791C0013E67E /* EZAudioDisplayLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755A841B3B791C0013E67E /* EZAudioDisplayLink.m */; };
@@ -60,8 +59,6 @@
 
 /* Begin PBXFileReference section */
 		6628E2341B3A121A00020E56 /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "simple-drum-beat.wav"; path = "../../../simple-drum-beat.wav"; sourceTree = "<group>"; };
-		66755A7D1B3B791C0013E67E /* AEFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEFloatConverter.h; sourceTree = "<group>"; };
-		66755A7E1B3B791C0013E67E /* AEFloatConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEFloatConverter.m; sourceTree = "<group>"; };
 		66755A7F1B3B791C0013E67E /* EZAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudio.h; sourceTree = "<group>"; };
 		66755A801B3B791C0013E67E /* EZAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudio.m; sourceTree = "<group>"; };
 		66755A811B3B791C0013E67E /* EZAudioDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioDevice.h; sourceTree = "<group>"; };
@@ -156,8 +153,6 @@
 		66755A7C1B3B791C0013E67E /* EZAudio */ = {
 			isa = PBXGroup;
 			children = (
-				66755A7D1B3B791C0013E67E /* AEFloatConverter.h */,
-				66755A7E1B3B791C0013E67E /* AEFloatConverter.m */,
 				66755A7F1B3B791C0013E67E /* EZAudio.h */,
 				66755A801B3B791C0013E67E /* EZAudio.m */,
 				66755A811B3B791C0013E67E /* EZAudioDevice.h */,
@@ -406,7 +401,6 @@
 				66755AAC1B3B791C0013E67E /* EZAudioPlotGLKViewController.m in Sources */,
 				66755AA61B3B791C0013E67E /* EZAudioFile.m in Sources */,
 				66755AAF1B3B791C0013E67E /* EZOutput.m in Sources */,
-				66755AA21B3B791C0013E67E /* AEFloatConverter.m in Sources */,
 				66755AAD1B3B791C0013E67E /* EZAudioUtilities.m in Sources */,
 				66755AB01B3B791C0013E67E /* EZPlot.m in Sources */,
 				94056F0E185BD83400EB94BA /* AppDelegate.m in Sources */,
