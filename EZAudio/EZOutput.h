@@ -244,21 +244,21 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
+ The AudioUnit that is being used to convert the audio data coming into the output's playback graph.
  */
 @property (readonly) AudioUnit converterAudioUnit;
 
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
+ The AudioUnit that is being used as the mixer to adjust the volume on the output's playback graph.
  */
 @property (readonly) AudioUnit mixerAudioUnit;
 
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
+ The AudioUnit that is being used as the hardware output for the output's playback graph.
  */
 @property (readonly) AudioUnit outputAudioUnit;
 
@@ -318,5 +318,11 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 - (AudioStreamBasicDescription)defaultInputFormat;
 
 //------------------------------------------------------------------------------
+
+/**
+ The default value used as the AudioUnit subtype when creating the hardware output component. By default this is kAudioUnitSubType_RemoteIO for iOS and kAudioUnitSubType_HALOutput for OSX.
+ @return An OSType that represents the AudioUnit subtype for the hardware output component.
+ */
+- (OSType)outputAudioUnitSubType;
 
 @end
