@@ -25,7 +25,8 @@
 
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
-#import "TPCircularBuffer.h"
+//#import "TPCircularBuffer.h"
+#import <TPCircularBuffer/TPCircularBuffer.h>
 
 #if TARGET_OS_IPHONE
 #import <AVFoundation/AVFoundation.h>
