@@ -149,7 +149,7 @@
               leftMin:0
               leftMax:self.audioFile.totalFrames
              rightMin:0
-             rightMax:self.audioFile.totalDuration];
+             rightMax:self.audioFile.duration];
 }
 
 -(BOOL)endOfFile {
@@ -172,7 +172,7 @@
 
 -(float)totalDuration {
   NSAssert(_audioFile,@"No audio file to perform the seek on, check that EZAudioFile is not nil");
-  return _audioFile.totalDuration;
+  return _audioFile.duration;
 }
 
 -(SInt64)totalFrames {
