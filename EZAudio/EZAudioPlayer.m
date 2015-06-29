@@ -194,12 +194,12 @@
     _audioFile = [EZAudioFile audioFileWithURL:audioFile.url];
     _audioFile.delegate = self;
   NSAssert(_output,@"No output was found, this should by default be the EZOutput shared instance");
-  [_output setAudioStreamBasicDescription:self.audioFile.clientFormat];    
+  [_output setInputFormat:self.audioFile.clientFormat];
 }
 
 -(void)setOutput:(EZOutput*)output {
   _output                  = output;
-  _output.outputDataSource = self;
+  _output.dataSource = self;
 }
 
 #pragma mark - Methods

@@ -26,7 +26,12 @@
 /**
  The EZAudioFile representing of the currently selected audio file
  */
-@property (nonatomic,strong) EZAudioFile *audioFile;
+@property (nonatomic, strong) EZAudioFile *audioFile;
+
+/**
+ The EZOutput representing the output currently being used to play the audio file.
+ */
+@property (nonatomic, strong) EZOutput *output;
 
 /**
  The CoreGraphics based audio plot

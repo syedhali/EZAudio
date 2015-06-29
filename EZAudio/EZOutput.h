@@ -29,16 +29,23 @@
 #elif TARGET_OS_MAC
 #import <AudioUnit/AudioUnit.h>
 #endif
-
-#import "TPCircularBuffer.h"
+#import "EZAudioDevice.h"
 
 @class EZOutput;
 
+//------------------------------------------------------------------------------
+#pragma mark - Constants
+//------------------------------------------------------------------------------
+
+FOUNDATION_EXPORT UInt32 const EZOutputMaximumFramesPerSlice;
+FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
+
+//------------------------------------------------------------------------------
+#pragma mark - EZOutputDataSource
+//------------------------------------------------------------------------------
+
 /**
- The EZOutputDataSource (required for the EZOutput) specifies a receiver to provide audio data when the EZOutput is started. Only ONE datasource method is expected to be implemented and priority is given as such:
-   1.) `output:callbackWithActionFlags:inTimeStamp:inBusNumber:inNumberFrames:ioData:`
-   2.) `outputShouldUseCircularBuffer:`
-   3.) `output:needsBufferListWithFrames:withBufferSize:`
+ The EZOutputDataSource (required for the EZOutput) specifies a receiver to provide audio data when the EZOutput is started. Since the 0.4.0 release this has been simplified to only one data source method.
  */
 @protocol EZOutputDataSource <NSObject>
 
@@ -47,40 +54,53 @@
 /// @name Pulling The Audio Data
 ///-----------------------------------------------------------
 
-/**
- Provides complete override of the output callback function. The delegate is expected to
- @param output         The instance of the EZOutput that asked for the data
- @param ioActionFlags  AudioUnitRenderActionFlags provided by the output callback
- @param inTimeStamp    AudioTimeStamp reference provided by the output callback
- @param inBusNumber    UInt32 representing the bus number provided by the output callback
- @param inNumberFrames UInt32 representing the number of frames provided by the output callback
- @param ioData         AudioBufferList pointer representing the audio data that will be used for output provided by the output callback (fill this!)
- */
--(void)output:(EZOutput*)output
-callbackWithActionFlags:(AudioUnitRenderActionFlags*)ioActionFlags
-  inTimeStamp:(const AudioTimeStamp*)inTimeStamp
-  inBusNumber:(UInt32)inBusNumber
-inNumberFrames:(UInt32)inNumberFrames
-       ioData:(AudioBufferList*)ioData;
+@required
 
 /**
- Provides output using a circular
- @param output The instance of the EZOutput that asked for the data
- @return The EZOutputDataSource's TPCircularBuffer structure holding the audio data in a circular buffer
- */
--(TPCircularBuffer*)outputShouldUseCircularBuffer:(EZOutput *)output;
-
-
-/**
- Provides a way to provide output with data anytime the EZOutput needs audio data to play. This function provides an already allocated AudioBufferList to use for providing audio data into the output buffer.
+ Provides a way to provide output with data anytime the EZOutput needs audio data to play. This function provides an already allocated AudioBufferList to use for providing audio data into the output buffer. The expected format of the audio data provided here is specified by the EZOutput `inputFormat` property. This audio data will be converted into the client format specified by the EZOutput `clientFormat` property.
  @param output The instance of the EZOutput that asked for the data.
  @param audioBufferList The AudioBufferList structure pointer that needs to be filled with audio data
  @param frames The amount of frames as a UInt32 that output will need to properly fill its output buffer.
- @return A pointer to the AudioBufferList structure holding the audio data. If nil or NULL, will output silence.
+ @param timestamp A AudioTimeStamp pointer to use if you need the current host time.
+ @return An OSStatus code. If there was no error then use the noErr status code.
  */
--(void)             output:(EZOutput *)output
- shouldFillAudioBufferList:(AudioBufferList*)audioBufferList
-        withNumberOfFrames:(UInt32)frames;
+- (OSStatus)        output:(EZOutput *)output
+ shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
+        withNumberOfFrames:(UInt32)frames
+                 timestamp:(const AudioTimeStamp *)timestamp;
+
+@end
+
+//------------------------------------------------------------------------------
+#pragma mark - EZOutputDelegate
+//------------------------------------------------------------------------------
+
+@protocol EZOutputDelegate <NSObject>
+
+@optional
+
+/**
+ <#Description#>
+ @param output <#output description#>
+ @param device <#device description#>
+ */
+- (void)output:(EZOutput *)output changedDevice:(EZAudioDevice *)device;
+
+//------------------------------------------------------------------------------
+
+/**
+ <#Description#>
+ @param output           <#output description#>
+ @param buffer           <#buffer description#>
+ @param bufferSize       <#bufferSize description#>
+ @param numberOfChannels <#numberOfChannels description#>
+ */
+- (void)       output:(EZOutput *)output
+          playedAudio:(float **)buffer
+       withBufferSize:(UInt32)bufferSize
+ withNumberOfChannels:(UInt32)numberOfChannels;
+
+//------------------------------------------------------------------------------
 
 @end
 
@@ -89,13 +109,10 @@ inNumberFrames:(UInt32)inNumberFrames
  */
 @interface EZOutput : NSObject
 
-#pragma mark - Properties
-/**
- The EZOutputDataSource that provides the required AudioBufferList to the output callback function
- */
-@property (nonatomic,assign) id<EZOutputDataSource>outputDataSource;
-
+//------------------------------------------------------------------------------
 #pragma mark - Initializers
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Initializers
 ///-----------------------------------------------------------
@@ -105,29 +122,38 @@ inNumberFrames:(UInt32)inNumberFrames
  @param dataSource The EZOutputDataSource that will be used to pull the audio data for the output callback.
  @return A newly created instance of the EZOutput class.
  */
--(id)initWithDataSource:(id<EZOutputDataSource>)dataSource;
+- (instancetype)initWithDataSource:(id<EZOutputDataSource>)dataSource;
 
 /**
  Creates a new instance of the EZOutput and allows the caller to specify an EZOutputDataSource.
  @param dataSource The EZOutputDataSource that will be used to pull the audio data for the output callback.
- @param audioStreamBasicDescription The AudioStreamBasicDescription of the EZOutput.
- @warning AudioStreamBasicDescriptions that are invalid will cause the EZOutput to fail to initialize
+ @param inputFormat The AudioStreamBasicDescription of the EZOutput.
+ @warning AudioStreamBasicDescription input formats must be linear PCM!
  @return A newly created instance of the EZOutput class.
  */
--(id)         initWithDataSource:(id<EZOutputDataSource>)dataSource
- withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
+- (instancetype)initWithDataSource:(id<EZOutputDataSource>)dataSource
+                       inputFormat:(AudioStreamBasicDescription)inputFormat;
 
+//------------------------------------------------------------------------------
 #pragma mark - Class Initializers
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Class Initializers
 ///-----------------------------------------------------------
 
 /**
+ Class method to create a new instance of the EZOutput
+ @return A newly created instance of the EZOutput class.
+ */
++ (instancetype)output;
+
+/**
  Class method to create a new instance of the EZOutput and allows the caller to specify an EZOutputDataSource.
  @param dataSource The EZOutputDataSource that will be used to pull the audio data for the output callback.
  @return A newly created instance of the EZOutput class.
  */
-+(EZOutput*)outputWithDataSource:(id<EZOutputDataSource>)dataSource;
++ (instancetype)outputWithDataSource:(id<EZOutputDataSource>)dataSource;
 
 /**
  Class method to create a new instance of the EZOutput and allows the caller to specify an EZOutputDataSource.
@@ -136,10 +162,13 @@ inNumberFrames:(UInt32)inNumberFrames
  @warning AudioStreamBasicDescriptions that are invalid will cause the EZOutput to fail to initialize
  @return A newly created instance of the EZOutput class.
  */
-+(EZOutput*)outputWithDataSource:(id<EZOutputDataSource>)dataSource
- withAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
++ (instancetype)outputWithDataSource:(id<EZOutputDataSource>)dataSource
+                         inputFormat:(AudioStreamBasicDescription)inputFormat;
 
+//------------------------------------------------------------------------------
 #pragma mark - Singleton
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Shared Instance
 ///-----------------------------------------------------------
@@ -148,9 +177,108 @@ inNumberFrames:(UInt32)inNumberFrames
  Creates a shared instance of the EZOutput (one app will usually only need one output and share the role of the EZOutputDataSource).
  @return The shared instance of the EZOutput class.
  */
-+(EZOutput*)sharedOutput;
++ (instancetype)sharedOutput;
 
-#pragma mark - Events
+//------------------------------------------------------------------------------
+#pragma mark - Properties
+//------------------------------------------------------------------------------
+
+///-----------------------------------------------------------
+/// @name Setting/Getting The Stream Formats
+///-----------------------------------------------------------
+
+/**
+ Provides the AudioStreamBasicDescription structure used at the beginning of the playback graph which is then converted into the `clientFormat` using the AUConverter audio unit.
+  @warning The AudioStreamBasicDescription set here must be linear PCM. Compressed formats are not supported...the EZAudioFile's clientFormat performs the audio conversion on the fly from compressed to linear PCM so there is no additional work to be done there.
+ @return An AudioStreamBasicDescription structure describing
+ */
+@property (nonatomic, readwrite) AudioStreamBasicDescription inputFormat;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the AudioStreamBasicDescription structure that serves as the common format used throughout the playback graph (similar to how the EZAudioFile as a clientFormat that is linear PCM to be shared amongst other components). The `inputFormat` is converted into this format at the beginning of the playback graph using an AUConverter audio unit. Defaults to the whatever the `defaultClientFormat` method returns is if a custom one isn't explicitly set.
+ @warning The AudioStreamBasicDescription set here must be linear PCM. Compressed formats are not supported by Audio Units.
+ @return An AudioStreamBasicDescription structure describing the common client format for the playback graph.
+ */
+@property (nonatomic, readwrite) AudioStreamBasicDescription clientFormat;
+
+//------------------------------------------------------------------------------
+
+/**
+ The EZOutputDataSource that provides the audio data in the `inputFormat` for the EZOutput to play.
+ */
+@property (nonatomic, weak) id<EZOutputDataSource> dataSource;
+
+//------------------------------------------------------------------------------
+
+/**
+ The EZOutputDelegate for which to handle the output callbacks
+ */
+@property (nonatomic, weak) id<EZOutputDelegate> delegate;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides a flag indicating whether the EZOutput is pulling audio data from the EZOutputDataSource for playback.
+ @return YES if the EZOutput is running, NO if it is stopped
+ */
+@property (readonly) BOOL isPlaying;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the current volume from the audio player's mixer audio unit in the playback graph. Setting the volume adjusts the gain of the output between 0 and 1. Default is 0.5.
+ */
+@property (nonatomic, assign) float volume;
+
+//------------------------------------------------------------------------------
+#pragma mark - Core Audio Properties
+//------------------------------------------------------------------------------
+
+/**
+ The AUGraph used to chain together the converter, mixer, and output audio units.
+ */
+@property (readonly) AUGraph graph;
+
+//------------------------------------------------------------------------------
+
+/**
+ <#Description#>
+ */
+@property (readonly) AudioUnit converterAudioUnit;
+
+//------------------------------------------------------------------------------
+
+/**
+ <#Description#>
+ */
+@property (readonly) AudioUnit mixerAudioUnit;
+
+//------------------------------------------------------------------------------
+
+/**
+ <#Description#>
+ */
+@property (readonly) AudioUnit outputAudioUnit;
+
+//------------------------------------------------------------------------------
+#pragma mark - Setters
+//------------------------------------------------------------------------------
+
+///-----------------------------------------------------------
+/// @name Getting/Setting The Output's Hardware Device
+///-----------------------------------------------------------
+
+/**
+ <#Description#>
+ */
+@property (nonatomic, strong, readwrite) EZAudioDevice *device;
+
+//------------------------------------------------------------------------------
+#pragma mark - Actions
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Starting/Stopping The Output
 ///-----------------------------------------------------------
@@ -158,44 +286,37 @@ inNumberFrames:(UInt32)inNumberFrames
 /**
  Starts pulling audio data from the EZOutputDataSource to the default device output.
  */
--(void)startPlayback;
+- (void)startPlayback;
+
+///-----------------------------------------------------------
 
 /**
  Stops pulling audio data from the EZOutputDataSource to the default device output.
  */
--(void)stopPlayback;
+- (void)stopPlayback;
 
-#pragma mark - Getters
-///-----------------------------------------------------------
-/// @name Getting The Output Audio Format
-///-----------------------------------------------------------
-
-/**
- Provides the AudioStreamBasicDescription structure containing the format of the microphone's audio.
- @return An AudioStreamBasicDescription structure describing the format of the microphone's audio.
- */
--(AudioStreamBasicDescription)audioStreamBasicDescription;
+//------------------------------------------------------------------------------
+#pragma mark - Subclass
+//------------------------------------------------------------------------------
 
 ///-----------------------------------------------------------
-/// @name Getting The State Of The Output
+/// @name Subclass
 ///-----------------------------------------------------------
 
 /**
- Provides a flag indicating whether the EZOutput is pulling audio data from the EZOutputDataSource for playback.
- @return YES if the EZOutput is pulling audio data to the output device, NO if it is stopped
+ The default AudioStreamBasicDescription set as the client format of the output if no custom `clientFormat` is set. Defaults to a 44.1 kHz stereo, non-interleaved, float format.
+ @return An AudioStreamBasicDescription that will be used as the default stream format.
  */
--(BOOL)isPlaying;
+- (AudioStreamBasicDescription)defaultClientFormat;
 
-#pragma mark - Setters
-///-----------------------------------------------------------
-/// @name Customizing The Output Format
-///-----------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
- Sets the AudioStreamBasicDescription on the output.
- @warning Do not set this during playback.
- @param asbd The new AudioStreamBasicDescription to use in place of the current audio format description.
+ The default AudioStreamBasicDescription set as the `inputFormat` of the output if no custom `inputFormat` is set. Defaults to a 44.1 kHz stereo, non-interleaved, float format.
+ @return An AudioStreamBasicDescription that will be used as the default stream format.
  */
--(void)setAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd;
+- (AudioStreamBasicDescription)defaultInputFormat;
+
+//------------------------------------------------------------------------------
 
 @end

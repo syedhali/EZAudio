@@ -49,6 +49,19 @@
 
 //------------------------------------------------------------------------------
 
++ (EZAudioDevice *)currentOutputDevice
+{
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    AVAudioSessionPortDescription *port = [[[session currentRoute] outputs] firstObject];
+    AVAudioSessionDataSourceDescription *dataSource = [session outputDataSource];
+    EZAudioDevice *device = [[EZAudioDevice alloc] init];
+    device.port = port;
+    device.dataSource = dataSource;
+    return device;
+}
+
+//------------------------------------------------------------------------------
+
 + (NSArray *)inputDevices
 {
     __block NSMutableArray *devices = [NSMutableArray array];
@@ -56,6 +69,18 @@
     {
         [devices addObject:device];
     }];
+    return devices;
+}
+
+//------------------------------------------------------------------------------
+
++ (NSArray *)outputDevices
+{
+    __block NSMutableArray *devices = [NSMutableArray array];
+    [self enumerateOutputDevicesUsingBlock:^(EZAudioDevice *device, BOOL *stop)
+     {
+         [devices addObject:device];
+     }];
     return devices;
 }
 
@@ -94,6 +119,42 @@
         {
             EZAudioDevice *device = [[EZAudioDevice alloc] init];
             device.port = inputDevicePortDescription;
+            block(device, &stop);
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+
++ (void)enumerateOutputDevicesUsingBlock:(void (^)(EZAudioDevice *, BOOL *))block
+{
+    if (!block)
+    {
+        return;
+    }
+    
+    AVAudioSessionRouteDescription *currentRoute = [[AVAudioSession sharedInstance] currentRoute];
+    NSArray *portDescriptions = [currentRoute outputs];
+    
+    BOOL stop;
+    for (AVAudioSessionPortDescription *outputDevicePortDescription in portDescriptions)
+    {
+        // add any additional sub-devices
+        NSArray *dataSources = [outputDevicePortDescription dataSources];
+        if (dataSources.count)
+        {
+            for (AVAudioSessionDataSourceDescription *outputDeviceDataSourceDescription in dataSources)
+            {
+                EZAudioDevice *device = [[EZAudioDevice alloc] init];
+                device.port = outputDevicePortDescription;
+                device.dataSource = outputDeviceDataSourceDescription;
+                block(device, &stop);
+            }
+        }
+        else
+        {
+            EZAudioDevice *device = [[EZAudioDevice alloc] init];
+            device.port = outputDevicePortDescription;
             block(device, &stop);
         }
     }
