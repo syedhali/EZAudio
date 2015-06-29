@@ -30,7 +30,11 @@
 #import <AudioUnit/AudioUnit.h>
 #endif
 
+#if COCOAPODS
+#import <TPCircularBuffer/TPCircularBuffer.h>
+#else
 #import "TPCircularBuffer.h"
+#endif
 
 @class EZOutput;
 
