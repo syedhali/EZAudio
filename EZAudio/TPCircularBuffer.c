@@ -27,8 +27,12 @@
 //  3. This notice may not be removed or altered from any source distribution.
 //
 
-//#import "TPCircularBuffer.h"
+#if COCOAPODS
 #import <TPCircularBuffer/TPCircularBuffer.h>
+#else
+#import "TPCircularBuffer.h"
+#endif
+
 #include <mach/mach.h>
 #include <stdio.h>
 

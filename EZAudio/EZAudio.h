@@ -26,8 +26,11 @@
 #import <Foundation/Foundation.h>
 
 #pragma mark - 3rd Party Utilties
-//#import "TPCircularBuffer.h"
+#if COCOAPODS
 #import <TPCircularBuffer/TPCircularBuffer.h>
+#else
+#import "TPCircularBuffer.h"
+#endif
 
 #pragma mark - Core Components
 #import "EZAudioFile.h"
