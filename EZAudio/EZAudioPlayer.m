@@ -241,6 +241,20 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
 
 //------------------------------------------------------------------------------
 
+- (NSTimeInterval)totalDuration
+{
+    return [self duration];
+}
+
+//------------------------------------------------------------------------------
+
+- (SInt64)totalFrames
+{
+    return [self.audioFile totalFrames];
+}
+
+//------------------------------------------------------------------------------
+
 - (float)volume
 {
     return [self.output volume];
@@ -372,6 +386,7 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
         else if (eof)
         {
             [self pause];
+            [self seekToFrame:0];
             [[NSNotificationCenter defaultCenter] postNotificationName:EZAudioPlayerDidReachEndOfFileNotification
                                                                 object:self];
         }

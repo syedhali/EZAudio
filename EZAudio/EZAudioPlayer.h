@@ -124,13 +124,6 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
 ///-----------------------------------------------------------
 
 /**
- Initializes the EZAudioPlayer with an EZAudioPlayerDelegate.
- @param delegate The receiver that will act as the EZAudioPlayerDelegate. Set to nil if it should have no delegate or use the initWithAudioFile: function instead.
- @return The newly created instance of the EZAudioPlayer
- */
-- (instancetype)initWithDelegate:(id<EZAudioPlayerDelegate>)delegate;
-
-/**
  Initializes the EZAudioPlayer with an EZAudioFile instance. This does not use the EZAudioFile by reference, but instead creates a separate EZAudioFile instance with the same file at the given file path provided by the internal NSURL to use for internal seeking so it doesn't cause any locking between the caller's instance of the EZAudioFile.
  @param audioFile The instance of the EZAudioFile to use for initializing the EZAudioPlayer
  @return The newly created instance of the EZAudioPlayer
@@ -147,6 +140,15 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
  */
 - (instancetype)initWithAudioFile:(EZAudioFile *)audioFile
                          delegate:(id<EZAudioPlayerDelegate>)delegate;
+
+//------------------------------------------------------------------------------
+
+/**
+ Initializes the EZAudioPlayer with an EZAudioPlayerDelegate.
+ @param delegate The receiver that will act as the EZAudioPlayerDelegate. Set to nil if it should have no delegate or use the initWithAudioFile: function instead.
+ @return The newly created instance of the EZAudioPlayer
+ */
+- (instancetype)initWithDelegate:(id<EZAudioPlayerDelegate>)delegate;
 
 //------------------------------------------------------------------------------
 
@@ -185,14 +187,6 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
 //------------------------------------------------------------------------------
 
 /**
- Class initializer that creates a default EZAudioPlayer with an EZAudioPlayerDelegate..
- @return The newly created instance of the EZAudioPlayer
- */
-+ (instancetype)audioPlayerWithDelegate:(id<EZAudioPlayerDelegate>)delegate;
-
-//------------------------------------------------------------------------------
-
-/**
  Class initializer that creates the EZAudioPlayer with an EZAudioFile instance. This does not use the EZAudioFile by reference, but instead creates a separate EZAudioFile instance with the same file at the given file path provided by the internal NSURL to use for internal seeking so it doesn't cause any locking between the caller's instance of the EZAudioFile.
  @param audioFile The instance of the EZAudioFile to use for initializing the EZAudioPlayer
  @return The newly created instance of the EZAudioPlayer
@@ -209,6 +203,14 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
  */
 + (instancetype)audioPlayerWithAudioFile:(EZAudioFile *)audioFile
                                 delegate:(id<EZAudioPlayerDelegate>)delegate;
+
+//------------------------------------------------------------------------------
+
+/**
+ Class initializer that creates a default EZAudioPlayer with an EZAudioPlayerDelegate..
+ @return The newly created instance of the EZAudioPlayer
+ */
++ (instancetype)audioPlayerWithDelegate:(id<EZAudioPlayerDelegate>)delegate;
 
 //------------------------------------------------------------------------------
 
@@ -267,7 +269,9 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
 
 //------------------------------------------------------------------------------
 
-
+/**
+ <#Description#>
+ */
 @property (readwrite) EZAudioDevice *device;
 
 //------------------------------------------------------------------------------
@@ -306,15 +310,7 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
  @note Please use `duration` property instead.
  @return The total duration of the audio file as a Float32.
  */
-@property (readonly) NSTimeInterval totalDuration __attribute__((deprecated));;
-
-//------------------------------------------------------------------------------
-
-/**
- Provides a flag indicating whether the EZAudioPlayer has reached the end of the audio file used for playback.
- @return A BOOL indicating whether or not the EZAudioPlayer has reached the end of the file it is using for playback.
- */
-@property (readonly) BOOL isEndOfFile;
+@property (readonly) NSTimeInterval totalDuration __attribute__((deprecated));
 
 //------------------------------------------------------------------------------
 
@@ -357,6 +353,9 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
 
 //------------------------------------------------------------------------------
 
+/**
+ <#Description#>
+ */
 @property (nonatomic, assign) float volume;
 
 //------------------------------------------------------------------------------
