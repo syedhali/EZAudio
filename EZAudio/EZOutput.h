@@ -105,7 +105,7 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 @end
 
 /**
- The EZOutput component provides a generic output to glue all the other EZAudio components together and push whatever sound you've created to the default output device (think opposite of the microphone). The EZOutputDataSource provides the required AudioBufferList needed to populate the output buffer.
+ The EZOutput component provides a generic output to glue all the other EZAudio components together and push whatever sound you've created to the default output device (think opposite of the microphone). The EZOutputDataSource provides the required AudioBufferList needed to populate the output buffer while the EZOutputDelegate provides the same kind of mechanism as the EZMicrophoneDelegate or EZAudioFileDelegate in that you will receive a callback that provides non-interleaved, float data for visualizing the output (done using an internal float converter). As of 0.4.0 the EZOutput has been simplified to a single EZOutputDataSource method and now uses an AUGraph to provide format conversion from the `inputFormat` to the playback graph's `clientFormat` linear PCM formats, mixer controls for setting volume and pan settings, hooks to add in any number of effect audio units (see the `connectOutputOfSourceNode:sourceNodeOutputBus:toDestinationNode:destinationNodeInputBus:inGraph:` subclass method), and hardware device toggling (via EZAudioDevice).
  */
 @interface EZOutput : NSObject
 
@@ -205,6 +205,10 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 
 //------------------------------------------------------------------------------
 
+///-----------------------------------------------------------
+/// @name Setting/Getting The Data Source and Delegate
+///-----------------------------------------------------------
+
 /**
  The EZOutputDataSource that provides the audio data in the `inputFormat` for the EZOutput to play.
  */
@@ -228,6 +232,13 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 //------------------------------------------------------------------------------
 
 /**
+ Provides the current pan from the audio player's mixer audio unit in the playback graph. Setting the pan adjusts the direction of the audio signal from left (0.0) to right (1.0). Default is 0.5 (middle).
+ */
+@property (nonatomic, assign) float pan;
+
+//------------------------------------------------------------------------------
+
+/**
  Provides the current volume from the audio player's mixer audio unit in the playback graph. Setting the volume adjusts the gain of the output between 0 and 1. Default is 0.5.
  */
 @property (nonatomic, assign) float volume;
@@ -235,6 +246,10 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 //------------------------------------------------------------------------------
 #pragma mark - Core Audio Properties
 //------------------------------------------------------------------------------
+
+///-----------------------------------------------------------
+/// @name Core Audio Properties
+///-----------------------------------------------------------
 
 /**
  The AUGraph used to chain together the converter, mixer, and output audio units.
@@ -271,7 +286,7 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 ///-----------------------------------------------------------
 
 /**
- <#Description#>
+ An EZAudioDevice instance that is used to route the audio data out to the speaker. To find a list of available output devices see the EZAudioDevice `outputDevices` method.
  */
 @property (nonatomic, strong, readwrite) EZAudioDevice *device;
 
@@ -302,6 +317,30 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 ///-----------------------------------------------------------
 /// @name Subclass
 ///-----------------------------------------------------------
+
+/**
+ <#Description#>
+ */
+- (void)cleanupCustomNodes;
+
+//------------------------------------------------------------------------------
+
+/**
+ <#Description#>
+ @param sourceNode              <#sourceNode description#>
+ @param sourceNodeOutputBus     <#sourceNodeOutputBus description#>
+ @param destinationNode         <#destinationNode description#>
+ @param destinationNodeInputBus <#destinationNodeInputBus description#>
+ @param graph                   <#graph description#>
+ @return <#return value description#>
+ */
+- (OSStatus)connectOutputOfSourceNode:(AUNode)sourceNode
+                  sourceNodeOutputBus:(UInt32)sourceNodeOutputBus
+                    toDestinationNode:(AUNode)destinationNode
+              destinationNodeInputBus:(UInt32)destinationNodeInputBus
+                              inGraph:(AUGraph)graph;
+
+//------------------------------------------------------------------------------
 
 /**
  The default AudioStreamBasicDescription set as the client format of the output if no custom `clientFormat` is set. Defaults to a 44.1 kHz stereo, non-interleaved, float format.

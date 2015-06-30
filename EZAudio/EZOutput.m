@@ -404,11 +404,36 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
 
 //------------------------------------------------------------------------------
 
+- (float)pan
+{
+    AudioUnitParameterID param;
+#if TARGET_OS_IPHONE
+    param = kMultiChannelMixerParam_Pan;
+#elif TARGET_OS_MAC
+    param = kStereoMixerParam_Pan;
+#endif
+    AudioUnitParameterValue pan;
+    [EZAudioUtilities checkResult:AudioUnitGetParameter(self.info->mixerNodeInfo.audioUnit,
+                                                        param,
+                                                        kAudioUnitScope_Input,
+                                                        0,
+                                                        &pan) operation:"Failed to get pan from mixer unit"];
+    return pan;
+}
+
+//------------------------------------------------------------------------------
+
 - (float)volume
 {
+    AudioUnitParameterID param;
+#if TARGET_OS_IPHONE
+    param = kMultiChannelMixerParam_Volume;
+#elif TARGET_OS_MAC
+    param = kStereoMixerParam_Volume;
+#endif
     AudioUnitParameterValue volume;
     [EZAudioUtilities checkResult:AudioUnitGetParameter(self.info->mixerNodeInfo.audioUnit,
-                                                        kMultiChannelMixerParam_Volume,
+                                                        param,
                                                         kAudioUnitScope_Input,
                                                         0,
                                                         &volume)
@@ -481,6 +506,8 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
 #elif TARGET_OS_MAC
     UInt32 outputEnabled = device.outputChannelCount > 0;
     NSAssert(outputEnabled, @"Selected EZAudioDevice does not have any output channels");
+    NSAssert([self outputAudioUnitSubType] == kAudioUnitSubType_HALOutput,
+             @"Audio device selection on OSX is only available when using the kAudioUnitSubType_HALOutput output unit subtype");
     [EZAudioUtilities checkResult:AudioUnitSetProperty(self.info->outputNodeInfo.audioUnit,
                                                        kAudioOutputUnitProperty_EnableIO,
                                                        kAudioUnitScope_Output,
@@ -521,6 +548,25 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
                                                        &inputFormat,
                                                        sizeof(inputFormat))
                         operation:"Failed to set input format on converter audio unit"];
+}
+
+//------------------------------------------------------------------------------
+
+- (void)setPan:(float)pan
+{
+    AudioUnitParameterID param;
+#if TARGET_OS_IPHONE
+    param = kMultiChannelMixerParam_Pan;
+#elif TARGET_OS_MAC
+    param = kStereoMixerParam_Pan;
+#endif
+    [EZAudioUtilities checkResult:AudioUnitSetParameter(self.info->mixerNodeInfo.audioUnit,
+                                                        param,
+                                                        kAudioUnitScope_Input,
+                                                        0,
+                                                        pan,
+                                                        0)
+                        operation:"Failed to set volume on mixer unit"];
 }
 
 //------------------------------------------------------------------------------
