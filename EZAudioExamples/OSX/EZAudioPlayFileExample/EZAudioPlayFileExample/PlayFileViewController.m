@@ -212,7 +212,7 @@
     //
     // Clear the audio plot
     //
-//    [self.audioPlot clear];
+    [self.audioPlot clear];
   
     //
     // Load the audio file and customize the UI
