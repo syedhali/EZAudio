@@ -332,16 +332,6 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
 //------------------------------------------------------------------------------
 
 /**
- Provides the total duration of the audio file in seconds.
- @deprecated This property is deprecated starting in version 0.4.0.
- @note Please use `duration` property instead.
- @return The total duration of the audio file as a Float32.
- */
-@property (readonly) NSTimeInterval totalDuration __attribute__((deprecated));
-
-//------------------------------------------------------------------------------
-
-/**
  Provides the frame index (a.k.a the seek positon) within the audio file being used for playback. This can be helpful when seeking through the audio file.
  @return An SInt64 representing the current frame index within the audio file used for playback.
  */
@@ -361,6 +351,14 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
  Provides the current pan from the audio player's internal `output` component. Setting the pan adjusts the direction of the audio signal from left (0) to right (1). Default is 0.5 (middle).
  */
 @property (nonatomic, assign) float pan;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the total amount of frames in the current audio file being used for playback.
+ @return A SInt64 representing the total amount of frames in the current audio file being used for playback.
+ */
+@property (readonly) SInt64 totalFrames;
 
 //------------------------------------------------------------------------------
 
