@@ -362,6 +362,14 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
     //
     [EZAudioUtilities checkResult:AUGraphStart(self.info->graph)
                         operation:"Failed to start graph"];
+    
+    //
+    // Notify delegate
+    //
+    if ([self.delegate respondsToSelector:@selector(output:changedPlayingState:)])
+    {
+        [self.delegate output:self changedPlayingState:[self isPlaying]];
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -373,6 +381,14 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
     //
     [EZAudioUtilities checkResult:AUGraphStop(self.info->graph)
                         operation:"Failed to stop graph"];
+    
+    //
+    // Notify delegate
+    //
+    if ([self.delegate respondsToSelector:@selector(output:changedPlayingState:)])
+    {
+        [self.delegate output:self changedPlayingState:[self isPlaying]];
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -620,15 +636,6 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
 
 //------------------------------------------------------------------------------
 #pragma mark - Subclass
-//------------------------------------------------------------------------------
-
-- (void)cleanupCustomNodes
-{
-    //
-    // Override in subclass
-    //
-}
-
 //------------------------------------------------------------------------------
 
 - (OSStatus)connectOutputOfSourceNode:(AUNode)sourceNode

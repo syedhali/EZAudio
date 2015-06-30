@@ -45,13 +45,13 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 //------------------------------------------------------------------------------
 
 /**
- The EZOutputDataSource (required for the EZOutput) specifies a receiver to provide audio data when the EZOutput is started. Since the 0.4.0 release this has been simplified to only one data source method.
+ The EZOutputDataSource specifies a receiver to provide audio data when the EZOutput is started. Since the 0.4.0 release this has been simplified to only one data source method.
  */
 @protocol EZOutputDataSource <NSObject>
 
 @optional
 ///-----------------------------------------------------------
-/// @name Pulling The Audio Data
+/// @name Providing Audio Data
 ///-----------------------------------------------------------
 
 @required
@@ -75,25 +75,38 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 #pragma mark - EZOutputDelegate
 //------------------------------------------------------------------------------
 
+/**
+ The EZOutputDelegate for the EZOutput component provides a receiver to handle play state, device, and audio data change events. This is very similar to the EZMicrophoneDelegate for the EZMicrophone and the EZAudioFileDelegate for the EZAudioFile.
+ */
 @protocol EZOutputDelegate <NSObject>
 
 @optional
 
 /**
- <#Description#>
- @param output <#output description#>
- @param device <#device description#>
+ Called anytime the EZOutput starts or stops.
+ @param output The instance of the EZOutput that triggered the event.
+ @param isPlaying A BOOL indicating whether the EZOutput instance is playing or not.
+ */
+- (void)output:(EZOutput *)output changedPlayingState:(BOOL)isPlaying;
+
+//------------------------------------------------------------------------------
+
+/**
+ Called anytime the `device` changes on an EZOutput instance.
+ @param output The instance of the EZOutput that triggered the event.
+ @param device The instance of the new EZAudioDevice the output is using to play audio data.
  */
 - (void)output:(EZOutput *)output changedDevice:(EZAudioDevice *)device;
 
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
- @param output           <#output description#>
- @param buffer           <#buffer description#>
- @param bufferSize       <#bufferSize description#>
- @param numberOfChannels <#numberOfChannels description#>
+ Like the EZMicrophoneDelegate, for the EZOutput this method provides an array of float arrays of the audio received, each float array representing a channel of audio data. This occurs on the background thread so any drawing code must explicity perform its functions on the main thread.
+ @param output The instance of the EZOutput that triggered the event.
+ @param buffer           The audio data as an array of float arrays. In a stereo signal buffer[0] represents the left channel while buffer[1] would represent the right channel.
+ @param bufferSize       A UInt32 representing the size of each of the buffers (the length of each float array).
+ @param numberOfChannels A UInt32 representing the number of channels (you can use this to know how many float arrays are in the `buffer` parameter.
+ @warning This function executes on a background thread to avoid blocking any audio operations. If operations should be performed on any other thread (like the main thread) it should be performed within a dispatch block like so: dispatch_async(dispatch_get_main_queue(), ^{ ...Your Code... })
  */
 - (void)       output:(EZOutput *)output
           playedAudio:(float **)buffer
@@ -210,7 +223,7 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 ///-----------------------------------------------------------
 
 /**
- The EZOutputDataSource that provides the audio data in the `inputFormat` for the EZOutput to play.
+ The EZOutputDataSource that provides the audio data in the `inputFormat` for the EZOutput to play. If an EZOutputDataSource is not specified then the EZOutput will just output silence.
  */
 @property (nonatomic, weak) id<EZOutputDataSource> dataSource;
 
@@ -232,14 +245,14 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 //------------------------------------------------------------------------------
 
 /**
- Provides the current pan from the audio player's mixer audio unit in the playback graph. Setting the pan adjusts the direction of the audio signal from left (0.0) to right (1.0). Default is 0.5 (middle).
+ Provides the current pan from the audio player's mixer audio unit in the playback graph. Setting the pan adjusts the direction of the audio signal from left (0) to right (1). Default is 0.5 (middle).
  */
 @property (nonatomic, assign) float pan;
 
 //------------------------------------------------------------------------------
 
 /**
- Provides the current volume from the audio player's mixer audio unit in the playback graph. Setting the volume adjusts the gain of the output between 0 and 1. Default is 0.5.
+ Provides the current volume from the audio player's mixer audio unit in the playback graph. Setting the volume adjusts the gain of the output between 0 and 1. Default is 1.
  */
 @property (nonatomic, assign) float volume;
 
@@ -319,20 +332,15 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 ///-----------------------------------------------------------
 
 /**
- <#Description#>
- */
-- (void)cleanupCustomNodes;
-
-//------------------------------------------------------------------------------
-
-/**
- <#Description#>
- @param sourceNode              <#sourceNode description#>
- @param sourceNodeOutputBus     <#sourceNodeOutputBus description#>
- @param destinationNode         <#destinationNode description#>
- @param destinationNodeInputBus <#destinationNodeInputBus description#>
- @param graph                   <#graph description#>
- @return <#return value description#>
+ This method handles connecting the converter node to the mixer node within the AUGraph that is being used as the playback graph. Subclasses can override this method and insert their custom nodes to perform effects processing on the audio data being rendered. 
+ 
+ This was inspired by Daniel Kennett's blog post on how to add a custom equalizer to the CocoaLibSpotify playback AUGraph. For more information see Daniel's post and example code here: http://ikennd.ac/blog/2012/04/augraph-basics-in-cocoalibspotify/.
+ @param sourceNode              An AUNode representing the node the audio data is coming from.
+ @param sourceNodeOutputBus     A UInt32 representing the output bus from the source node that should be connected into the next node's input bus.
+ @param destinationNode         An AUNode representing the node the audio data should be connected to.
+ @param destinationNodeInputBus A UInt32 representing the input bus the source node's output bus should be connecting to.
+ @param graph                   The AUGraph that is being used to hold the playback graph. Same as from the `graph` property.
+ @return An OSStatus code. For no error return back `noErr`.
  */
 - (OSStatus)connectOutputOfSourceNode:(AUNode)sourceNode
                   sourceNodeOutputBus:(UInt32)sourceNodeOutputBus
@@ -359,7 +367,8 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 //------------------------------------------------------------------------------
 
 /**
- The default value used as the AudioUnit subtype when creating the hardware output component. By default this is kAudioUnitSubType_RemoteIO for iOS and kAudioUnitSubType_HALOutput for OSX.
+ The default value used as the AudioUnit subtype when creating the hardware output component. By default this is kAudioUnitSubType_RemoteIO for iOS and kAudioUnitSubType_HALOutput for OSX. 
+ @warning If you change this to anything other than kAudioUnitSubType_HALOutput for OSX you will get a failed assertion because devices can only be set when using the HAL audio unit.
  @return An OSType that represents the AudioUnit subtype for the hardware output component.
  */
 - (OSType)outputAudioUnitSubType;
