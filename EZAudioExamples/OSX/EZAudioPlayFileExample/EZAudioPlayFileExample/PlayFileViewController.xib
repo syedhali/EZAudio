@@ -16,7 +16,6 @@
                 <outlet property="positionSlider" destination="CFP-v0-TzQ" id="EGD-qT-48R"/>
                 <outlet property="rollingHistoryLengthLabel" destination="vKe-ey-hXI" id="UiN-5S-TOn"/>
                 <outlet property="rollingHistoryLengthSlider" destination="vj5-qT-JkR" id="sEj-iE-yTV"/>
-                <outlet property="sampleRateLabel" destination="3ul-3w-l3S" id="5CA-Au-tFa"/>
                 <outlet property="view" destination="Xpo-HP-Ost" id="zlj-bW-4iz"/>
                 <outlet property="volumeLabel" destination="3ul-3w-l3S" id="sXM-mC-tN0"/>
                 <outlet property="volumeSlider" destination="rRH-oS-VV3" id="kql-X5-amB"/>
