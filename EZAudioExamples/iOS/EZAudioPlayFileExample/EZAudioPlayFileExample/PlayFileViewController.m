@@ -10,13 +10,28 @@
 
 @implementation PlayFileViewController
 
+//------------------------------------------------------------------------------
+#pragma mark - Dealloc
+//------------------------------------------------------------------------------
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+//------------------------------------------------------------------------------
 #pragma mark - Status Bar Style
+//------------------------------------------------------------------------------
+
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - Customize the Audio Plot
+//------------------------------------------------------------------------------
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
