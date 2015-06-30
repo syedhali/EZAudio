@@ -98,6 +98,12 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
 
 - (void)dealloc
 {
+    if (self.floatConverter)
+    {
+        self.floatConverter = nil;
+        [EZAudioUtilities freeFloatBuffers:self.info->floatData
+                          numberOfChannels:self.info->clientFormat.mChannelsPerFrame];
+    }
     [EZAudioUtilities checkResult:AUGraphStop(self.info->graph)
                         operation:"Failed to stop graph"];
     [EZAudioUtilities checkResult:AUGraphClose(self.info->graph)
