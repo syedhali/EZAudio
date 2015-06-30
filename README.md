@@ -3,9 +3,6 @@
 #EZAudio
 A simple, intuitive audio framework for iOS and OSX.
 
-*The Official EZAudio Page:*
-http://syedharisali.com/projects/EZAudio/getting-started
-
 ##Features
 ![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/EZAudioSummary.png "EZAudioFeatures")
 
@@ -82,9 +79,6 @@ The official documentation for EZAudio can be found here: http://cocoadocs.org/d
 <br>You can also generate the docset yourself using appledocs by running the appledocs on the EZAudio source folder.
 
 ##Getting Started
-*To see the full project page, interactive Getting Started guide, and Documentation go here:*
-http://syedharisali.com/projects/EZAudio/getting-started
-
 To begin using `EZAudio` you must first make sure you have the proper build requirements and frameworks. Below you'll find explanations of each component and code snippets to show how to use each to perform common tasks like getting microphone data, updating audio waveform plots, reading/seeking through audio files, and performing playback.
 
 ###Build Requirements
@@ -114,13 +108,10 @@ To begin using `EZAudio` you must first make sure you have the proper build requ
 You can add EZAudio to your project in a few ways: <br><br>1.) The easiest way to use EZAudio is via <a href="http://cocoapods.org/", target="_blank">Cocoapods</a>. Simply add EZAudio to your <a href="http://guides.cocoapods.org/using/the-podfile.html", target="_blank">Podfile</a> like so:
 
 `
-pod 'EZAudio', '~> 0.1.0'
+pod 'EZAudio', '~> 0.4.0'
 `
 
 2.) Alternatively, you could clone or fork this repo and just drag and drop the source into your project. 
-
-*For more information see main project page:*
-http://syedharisali.com/projects/EZAudio/getting-started
 
 ##Core Components
 `EZAudio` currently offers four components that encompass a wide range of audio functionality. In addition to the functional aspects of these components such as pulling audio data, reading/writing from files, and performing playback they also take special care to hook into the interface components to allow developers to display visual feedback (see the Interface Components below).
@@ -474,7 +465,6 @@ Provides an audio waveform plot that uses CoreGraphics to perform the drawing. O
 ####Creating An Audio Plot
 
 You can create an audio plot in the interface builder by dragging in a UIView on iOS or an NSView on OSX onto your content area. Then change the custom class of the UIView/NSView to `EZAudioPlot`.
-See full Getting Started page for how to: http://syedharisali.com/projects/EZAudio/getting-started
 
 Alternatively, you can could create the audio plot programmatically
 
@@ -539,7 +529,6 @@ Provides an audio waveform plot that uses OpenGL to perform the drawing. The API
 ####Creating An OpenGL Audio Plot
 
 You can create an audio plot in the interface builder by dragging in a UIView on iOS or an NSOpenGLView on OSX onto your content area. Then change the custom class of the UIView/NSView to `EZAudioPlotGL`.
-See full Getting Started page for how to: http://syedharisali.com/projects/EZAudio/getting-started
 
 Alternatively, you can could create the `EZAudioPlotGL` programmatically
 ```objectivec
