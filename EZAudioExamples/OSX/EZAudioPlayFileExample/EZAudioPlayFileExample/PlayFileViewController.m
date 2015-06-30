@@ -68,8 +68,8 @@
     //
     self.volumeSlider.floatValue = [self.output volume];
     self.volumeLabel.floatValue = [self.output volume];
-    self.rollingHistoryLengthSlider.intValue = self.audioPlot.rollingHistoryLength;
-    self.rollingHistoryLengthLabel.intValue = self.audioPlot.rollingHistoryLength;
+    self.rollingHistoryLengthSlider.intValue = [self.audioPlot rollingHistoryLength];
+    self.rollingHistoryLengthLabel.intValue = [self.audioPlot rollingHistoryLength];
 
     //
     // Try opening the sample file
