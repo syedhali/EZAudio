@@ -161,6 +161,15 @@ typedef struct
 }
 
 //------------------------------------------------------------------------------
+#pragma mark - NSCopying
+//------------------------------------------------------------------------------
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    return [EZAudioFile audioFileWithURL:self.url];
+}
+
+//------------------------------------------------------------------------------
 #pragma mark - Class Methods
 //------------------------------------------------------------------------------
 
@@ -665,6 +674,29 @@ typedef struct
                                 rightMin:0.0f
                                 rightMax:[self totalFrames]];
     [self seekToFrame:frame];
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Description
+//------------------------------------------------------------------------------
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"%@ {\n"
+                                       "    url: %@,\n"
+                                       "    duration: %f,\n"
+                                       "    totalFrames: %lld,\n"
+                                       "    metadata: %@,\n"
+                                       "    fileFormat: { %@ },\n"
+                                       "    clientFormat: { %@ } \n"
+                                       "}",
+            [super description],
+            [self url],
+            [self duration],
+            [self totalFrames],
+            [self metadata],
+            [EZAudioUtilities stringForAudioStreamBasicDescription:[self fileFormat]],
+            [EZAudioUtilities stringForAudioStreamBasicDescription:[self clientFormat]]];
 }
 
 //------------------------------------------------------------------------------

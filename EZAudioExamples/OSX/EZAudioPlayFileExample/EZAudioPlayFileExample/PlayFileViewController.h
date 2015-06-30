@@ -37,9 +37,7 @@
  Using the EZOutputDataSource to provide output data to the EZOutput component. 
  */
 @interface PlayFileViewController : NSViewController <NSOpenSavePanelDelegate,
-                                                      EZAudioFileDelegate,
-                                                      EZOutputDataSource,
-                                                      EZOutputDelegate>
+                                                      EZAudioPlayerDelegate>
 
 #pragma mark - Components
 /**
@@ -50,7 +48,7 @@
 /**
  The EZOutput component used to output the audio file's audio data.
  */
-@property (nonatomic, strong) EZOutput *output;
+@property (nonatomic, strong) EZAudioPlayer *player;
 
 /**
  The CoreGraphics based audio plot
@@ -62,6 +60,11 @@
  A label to display the current file path with the waveform shown
  */
 @property (nonatomic, weak) IBOutlet NSTextField *filePathLabel;
+
+/**
+ A checkbox button to that allows you to specify if the audio player should loop.
+ */
+@property (nonatomic, weak) IBOutlet NSButton *loopCheckboxButton;
 
 /**
  A label to display the audio file's current position.
@@ -113,6 +116,11 @@
  Changes the length of the rolling history of the audio plot.
  */
 - (IBAction)changeRollingHistoryLength:(id)sender;
+
+/**
+ Switches the loop state on the audio player regarding whether the current playing audio file should loop back to the beginning when it finishes.
+ */
+- (IBAction)changeShouldLoop:(id)sender;
 
 /**
  Changes the volume of the audio coming out of the EZOutput.

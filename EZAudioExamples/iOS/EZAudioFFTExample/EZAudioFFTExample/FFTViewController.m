@@ -49,6 +49,23 @@
 {
     [super viewDidLoad];
 
+    //
+    // Setup the AVAudioSession. EZMicrophone will not work properly on iOS
+    // if you don't do this!
+    //
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error;
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session category: %@", error.localizedDescription);
+    }
+    [session setActive:YES error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session active: %@", error.localizedDescription);
+    }
+    
     /*
     Customizing the audio plot's look
     */
@@ -70,7 +87,7 @@
     Start the microphone
     */
     self.microphone = [EZMicrophone microphoneWithDelegate:self
-                                       startsImmediately:YES];
+                                         startsImmediately:YES];
   
 }
 

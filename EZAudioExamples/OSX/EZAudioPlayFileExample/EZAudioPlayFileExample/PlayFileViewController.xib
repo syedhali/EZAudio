@@ -8,7 +8,9 @@
         <customObject id="-2" userLabel="File's Owner" customClass="PlayFileViewController">
             <connections>
                 <outlet property="audioPlot" destination="Lz1-Gs-1lD" id="V5w-yH-ZVR"/>
+                <outlet property="checkboxButton" destination="5xb-MK-C8b" id="fx2-y9-qXH"/>
                 <outlet property="filePathLabel" destination="0eT-7c-7fJ" id="IGv-mA-5Hw"/>
+                <outlet property="loopCheckboxButton" destination="5xb-MK-C8b" id="Rlt-Z9-Zy8"/>
                 <outlet property="outputDevicePopUpButton" destination="0LV-Bi-dGz" id="QTQ-qq-Ro8"/>
                 <outlet property="playButton" destination="OQp-Lr-dlS" id="K5R-Qg-7DY"/>
                 <outlet property="plotSegmentControl" destination="bZW-tA-C61" id="4ic-Ou-qh2"/>
@@ -192,6 +194,16 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="5xb-MK-C8b">
+                    <rect key="frame" x="410" y="162" width="54" height="18"/>
+                    <buttonCell key="cell" type="check" title="Loop" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="O83-sN-k0z">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="changeShouldLoop:" target="-2" id="lJN-Pe-JWA"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
                 <constraint firstItem="vKe-ey-hXI" firstAttribute="baseline" secondItem="vj5-qT-JkR" secondAttribute="baseline" id="03u-fe-Q2r"/>
@@ -199,6 +211,7 @@
                 <constraint firstItem="rRH-oS-VV3" firstAttribute="baseline" secondItem="7AB-VA-xL3" secondAttribute="baseline" id="4WU-L2-5TI"/>
                 <constraint firstItem="3ul-3w-l3S" firstAttribute="trailing" secondItem="bZW-tA-C61" secondAttribute="trailing" constant="-2" id="75o-B9-UmY"/>
                 <constraint firstItem="vj5-qT-JkR" firstAttribute="baseline" secondItem="Aa9-nc-WHJ" secondAttribute="baseline" id="8ia-fE-3Ej"/>
+                <constraint firstItem="Lz1-Gs-1lD" firstAttribute="top" secondItem="5xb-MK-C8b" secondAttribute="bottom" constant="18" id="CG6-jk-Mmj"/>
                 <constraint firstAttribute="bottom" secondItem="Lz1-Gs-1lD" secondAttribute="bottom" id="Cdp-xg-Udu"/>
                 <constraint firstItem="0eT-7c-7fJ" firstAttribute="leading" secondItem="2Ma-jj-U3z" secondAttribute="trailing" constant="11" id="F4y-lz-2p6"/>
                 <constraint firstItem="7AB-VA-xL3" firstAttribute="top" secondItem="OQp-Lr-dlS" secondAttribute="bottom" constant="9" id="GbY-7Z-81V"/>
@@ -209,6 +222,7 @@
                 <constraint firstItem="2Ma-jj-U3z" firstAttribute="leading" secondItem="Xpo-HP-Ost" secondAttribute="leading" constant="18" id="PiQ-KC-eta"/>
                 <constraint firstItem="Fw5-pm-4w0" firstAttribute="top" secondItem="7AB-VA-xL3" secondAttribute="bottom" constant="9" id="SPP-F6-chs"/>
                 <constraint firstItem="vj5-qT-JkR" firstAttribute="trailing" secondItem="CFP-v0-TzQ" secondAttribute="trailing" id="URd-7z-JBO"/>
+                <constraint firstAttribute="trailing" secondItem="5xb-MK-C8b" secondAttribute="trailing" constant="18" id="WdY-l2-cmp"/>
                 <constraint firstItem="RRH-G6-xkQ" firstAttribute="leading" secondItem="Xpo-HP-Ost" secondAttribute="leading" constant="18" id="WiW-CU-B7N"/>
                 <constraint firstAttribute="trailing" secondItem="Lz1-Gs-1lD" secondAttribute="trailing" id="ay9-Mt-iFx"/>
                 <constraint firstItem="rRH-oS-VV3" firstAttribute="leading" secondItem="CFP-v0-TzQ" secondAttribute="leading" id="cWn-4f-E04"/>
