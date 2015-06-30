@@ -34,12 +34,39 @@
 #pragma mark - Notifications
 //------------------------------------------------------------------------------
 
+/**
+ Notification that occurs whenever the EZAudioPlayer changes its `audioFile` property. Check the new value using the EZAudioPlayer's `audioFile` property.
+ */
 FOUNDATION_EXPORT NSString * const EZAudioPlayerDidChangeAudioFileNotification;
+
+/**
+ Notification that occurs whenever the EZAudioPlayer changes its `device` property. Check the new value using the EZAudioPlayer's `device` property.
+ */
 FOUNDATION_EXPORT NSString * const EZAudioPlayerDidChangeOutputDeviceNotification;
+
+/**
+ Notification that occurs whenever the EZAudioPlayer changes its `output` component's `pan` property. Check the new value using the EZAudioPlayer's `pan` property.
+ */
 FOUNDATION_EXPORT NSString * const EZAudioPlayerDidChangePanNotification;
+
+/**
+ Notification that occurs whenever the EZAudioPlayer changes its `output` component's play state. Check the new value using the EZAudioPlayer's `isPlaying` property.
+ */
 FOUNDATION_EXPORT NSString * const EZAudioPlayerDidChangePlayStateNotification;
+
+/**
+ Notification that occurs whenever the EZAudioPlayer changes its `output` component's `volume` property. Check the new value using the EZAudioPlayer's `volume` property.
+ */
 FOUNDATION_EXPORT NSString * const EZAudioPlayerDidChangeVolumeNotification;
+
+/**
+ Notification that occurs whenever the EZAudioPlayer has reached the end of a file and its `shouldLoop` property has been set to NO.
+ */
 FOUNDATION_EXPORT NSString * const EZAudioPlayerDidReachEndOfFileNotification;
+
+/**
+ Notification that occurs whenever the EZAudioPlayer performs a seek via the `seekToFrame` method or `setCurrentTime:` property setter. Check the new `currentTime` or `frameIndex` value using the EZAudioPlayer's `currentTime` or `frameIndex` property, respectively.
+ */
 FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
 
 //------------------------------------------------------------------------------
@@ -47,7 +74,7 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
 //------------------------------------------------------------------------------
 
 /**
- The EZAudioPlayerDelegate provides event callbacks for the EZAudioPlayer. These type of events are triggered by changes in the EZAudioPlayer's state and allow someone implementing the EZAudioPlayer to more easily update their user interface. Events are triggered anytime the EZAudioPlayer resumes/pauses playback, reaches the end of the file, reads audio data and converts it to float data visualizations (using the EZAudioFile), and updates its cursor position within the audio file during playback (use this for the play position on a slider on the user interface).
+ The EZAudioPlayerDelegate provides event callbacks for the EZAudioPlayer. Since 0.5.0 the EZAudioPlayerDelegate provides a smaller set of delegate methods in favor of notifications to allow multiple receivers of the EZAudioPlayer event callbacks since only one player is typically used in an application. Specifically, these methods are provided for high frequency callbacks that wrap the EZAudioPlayer's internal EZAudioFile and EZOutput instances.
  @warning These callbacks don't necessarily occur on the main thread so make sure you wrap any UI code in a GCD block like: dispatch_async(dispatch_get_main_queue(), ^{ // Update UI });
  */
 @protocol EZAudioPlayerDelegate <NSObject>
@@ -89,7 +116,7 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
 //------------------------------------------------------------------------------
 
 /**
- The EZAudioPlayer acts as the master delegate (the EZAudioFileDelegate) over whatever EZAudioFile it is using for playback. Classes that want to get the EZAudioFileDelegate callbacks should implement the EZAudioPlayer's EZAudioPlayerDelegate on the EZAudioPlayer instance.
+ The EZAudioPlayer provides an interface that combines the EZAudioFile and EZOutput to play local audio files. This class acts as the master delegate (the EZAudioFileDelegate) over whatever EZAudioFile instance, the `audioFile` property, it is using for playback as well as the EZOutputDelegate and EZOutputDataSource over whatever EZOutput instance is set as the `output`. Classes that want to get the EZAudioFileDelegate callbacks should implement the EZAudioPlayer's EZAudioPlayerDelegate on the EZAudioPlayer instance. Since 0.5.0 the EZAudioPlayer offers notifications over the usual delegate methods to allow multiple receivers to get the EZAudioPlayer's state changes since one player will typically be used in one application. The EZAudioPlayerDelegate, the `delegate`, provides callbacks for high frequency methods that simply wrap the EZAudioFileDelegate and EZOutputDelegate callbacks for providing the audio buffer played as well as the position updating (you will typically have one scrub bar in an application).
  */
 @interface EZAudioPlayer : NSObject <EZAudioFileDelegate,
                                      EZOutputDataSource,
@@ -255,7 +282,7 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
 ///-----------------------------------------------------------
 
 /**
- Provides the EZAudioFile instance that is being used as the datasource for playback. When set it creates a copy of the EZAudioFile provided for internal use. This does not use the EZAudioFile by reference, but instead creates a separate EZAudioFile instance with the same file at the given file path provided by the internal NSURL to use for internal seeking so it doesn't cause any locking between the caller's instance of the EZAudioFile.
+ Provides the EZAudioFile instance that is being used as the datasource for playback. When set it creates a copy of the EZAudioFile provided for internal use. This does not use the EZAudioFile by reference, but instead creates a copy of the EZAudioFile instance provided.
  */
 @property (nonatomic, readwrite, copy) EZAudioFile *audioFile;
 
@@ -270,7 +297,7 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
+ The EZAudioDevice instance that is being used by the `output`. Similarly, setting this just sets the `device` property of the `output`.
  */
 @property (readwrite) EZAudioDevice *device;
 
@@ -298,7 +325,7 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
+ Provides the EZOutput that is being used to handle the actual playback of the audio data. This property is also settable, but note that the EZAudioPlayer will become the output's EZOutputDataSource and EZOutputDelegate. To listen for the EZOutput's delegate methods your view should implement the EZAudioPlayerDelegate and set itself as the EZAudioPlayer's `delegate`.
  */
 @property (nonatomic, strong, readwrite) EZOutput *output;
 
@@ -331,17 +358,9 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
+ Provides the current pan from the audio player's internal `output` component. Setting the pan adjusts the direction of the audio signal from left (0) to right (1). Default is 0.5 (middle).
  */
 @property (nonatomic, assign) float pan;
-
-//------------------------------------------------------------------------------
-
-/**
- Provides the total amount of frames in the current audio file being used for playback.
- @return A SInt64 representing the total amount of frames in the current audio file being used for playback.
- */
-@property (readonly) SInt64 totalFrames;
 
 //------------------------------------------------------------------------------
 
@@ -354,7 +373,7 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
 //------------------------------------------------------------------------------
 
 /**
- <#Description#>
+  Provides the current volume from the audio player's internal `output` component. Setting the volume adjusts the gain of the output between 0 and 1. Default is 1.
  */
 @property (nonatomic, assign) float volume;
 

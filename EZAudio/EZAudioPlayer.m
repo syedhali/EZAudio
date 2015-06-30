@@ -241,13 +241,6 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
 
 //------------------------------------------------------------------------------
 
-- (NSTimeInterval)totalDuration
-{
-    return [self duration];
-}
-
-//------------------------------------------------------------------------------
-
 - (SInt64)totalFrames
 {
     return [self.audioFile totalFrames];

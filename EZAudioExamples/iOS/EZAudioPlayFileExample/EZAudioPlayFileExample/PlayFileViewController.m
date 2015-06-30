@@ -37,6 +37,23 @@
     [super viewDidLoad];
     
     //
+    // Setup the AVAudioSession. EZMicrophone will not work properly on iOS
+    // if you don't do this!
+    //
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error;
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session category: %@", error.localizedDescription);
+    }
+    [session setActive:YES error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session active: %@", error.localizedDescription);
+    }
+    
+    //
     // Customizing the audio plot's look
     //
     self.audioPlot.backgroundColor = [UIColor colorWithRed: 0.816 green: 0.349 blue: 0.255 alpha: 1];
@@ -50,6 +67,13 @@
     //
     self.player = [EZAudioPlayer audioPlayerWithDelegate:self];
     self.player.shouldLoop = YES;
+    
+    // Override the output to the speaker
+    [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
+    if (error)
+    {
+        NSLog(@"Error overriding output to the speaker: %@", error.localizedDescription);
+    }
     
     //
     // Customize UI components
