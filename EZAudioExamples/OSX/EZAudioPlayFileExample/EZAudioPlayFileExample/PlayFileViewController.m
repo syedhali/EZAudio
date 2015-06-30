@@ -56,6 +56,7 @@
     // Create EZOutput to play audio data
     //
     self.output = [EZOutput outputWithDataSource:self];
+    self.output.delegate = self;
     
     //
     // Reload the menu for the output device selector popup button
@@ -291,25 +292,8 @@
 #pragma mark - EZAudioFileDelegate
 //------------------------------------------------------------------------------
 
--(void)     audioFile:(EZAudioFile *)audioFile
-            readAudio:(float **)buffer
-       withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels
+-(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition
 {
-    if ([self.output isPlaying])
-    {
-        __weak typeof (self) weakSelf = self;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.audioPlot updateBuffer:buffer[0]
-                              withBufferSize:bufferSize];
-        });
-    }
-}
-
-//------------------------------------------------------------------------------
-
--(void)audioFile:(EZAudioFile *)audioFile
- updatedPosition:(SInt64)framePosition {
     __weak typeof (self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (![weakSelf.positionSlider.cell isHighlighted])
@@ -342,6 +326,22 @@
         }
     }
     return noErr;
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - EZOutputDelegate
+//------------------------------------------------------------------------------
+
+- (void)       output:(EZOutput *)output
+          playedAudio:(float **)buffer
+       withBufferSize:(UInt32)bufferSize
+ withNumberOfChannels:(UInt32)numberOfChannels
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.audioPlot updateBuffer:buffer[0]
+                          withBufferSize:bufferSize];
+    });
 }
 
 //------------------------------------------------------------------------------

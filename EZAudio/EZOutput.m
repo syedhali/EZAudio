@@ -25,6 +25,7 @@
 
 #import "EZOutput.h"
 #import "EZAudioDevice.h"
+#import "EZAudioFloatConverter.h"
 #import "EZAudioUtilities.h"
 
 //------------------------------------------------------------------------------
@@ -43,6 +44,9 @@ typedef struct
     // stream format params
     AudioStreamBasicDescription inputFormat;
     AudioStreamBasicDescription clientFormat;
+    
+    // float converted data
+    float **floatData;
     
     // nodes
     EZAudioNodeInfo converterNodeInfo;
@@ -78,6 +82,7 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
 //------------------------------------------------------------------------------
 
 @interface EZOutput ()
+@property (nonatomic, strong) EZAudioFloatConverter *floatConverter;
 @property (nonatomic, assign) EZOutputInfo *info;
 @end
 
@@ -411,6 +416,13 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
 
 - (void)setClientFormat:(AudioStreamBasicDescription)clientFormat
 {
+    if (self.floatConverter)
+    {
+        self.floatConverter = nil;
+        [EZAudioUtilities freeFloatBuffers:self.info->floatData
+                          numberOfChannels:self.clientFormat.mChannelsPerFrame];
+    }
+    
     self.info->clientFormat = clientFormat;
     [EZAudioUtilities checkResult:AudioUnitSetProperty(self.info->converterNodeInfo.audioUnit,
                                                        kAudioUnitProperty_StreamFormat,
@@ -433,6 +445,10 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
                                                        &self.info->clientFormat,
                                                        sizeof(self.info->clientFormat))
                         operation:"Failed to set output client format on mixer audio unit"];
+    
+    self.floatConverter = [[EZAudioFloatConverter alloc] initWithInputFormat:clientFormat];
+    self.info->floatData = [EZAudioUtilities floatBuffersWithNumberOfFrames:EZOutputMaximumFramesPerSlice
+                                                           numberOfChannels:clientFormat.mChannelsPerFrame];
 }
 
 //------------------------------------------------------------------------------
@@ -667,16 +683,14 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
     {
         if ([output.delegate respondsToSelector:@selector(output:playedAudio:withBufferSize:withNumberOfChannels:)])
         {
-            UInt32 channels = output.info->clientFormat.mChannelsPerFrame;
-            float *buffers[channels];
-            for (int i = 0; i < channels; i++)
-            {
-                buffers[i] = ioData->mBuffers[i].mData;
-            }
+            UInt32 frames = ioData->mBuffers[0].mDataByteSize / output.info->clientFormat.mBytesPerFrame;
+            [output.floatConverter convertDataFromAudioBufferList:ioData
+                                               withNumberOfFrames:frames
+                                                   toFloatBuffers:output.info->floatData];
             [output.delegate output:output
-                        playedAudio:buffers
+                        playedAudio:output.info->floatData
                      withBufferSize:inNumberFrames
-               withNumberOfChannels:channels];
+               withNumberOfChannels:output.info->clientFormat.mChannelsPerFrame];
         }
     }
     return noErr;

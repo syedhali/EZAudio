@@ -36,7 +36,10 @@
 /**
  Using the EZOutputDataSource to provide output data to the EZOutput component. 
  */
-@interface PlayFileViewController : NSViewController <NSOpenSavePanelDelegate,EZAudioFileDelegate,EZOutputDataSource>
+@interface PlayFileViewController : NSViewController <NSOpenSavePanelDelegate,
+                                                      EZAudioFileDelegate,
+                                                      EZOutputDataSource,
+                                                      EZOutputDelegate>
 
 #pragma mark - Components
 /**
