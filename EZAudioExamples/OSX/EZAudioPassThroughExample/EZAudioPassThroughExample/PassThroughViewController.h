@@ -30,7 +30,7 @@
  */
 #import "EZAudio.h"
 
-@interface PassThroughViewController : NSViewController <EZMicrophoneDelegate,EZOutputDataSource>
+@interface PassThroughViewController : NSViewController <EZMicrophoneDelegate>
 
 //------------------------------------------------------------------------------
 #pragma mark - Components

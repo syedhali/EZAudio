@@ -42,7 +42,12 @@
 /**
  The EZAudioFile representing of the currently selected audio file
  */
-@property (nonatomic,strong) EZAudioFile *audioFile;
+@property (nonatomic, strong) EZAudioFile *audioFile;
+
+/**
+ The EZOutput component used to output the audio file's audio data.
+ */
+@property (nonatomic, strong) EZOutput *output;
 
 /**
  The CoreGraphics based audio plot
@@ -56,7 +61,7 @@
 @property (nonatomic, weak) IBOutlet NSTextField *filePathLabel;
 
 /**
- <#Description#>
+ A label to display the audio file's current position.
  */
 @property (nonatomic, weak) IBOutlet NSTextField *positionLabel;
 
@@ -66,24 +71,24 @@
 @property (nonatomic, weak) IBOutlet NSSlider *positionSlider;
 
 /**
- <#Description#>
+ A label to display the value of the rolling history length of the audio plot.
  */
 @property (nonatomic, weak) IBOutlet NSTextField *rollingHistoryLengthLabel;
 
 /**
- <#Description#>
+ A slider to adjust the rolling history length of the audio plot.
  */
 @property (nonatomic, weak) IBOutlet NSSlider *rollingHistoryLengthSlider;
 
 /**
- A slider to adjust the sample rate.
+ A slider to adjust the volume.
  */
-@property (nonatomic, weak) IBOutlet NSSlider *sampleRateSlider;
+@property (nonatomic, weak) IBOutlet NSSlider *volumeSlider;
 
 /**
- A slider to adjust the sample rate.
+ A label to display the volume of the audio plot.
  */
-@property (nonatomic, weak) IBOutlet NSTextField *sampleRateLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *volumeLabel;
 
 /**
  A BOOL indicating whether or not we've reached the end of the file
@@ -91,11 +96,6 @@
 @property (nonatomic,assign) BOOL eof;
 
 #pragma mark - Actions
-/**
- Changes the sampling frequency on the output unit
- */
--(IBAction)changeOutputSamplingFrequency:(id)sender;
-
 /**
  Switches the plot drawing type between a buffer plot (visualizes the current stream of audio data from the update function) or a rolling plot (visualizes the audio data over time, this is the classic waveform look)
  */
@@ -105,6 +105,11 @@
  Changes the length of the rolling history of the audio plot.
  */
 - (IBAction)changeRollingHistoryLength:(id)sender;
+
+/**
+ Changes the volume of the audio coming out of the EZOutput.
+ */
+- (IBAction)changeVolume:(id)sender;
 
 /**
  Prompts the file manager and loads in a new audio file into the EZAudioFile representation.

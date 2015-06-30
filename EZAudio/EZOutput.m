@@ -24,6 +24,7 @@
 //  THE SOFTWARE.
 
 #import "EZOutput.h"
+#import "EZAudioDevice.h"
 #import "EZAudioUtilities.h"
 
 //------------------------------------------------------------------------------
@@ -307,7 +308,7 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
     [self setDevice:currentOutputDevice];
 #elif TARGET_OS_MAC
     NSArray *outputDevices = [EZAudioDevice outputDevices];
-    EZAudioDevice *defaultOutput = [outputDevices lastObject];
+    EZAudioDevice *defaultOutput = [outputDevices firstObject];
     [self setDevice:defaultOutput];
 #endif
     
@@ -365,6 +366,20 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
 
 //------------------------------------------------------------------------------
 #pragma mark - Getters
+//------------------------------------------------------------------------------
+
+- (AudioStreamBasicDescription)clientFormat
+{
+    return self.info->clientFormat;
+}
+
+//------------------------------------------------------------------------------
+
+- (AudioStreamBasicDescription)inputFormat
+{
+    return self.info->inputFormat;
+}
+
 //------------------------------------------------------------------------------
 
 - (BOOL)isPlaying
@@ -444,7 +459,7 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
 #elif TARGET_OS_MAC
     UInt32 outputEnabled = device.outputChannelCount > 0;
     NSAssert(outputEnabled, @"Selected EZAudioDevice does not have any output channels");
-    [EZAudioUtilities checkResult:AudioUnitSetProperty(self.info->audioUnit,
+    [EZAudioUtilities checkResult:AudioUnitSetProperty(self.info->outputNodeInfo.audioUnit,
                                                        kAudioOutputUnitProperty_EnableIO,
                                                        kAudioUnitScope_Output,
                                                        0,
@@ -453,7 +468,7 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
                         operation:"Failed to set flag on device output"];
     
     AudioDeviceID deviceId = device.deviceID;
-    [EZAudioUtilities checkResult:AudioUnitSetProperty(self.info->audioUnit,
+    [EZAudioUtilities checkResult:AudioUnitSetProperty(self.info->outputNodeInfo.audioUnit,
                                                        kAudioOutputUnitProperty_CurrentDevice,
                                                        kAudioUnitScope_Global,
                                                        0,

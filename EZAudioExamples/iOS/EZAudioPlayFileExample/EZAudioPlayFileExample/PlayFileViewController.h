@@ -49,6 +49,12 @@
  */
 @property (nonatomic,weak) IBOutlet UISlider *framePositionSlider;
 
+
+/**
+ A slider to indicate the volume on the audio player
+ */
+@property (nonatomic, weak) IBOutlet UISlider *volumeSlider;
+
 /**
  A BOOL indicating whether or not we've reached the end of the file
  */
@@ -64,6 +70,11 @@
  Changes the length of the rolling history of the audio plot.
  */
 - (IBAction)changeRollingHistoryLength:(id)sender;
+
+/**
+ Changes the volume of the audio player.
+ */
+- (IBAction)changeVolume:(id)sender;
 
 /**
  Begins playback if a file is loaded. Pauses if the file is already playing.

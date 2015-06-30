@@ -22,6 +22,23 @@
     [super viewDidLoad];
 
     //
+    // Setup the AVAudioSession. EZMicrophone will not work properly on iOS
+    // if you don't do this!
+    //
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error;
+    [session setCategory:AVAudioSessionCategoryPlayback error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session category: %@", error.localizedDescription);
+    }
+    [session setActive:YES error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session active: %@", error.localizedDescription);
+    }
+    
+    //
     // Customize the plot's look
     //
     // Background color
@@ -39,7 +56,7 @@
     // Create an EZOutput instance
     //
     self.output = [EZOutput outputWithDataSource:self];
-
+    
     //
     // Try opening the sample file
     //
@@ -72,6 +89,14 @@
 {
     float value = [(UISlider *)sender value];
     [self.audioPlot setRollingHistoryLength:(int)value];
+}
+
+//------------------------------------------------------------------------------
+
+- (void)changeVolume:(id)sender
+{
+    float value = [(UISlider *)sender value];
+    [self.output setVolume:value];
 }
 
 //------------------------------------------------------------------------------

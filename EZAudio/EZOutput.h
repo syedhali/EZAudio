@@ -29,15 +29,15 @@
 #elif TARGET_OS_MAC
 #import <AudioUnit/AudioUnit.h>
 #endif
-#import "EZAudioDevice.h"
 
+@class EZAudioDevice;
 @class EZOutput;
 
 //------------------------------------------------------------------------------
 #pragma mark - Constants
 //------------------------------------------------------------------------------
 
-FOUNDATION_EXPORT UInt32 const EZOutputMaximumFramesPerSlice;
+FOUNDATION_EXPORT UInt32  const EZOutputMaximumFramesPerSlice;
 FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 
 //------------------------------------------------------------------------------

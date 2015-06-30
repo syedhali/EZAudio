@@ -53,8 +53,15 @@
     self.audioPlot.shouldMirror    = YES;
     
     //
+    // Create EZOutput to play audio data
+    //
+    self.output = [EZOutput outputWithDataSource:self];
+    
+    //
     // Configure UI components
     //
+    self.volumeSlider.floatValue = [self.output volume];
+    self.volumeLabel.floatValue = [self.output volume];
     self.rollingHistoryLengthSlider.intValue = self.audioPlot.rollingHistoryLength;
     self.rollingHistoryLengthLabel.intValue = self.audioPlot.rollingHistoryLength;
 
@@ -86,13 +93,11 @@
 
 //------------------------------------------------------------------------------
 
-- (void)changeOutputSamplingFrequency:(id)sender
+- (void)changeVolume:(id)sender
 {
-    float sampleRate = ((NSSlider *)sender).floatValue;
-    AudioStreamBasicDescription asbd = [[EZOutput sharedOutput] audioStreamBasicDescription];
-    asbd.mSampleRate = sampleRate;
-    [[EZOutput sharedOutput] setAudioStreamBasicDescription:asbd];
-    self.sampleRateLabel.floatValue = sampleRate;
+    float value = [(NSSlider *)sender floatValue];
+    [self.output setVolume:value];
+    self.volumeLabel.floatValue = value;
 }
 
 //------------------------------------------------------------------------------
@@ -123,7 +128,7 @@
 
 -(void)play:(id)sender
 {
-    if (![[EZOutput sharedOutput] isPlaying])
+    if (![self.output isPlaying])
     {
         if (self.eof)
         {
@@ -133,13 +138,11 @@
         {
             self.audioPlot.plotType = EZPlotTypeRolling;
         }
-        [EZOutput sharedOutput].outputDataSource = self;
-        [[EZOutput sharedOutput] startPlayback];
+        [self.output startPlayback];
     }
     else
     {
-        [EZOutput sharedOutput].outputDataSource = nil;
-        [[EZOutput sharedOutput] stopPlayback];
+        [self.output stopPlayback];
     }
 }
 
@@ -191,7 +194,7 @@
     //
     // Stop playback
     //
-    [[EZOutput sharedOutput] stopPlayback];
+    [self.output stopPlayback];
     
     //
     // Clear the audio plot
@@ -212,10 +215,7 @@
     //
     // Set the client format from the EZAudioFile on the output
     //
-    Float64 sampleRate = self.audioFile.clientFormat.mSampleRate;
-    self.sampleRateSlider.floatValue = sampleRate;
-    self.sampleRateLabel.floatValue = sampleRate;
-    [[EZOutput sharedOutput] setAudioStreamBasicDescription:self.audioFile.clientFormat];
+    [self.output setInputFormat:self.audioFile.clientFormat];
 
     //
     // Change back to a buffer plot, but mirror and fill the waveform
@@ -247,7 +247,7 @@
        withBufferSize:(UInt32)bufferSize
  withNumberOfChannels:(UInt32)numberOfChannels
 {
-    if ([[EZOutput sharedOutput] isPlaying])
+    if ([self.output isPlaying])
     {
         __weak typeof (self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -275,9 +275,10 @@
 #pragma mark - EZOutputDataSource
 //------------------------------------------------------------------------------
 
--(void)             output:(EZOutput *)output
+-(OSStatus)         output:(EZOutput *)output
  shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
         withNumberOfFrames:(UInt32)frames
+                 timestamp:(const AudioTimeStamp *)timestamp
 {
     if (self.audioFile)
     {
@@ -291,6 +292,7 @@
             [self seekToFrame:0];
         }
     }
+    return noErr;
 }
 
 //------------------------------------------------------------------------------

@@ -278,9 +278,10 @@ withNumberOfChannels:(UInt32)numberOfChannels {
 }
 
 #pragma mark - EZOutputDataSource
--(void)             output:(EZOutput *)output
+-(OSStatus)         output:(EZOutput *)output
  shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
         withNumberOfFrames:(UInt32)frames
+                 timestamp:(const AudioTimeStamp *)timestamp
 {
     if (self.audioFile)
     {
@@ -294,6 +295,7 @@ withNumberOfChannels:(UInt32)numberOfChannels {
             [self seekToFrame:0];
         }
     }
+    return noErr;
 }
 
 @end
