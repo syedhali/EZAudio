@@ -334,7 +334,7 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 /**
  This method handles connecting the converter node to the mixer node within the AUGraph that is being used as the playback graph. Subclasses can override this method and insert their custom nodes to perform effects processing on the audio data being rendered. 
  
- This was inspired by Daniel Kennett's blog post on how to add a custom equalizer to the CocoaLibSpotify playback AUGraph. For more information see Daniel's post and example code here: http://ikennd.ac/blog/2012/04/augraph-basics-in-cocoalibspotify/.
+ This was inspired by Daniel Kennett's blog post on how to add a custom equalizer to a CocoaLibSpotify SPCoreAudioController's AUGraph. For more information see Daniel's post and example code here: http://ikennd.ac/blog/2012/04/augraph-basics-in-cocoalibspotify/.
  @param sourceNode              An AUNode representing the node the audio data is coming from.
  @param sourceNodeOutputBus     A UInt32 representing the output bus from the source node that should be connected into the next node's input bus.
  @param destinationNode         An AUNode representing the node the audio data should be connected to.
