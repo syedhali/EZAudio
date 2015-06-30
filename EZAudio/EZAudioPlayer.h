@@ -64,8 +64,8 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
  @param numberOfChannels The number of channels. 2 for stereo, 1 for mono.
  @param audioFile   The instance of the EZAudioFile that the event was triggered from
  */
-- (void)   audioPlayer:(EZAudioPlayer *)audioPlayer
-           playedAudio:(float **)buffer
+- (void)  audioPlayer:(EZAudioPlayer *)audioPlayer
+          playedAudio:(float **)buffer
        withBufferSize:(UInt32)bufferSize
  withNumberOfChannels:(UInt32)numberOfChannels
           inAudioFile:(EZAudioFile *)audioFile;;
