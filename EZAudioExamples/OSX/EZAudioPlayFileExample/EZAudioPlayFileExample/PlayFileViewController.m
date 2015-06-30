@@ -274,7 +274,7 @@
         // if you are connected to an external display by default the external
         // display's microphone might be used instead of the mac's built in
         // mic.
-        if ([device isEqual:self.output.device])
+        if ([device isEqual:[self.output device]])
         {
             defaultOutputDeviceItem = item;
         }
