@@ -71,10 +71,56 @@
     self.rollingHistoryLengthSlider.intValue = [self.audioPlot rollingHistoryLength];
     self.rollingHistoryLengthLabel.intValue = [self.audioPlot rollingHistoryLength];
 
+    [self setupNotifications];
+    
     //
     // Try opening the sample file
     //
     [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Notifications
+//------------------------------------------------------------------------------
+
+- (void)setupNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(audioPlayerDidChangeAudioFile:)
+                                                 name:EZAudioPlayerDidChangeAudioFileNotification
+                                               object:self.player];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(audioPlayerDidChangeOutputDevice:)
+                                                 name:EZAudioPlayerDidChangeOutputDeviceNotification
+                                               object:self.player];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(audioPlayerDidChangePlayState:)
+                                                 name:EZAudioPlayerDidChangePlayStateNotification
+                                               object:self.player];
+}
+
+//------------------------------------------------------------------------------
+
+- (void)audioPlayerDidChangeAudioFile:(NSNotification *)notification
+{
+    EZAudioPlayer *player = [notification object];
+    NSLog(@"Player changed audio file: %@", [player audioFile]);
+}
+
+//------------------------------------------------------------------------------
+
+- (void)audioPlayerDidChangeOutputDevice:(NSNotification *)notification
+{
+    EZAudioPlayer *player = [notification object];
+    NSLog(@"Player changed output device: %@", [player device]);
+}
+
+//------------------------------------------------------------------------------
+
+- (void)audioPlayerDidChangePlayState:(NSNotification *)notification
+{
+    EZAudioPlayer *player = [notification object];
+    NSLog(@"Player change play state, isPlaying: %i", [player isPlaying]);
 }
 
 //------------------------------------------------------------------------------

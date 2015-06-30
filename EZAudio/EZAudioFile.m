@@ -677,5 +677,28 @@ typedef struct
 }
 
 //------------------------------------------------------------------------------
+#pragma mark - Description
+//------------------------------------------------------------------------------
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"%@ {\n"
+                                       "    url: %@,\n"
+                                       "    duration: %f,\n"
+                                       "    totalFrames: %lld,\n"
+                                       "    metadata: %@,\n"
+                                       "    fileFormat: { %@ },\n"
+                                       "    clientFormat: { %@ } \n"
+                                       "}",
+            [super description],
+            [self url],
+            [self duration],
+            [self totalFrames],
+            [self metadata],
+            [EZAudioUtilities stringForAudioStreamBasicDescription:[self fileFormat]],
+            [EZAudioUtilities stringForAudioStreamBasicDescription:[self clientFormat]]];
+}
+
+//------------------------------------------------------------------------------
 
 @end
