@@ -37,9 +37,7 @@
  Using the EZOutputDataSource to provide output data to the EZOutput component. 
  */
 @interface PlayFileViewController : NSViewController <NSOpenSavePanelDelegate,
-                                                      EZAudioFileDelegate,
-                                                      EZOutputDataSource,
-                                                      EZOutputDelegate>
+                                                      EZAudioPlayerDelegate>
 
 #pragma mark - Components
 /**
@@ -50,7 +48,7 @@
 /**
  The EZOutput component used to output the audio file's audio data.
  */
-@property (nonatomic, strong) EZOutput *output;
+@property (nonatomic, strong) EZAudioPlayer *player;
 
 /**
  The CoreGraphics based audio plot

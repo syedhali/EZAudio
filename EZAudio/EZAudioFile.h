@@ -80,7 +80,7 @@ typedef void (^EZAudioWaveformDataCompletionBlock)(float **waveformData, int len
 /**
  The EZAudioFile provides a lightweight and intuitive way to asynchronously interact with audio files. These interactions included reading audio data, seeking within an audio file, getting information about the file, and pulling the waveform data for visualizing the contents of the audio file. The EZAudioFileDelegate provides event callbacks for when reads, seeks, and various updates happen within the audio file to allow the caller to interact with the action in meaningful ways. Common use cases here could be to read the audio file's data as AudioBufferList structures for output (see EZOutput) and visualizing the audio file's data as a float array using an audio plot (see EZAudioPlot).
  */
-@interface EZAudioFile : NSObject
+@interface EZAudioFile : NSObject <NSCopying>
 
 //------------------------------------------------------------------------------
 #pragma mark - Properties

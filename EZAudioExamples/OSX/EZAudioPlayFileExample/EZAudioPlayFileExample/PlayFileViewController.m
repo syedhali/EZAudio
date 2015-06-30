@@ -55,8 +55,8 @@
     //
     // Create EZOutput to play audio data
     //
-    self.output = [EZOutput outputWithDataSource:self];
-    self.output.delegate = self;
+    self.player = [EZAudioPlayer audioPlayerWithDelegate:self];
+    self.player.shouldLoop = YES;
     
     //
     // Reload the menu for the output device selector popup button
@@ -66,8 +66,8 @@
     //
     // Configure UI components
     //
-    self.volumeSlider.floatValue = [self.output volume];
-    self.volumeLabel.floatValue = [self.output volume];
+    self.volumeSlider.floatValue = [self.player volume];
+    self.volumeLabel.floatValue = [self.player volume];
     self.rollingHistoryLengthSlider.intValue = [self.audioPlot rollingHistoryLength];
     self.rollingHistoryLengthLabel.intValue = [self.audioPlot rollingHistoryLength];
 
@@ -84,7 +84,7 @@
 - (void)changedOutput:(NSMenuItem *)item
 {
     EZAudioDevice *device = [item representedObject];
-    [self.output setDevice:device];
+    [self.player setDevice:device];
 }
 
 //------------------------------------------------------------------------------
@@ -110,7 +110,7 @@
 - (void)changeVolume:(id)sender
 {
     float value = [(NSSlider *)sender floatValue];
-    [self.output setVolume:value];
+    [self.player setVolume:value];
     self.volumeLabel.floatValue = value;
 }
 
@@ -142,7 +142,7 @@
 
 -(void)play:(id)sender
 {
-    if (![self.output isPlaying])
+    if (![self.player isPlaying])
     {
         if (self.eof)
         {
@@ -152,11 +152,11 @@
         {
             self.audioPlot.plotType = EZPlotTypeRolling;
         }
-        [self.output startPlayback];
+        [self.player play];
     }
     else
     {
-        [self.output stopPlayback];
+        [self.player pause];
     }
 }
 
@@ -165,7 +165,7 @@
 -(void)seekToFrame:(id)sender
 {
     double value = [(NSSlider*)sender doubleValue];
-    [self.audioFile seekToFrame:(SInt64)value];
+    [self.player seekToFrame:(SInt64)value];
     self.positionLabel.doubleValue = value;
 }
 
@@ -208,7 +208,7 @@
     //
     // Stop playback
     //
-    [self.output stopPlayback];
+    [self.player pause];
     
     //
     // Clear the audio plot
@@ -218,18 +218,13 @@
     //
     // Load the audio file and customize the UI
     //
-    self.audioFile = [EZAudioFile audioFileWithURL:filePathURL delegate:self];
+    self.audioFile = [EZAudioFile audioFileWithURL:filePathURL];
     self.eof = NO;
     self.filePathLabel.stringValue = filePathURL.lastPathComponent;
     self.positionSlider.minValue = 0.0f;
     self.positionSlider.maxValue = (double)self.audioFile.totalFrames;
     self.playButton.state = NSOffState;
     self.plotSegmentControl.selectedSegment = 1;
-
-    //
-    // Set the client format from the EZAudioFile on the output
-    //
-    [self.output setInputFormat:self.audioFile.clientFormat];
 
     //
     // Change back to a buffer plot, but mirror and fill the waveform
@@ -250,6 +245,11 @@
         [weakSelf.audioPlot updateBuffer:waveformData[0]
                           withBufferSize:length];
     }];
+    
+    //
+    // Play the audio file
+    //
+    [self.player setAudioFile:self.audioFile];
 }
 
 //------------------------------------------------------------------------------
@@ -274,7 +274,7 @@
         // if you are connected to an external display by default the external
         // display's microphone might be used instead of the mac's built in
         // mic.
-        if ([device isEqual:[self.output device]])
+        if ([device isEqual:[self.player device]])
         {
             defaultOutputDeviceItem = item;
         }
@@ -289,58 +289,35 @@
 }
 
 //------------------------------------------------------------------------------
-#pragma mark - EZAudioFileDelegate
+#pragma mark - EZAudioPlayerDelegate
 //------------------------------------------------------------------------------
 
--(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition
-{
-    __weak typeof (self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (![weakSelf.positionSlider.cell isHighlighted])
-        {
-            weakSelf.positionSlider.floatValue = (float)framePosition;
-            weakSelf.positionLabel.floatValue = (float)framePosition;
-        }
-    });
-}
-
-//------------------------------------------------------------------------------
-#pragma mark - EZOutputDataSource
-//------------------------------------------------------------------------------
-
--(OSStatus)         output:(EZOutput *)output
- shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
-        withNumberOfFrames:(UInt32)frames
-                 timestamp:(const AudioTimeStamp *)timestamp
-{
-    if (self.audioFile)
-    {
-        UInt32 bufferSize;
-        [self.audioFile readFrames:frames
-                   audioBufferList:audioBufferList
-                        bufferSize:&bufferSize
-                               eof:&_eof];
-        if (_eof)
-        {
-            [self seekToFrame:0];
-        }
-    }
-    return noErr;
-}
-
-//------------------------------------------------------------------------------
-#pragma mark - EZOutputDelegate
-//------------------------------------------------------------------------------
-
-- (void)       output:(EZOutput *)output
+- (void)  audioPlayer:(EZAudioPlayer *)audioPlayer
           playedAudio:(float **)buffer
        withBufferSize:(UInt32)bufferSize
  withNumberOfChannels:(UInt32)numberOfChannels
+          inAudioFile:(EZAudioFile *)audioFile
 {
     __weak typeof (self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf.audioPlot updateBuffer:buffer[0]
                           withBufferSize:bufferSize];
+    });
+}
+
+//------------------------------------------------------------------------------
+
+- (void)audioPlayer:(EZAudioPlayer *)audioPlayer
+    updatedPosition:(SInt64)framePosition
+        inAudioFile:(EZAudioFile *)audioFile
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!weakSelf.positionSlider.highlighted)
+        {
+            weakSelf.positionSlider.floatValue = (float)framePosition;
+            weakSelf.positionLabel.integerValue = framePosition;
+        }
     });
 }
 
