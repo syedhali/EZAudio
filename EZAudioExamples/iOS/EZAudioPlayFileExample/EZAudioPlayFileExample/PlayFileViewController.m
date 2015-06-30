@@ -33,8 +33,7 @@
     //
     // Create the audio player
     //
-    self.player = [EZAudioPlayer audioPlayer];
-    self.player.delegate = self;
+    self.player = [EZAudioPlayer audioPlayerWithDelegate:self];
     self.player.shouldLoop = YES;
     
     //

@@ -70,7 +70,11 @@
     self.volumeLabel.floatValue = [self.player volume];
     self.rollingHistoryLengthSlider.intValue = [self.audioPlot rollingHistoryLength];
     self.rollingHistoryLengthLabel.intValue = [self.audioPlot rollingHistoryLength];
+    self.loopCheckboxButton.state = [self.player shouldLoop];
 
+    //
+    // Listen for state changes to the EZAudioPlayer
+    //
     [self setupNotifications];
     
     //
@@ -96,6 +100,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(audioPlayerDidChangePlayState:)
                                                  name:EZAudioPlayerDidChangePlayStateNotification
+                                               object:self.player];
+    
+    // This notification will only trigger if the player's shouldLoop property is set to NO
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(audioPlayerDidReachEndOfFile:)
+                                                 name:EZAudioPlayerDidReachEndOfFileNotification
                                                object:self.player];
 }
 
@@ -124,6 +134,14 @@
 }
 
 //------------------------------------------------------------------------------
+
+- (void)audioPlayerDidReachEndOfFile:(NSNotification *)notification
+{
+    NSLog(@"Player did reach end of file!");
+    [self.playButton setState:NSOffState];
+}
+
+//------------------------------------------------------------------------------
 #pragma mark - Actions
 //------------------------------------------------------------------------------
 
@@ -149,6 +167,14 @@
         default:
             break;
     }
+}
+
+//------------------------------------------------------------------------------
+
+- (void)changeShouldLoop:(id)sender
+{
+    NSInteger state = [(NSButton *)sender state];
+    [self.player setShouldLoop:state];
 }
 
 //------------------------------------------------------------------------------
