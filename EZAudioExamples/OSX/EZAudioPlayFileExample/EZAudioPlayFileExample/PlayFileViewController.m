@@ -53,10 +53,23 @@
     self.audioPlot.shouldMirror    = YES;
     
     //
+    // Create EZOutput to play audio data
+    //
+    self.output = [EZOutput outputWithDataSource:self];
+    self.output.delegate = self;
+    
+    //
+    // Reload the menu for the output device selector popup button
+    //
+    [self reloadOutputDevicePopUpButtonMenu];
+    
+    //
     // Configure UI components
     //
-    self.rollingHistoryLengthSlider.intValue = self.audioPlot.rollingHistoryLength;
-    self.rollingHistoryLengthLabel.intValue = self.audioPlot.rollingHistoryLength;
+    self.volumeSlider.floatValue = [self.output volume];
+    self.volumeLabel.floatValue = [self.output volume];
+    self.rollingHistoryLengthSlider.intValue = [self.audioPlot rollingHistoryLength];
+    self.rollingHistoryLengthLabel.intValue = [self.audioPlot rollingHistoryLength];
 
     //
     // Try opening the sample file
@@ -66,6 +79,14 @@
 
 //------------------------------------------------------------------------------
 #pragma mark - Actions
+//------------------------------------------------------------------------------
+
+- (void)changedOutput:(NSMenuItem *)item
+{
+    EZAudioDevice *device = [item representedObject];
+    [self.output setDevice:device];
+}
+
 //------------------------------------------------------------------------------
 
 - (void)changePlotType:(id)sender
@@ -86,13 +107,11 @@
 
 //------------------------------------------------------------------------------
 
-- (void)changeOutputSamplingFrequency:(id)sender
+- (void)changeVolume:(id)sender
 {
-    float sampleRate = ((NSSlider *)sender).floatValue;
-    AudioStreamBasicDescription asbd = [[EZOutput sharedOutput] audioStreamBasicDescription];
-    asbd.mSampleRate = sampleRate;
-    [[EZOutput sharedOutput] setAudioStreamBasicDescription:asbd];
-    self.sampleRateLabel.floatValue = sampleRate;
+    float value = [(NSSlider *)sender floatValue];
+    [self.output setVolume:value];
+    self.volumeLabel.floatValue = value;
 }
 
 //------------------------------------------------------------------------------
@@ -123,7 +142,7 @@
 
 -(void)play:(id)sender
 {
-    if (![[EZOutput sharedOutput] isPlaying])
+    if (![self.output isPlaying])
     {
         if (self.eof)
         {
@@ -133,13 +152,11 @@
         {
             self.audioPlot.plotType = EZPlotTypeRolling;
         }
-        [EZOutput sharedOutput].outputDataSource = self;
-        [[EZOutput sharedOutput] startPlayback];
+        [self.output startPlayback];
     }
     else
     {
-        [EZOutput sharedOutput].outputDataSource = nil;
-        [[EZOutput sharedOutput] stopPlayback];
+        [self.output stopPlayback];
     }
 }
 
@@ -191,12 +208,12 @@
     //
     // Stop playback
     //
-    [[EZOutput sharedOutput] stopPlayback];
+    [self.output stopPlayback];
     
     //
     // Clear the audio plot
     //
-//    [self.audioPlot clear];
+    [self.audioPlot clear];
   
     //
     // Load the audio file and customize the UI
@@ -212,10 +229,7 @@
     //
     // Set the client format from the EZAudioFile on the output
     //
-    Float64 sampleRate = self.audioFile.clientFormat.mSampleRate;
-    self.sampleRateSlider.floatValue = sampleRate;
-    self.sampleRateLabel.floatValue = sampleRate;
-    [[EZOutput sharedOutput] setAudioStreamBasicDescription:self.audioFile.clientFormat];
+    [self.output setInputFormat:self.audioFile.clientFormat];
 
     //
     // Change back to a buffer plot, but mirror and fill the waveform
@@ -239,28 +253,47 @@
 }
 
 //------------------------------------------------------------------------------
-#pragma mark - EZAudioFileDelegate
-//------------------------------------------------------------------------------
 
--(void)     audioFile:(EZAudioFile *)audioFile
-            readAudio:(float **)buffer
-       withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels
+- (void)reloadOutputDevicePopUpButtonMenu
 {
-    if ([[EZOutput sharedOutput] isPlaying])
+    NSArray *outputDevices = [EZAudioDevice outputDevices];
+    NSMenu *menu = [[NSMenu alloc] init];
+    NSMenuItem *defaultOutputDeviceItem;
+    for (EZAudioDevice *device in outputDevices)
     {
-        __weak typeof (self) weakSelf = self;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.audioPlot updateBuffer:buffer[0]
-                              withBufferSize:bufferSize];
-        });
+        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:device.name
+                                                      action:@selector(changedOutput:)
+                                               keyEquivalent:@""];
+        item.representedObject = device;
+        item.target = self;
+        [menu addItem:item];
+        
+        // If this device is the same one the microphone is using then
+        // we will use this menu item as the currently selected item
+        // in the microphone input popup button's list of items. For instance,
+        // if you are connected to an external display by default the external
+        // display's microphone might be used instead of the mac's built in
+        // mic.
+        if ([device isEqual:[self.output device]])
+        {
+            defaultOutputDeviceItem = item;
+        }
     }
+    self.outputDevicePopUpButton.menu = menu;
+    
+    //
+    // Set the selected device to the current selection on the
+    // microphone input popup button
+    //
+    [self.outputDevicePopUpButton selectItem:defaultOutputDeviceItem];
 }
 
 //------------------------------------------------------------------------------
+#pragma mark - EZAudioFileDelegate
+//------------------------------------------------------------------------------
 
--(void)audioFile:(EZAudioFile *)audioFile
- updatedPosition:(SInt64)framePosition {
+-(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition
+{
     __weak typeof (self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (![weakSelf.positionSlider.cell isHighlighted])
@@ -275,9 +308,10 @@
 #pragma mark - EZOutputDataSource
 //------------------------------------------------------------------------------
 
--(void)             output:(EZOutput *)output
+-(OSStatus)         output:(EZOutput *)output
  shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
         withNumberOfFrames:(UInt32)frames
+                 timestamp:(const AudioTimeStamp *)timestamp
 {
     if (self.audioFile)
     {
@@ -291,6 +325,23 @@
             [self seekToFrame:0];
         }
     }
+    return noErr;
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - EZOutputDelegate
+//------------------------------------------------------------------------------
+
+- (void)       output:(EZOutput *)output
+          playedAudio:(float **)buffer
+       withBufferSize:(UInt32)bufferSize
+ withNumberOfChannels:(UInt32)numberOfChannels
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.audioPlot updateBuffer:buffer[0]
+                          withBufferSize:bufferSize];
+    });
 }
 
 //------------------------------------------------------------------------------

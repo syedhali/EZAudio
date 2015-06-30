@@ -47,6 +47,17 @@ typedef struct
 } EZPlotHistoryInfo;
 
 //------------------------------------------------------------------------------
+
+/**
+ A data structure that holds information about a node in the context of an AUGraph.
+ */
+typedef struct
+{
+    AudioUnit audioUnit;
+    AUNode    node;
+} EZAudioNodeInfo;
+
+//------------------------------------------------------------------------------
 #pragma mark - Types
 //------------------------------------------------------------------------------
 

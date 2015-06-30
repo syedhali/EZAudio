@@ -20,29 +20,45 @@
  Using the EZOutputDataSource to provide output data to the EZOutput component.
  */
 @interface PlayFileViewController : UIViewController <EZAudioFileDelegate,
-                                                      EZOutputDataSource>
+                                                      EZOutputDataSource,
+                                                      EZOutputDelegate>
 
 #pragma mark - Components
 /**
  The EZAudioFile representing of the currently selected audio file
  */
-@property (nonatomic,strong) EZAudioFile *audioFile;
+@property (nonatomic, strong) EZAudioFile *audioFile;
+
+/**
+ The EZOutput representing the output currently being used to play the audio file.
+ */
+@property (nonatomic, strong) EZOutput *output;
 
 /**
  The CoreGraphics based audio plot
  */
-@property (nonatomic,weak) IBOutlet EZAudioPlot *audioPlot;
+@property (nonatomic, weak) IBOutlet EZAudioPlot *audioPlot;
 
 #pragma mark - UI Extras
 /**
  A label to display the current file path with the waveform shown
  */
-@property (nonatomic,weak) IBOutlet UILabel *filePathLabel;
+@property (nonatomic, weak) IBOutlet UILabel *filePathLabel;
 
 /**
  A slider to indicate the current frame position in the audio file
  */
-@property (nonatomic,weak) IBOutlet UISlider *framePositionSlider;
+@property (nonatomic, weak) IBOutlet UISlider *framePositionSlider;
+
+/**
+ A slider to indicate the current rolling history length of the audio plot.
+ */
+@property (nonatomic, weak) IBOutlet UISlider *rollingHistorySlider;
+
+/**
+ A slider to indicate the volume on the audio player
+ */
+@property (nonatomic, weak) IBOutlet UISlider *volumeSlider;
 
 /**
  A BOOL indicating whether or not we've reached the end of the file
@@ -59,6 +75,11 @@
  Changes the length of the rolling history of the audio plot.
  */
 - (IBAction)changeRollingHistoryLength:(id)sender;
+
+/**
+ Changes the volume of the audio player.
+ */
+- (IBAction)changeVolume:(id)sender;
 
 /**
  Begins playback if a file is loaded. Pauses if the file is already playing.

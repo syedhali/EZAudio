@@ -33,6 +33,14 @@
  */
 + (NSArray *)inputDevices;
 
+//------------------------------------------------------------------------------
+
+/**
+ Enumerates all the available output devices and returns the result in an NSArray of EZAudioDevice instances.
+ @return An NSArray of output EZAudioDevice instances.
+ */
++ (NSArray *)outputDevices;
+
 #if TARGET_OS_IPHONE
 
 /**
@@ -41,6 +49,13 @@
  @return An EZAudioDevice instance representing the currently selected input device.
  */
 + (EZAudioDevice *)currentInputDevice;
+
+/**
+ Provides the current EZAudioDevice that is being used to output audio.
+    - iOS only
+ @return An EZAudioDevice instance representing the currently selected ouotput device.
+ */
++ (EZAudioDevice *)currentOutputDevice;
 
 //------------------------------------------------------------------------------
 
@@ -52,6 +67,16 @@
 + (void)enumerateInputDevicesUsingBlock:(void(^)(EZAudioDevice *device,
                                                  BOOL *stop))block;
 
+//------------------------------------------------------------------------------
+
+/**
+ Enumerates all the available output devices.
+ - iOS only
+ @param block When enumerating this block executes repeatedly for each EZAudioDevice found. It contains two arguments - first, the EZAudioDevice found, then a pointer to a stop BOOL to allow breaking out of the enumeration)
+ */
++ (void)enumerateOutputDevicesUsingBlock:(void (^)(EZAudioDevice *device,
+                                                   BOOL *stop))block;
+
 #elif TARGET_OS_MAC
 
 /**
@@ -60,15 +85,6 @@
  @return An NSArray of input and output EZAudioDevice instances.
  */
 + (NSArray *)devices;
-
-//------------------------------------------------------------------------------
-
-/**
- Enumerates all the available output devices and returns the result in an NSArray of EZAudioDevice instances.
-    - OSX only
- @return An NSArray of output EZAudioDevice instances.
- */
-+ (NSArray *)outputDevices;
 
 //------------------------------------------------------------------------------
 

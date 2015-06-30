@@ -21,10 +21,30 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pcc-nf-p5k">
-                                        <rect key="frame" x="0.0" y="435" width="600" height="165"/>
+                                        <rect key="frame" x="0.0" y="396" width="600" height="204"/>
+                                        <subviews>
+                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="d3R-ct-df2">
+                                                <rect key="frame" x="118" y="9" width="467" height="31"/>
+                                                <color key="tintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                <connections>
+                                                    <action selector="changeVolume:" destination="scx-fQ-Cxi" eventType="valueChanged" id="zBC-Ej-fju"/>
+                                                </connections>
+                                            </slider>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Volume:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iS5-xf-09a">
+                                                <rect key="frame" x="18" y="15" width="49" height="16"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
+                                                <color key="textColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.70000000000000007" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="165" id="CMG-37-Ji8"/>
+                                            <constraint firstAttribute="height" constant="204" id="CMG-37-Ji8"/>
+                                            <constraint firstItem="iS5-xf-09a" firstAttribute="leading" secondItem="Pcc-nf-p5k" secondAttribute="leading" constant="18" id="MWr-Og-OGn"/>
+                                            <constraint firstItem="d3R-ct-df2" firstAttribute="top" secondItem="Pcc-nf-p5k" secondAttribute="top" constant="9" id="Ukk-HX-GtW"/>
+                                            <constraint firstItem="d3R-ct-df2" firstAttribute="leading" secondItem="iS5-xf-09a" secondAttribute="trailing" constant="53" id="cE7-h4-F6T"/>
+                                            <constraint firstItem="iS5-xf-09a" firstAttribute="top" secondItem="Pcc-nf-p5k" secondAttribute="top" constant="15" id="cFA-qs-q09"/>
+                                            <constraint firstAttribute="trailing" secondItem="d3R-ct-df2" secondAttribute="trailing" constant="17" id="rCY-Vg-KOz"/>
                                         </constraints>
                                     </view>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="X0b-lY-wCz">
@@ -130,7 +150,9 @@
                         <outlet property="audioPlot" destination="kt3-hw-eFY" id="9mm-d1-vJk"/>
                         <outlet property="filePathLabel" destination="i5r-ex-ukW" id="GRl-ld-nWi"/>
                         <outlet property="framePositionSlider" destination="Oc2-kU-kAJ" id="z0M-Q9-JAb"/>
+                        <outlet property="rollingHistorySlider" destination="2qJ-Va-Qht" id="yf8-JW-5yM"/>
                         <outlet property="view" destination="PED-9r-Xub" id="Xxb-En-D2X"/>
+                        <outlet property="volumeSlider" destination="d3R-ct-df2" id="pAW-BF-AFa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g7v-Xp-r3F" userLabel="First Responder" sceneMemberID="firstResponder"/>

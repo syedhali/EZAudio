@@ -194,12 +194,12 @@
     _audioFile = [EZAudioFile audioFileWithURL:audioFile.url];
     _audioFile.delegate = self;
   NSAssert(_output,@"No output was found, this should by default be the EZOutput shared instance");
-  [_output setAudioStreamBasicDescription:self.audioFile.clientFormat];    
+  [_output setInputFormat:self.audioFile.clientFormat];
 }
 
 -(void)setOutput:(EZOutput*)output {
   _output                  = output;
-  _output.outputDataSource = self;
+  _output.dataSource = self;
 }
 
 #pragma mark - Methods
@@ -278,9 +278,10 @@ withNumberOfChannels:(UInt32)numberOfChannels {
 }
 
 #pragma mark - EZOutputDataSource
--(void)             output:(EZOutput *)output
+-(OSStatus)         output:(EZOutput *)output
  shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
         withNumberOfFrames:(UInt32)frames
+                 timestamp:(const AudioTimeStamp *)timestamp
 {
     if (self.audioFile)
     {
@@ -294,6 +295,7 @@ withNumberOfChannels:(UInt32)numberOfChannels {
             [self seekToFrame:0];
         }
     }
+    return noErr;
 }
 
 @end

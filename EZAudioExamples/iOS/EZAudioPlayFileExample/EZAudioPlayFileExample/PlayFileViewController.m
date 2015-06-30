@@ -19,27 +19,55 @@
 #pragma mark - Customize the Audio Plot
 - (void)viewDidLoad
 {
-  [super viewDidLoad];
-  
-  /*
-   Customizing the audio plot's look
-   */
-  // Background color
-  self.audioPlot.backgroundColor = [UIColor colorWithRed: 0.816 green: 0.349 blue: 0.255 alpha: 1];
-  // Waveform color
-  self.audioPlot.color           = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
-  // Plot type
-  self.audioPlot.plotType        = EZPlotTypeBuffer;
-  // Fill
-  self.audioPlot.shouldFill      = YES;
-  // Mirror
-  self.audioPlot.shouldMirror    = YES;
-  
-  /*
-   Try opening the sample file
-   */
-  [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
-  
+    [super viewDidLoad];
+
+    //
+    // Setup the AVAudioSession. EZMicrophone will not work properly on iOS
+    // if you don't do this!
+    //
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error;
+    [session setCategory:AVAudioSessionCategoryPlayback error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session category: %@", error.localizedDescription);
+    }
+    [session setActive:YES error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session active: %@", error.localizedDescription);
+    }
+    
+    //
+    // Customize the plot's look
+    //
+    // Background color
+    self.audioPlot.backgroundColor = [UIColor colorWithRed: 0.816 green: 0.349 blue: 0.255 alpha: 1];
+    // Waveform color
+    self.audioPlot.color           = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+    // Plot type
+    self.audioPlot.plotType        = EZPlotTypeBuffer;
+    // Fill
+    self.audioPlot.shouldFill      = YES;
+    // Mirror
+    self.audioPlot.shouldMirror    = YES;
+
+    //
+    // Create an EZOutput instance
+    //
+    self.output = [EZOutput outputWithDataSource:self];
+    self.output.delegate = self;
+    
+    //
+    // Customize UI controls
+    //
+    self.volumeSlider.value = [self.output volume];
+    self.rollingHistorySlider.value = [self.audioPlot rollingHistoryLength];
+    
+    //
+    // Try opening the sample file
+    //
+    [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
 }
 
 //------------------------------------------------------------------------------
@@ -72,18 +100,26 @@
 
 //------------------------------------------------------------------------------
 
+- (void)changeVolume:(id)sender
+{
+    float value = [(UISlider *)sender value];
+    [self.output setVolume:value];
+}
+
+//------------------------------------------------------------------------------
+
 - (void)openFileWithFilePathURL:(NSURL *)filePathURL
 {
     // Stop playback
-    [[EZOutput sharedOutput] stopPlayback];
+    [self.output stopPlayback];
     
     self.audioFile = [EZAudioFile audioFileWithURL:filePathURL delegate:self];
     self.eof = NO;
     self.filePathLabel.text = filePathURL.lastPathComponent;
     self.framePositionSlider.maximumValue = (float)self.audioFile.totalFrames;
     
-    // Set the client format from the EZAudioFile on the output
-    [[EZOutput sharedOutput] setAudioStreamBasicDescription:self.audioFile.clientFormat];
+    // Set the input format from the EZAudioFile on the output
+    [self.output setInputFormat:[self.audioFile clientFormat]];
     
     // Plot the whole waveform
     self.audioPlot.plotType = EZPlotTypeBuffer;
@@ -93,29 +129,27 @@
     __weak typeof (self) weakSelf = self;
     [self.audioFile getWaveformDataWithCompletionBlock:^(float **waveformData,
                                                          int length)
-     {
-         [weakSelf.audioPlot updateBuffer:waveformData[0]
-                           withBufferSize:length];
-     }];
+    {
+        [weakSelf.audioPlot updateBuffer:waveformData[0]
+                          withBufferSize:length];
+    }];
 }
 
 //------------------------------------------------------------------------------
 
 - (void)play:(id)sender
 {
-    if (![[EZOutput sharedOutput] isPlaying])
+    if (![self.output isPlaying])
     {
         if (self.eof)
         {
             [self.audioFile seekToFrame:0];
         }
-        [EZOutput sharedOutput].outputDataSource = self;
-        [[EZOutput sharedOutput] startPlayback];
+        [self.output startPlayback];
     }
     else
     {
-        [EZOutput sharedOutput].outputDataSource = nil;
-        [[EZOutput sharedOutput] stopPlayback];
+        [self.output stopPlayback];
     }
 }
 
@@ -156,30 +190,6 @@
 #pragma mark - EZAudioFileDelegate
 //------------------------------------------------------------------------------
 
-- (void)     audioFile:(EZAudioFile *)audioFile
-            readAudio:(float **)buffer
-       withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels
-{
-    __weak typeof (self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([EZOutput sharedOutput].isPlaying)
-        {
-            if (weakSelf.audioPlot.plotType == EZPlotTypeBuffer &&
-               weakSelf.audioPlot.shouldFill == YES &&
-               weakSelf.audioPlot.shouldMirror == YES)
-            {
-                weakSelf.audioPlot.shouldFill = NO;
-                weakSelf.audioPlot.shouldMirror = NO;
-            }
-            [weakSelf.audioPlot updateBuffer:buffer[0]
-                              withBufferSize:bufferSize];
-        }
-    });
-}
-
-//------------------------------------------------------------------------------
-
 - (void)audioFile:(EZAudioFile *)audioFile
   updatedPosition:(SInt64)framePosition
 {
@@ -196,29 +206,51 @@
 #pragma mark - EZOutputDataSource
 //------------------------------------------------------------------------------
 
-- (void)            output:(EZOutput *)output
+- (OSStatus)        output:(EZOutput *)output
  shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
         withNumberOfFrames:(UInt32)frames
+                 timestamp:(const AudioTimeStamp *)timestamp
 {
-    if ( self.audioFile )
+    if (self.audioFile)
     {
         UInt32 bufferSize;
+        BOOL eof;
         [self.audioFile readFrames:frames
                    audioBufferList:audioBufferList
                         bufferSize:&bufferSize
-                               eof:&_eof];
-        if ( _eof )
+                               eof:&eof];
+        if (eof)
         {
-            [self seekToFrame:0];
+            [self.audioFile seekToFrame:0];
         }
     }
+    return noErr;
 }
 
 //------------------------------------------------------------------------------
+#pragma mark - EZOutputDelegate
+//------------------------------------------------------------------------------
 
-- (AudioStreamBasicDescription)outputHasAudioStreamBasicDescription:(EZOutput *)output
+- (void)        output:(EZOutput *)output
+          playedAudio:(float **)buffer
+       withBufferSize:(UInt32)bufferSize
+ withNumberOfChannels:(UInt32)numberOfChannels
 {
-  return self.audioFile.clientFormat;
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.output isPlaying])
+        {
+            if (weakSelf.audioPlot.plotType == EZPlotTypeBuffer &&
+               weakSelf.audioPlot.shouldFill == YES &&
+               weakSelf.audioPlot.shouldMirror == YES)
+            {
+                weakSelf.audioPlot.shouldFill = NO;
+                weakSelf.audioPlot.shouldMirror = NO;
+            }
+            [weakSelf.audioPlot updateBuffer:buffer[0]
+                              withBufferSize:bufferSize];
+        }
+    });
 }
 
 //------------------------------------------------------------------------------
