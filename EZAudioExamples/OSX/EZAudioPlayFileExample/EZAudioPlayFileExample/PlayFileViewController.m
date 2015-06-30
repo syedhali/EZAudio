@@ -58,6 +58,11 @@
     self.output = [EZOutput outputWithDataSource:self];
     
     //
+    // Reload the menu for the output device selector popup button
+    //
+    [self reloadOutputDevicePopUpButtonMenu];
+    
+    //
     // Configure UI components
     //
     self.volumeSlider.floatValue = [self.output volume];
@@ -73,6 +78,14 @@
 
 //------------------------------------------------------------------------------
 #pragma mark - Actions
+//------------------------------------------------------------------------------
+
+- (void)changedOutput:(NSMenuItem *)item
+{
+    EZAudioDevice *device = [item representedObject];
+    [self.output setDevice:device];
+}
+
 //------------------------------------------------------------------------------
 
 - (void)changePlotType:(id)sender
@@ -236,6 +249,42 @@
         [weakSelf.audioPlot updateBuffer:waveformData[0]
                           withBufferSize:length];
     }];
+}
+
+//------------------------------------------------------------------------------
+
+- (void)reloadOutputDevicePopUpButtonMenu
+{
+    NSArray *outputDevices = [EZAudioDevice outputDevices];
+    NSMenu *menu = [[NSMenu alloc] init];
+    NSMenuItem *defaultOutputDeviceItem;
+    for (EZAudioDevice *device in outputDevices)
+    {
+        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:device.name
+                                                      action:@selector(changedOutput:)
+                                               keyEquivalent:@""];
+        item.representedObject = device;
+        item.target = self;
+        [menu addItem:item];
+        
+        // If this device is the same one the microphone is using then
+        // we will use this menu item as the currently selected item
+        // in the microphone input popup button's list of items. For instance,
+        // if you are connected to an external display by default the external
+        // display's microphone might be used instead of the mac's built in
+        // mic.
+        if ([device isEqual:self.output.device])
+        {
+            defaultOutputDeviceItem = item;
+        }
+    }
+    self.outputDevicePopUpButton.menu = menu;
+    
+    //
+    // Set the selected device to the current selection on the
+    // microphone input popup button
+    //
+    [self.outputDevicePopUpButton selectItem:defaultOutputDeviceItem];
 }
 
 //------------------------------------------------------------------------------
