@@ -56,6 +56,13 @@
     // Create an EZOutput instance
     //
     self.output = [EZOutput outputWithDataSource:self];
+    self.output.delegate = self;
+    
+    //
+    // Customize UI controls
+    //
+    self.volumeSlider.value = [self.output volume];
+    self.rollingHistorySlider.value = [self.audioPlot rollingHistoryLength];
     
     //
     // Try opening the sample file
@@ -183,30 +190,6 @@
 #pragma mark - EZAudioFileDelegate
 //------------------------------------------------------------------------------
 
-- (void)     audioFile:(EZAudioFile *)audioFile
-            readAudio:(float **)buffer
-       withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels
-{
-    __weak typeof (self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.output isPlaying])
-        {
-            if (weakSelf.audioPlot.plotType == EZPlotTypeBuffer &&
-               weakSelf.audioPlot.shouldFill == YES &&
-               weakSelf.audioPlot.shouldMirror == YES)
-            {
-                weakSelf.audioPlot.shouldFill = NO;
-                weakSelf.audioPlot.shouldMirror = NO;
-            }
-            [weakSelf.audioPlot updateBuffer:buffer[0]
-                              withBufferSize:bufferSize];
-        }
-    });
-}
-
-//------------------------------------------------------------------------------
-
 - (void)audioFile:(EZAudioFile *)audioFile
   updatedPosition:(SInt64)framePosition
 {
@@ -242,6 +225,32 @@
         }
     }
     return noErr;
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - EZOutputDelegate
+//------------------------------------------------------------------------------
+
+- (void)        output:(EZOutput *)output
+          playedAudio:(float **)buffer
+       withBufferSize:(UInt32)bufferSize
+ withNumberOfChannels:(UInt32)numberOfChannels
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.output isPlaying])
+        {
+            if (weakSelf.audioPlot.plotType == EZPlotTypeBuffer &&
+               weakSelf.audioPlot.shouldFill == YES &&
+               weakSelf.audioPlot.shouldMirror == YES)
+            {
+                weakSelf.audioPlot.shouldFill = NO;
+                weakSelf.audioPlot.shouldMirror = NO;
+            }
+            [weakSelf.audioPlot updateBuffer:buffer[0]
+                              withBufferSize:bufferSize];
+        }
+    });
 }
 
 //------------------------------------------------------------------------------

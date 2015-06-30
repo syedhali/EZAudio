@@ -150,6 +150,7 @@
                         <outlet property="audioPlot" destination="kt3-hw-eFY" id="9mm-d1-vJk"/>
                         <outlet property="filePathLabel" destination="i5r-ex-ukW" id="GRl-ld-nWi"/>
                         <outlet property="framePositionSlider" destination="Oc2-kU-kAJ" id="z0M-Q9-JAb"/>
+                        <outlet property="rollingHistorySlider" destination="2qJ-Va-Qht" id="yf8-JW-5yM"/>
                         <outlet property="view" destination="PED-9r-Xub" id="Xxb-En-D2X"/>
                         <outlet property="volumeSlider" destination="d3R-ct-df2" id="pAW-BF-AFa"/>
                     </connections>

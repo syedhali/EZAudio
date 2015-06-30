@@ -20,7 +20,8 @@
  Using the EZOutputDataSource to provide output data to the EZOutput component.
  */
 @interface PlayFileViewController : UIViewController <EZAudioFileDelegate,
-                                                      EZOutputDataSource>
+                                                      EZOutputDataSource,
+                                                      EZOutputDelegate>
 
 #pragma mark - Components
 /**
@@ -36,19 +37,23 @@
 /**
  The CoreGraphics based audio plot
  */
-@property (nonatomic,weak) IBOutlet EZAudioPlot *audioPlot;
+@property (nonatomic, weak) IBOutlet EZAudioPlot *audioPlot;
 
 #pragma mark - UI Extras
 /**
  A label to display the current file path with the waveform shown
  */
-@property (nonatomic,weak) IBOutlet UILabel *filePathLabel;
+@property (nonatomic, weak) IBOutlet UILabel *filePathLabel;
 
 /**
  A slider to indicate the current frame position in the audio file
  */
-@property (nonatomic,weak) IBOutlet UISlider *framePositionSlider;
+@property (nonatomic, weak) IBOutlet UISlider *framePositionSlider;
 
+/**
+ A slider to indicate the current rolling history length of the audio plot.
+ */
+@property (nonatomic, weak) IBOutlet UISlider *rollingHistorySlider;
 
 /**
  A slider to indicate the volume on the audio player
