@@ -229,7 +229,10 @@ typedef struct
 #endif
     glGenBuffers(1, &self.info->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
-    glBufferData(GL_ARRAY_BUFFER, self.info->pointCount * sizeof(EZAudioPlotGLPoint), self.info->points, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,
+                 self.info->pointCount * sizeof(EZAudioPlotGLPoint),
+                 self.info->points,
+                 GL_STREAM_DRAW);
     glClearColor(0.686f, 0.51f, 0.663f, 1.0f);
 #if !TARGET_OS_IPHONE
     [self.openGLContext unlock];
@@ -271,9 +274,6 @@ typedef struct
 
 - (void)setSampleData:(float *)data length:(int)length
 {
-    //
-    // Convert buffer to points
-    //
     int pointCount = self.shouldFill ? length * 2 : length;
     EZAudioPlotGLPoint *points = self.info->points;
     for (int i = 0; i < length; i++)
@@ -348,44 +348,20 @@ typedef struct
 
 - (void)redraw
 {
-#if TARGET_OS_IPHONE
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    GLenum mode = self.info->interpolated ? GL_TRIANGLE_STRIP : GL_LINE_STRIP;
-    float interpolatedFactor = self.info->interpolated ? 2.0f : 1.0f;
-    float xscale = 2.0f / ((float)self.info->pointCount / interpolatedFactor);
-    GLKMatrix4 transform = GLKMatrix4MakeTranslation(-1.0f, 0.0f, 0.0f);
-    transform = GLKMatrix4Scale(transform, xscale, self.gain, 1.0f);
-    self.baseEffect.transform.modelviewMatrix = transform;
-//    glBindVertexArray(self.info->vab);
-    glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
-    [self.baseEffect prepareToDraw];
-    glEnableVertexAttribArray(GLKVertexAttribPosition);
-    glVertexAttribPointer(GLKVertexAttribPosition,
-                          2,
-                          GL_FLOAT,
-                          GL_FALSE,
-                          sizeof(EZAudioPlotGLPoint),
-                          NULL);
-    glDrawArrays(mode, 0, self.info->pointCount);
-    if (self.shouldMirror)
-    {
-        self.baseEffect.transform.modelviewMatrix = GLKMatrix4Rotate(transform, M_PI, 1.0f, 0.0f, 0.0f);
-        [self.baseEffect prepareToDraw];
-        glDrawArrays(mode, 0, self.info->pointCount);
-    }
-#elif TARGET_OS_MAC
+#if !TARGET_OS_IPHONE
     [self.openGLContext makeCurrentContext];
     [self.openGLContext lock];
-    
+#endif
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    
     GLenum mode = self.info->interpolated ? GL_TRIANGLE_STRIP : GL_LINE_STRIP;
     float interpolatedFactor = self.info->interpolated ? 2.0f : 1.0f;
     float xscale = 2.0f / ((float)self.info->pointCount / interpolatedFactor);
     GLKMatrix4 transform = GLKMatrix4MakeTranslation(-1.0f, 0.0f, 0.0f);
     transform = GLKMatrix4Scale(transform, xscale, self.gain, 1.0f);
     self.baseEffect.transform.modelviewMatrix = transform;
+#if !TARGET_OS_IPHONE
     glBindVertexArray(self.info->vab);
+#endif
     glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
     [self.baseEffect prepareToDraw];
     glEnableVertexAttribArray(GLKVertexAttribPosition);
@@ -402,7 +378,7 @@ typedef struct
         [self.baseEffect prepareToDraw];
         glDrawArrays(mode, 0, self.info->pointCount);
     }
-    
+#if !TARGET_OS_IPHONE
     [self.openGLContext flushBuffer];
     [self.openGLContext unlock];
 #endif
