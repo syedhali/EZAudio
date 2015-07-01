@@ -23,21 +23,11 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#import <GLKit/GLKit.h>
 #import "TargetConditionals.h"
 #import "EZPlot.h"
-
-//#if TARGET_OS_IPHONE
-//#import <GLKit/GLKit.h>
-//@class EZAudioPlotGLKViewController;
-//#elif TARGET_OS_MAC
-//#import <Cocoa/Cocoa.h>
-//#import <GLKit/GLKit.h>
-//#import <OpenGL/gl3.h>
-//#import <QuartzCore/CVDisplayLink.h>
-//#endif
-#if TARGET_OS_IPHONE
-#import <GLKit/GLKit.h>
-#elif TARGET_OS_MAC
+#if !TARGET_OS_IPHONE
+#import <OpenGL/gl3.h>
 #endif
 
 #pragma mark - Structures
@@ -63,35 +53,35 @@ typedef struct
 /////-----------------------------------------------------------
 ///// @name Customizing The Plot's Appearance
 /////-----------------------------------------------------------
-///**
-// The default background color of the plot. For iOS the color is specified as a UIColor while for OSX the color is an NSColor. The default value on both platforms is black.
-// */
-//@property (nonatomic,strong) id backgroundColor;
+/**
+ The default background color of the plot. For iOS the color is specified as a UIColor while for OSX the color is an NSColor. The default value on both platforms is black.
+ */
+@property (nonatomic, strong) id backgroundColor;
 
 /**
  The default color of the plot's data (i.e. waveform, y-axis values). For iOS the color is specified as a UIColor while for OSX the color is an NSColor. The default value on both platforms is red.
  */
-@property (nonatomic,strong) id color;
+@property (nonatomic, strong) id color;
 
 /**
  The plot's gain value, which controls the scale of the y-axis values. The default value of the gain is 1.0f and should always be greater than 0.0f.
  */
-@property (nonatomic,assign,setter=setGain:) float gain;
+@property (nonatomic, assign) float gain;
 
 /**
  The type of plot as specified by the `EZPlotType` enumeration (i.e. a buffer or rolling plot type).
  */
-@property (nonatomic,assign,setter=setPlotType:) EZPlotType plotType;
+@property (nonatomic, assign) EZPlotType plotType;
 
 /**
  A BOOL indicating whether or not to fill in the graph. A value of YES will make a filled graph (filling in the space between the x-axis and the y-value), while a value of NO will create a stroked graph (connecting the points along the y-axis).
  */
-@property (nonatomic,assign,setter=setShouldFill:) BOOL shouldFill;
+@property (nonatomic, assign) BOOL shouldFill;
 
 /**
  A boolean indicating whether the graph should be rotated along the x-axis to give a mirrored reflection. This is typical for audio plots to produce the classic waveform look. A value of YES will produce a mirrored reflection of the y-values about the x-axis, while a value of NO will only plot the y-values.
  */
-@property (nonatomic,assign,setter=setShouldMirror:) BOOL shouldMirror;
+@property (nonatomic, assign) BOOL shouldMirror;
 
 #pragma mark - Get Samples
 ///-----------------------------------------------------------

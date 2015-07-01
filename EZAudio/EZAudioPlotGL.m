@@ -28,7 +28,6 @@
 #import "EZAudioUtilities.h"
 #import "EZAudioPlot.h"
 
-#if TARGET_OS_IPHONE
 typedef struct
 {
     BOOL                interpolated;
@@ -37,9 +36,6 @@ typedef struct
     UInt32              pointCount;
     GLuint              vbo;
 } EZAudioPlotGLInfo;
-#elif TARGET_OS_MAC
-
-#endif
 
 @interface EZAudioPlotGL () <EZAudioDisplayLinkDelegate>
 
@@ -96,7 +92,7 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(EZRect)frame
 {
     self = [super initWithFrame:frame];
     if (self)
@@ -108,6 +104,7 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
+#if TARGET_OS_IPHONE
 - (instancetype)initWithFrame:(CGRect)frame
                       context:(EAGLContext *)context
 {
@@ -118,6 +115,18 @@ typedef struct
     }
     return self;
 }
+#elif TARGET_OS_MAC
+- (instancetype)initWithFrame:(NSRect)frameRect
+                  pixelFormat:(NSOpenGLPixelFormat *)format
+{
+    self = [super initWithFrame:frameRect pixelFormat:format];
+    if (self)
+    {
+        [self setup];
+    }
+    return self;
+}
+#endif
 
 //------------------------------------------------------------------------------
 #pragma mark - Setup
@@ -125,15 +134,6 @@ typedef struct
 
 - (void)setup
 {
-    //
-    // Make sure we have a valid OpenGL Context
-    //
-    if (!self.context)
-    {
-        self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    }
-    [EAGLContext setCurrentContext:self.context];
-    
     //
     // Setup info data structure
     //
@@ -178,6 +178,12 @@ typedef struct
 - (void)setupOpenGL
 {
 #if TARGET_OS_IPHONE
+    if (!self.context)
+    {
+        self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    }
+    [EAGLContext setCurrentContext:self.context];
+    
     self.drawableColorFormat   = GLKViewDrawableColorFormatRGBA8888;
     self.drawableDepthFormat   = GLKViewDrawableDepthFormat24;
     self.drawableStencilFormat = GLKViewDrawableStencilFormat8;
@@ -191,13 +197,40 @@ typedef struct
     glGenBuffers(1, &self.info->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
     glBufferData(GL_ARRAY_BUFFER, self.info->pointCount * sizeof(EZAudioPlotGLPoint), self.info->points, GL_STREAM_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glLineWidth(2.0);
 #elif TARGET_OS_MAC
     //
     // mac OpenGL setup
     //
+    if (!self.pixelFormat)
+    {
+        NSOpenGLPixelFormatAttribute attrs[] =
+        {
+            NSOpenGLPFADoubleBuffer,
+            NSOpenGLPFAMultisample,
+            NSOpenGLPFASampleBuffers,
+            1,
+            NSOpenGLPFASamples,
+            4,
+            NSOpenGLPFADepthSize,
+            24,
+            NSOpenGLPFAOpenGLProfile,
+            NSOpenGLProfileVersion3_2Core,
+            0
+        };
+        self.pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
+    }
+#if DEBUG
+    NSAssert(self.pixelFormat, @"Could not create OpenGL pixel format so context is not valid");
 #endif
+    self.openGLContext = [[NSOpenGLContext alloc] initWithFormat:self.pixelFormat
+                                                    shareContext:nil];
+    self.wantsBestResolutionOpenGLSurface = YES;
+    self.wantsLayer = YES;
+    GLint swapInt = 1;
+    [self.openGLContext setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
+#endif
+    glClearColor(0.686f, 0.51f, 0.663f, 1.0f);
+    glLineWidth(2.0f);
 }
 
 //------------------------------------------------------------------------------
@@ -206,29 +239,29 @@ typedef struct
 
 - (void)updateBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize
 {
-        //
-        // Update history
-        //
-        [EZAudioUtilities appendBuffer:buffer
-                        withBufferSize:bufferSize
-                         toHistoryInfo:self.info->historyInfo];
-    
-        //
-        // Convert this data to point data
-        //
-        switch (self.plotType)
-        {
-            case EZPlotTypeBuffer:
-                [self setSampleData:buffer
-                             length:bufferSize];
-                break;
-            case EZPlotTypeRolling:
-                [self setSampleData:self.info->historyInfo->buffer
-                             length:self.info->historyInfo->bufferSize];
-                break;
-            default:
-                break;
-        }
+    //
+    // Update history
+    //
+    [EZAudioUtilities appendBuffer:buffer
+                    withBufferSize:bufferSize
+                     toHistoryInfo:self.info->historyInfo];
+
+    //
+    // Convert this data to point data
+    //
+    switch (self.plotType)
+    {
+        case EZPlotTypeBuffer:
+            [self setSampleData:buffer
+                         length:bufferSize];
+            break;
+        case EZPlotTypeRolling:
+            [self setSampleData:self.info->historyInfo->buffer
+                         length:self.info->historyInfo->bufferSize];
+            break;
+        default:
+            break;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -258,8 +291,10 @@ typedef struct
     self.info->pointCount = pointCount;
     self.info->interpolated = self.shouldFill;
     glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, pointCount * sizeof(EZAudioPlotGLPoint), self.info->points);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBufferSubData(GL_ARRAY_BUFFER,
+                    0,
+                    pointCount * sizeof(EZAudioPlotGLPoint),
+                    self.info->points);
 }
 
 //------------------------------------------------------------------------------
@@ -280,21 +315,49 @@ typedef struct
 }
 
 //------------------------------------------------------------------------------
+#pragma mark - Clearing The Plot
+//------------------------------------------------------------------------------
+
+- (void)clear
+{
+    //
+    // TODO: clear plot!
+    //
+}
+
+//------------------------------------------------------------------------------
 #pragma mark - Drawing
 //------------------------------------------------------------------------------
 
-- (void)drawRect:(CGRect)rect
+- (void)drawRect:(EZRect)rect
 {
-    //
-    // Draw the background
-    //
-    glClearColor(0.686f, 0.51f, 0.663f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    
-    //
-    // Draw the buffer
-    //
+    [self redraw];
+}
+
+#if !TARGET_OS_IPHONE
+
+- (void)lockContext
+{
+    [self.openGLContext makeCurrentContext];
+    CGLLockContext([self.openGLContext CGLContextObj]);
+}
+
+//------------------------------------------------------------------------------
+
+- (void)unlockContext
+{
+    CGLFlushDrawable([self.openGLContext CGLContextObj]);
+    CGLUnlockContext([self.openGLContext CGLContextObj]);
+}
+
+#endif
+
+//------------------------------------------------------------------------------
+
+- (void)redraw
+{
 #if TARGET_OS_IPHONE
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     GLenum mode = self.info->interpolated ? GL_TRIANGLE_STRIP : GL_LINE_STRIP;
     float interpolatedFactor = self.info->interpolated ? 2.0f : 1.0f;
     float xscale = 2.0f / ((float)self.info->pointCount / interpolatedFactor);
@@ -312,9 +375,10 @@ typedef struct
         self.baseEffect.transform.modelviewMatrix = GLKMatrix4Rotate(transform, M_PI, 1.0f, 0.0f, 0.0f);
         glDrawArrays(mode, 0, self.info->pointCount);
     }
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
 #elif TARGET_OS_MAC
-    
+    [self lockContext];
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    [self unlockContext];
 #endif
 }
 
@@ -325,13 +389,6 @@ typedef struct
 - (int)defaultRollingHistoryLength
 {
     return EZAudioPlotDefaultHistoryBufferLength;
-}
-
-//------------------------------------------------------------------------------
-
-- (int)initialPointCount
-{
-    return 100;
 }
 
 //------------------------------------------------------------------------------
@@ -353,6 +410,7 @@ typedef struct
         [self display];
     }
 #elif TARGET_OS_MAC
+    [self redraw];
 #endif
 }
 
