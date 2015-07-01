@@ -28,14 +28,23 @@
 #import "EZAudioUtilities.h"
 #import "EZAudioPlot.h"
 
+#if TARGET_OS_IPHONE
+typedef struct
+{
+    EZPlotHistoryInfo *historyInfo;
+    EZAudioPlotGLPoint *points;
+    UInt32 pointCount;
+    GLuint vbo;
+} EZAudioPlotGLInfo;
+#elif TARGET_OS_MAC
+
+#endif
+
 @interface EZAudioPlotGL () <EZAudioDisplayLinkDelegate>
 
 @property (nonatomic, strong) GLKBaseEffect *baseEffect;
 @property (nonatomic, strong) EZAudioDisplayLink *displayLink;
-@property (nonatomic, assign) EZPlotHistoryInfo *historyInfo;
-@property (nonatomic, assign) EZAudioPlotGLPoint *points;
-@property (nonatomic, assign) UInt32 pointCount;
-
+@property (nonatomic, assign) EZAudioPlotGLInfo *info;
 #if TARGET_OS_IPHONE
 
 #elif TARGET_OS_MAC
@@ -53,9 +62,9 @@
 - (void)dealloc
 {
     [self.displayLink stop];
+    [EZAudioUtilities freeHistoryInfo:self.info->historyInfo];
+    free(self.info->points);
     self.baseEffect = nil;
-    [EZAudioUtilities freeHistoryInfo:self.historyInfo];
-    free(self.points);
 }
 
 //------------------------------------------------------------------------------
@@ -125,14 +134,23 @@
     [EAGLContext setCurrentContext:self.context];
     
     //
+    //
+    //
+    self.info = (EZAudioPlotGLInfo *)malloc(sizeof(EZAudioPlotGLInfo));
+    memset(self.info, 0, sizeof(EZAudioPlotGLInfo));
+    
+    //
     // Create points array
     //
+    UInt32 pointCount = [self maximumRollingHistoryLength];
+    self.info->points = (EZAudioPlotGLPoint *)calloc(sizeof(EZAudioPlotGLPoint), pointCount);
+    self.info->pointCount = pointCount;
     
     //
     // Create the history data structure to hold the rolling data
     //
-    self.historyInfo = [EZAudioUtilities historyInfoWithDefaultLength:[self defaultRollingHistoryLength]
-                                                        maximumLength:[self maximumRollingHistoryLength]];
+    self.info->historyInfo = [EZAudioUtilities historyInfoWithDefaultLength:[self defaultRollingHistoryLength]
+                                                              maximumLength:[self maximumRollingHistoryLength]];
     
     //
     // Setup OpenGL properties
@@ -140,19 +158,11 @@
     self.baseEffect = [[GLKBaseEffect alloc] init];
     self.baseEffect.useConstantColor = YES;
     self.baseEffect.constantColor = GLKVector4Make(1.0f, 1.0f, 1.0f, 1.0f);
-#if TARGET_OS_IPHONE
-    self.drawableColorFormat   = GLKViewDrawableColorFormatRGBA8888;
-    self.drawableDepthFormat   = GLKViewDrawableDepthFormat24;
-    self.drawableStencilFormat = GLKViewDrawableStencilFormat8;
-    self.drawableMultisample   = GLKViewDrawableMultisample4X;
-    self.opaque                = NO;
-    self.enableSetNeedsDisplay = NO;
     
-#elif TARGET_OS_MAC
     //
-    // mac OpenGL setup
+    // Setup OpenGL specific stuff
     //
-#endif
+    [self setupOpenGL];
     
     //
     // Create the display link
@@ -162,57 +172,82 @@
 }
 
 //------------------------------------------------------------------------------
+
+- (void)setupOpenGL
+{
+#if TARGET_OS_IPHONE
+    self.drawableColorFormat   = GLKViewDrawableColorFormatRGBA8888;
+    self.drawableDepthFormat   = GLKViewDrawableDepthFormat24;
+    self.drawableStencilFormat = GLKViewDrawableStencilFormat8;
+    self.drawableMultisample   = GLKViewDrawableMultisample4X;
+    self.opaque                = NO;
+    self.enableSetNeedsDisplay = NO;
+    
+    //
+    // Generate VBO
+    //
+    glGenBuffers(1, &self.info->vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
+    glBufferData(GL_ARRAY_BUFFER, self.info->pointCount * sizeof(EZAudioPlotGLPoint), self.info->points, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glLineWidth(2.0);
+#elif TARGET_OS_MAC
+    //
+    // mac OpenGL setup
+    //
+#endif
+}
+
+//------------------------------------------------------------------------------
 #pragma mark - Updating The Plot
 //------------------------------------------------------------------------------
 
 - (void)updateBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize
 {
-    //    //
-    //    // Update history
-    //    //
-    //    [EZAudioUtilities appendBuffer:buffer
-    //                    withBufferSize:bufferSize
-    //                     toHistoryInfo:self.historyInfo];
-    //
-    //    //
-    //    // Convert this data to point data
-    //    //
-    //    switch (self.plotType)
-    //    {
-    //        case EZPlotTypeBuffer:
-    //            [self setSampleData:buffer
-    //                         length:bufferSize];
-    //            break;
-    //        case EZPlotTypeRolling:
-    //            [self setSampleData:self.historyInfo->buffer
-    //                         length:self.historyInfo->bufferSize];
-    //            break;
-    //        default:
-    //            break;
-    //    }
+        //
+        // Update history
+        //
+        [EZAudioUtilities appendBuffer:buffer
+                        withBufferSize:bufferSize
+                         toHistoryInfo:self.info->historyInfo];
+    
+        //
+        // Convert this data to point data
+        //
+        switch (self.plotType)
+        {
+            case EZPlotTypeBuffer:
+                [self setSampleData:buffer
+                             length:bufferSize];
+                break;
+            case EZPlotTypeRolling:
+                [self setSampleData:self.info->historyInfo->buffer
+                             length:self.info->historyInfo->bufferSize];
+                break;
+            default:
+                break;
+        }
 }
 
 //------------------------------------------------------------------------------
 
 - (void)setSampleData:(float *)data length:(int)length
 {
-    //    //
-    //    // Convert buffer to points
-    //    //
-    //    int pointCount = length * 2;
-    //    EZAudioPlotGLPoint *points = self.points;
-    //    for (int i = 0; i < length; i++)
-    //    {
-    //        EZAudioPlotGLPoint point     = points[i * 2];
-    //        EZAudioPlotGLPoint nextPoint = points[i * 2 + 1];
-    //        point.x = nextPoint.x = i;
-    //        point.y = 0.0f;
-    //        nextPoint.y = data[i];
-    //    }
-    //    points[0].y = points[pointCount - 1].y = 0.0f;
-    //    self.pointCount = pointCount;
-    //    glBindBuffer(GL_ARRAY_BUFFER, *self.vbo);
-    //    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(self.points), self.points);
+    //
+    // Convert buffer to points
+    //
+    int pointCount = length;
+    EZAudioPlotGLPoint *points = self.info->points;
+    for (int i = 0; i < length; i++)
+    {
+        points[i].x = [EZAudioUtilities MAP:(float)i leftMin:0.f leftMax:(float)length rightMin:-1.f rightMax:1.f];
+        points[i].y = data[i];
+    }
+    points[0].y = points[pointCount - 1].y = 0.0f;
+    self.info->pointCount = pointCount;
+    glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, pointCount * sizeof(EZAudioPlotGLPoint), self.info->points);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 //------------------------------------------------------------------------------
@@ -221,11 +256,23 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    [EAGLContext setCurrentContext:self.context];
+    
     //
     // Draw the background
     //
     glClearColor(0.686f, 0.51f, 0.663f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    
+    //
+    // Draw the buffer
+    //
+    [self.baseEffect prepareToDraw];
+    glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
+    glEnableVertexAttribArray(GLKVertexAttribPosition);
+    glVertexAttribPointer(GLKVertexAttribPosition, 2, GL_FLOAT, GL_FALSE, sizeof(EZAudioPlotGLPoint), NULL);
+    glDrawArrays(GL_LINE_STRIP, 0, self.info->pointCount);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 //------------------------------------------------------------------------------
