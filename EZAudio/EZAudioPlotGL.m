@@ -134,7 +134,7 @@ typedef struct
     [EAGLContext setCurrentContext:self.context];
     
     //
-    //
+    // Setup info data structure
     //
     self.info = (EZAudioPlotGLInfo *)malloc(sizeof(EZAudioPlotGLInfo));
     memset(self.info, 0, sizeof(EZAudioPlotGLInfo));
@@ -256,8 +256,6 @@ typedef struct
 
 - (void)drawRect:(CGRect)rect
 {
-    [EAGLContext setCurrentContext:self.context];
-    
     //
     // Draw the background
     //
@@ -267,20 +265,23 @@ typedef struct
     //
     // Draw the buffer
     //
+#if TARGET_OS_IPHONE
     [self.baseEffect prepareToDraw];
     self.baseEffect.transform.modelviewMatrix = GLKMatrix4MakeXRotation(0);
     glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
     glEnableVertexAttribArray(GLKVertexAttribPosition);
     glVertexAttribPointer(GLKVertexAttribPosition, 2, GL_FLOAT, GL_FALSE, sizeof(EZAudioPlotGLPoint), NULL);
     glDrawArrays(GL_LINE_STRIP, 0, self.info->pointCount);
-    
     if (self.shouldMirror)
     {
         [self.baseEffect prepareToDraw];
         self.baseEffect.transform.modelviewMatrix = GLKMatrix4MakeXRotation(M_PI);
         glDrawArrays(GL_LINE_STRIP, 0, self.info->pointCount);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+#elif TARGET_OS_MAC
+    
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -312,7 +313,13 @@ typedef struct
 
 - (void)displayLinkNeedsDisplay:(EZAudioDisplayLink *)displayLink
 {
-    [self display];
+#if TARGET_OS_IPHONE
+    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+    {
+        [self display];
+    }
+#elif TARGET_OS_MAC
+#endif
 }
 
 //------------------------------------------------------------------------------

@@ -123,7 +123,7 @@ typedef struct
  */
 -(int)rollingHistoryLength;
 
-#pragma mark - Shared Methods
+#pragma mark - Clearing The Plot
 ///-----------------------------------------------------------
 /// @name Clearing The Plot
 ///-----------------------------------------------------------
