@@ -188,7 +188,7 @@ typedef struct
     //
     glGenBuffers(1, &self.info->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
-    glBufferData(GL_ARRAY_BUFFER, self.info->pointCount * sizeof(EZAudioPlotGLPoint), self.info->points, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, self.info->pointCount * sizeof(EZAudioPlotGLPoint), self.info->points, GL_STREAM_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glLineWidth(2.0);
 #elif TARGET_OS_MAC
@@ -268,11 +268,19 @@ typedef struct
     // Draw the buffer
     //
     [self.baseEffect prepareToDraw];
+    self.baseEffect.transform.modelviewMatrix = GLKMatrix4MakeXRotation(0);
     glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
     glEnableVertexAttribArray(GLKVertexAttribPosition);
     glVertexAttribPointer(GLKVertexAttribPosition, 2, GL_FLOAT, GL_FALSE, sizeof(EZAudioPlotGLPoint), NULL);
     glDrawArrays(GL_LINE_STRIP, 0, self.info->pointCount);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
+    if (self.shouldMirror)
+    {
+        [self.baseEffect prepareToDraw];
+        self.baseEffect.transform.modelviewMatrix = GLKMatrix4MakeXRotation(M_PI);
+        glDrawArrays(GL_LINE_STRIP, 0, self.info->pointCount);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
 }
 
 //------------------------------------------------------------------------------
