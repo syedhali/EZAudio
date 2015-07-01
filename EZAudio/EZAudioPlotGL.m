@@ -202,6 +202,7 @@ typedef struct
     self.opaque                = NO;
     self.enableSetNeedsDisplay = NO;
 #elif TARGET_OS_MAC
+    self.wantsBestResolutionOpenGLSurface = YES;
     self.wantsLayer = YES;
     if (!self.pixelFormat)
     {
@@ -222,10 +223,9 @@ typedef struct
 #endif
     self.openGLContext = [[NSOpenGLContext alloc] initWithFormat:self.pixelFormat
                                                     shareContext:nil];
-    self.wantsBestResolutionOpenGLSurface = YES;
-    [self.openGLContext lock];
     GLint swapInt = 1;
     [self.openGLContext setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
+    [self.openGLContext lock];
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -361,8 +361,9 @@ typedef struct
     GLenum mode = self.info->interpolated ? GL_TRIANGLE_STRIP : GL_LINE_STRIP;
     float interpolatedFactor = self.info->interpolated ? 2.0f : 1.0f;
     float xscale = 2.0f / ((float)self.info->pointCount / interpolatedFactor);
+    float yscale = 0.5f * self.gain;
     GLKMatrix4 transform = GLKMatrix4MakeTranslation(-1.0f, 0.0f, 0.0f);
-    transform = GLKMatrix4Scale(transform, xscale, self.gain, 1.0f);
+    transform = GLKMatrix4Scale(transform, xscale, yscale, 1.0f);
     self.baseEffect.transform.modelviewMatrix = transform;
 #if !TARGET_OS_IPHONE
     glBindVertexArray(self.info->vab);
