@@ -43,7 +43,6 @@
 #import "EZPlot.h"
 #import "EZAudioPlot.h"
 #import "EZAudioPlotGL.h"
-#import "EZAudioPlotGLKViewController.h"
 
 //------------------------------------------------------------------------------
 
