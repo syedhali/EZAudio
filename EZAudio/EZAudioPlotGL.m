@@ -28,6 +28,10 @@
 #import "EZAudioUtilities.h"
 #import "EZAudioPlot.h"
 
+//------------------------------------------------------------------------------
+#pragma mark - Data Structures
+//------------------------------------------------------------------------------
+
 typedef struct
 {
     BOOL                interpolated;
@@ -40,18 +44,19 @@ typedef struct
 #endif
 } EZAudioPlotGLInfo;
 
+//------------------------------------------------------------------------------
+#pragma mark - EZAudioPlotGL (Interface Extension)
+//------------------------------------------------------------------------------
+
 @interface EZAudioPlotGL () <EZAudioDisplayLinkDelegate>
-
-@property (nonatomic, strong) GLKBaseEffect *baseEffect;
+@property (nonatomic, strong) GLKBaseEffect      *baseEffect;
 @property (nonatomic, strong) EZAudioDisplayLink *displayLink;
-@property (nonatomic, assign) EZAudioPlotGLInfo *info;
-#if TARGET_OS_IPHONE
-
-#elif TARGET_OS_MAC
-
-#endif
-
+@property (nonatomic, assign) EZAudioPlotGLInfo  *info;
 @end
+
+//------------------------------------------------------------------------------
+#pragma mark - EZAudioPlotGL (Implementation)
+//------------------------------------------------------------------------------
 
 @implementation EZAudioPlotGL
 
