@@ -35,6 +35,9 @@ typedef struct
     EZAudioPlotGLPoint *points;
     UInt32              pointCount;
     GLuint              vbo;
+#if !TARGET_OS_IPHONE
+    GLuint              vab;
+#endif
 } EZAudioPlotGLInfo;
 
 @interface EZAudioPlotGL () <EZAudioDisplayLinkDelegate>
@@ -60,6 +63,10 @@ typedef struct
 {
     [self.displayLink stop];
     [EZAudioUtilities freeHistoryInfo:self.info->historyInfo];
+#if !TARGET_OS_IPHONE
+    glDeleteVertexArrays(1, &self.info->vab);
+#endif
+    glDeleteBuffers(1, &self.info->vbo);
     free(self.info->points);
     self.baseEffect = nil;
 }
@@ -183,39 +190,25 @@ typedef struct
         self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     }
     [EAGLContext setCurrentContext:self.context];
-    
     self.drawableColorFormat   = GLKViewDrawableColorFormatRGBA8888;
     self.drawableDepthFormat   = GLKViewDrawableDepthFormat24;
     self.drawableStencilFormat = GLKViewDrawableStencilFormat8;
     self.drawableMultisample   = GLKViewDrawableMultisample4X;
     self.opaque                = NO;
     self.enableSetNeedsDisplay = NO;
-    
-    //
-    // Generate VBO
-    //
-    glGenBuffers(1, &self.info->vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
-    glBufferData(GL_ARRAY_BUFFER, self.info->pointCount * sizeof(EZAudioPlotGLPoint), self.info->points, GL_STREAM_DRAW);
 #elif TARGET_OS_MAC
-    //
-    // mac OpenGL setup
-    //
+    self.wantsLayer = YES;
     if (!self.pixelFormat)
     {
         NSOpenGLPixelFormatAttribute attrs[] =
         {
             NSOpenGLPFADoubleBuffer,
             NSOpenGLPFAMultisample,
-            NSOpenGLPFASampleBuffers,
-            1,
-            NSOpenGLPFASamples,
-            4,
-            NSOpenGLPFADepthSize,
-            24,
+            NSOpenGLPFASampleBuffers,      1,
+            NSOpenGLPFASamples,            4,
+            NSOpenGLPFADepthSize,          24,
             NSOpenGLPFAOpenGLProfile,
-            NSOpenGLProfileVersion3_2Core,
-            0
+            NSOpenGLProfileVersion3_2Core, 0
         };
         self.pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
     }
@@ -225,12 +218,22 @@ typedef struct
     self.openGLContext = [[NSOpenGLContext alloc] initWithFormat:self.pixelFormat
                                                     shareContext:nil];
     self.wantsBestResolutionOpenGLSurface = YES;
-    self.wantsLayer = YES;
+    [self.openGLContext lock];
     GLint swapInt = 1;
     [self.openGLContext setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
+    glEnable(GL_MULTISAMPLE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glGenVertexArrays(1, &self.info->vab);
+    glBindVertexArray(self.info->vab);
 #endif
+    glGenBuffers(1, &self.info->vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
+    glBufferData(GL_ARRAY_BUFFER, self.info->pointCount * sizeof(EZAudioPlotGLPoint), self.info->points, GL_STREAM_DRAW);
     glClearColor(0.686f, 0.51f, 0.663f, 1.0f);
-    glLineWidth(2.0f);
+#if !TARGET_OS_IPHONE
+    [self.openGLContext unlock];
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -290,11 +293,18 @@ typedef struct
     points[0].y = points[pointCount - 1].y = 0.0f;
     self.info->pointCount = pointCount;
     self.info->interpolated = self.shouldFill;
+#if !TARGET_OS_IPHONE
+    [self.openGLContext lock];
+    glBindVertexArray(self.info->vab);
+#endif
     glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
     glBufferSubData(GL_ARRAY_BUFFER,
                     0,
                     pointCount * sizeof(EZAudioPlotGLPoint),
                     self.info->points);
+#if !TARGET_OS_IPHONE
+    [self.openGLContext unlock];
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -334,24 +344,6 @@ typedef struct
     [self redraw];
 }
 
-#if !TARGET_OS_IPHONE
-
-- (void)lockContext
-{
-    [self.openGLContext makeCurrentContext];
-    CGLLockContext([self.openGLContext CGLContextObj]);
-}
-
-//------------------------------------------------------------------------------
-
-- (void)unlockContext
-{
-    CGLFlushDrawable([self.openGLContext CGLContextObj]);
-    CGLUnlockContext([self.openGLContext CGLContextObj]);
-}
-
-#endif
-
 //------------------------------------------------------------------------------
 
 - (void)redraw
@@ -363,22 +355,56 @@ typedef struct
     float xscale = 2.0f / ((float)self.info->pointCount / interpolatedFactor);
     GLKMatrix4 transform = GLKMatrix4MakeTranslation(-1.0f, 0.0f, 0.0f);
     transform = GLKMatrix4Scale(transform, xscale, self.gain, 1.0f);
-    [self.baseEffect prepareToDraw];
     self.baseEffect.transform.modelviewMatrix = transform;
+//    glBindVertexArray(self.info->vab);
     glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
+    [self.baseEffect prepareToDraw];
     glEnableVertexAttribArray(GLKVertexAttribPosition);
-    glVertexAttribPointer(GLKVertexAttribPosition, 2, GL_FLOAT, GL_FALSE, sizeof(EZAudioPlotGLPoint), NULL);
+    glVertexAttribPointer(GLKVertexAttribPosition,
+                          2,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          sizeof(EZAudioPlotGLPoint),
+                          NULL);
     glDrawArrays(mode, 0, self.info->pointCount);
     if (self.shouldMirror)
     {
-        [self.baseEffect prepareToDraw];
         self.baseEffect.transform.modelviewMatrix = GLKMatrix4Rotate(transform, M_PI, 1.0f, 0.0f, 0.0f);
+        [self.baseEffect prepareToDraw];
         glDrawArrays(mode, 0, self.info->pointCount);
     }
 #elif TARGET_OS_MAC
-    [self lockContext];
+    [self.openGLContext makeCurrentContext];
+    [self.openGLContext lock];
+    
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    [self unlockContext];
+    
+    GLenum mode = self.info->interpolated ? GL_TRIANGLE_STRIP : GL_LINE_STRIP;
+    float interpolatedFactor = self.info->interpolated ? 2.0f : 1.0f;
+    float xscale = 2.0f / ((float)self.info->pointCount / interpolatedFactor);
+    GLKMatrix4 transform = GLKMatrix4MakeTranslation(-1.0f, 0.0f, 0.0f);
+    transform = GLKMatrix4Scale(transform, xscale, self.gain, 1.0f);
+    self.baseEffect.transform.modelviewMatrix = transform;
+    glBindVertexArray(self.info->vab);
+    glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
+    [self.baseEffect prepareToDraw];
+    glEnableVertexAttribArray(GLKVertexAttribPosition);
+    glVertexAttribPointer(GLKVertexAttribPosition,
+                          2,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          sizeof(EZAudioPlotGLPoint),
+                          NULL);
+    glDrawArrays(mode, 0, self.info->pointCount);
+    if (self.shouldMirror)
+    {
+        self.baseEffect.transform.modelviewMatrix = GLKMatrix4Rotate(transform, M_PI, 1.0f, 0.0f, 0.0f);
+        [self.baseEffect prepareToDraw];
+        glDrawArrays(mode, 0, self.info->pointCount);
+    }
+    
+    [self.openGLContext flushBuffer];
+    [self.openGLContext unlock];
 #endif
 }
 
