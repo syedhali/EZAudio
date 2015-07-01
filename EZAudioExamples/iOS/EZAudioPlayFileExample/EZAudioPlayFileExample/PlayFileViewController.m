@@ -196,10 +196,9 @@
     __weak typeof (self) weakSelf = self;
     [self.audioFile getWaveformDataWithCompletionBlock:^(float **waveformData,
                                                          int length)
-     {
-         [weakSelf.audioPlot updateBuffer:waveformData[0]
-                           withBufferSize:length];
-     }];
+    {
+        [weakSelf.audioPlot updateBuffer:waveformData[0] withBufferSize:length];
+    }];
     
     //
     // Play the audio file

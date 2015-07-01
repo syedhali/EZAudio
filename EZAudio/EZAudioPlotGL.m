@@ -31,10 +31,11 @@
 #if TARGET_OS_IPHONE
 typedef struct
 {
-    EZPlotHistoryInfo *historyInfo;
+    BOOL                interpolated;
+    EZPlotHistoryInfo  *historyInfo;
     EZAudioPlotGLPoint *points;
-    UInt32 pointCount;
-    GLuint vbo;
+    UInt32              pointCount;
+    GLuint              vbo;
 } EZAudioPlotGLInfo;
 #elif TARGET_OS_MAC
 
@@ -158,6 +159,7 @@ typedef struct
     self.baseEffect = [[GLKBaseEffect alloc] init];
     self.baseEffect.useConstantColor = YES;
     self.baseEffect.constantColor = GLKVector4Make(1.0f, 1.0f, 1.0f, 1.0f);
+    self.gain = 1.0f;
     
     //
     // Setup OpenGL specific stuff
@@ -236,18 +238,45 @@ typedef struct
     //
     // Convert buffer to points
     //
-    int pointCount = length;
+    int pointCount = self.shouldFill ? length * 2 : length;
     EZAudioPlotGLPoint *points = self.info->points;
     for (int i = 0; i < length; i++)
     {
-        points[i].x = [EZAudioUtilities MAP:(float)i leftMin:0.f leftMax:(float)length rightMin:-1.f rightMax:1.f];
-        points[i].y = data[i];
+        if (self.shouldFill)
+        {
+            points[i * 2].x = points[i * 2 + 1].x = i;
+            points[i * 2].y = data[i];
+            points[i * 2 + 1].y = 0.0f;
+        }
+        else
+        {
+            points[i].x = i;
+            points[i].y = data[i];
+        }
     }
     points[0].y = points[pointCount - 1].y = 0.0f;
     self.info->pointCount = pointCount;
+    self.info->interpolated = self.shouldFill;
     glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
     glBufferSubData(GL_ARRAY_BUFFER, 0, pointCount * sizeof(EZAudioPlotGLPoint), self.info->points);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Adjusting History Resolution
+//------------------------------------------------------------------------------
+
+- (int)rollingHistoryLength
+{
+    return self.info->historyInfo->bufferSize;
+}
+
+//------------------------------------------------------------------------------
+
+- (int)setRollingHistoryLength:(int)historyLength
+{
+    self.info->historyInfo->bufferSize = MIN(EZAudioPlotDefaultMaxHistoryBufferLength, historyLength);
+    return self.info->historyInfo->bufferSize;
 }
 
 //------------------------------------------------------------------------------
@@ -266,17 +295,22 @@ typedef struct
     // Draw the buffer
     //
 #if TARGET_OS_IPHONE
+    GLenum mode = self.info->interpolated ? GL_TRIANGLE_STRIP : GL_LINE_STRIP;
+    float interpolatedFactor = self.info->interpolated ? 2.0f : 1.0f;
+    float xscale = 2.0f / ((float)self.info->pointCount / interpolatedFactor);
+    GLKMatrix4 transform = GLKMatrix4MakeTranslation(-1.0f, 0.0f, 0.0f);
+    transform = GLKMatrix4Scale(transform, xscale, self.gain, 1.0f);
     [self.baseEffect prepareToDraw];
-    self.baseEffect.transform.modelviewMatrix = GLKMatrix4MakeXRotation(0);
+    self.baseEffect.transform.modelviewMatrix = transform;
     glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
     glEnableVertexAttribArray(GLKVertexAttribPosition);
     glVertexAttribPointer(GLKVertexAttribPosition, 2, GL_FLOAT, GL_FALSE, sizeof(EZAudioPlotGLPoint), NULL);
-    glDrawArrays(GL_LINE_STRIP, 0, self.info->pointCount);
+    glDrawArrays(mode, 0, self.info->pointCount);
     if (self.shouldMirror)
     {
         [self.baseEffect prepareToDraw];
-        self.baseEffect.transform.modelviewMatrix = GLKMatrix4MakeXRotation(M_PI);
-        glDrawArrays(GL_LINE_STRIP, 0, self.info->pointCount);
+        self.baseEffect.transform.modelviewMatrix = GLKMatrix4Rotate(transform, M_PI, 1.0f, 0.0f, 0.0f);
+        glDrawArrays(mode, 0, self.info->pointCount);
     }
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 #elif TARGET_OS_MAC
