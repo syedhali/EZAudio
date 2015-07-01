@@ -109,6 +109,10 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
     updatedPosition:(SInt64)framePosition
         inAudioFile:(EZAudioFile *)audioFile;
 
+
+- (void)audioPlayer:(EZAudioPlayer *)audioPlayer
+reachedEndOfAudioFile:(EZAudioFile *)audioFile;
+
 @end
 
 //------------------------------------------------------------------------------

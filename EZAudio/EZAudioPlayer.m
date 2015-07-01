@@ -372,6 +372,9 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
                    audioBufferList:audioBufferList
                         bufferSize:&bufferSize
                                eof:&eof];
+        if (eof && [self.delegate respondsToSelector:@selector(audioPlayer:reachedEndOfAudioFile:)]) {
+            [self.delegate audioPlayer:self reachedEndOfAudioFile:self.audioFile];
+        }
         if (eof && self.shouldLoop)
         {
             [self seekToFrame:0];
