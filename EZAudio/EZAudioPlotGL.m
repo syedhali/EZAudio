@@ -34,22 +34,12 @@
 
 typedef struct
 {
-    GLfloat x;
-    GLfloat y;
-} EZAudioPlotGLPoint;
-
-//------------------------------------------------------------------------------
-
-typedef struct
-{
     BOOL                interpolated;
     EZPlotHistoryInfo  *historyInfo;
     EZAudioPlotGLPoint *points;
     UInt32              pointCount;
     GLuint              vbo;
-#if !TARGET_OS_IPHONE
     GLuint              vab;
-#endif
 } EZAudioPlotGLInfo;
 
 //------------------------------------------------------------------------------
@@ -433,19 +423,44 @@ typedef struct
     [self.openGLContext makeCurrentContext];
     [self.openGLContext lock];
 #endif
+    [self redrawWithPoints:self.info->points
+                pointCount:self.info->pointCount
+                baseEffect:self.baseEffect
+        vertexBufferObject:self.info->vbo
+         vertexArrayBuffer:self.info->vab
+              interpolated:self.info->interpolated
+                  mirrored:self.shouldMirror
+                      gain:self.gain];
+#if !TARGET_OS_IPHONE
+    [self.openGLContext flushBuffer];
+    [self.openGLContext unlock];
+#endif
+}
+
+//------------------------------------------------------------------------------
+
+- (void)redrawWithPoints:(EZAudioPlotGLPoint *)points
+              pointCount:(UInt32)pointCount
+              baseEffect:(GLKBaseEffect *)baseEffect
+      vertexBufferObject:(GLuint)vbo
+       vertexArrayBuffer:(GLuint)vab
+            interpolated:(BOOL)interpolated
+                mirrored:(BOOL)mirrored
+                    gain:(float)gain
+{
     glClear(GL_COLOR_BUFFER_BIT);
-    GLenum mode = self.info->interpolated ? GL_TRIANGLE_STRIP : GL_LINE_STRIP;
-    float interpolatedFactor = self.info->interpolated ? 2.0f : 1.0f;
-    float xscale = 2.0f / ((float)self.info->pointCount / interpolatedFactor);
-    float yscale = 0.5f * self.gain;
+    GLenum mode = interpolated ? GL_TRIANGLE_STRIP : GL_LINE_STRIP;
+    float interpolatedFactor = interpolated ? 2.0f : 1.0f;
+    float xscale = 2.0f / ((float)pointCount / interpolatedFactor);
+    float yscale = 0.5f * gain;
     GLKMatrix4 transform = GLKMatrix4MakeTranslation(-1.0f, 0.0f, 0.0f);
     transform = GLKMatrix4Scale(transform, xscale, yscale, 1.0f);
-    self.baseEffect.transform.modelviewMatrix = transform;
+    baseEffect.transform.modelviewMatrix = transform;
 #if !TARGET_OS_IPHONE
-    glBindVertexArray(self.info->vab);
+    glBindVertexArray(vab);
 #endif
-    glBindBuffer(GL_ARRAY_BUFFER, self.info->vbo);
-    [self.baseEffect prepareToDraw];
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    [baseEffect prepareToDraw];
     glEnableVertexAttribArray(GLKVertexAttribPosition);
     glVertexAttribPointer(GLKVertexAttribPosition,
                           2,
@@ -453,17 +468,13 @@ typedef struct
                           GL_FALSE,
                           sizeof(EZAudioPlotGLPoint),
                           NULL);
-    glDrawArrays(mode, 0, self.info->pointCount);
-    if (self.shouldMirror)
+    glDrawArrays(mode, 0, pointCount);
+    if (mirrored)
     {
-        self.baseEffect.transform.modelviewMatrix = GLKMatrix4Rotate(transform, M_PI, 1.0f, 0.0f, 0.0f);
-        [self.baseEffect prepareToDraw];
-        glDrawArrays(mode, 0, self.info->pointCount);
+        baseEffect.transform.modelviewMatrix = GLKMatrix4Rotate(transform, M_PI, 1.0f, 0.0f, 0.0f);
+        [baseEffect prepareToDraw];
+        glDrawArrays(mode, 0, pointCount);
     }
-#if !TARGET_OS_IPHONE
-    [self.openGLContext flushBuffer];
-    [self.openGLContext unlock];
-#endif
 }
 
 //------------------------------------------------------------------------------

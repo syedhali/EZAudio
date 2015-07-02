@@ -30,8 +30,22 @@
 #import <OpenGL/OpenGL.h>
 #endif
 
+//------------------------------------------------------------------------------
+#pragma mark - Data Structures
+//------------------------------------------------------------------------------
+
+typedef struct
+{
+    GLfloat x;
+    GLfloat y;
+} EZAudioPlotGLPoint;
+
+//------------------------------------------------------------------------------
+#pragma mark - EZAudioPlotGL
+//------------------------------------------------------------------------------
+
 /**
- EZAudioPlotGL is a subclass of either the EZPlot on iOS or an NSOpenGLView on OSX. I apologize ahead of time for the weirdness in the docs for this class, but I had to do a bit of hackery to get a universal namespace for something works on both iOS and OSX without any additional components. The EZAudioPlotGL provides an the same utilities and interface as the EZAudioPlot with the added benefit of being GPU-accelerated. This is the recommended plot to use on iOS devices to get super fast real-time drawings of audio streams. For the methods and properties below I've included notes on the bottom just indicating which OS they correspond to. In most (if not all) use cases you can just refer to the EZPlot documentation to see which custom properties can be setup. There update function is the same as the EZPlot as well: `updateBuffer:withBufferSize:`
+ EZAudioPlotGL is a subclass of either a GLKView on iOS or an NSOpenGLView on OSX. As of 0.6.0 this class no longer depends on an embedded GLKViewController for iOS as the display link is just manually managed within this single view instead. The EZAudioPlotGL provides the same kind of audio plot as the EZAudioPlot, but uses OpenGL to GPU-accelerate the drawing of the points, which means you can fit a lot more points and complex geometries.
  */
 #if TARGET_OS_IPHONE
 @interface EZAudioPlotGL : GLKView
@@ -142,6 +156,14 @@
 #pragma mark - Subclass
 //------------------------------------------------------------------------------
 
+- (void)redrawWithPoints:(EZAudioPlotGLPoint *)points
+              pointCount:(UInt32)pointCount
+              baseEffect:(GLKBaseEffect *)baseEffect
+      vertexBufferObject:(GLuint)vbo
+       vertexArrayBuffer:(GLuint)vab
+            interpolated:(BOOL)interpolated
+                mirrored:(BOOL)mirrored
+                    gain:(float)gain;
 
 - (int)defaultRollingHistoryLength;
 
