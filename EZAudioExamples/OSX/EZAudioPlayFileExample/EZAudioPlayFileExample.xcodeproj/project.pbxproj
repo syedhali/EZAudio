@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		662428E61B451AF90069FFD7 /* EZAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 662428E51B451AF90069FFD7 /* EZAudio.framework */; };
-		662428E71B451AF90069FFD7 /* EZAudio.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 662428E51B451AF90069FFD7 /* EZAudio.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6611CEAE1B45F73100AE0EE8 /* EZAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6611CEAD1B45F73100AE0EE8 /* EZAudio.framework */; };
+		6611CEAF1B45F73100AE0EE8 /* EZAudio.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6611CEAD1B45F73100AE0EE8 /* EZAudio.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6628E2351B3A121A00020E56 /* simple-drum-beat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6628E2341B3A121A00020E56 /* simple-drum-beat.wav */; };
 		94056EFB185BD83400EB94BA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056EFA185BD83400EB94BA /* Cocoa.framework */; };
 		94056F05185BD83400EB94BA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94056F03185BD83400EB94BA /* InfoPlist.strings */; };
@@ -28,13 +28,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		662428E81B451AFA0069FFD7 /* Embed Frameworks */ = {
+		6611CEB01B45F73100AE0EE8 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				662428E71B451AF90069FFD7 /* EZAudio.framework in Embed Frameworks */,
+				6611CEAF1B45F73100AE0EE8 /* EZAudio.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -42,7 +42,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		662428E51B451AF90069FFD7 /* EZAudio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = EZAudio.framework; path = "/Users/haris/Library/Developer/Xcode/DerivedData/EZAudioExamplesOSX-coaaitxpxjzwgfdbxuusgvrdmjux/Build/Products/Debug/EZAudio.framework"; sourceTree = "<absolute>"; };
+		6611CEAD1B45F73100AE0EE8 /* EZAudio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = EZAudio.framework; path = /Users/haris/Documents/code/openSource/EZAudio/EZAudioExamples/OSX/Build/Products/Debug/EZAudio.framework; sourceTree = "<absolute>"; };
 		6628E2341B3A121A00020E56 /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "simple-drum-beat.wav"; path = "../../../simple-drum-beat.wav"; sourceTree = "<group>"; };
 		94056EF7185BD83400EB94BA /* EZAudioPlayFileExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EZAudioPlayFileExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94056EFA185BD83400EB94BA /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -81,7 +81,7 @@
 				94056F61185BDB3F00EB94BA /* QuartzCore.framework in Frameworks */,
 				94056F5F185BDB3900EB94BA /* GLKit.framework in Frameworks */,
 				94056F5D185BDB3500EB94BA /* OpenGL.framework in Frameworks */,
-				662428E61B451AF90069FFD7 /* EZAudio.framework in Frameworks */,
+				6611CEAE1B45F73100AE0EE8 /* EZAudio.framework in Frameworks */,
 				94056EFB185BD83400EB94BA /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -92,7 +92,7 @@
 		94056EEE185BD83400EB94BA = {
 			isa = PBXGroup;
 			children = (
-				662428E51B451AF90069FFD7 /* EZAudio.framework */,
+				6611CEAD1B45F73100AE0EE8 /* EZAudio.framework */,
 				94056F00185BD83400EB94BA /* EZAudioPlayFileExample */,
 				94056EF9185BD83400EB94BA /* Frameworks */,
 				94056EF8185BD83400EB94BA /* Products */,
@@ -171,7 +171,7 @@
 				94056EF3185BD83400EB94BA /* Sources */,
 				94056EF4185BD83400EB94BA /* Frameworks */,
 				94056EF5185BD83400EB94BA /* Resources */,
-				662428E81B451AFA0069FFD7 /* Embed Frameworks */,
+				6611CEB01B45F73100AE0EE8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -339,6 +339,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/haris/Documents/code/openSource/EZAudio/EZAudioExamples/OSX/Build/Products/Debug,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EZAudioPlayFileExample/EZAudioPlayFileExample-Prefix.pch";
 				INFOPLIST_FILE = "EZAudioPlayFileExample/EZAudioPlayFileExample-Info.plist";
@@ -353,6 +357,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/haris/Documents/code/openSource/EZAudio/EZAudioExamples/OSX/Build/Products/Debug,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EZAudioPlayFileExample/EZAudioPlayFileExample-Prefix.pch";
 				INFOPLIST_FILE = "EZAudioPlayFileExample/EZAudioPlayFileExample-Info.plist";
