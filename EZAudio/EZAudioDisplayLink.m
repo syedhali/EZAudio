@@ -45,9 +45,9 @@ static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLinkRef,
 
 @interface EZAudioDisplayLink ()
 #if TARGET_OS_IPHONE
-@property (nonatomic, strong, readwrite) CADisplayLink *displayLink;
+@property (nonatomic, strong) CADisplayLink *displayLink;
 #elif TARGET_OS_MAC
-@property (nonatomic, assign, readwrite) CVDisplayLinkRef displayLink;
+@property (nonatomic, assign) CVDisplayLinkRef displayLink;
 #endif
 @property (nonatomic, assign) BOOL stopped;
 @end
