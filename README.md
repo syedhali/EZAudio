@@ -4,7 +4,7 @@
 A simple, intuitive audio framework for iOS and OSX.
 
 # Note as of July 2, 2015
-Over the last week I've been rewriting the core components of EZAudio to be better, faster, and much more flexible. As EZAudio gets closer its 1.0 release the API has changed a little bit for each component and as a result this repo's README for the [Examples](#Examples) and [Core Components](#CoreComponents) is in a deprecated state, but will be updated tomorrow <b>July 3rd, 2015</b>. Happy coding!
+Over the last week I've been rewriting the core components of EZAudio to be better, faster, and much more flexible. As EZAudio gets closer its 1.0 release the API has changed a little bit for each component and as a result this repo's README for the [Examples](#Examples) and [Core Components](#CoreComponents) are in a deprecated state, but will be updated tomorrow <b>July 3rd, 2015</b>. Happy coding!
 
 ##Features
 ![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/EZAudioSummary.png "EZAudioFeatures")
