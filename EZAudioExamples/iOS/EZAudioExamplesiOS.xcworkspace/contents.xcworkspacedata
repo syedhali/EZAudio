@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../../EZAudio/iOS/EZAudio.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:EZAudioCoreGraphicsWaveformExample/EZAudioCoreGraphicsWaveformExample.xcodeproj">
    </FileRef>
    <FileRef

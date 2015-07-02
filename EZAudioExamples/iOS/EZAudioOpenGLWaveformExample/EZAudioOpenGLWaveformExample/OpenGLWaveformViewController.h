@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 // Import EZAudio header
-#import "EZAudio.h"
+#import <EZAudio/EZAudio.h>
 
 @interface OpenGLWaveformViewController : UIViewController <EZMicrophoneDelegate,
 UIPickerViewDataSource,

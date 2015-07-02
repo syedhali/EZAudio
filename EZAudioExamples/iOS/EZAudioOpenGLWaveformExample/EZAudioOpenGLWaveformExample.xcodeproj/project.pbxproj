@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6611CE431B45D1A400AE0EE8 /* EZAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6611CE421B45D1A400AE0EE8 /* EZAudio.framework */; };
 		66DB85B81B05714F0018EFC5 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66DB85B71B05714F0018EFC5 /* MainStoryboard.storyboard */; };
 		94056FEC185E5EAF00EB94BA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056FEB185E5EAF00EB94BA /* Foundation.framework */; };
 		94056FEE185E5EAF00EB94BA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056FED185E5EAF00EB94BA /* CoreGraphics.framework */; };
@@ -15,28 +16,14 @@
 		94056FF8185E5EAF00EB94BA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 94056FF7185E5EAF00EB94BA /* main.m */; };
 		94056FFC185E5EAF00EB94BA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94056FFB185E5EAF00EB94BA /* AppDelegate.m */; };
 		94057007185E5EAF00EB94BA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94057006185E5EAF00EB94BA /* Images.xcassets */; };
-		9405700E185E5EAF00EB94BA /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405700D185E5EAF00EB94BA /* XCTest.framework */; };
-		9405700F185E5EAF00EB94BA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056FEB185E5EAF00EB94BA /* Foundation.framework */; };
-		94057010185E5EAF00EB94BA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056FEF185E5EAF00EB94BA /* UIKit.framework */; };
-		94057018185E5EAF00EB94BA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94057016185E5EAF00EB94BA /* InfoPlist.strings */; };
-		9405701A185E5EAF00EB94BA /* EZAudioOpenGLWaveformExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94057019185E5EAF00EB94BA /* EZAudioOpenGLWaveformExampleTests.m */; };
 		94057050185E636100EB94BA /* OpenGLWaveformViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405704F185E636100EB94BA /* OpenGLWaveformViewController.m */; };
 		9417A6CB18658FC900D9D37B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A6CA18658FC900D9D37B /* AudioToolbox.framework */; };
 		9417A6CD18658FCD00D9D37B /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A6CC18658FCD00D9D37B /* GLKit.framework */; };
 		94FBB77518B15698007CAE45 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FBB77418B15698007CAE45 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		94057011185E5EAF00EB94BA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 94056FE0185E5EAF00EB94BA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 94056FE7185E5EAF00EB94BA;
-			remoteInfo = EZAudioOpenGLWaveformExample;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
+		6611CE421B45D1A400AE0EE8 /* EZAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EZAudio.framework; path = "../../../EZAudio/iOS/build/Debug-iphoneos/EZAudio.framework"; sourceTree = "<group>"; };
 		66DB85B71B05714F0018EFC5 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		94056FE8185E5EAF00EB94BA /* EZAudioOpenGLWaveformExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EZAudioOpenGLWaveformExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94056FEB185E5EAF00EB94BA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -49,7 +36,6 @@
 		94056FFA185E5EAF00EB94BA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		94056FFB185E5EAF00EB94BA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		94057006185E5EAF00EB94BA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		9405700C185E5EAF00EB94BA /* EZAudioOpenGLWaveformExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EZAudioOpenGLWaveformExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9405700D185E5EAF00EB94BA /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		94057015185E5EAF00EB94BA /* EZAudioOpenGLWaveformExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EZAudioOpenGLWaveformExampleTests-Info.plist"; sourceTree = "<group>"; };
 		94057017185E5EAF00EB94BA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -66,22 +52,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6611CE431B45D1A400AE0EE8 /* EZAudio.framework in Frameworks */,
 				94FBB77518B15698007CAE45 /* AVFoundation.framework in Frameworks */,
 				9417A6CD18658FCD00D9D37B /* GLKit.framework in Frameworks */,
 				9417A6CB18658FC900D9D37B /* AudioToolbox.framework in Frameworks */,
 				94056FEE185E5EAF00EB94BA /* CoreGraphics.framework in Frameworks */,
 				94056FF0185E5EAF00EB94BA /* UIKit.framework in Frameworks */,
 				94056FEC185E5EAF00EB94BA /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94057009185E5EAF00EB94BA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9405700E185E5EAF00EB94BA /* XCTest.framework in Frameworks */,
-				94057010185E5EAF00EB94BA /* UIKit.framework in Frameworks */,
-				9405700F185E5EAF00EB94BA /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,7 +79,6 @@
 			isa = PBXGroup;
 			children = (
 				94056FE8185E5EAF00EB94BA /* EZAudioOpenGLWaveformExample.app */,
-				9405700C185E5EAF00EB94BA /* EZAudioOpenGLWaveformExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -110,6 +86,7 @@
 		94056FEA185E5EAF00EB94BA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6611CE421B45D1A400AE0EE8 /* EZAudio.framework */,
 				94FBB77418B15698007CAE45 /* AVFoundation.framework */,
 				9417A6CC18658FCD00D9D37B /* GLKit.framework */,
 				9417A6CA18658FC900D9D37B /* AudioToolbox.framework */,
@@ -184,24 +161,6 @@
 			productReference = 94056FE8185E5EAF00EB94BA /* EZAudioOpenGLWaveformExample.app */;
 			productType = "com.apple.product-type.application";
 		};
-		9405700B185E5EAF00EB94BA /* EZAudioOpenGLWaveformExampleTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 94057020185E5EAF00EB94BA /* Build configuration list for PBXNativeTarget "EZAudioOpenGLWaveformExampleTests" */;
-			buildPhases = (
-				94057008185E5EAF00EB94BA /* Sources */,
-				94057009185E5EAF00EB94BA /* Frameworks */,
-				9405700A185E5EAF00EB94BA /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				94057012185E5EAF00EB94BA /* PBXTargetDependency */,
-			);
-			name = EZAudioOpenGLWaveformExampleTests;
-			productName = EZAudioOpenGLWaveformExampleTests;
-			productReference = 9405700C185E5EAF00EB94BA /* EZAudioOpenGLWaveformExampleTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -210,11 +169,6 @@
 			attributes = {
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Syed Haris Ali";
-				TargetAttributes = {
-					9405700B185E5EAF00EB94BA = {
-						TestTargetID = 94056FE7185E5EAF00EB94BA;
-					};
-				};
 			};
 			buildConfigurationList = 94056FE3185E5EAF00EB94BA /* Build configuration list for PBXProject "EZAudioOpenGLWaveformExample" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -230,7 +184,6 @@
 			projectRoot = "";
 			targets = (
 				94056FE7185E5EAF00EB94BA /* EZAudioOpenGLWaveformExample */,
-				9405700B185E5EAF00EB94BA /* EZAudioOpenGLWaveformExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -243,14 +196,6 @@
 				94057007185E5EAF00EB94BA /* Images.xcassets in Resources */,
 				66DB85B81B05714F0018EFC5 /* MainStoryboard.storyboard in Resources */,
 				94056FF6185E5EAF00EB94BA /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9405700A185E5EAF00EB94BA /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				94057018185E5EAF00EB94BA /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,23 +212,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		94057008185E5EAF00EB94BA /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9405701A185E5EAF00EB94BA /* EZAudioOpenGLWaveformExampleTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		94057012185E5EAF00EB94BA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 94056FE7185E5EAF00EB94BA /* EZAudioOpenGLWaveformExample */;
-			targetProxy = 94057011185E5EAF00EB94BA /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		94056FF4185E5EAF00EB94BA /* InfoPlist.strings */ = {
@@ -384,9 +313,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EZAudioOpenGLWaveformExample/EZAudioOpenGLWaveformExample-Prefix.pch";
 				INFOPLIST_FILE = "EZAudioOpenGLWaveformExample/EZAudioOpenGLWaveformExample-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -397,53 +328,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EZAudioOpenGLWaveformExample/EZAudioOpenGLWaveformExample-Prefix.pch";
 				INFOPLIST_FILE = "EZAudioOpenGLWaveformExample/EZAudioOpenGLWaveformExample-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		94057021185E5EAF00EB94BA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EZAudioOpenGLWaveformExample.app/EZAudioOpenGLWaveformExample";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "EZAudioOpenGLWaveformExample/EZAudioOpenGLWaveformExample-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "EZAudioOpenGLWaveformExampleTests/EZAudioOpenGLWaveformExampleTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		94057022185E5EAF00EB94BA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EZAudioOpenGLWaveformExample.app/EZAudioOpenGLWaveformExample";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "EZAudioOpenGLWaveformExample/EZAudioOpenGLWaveformExample-Prefix.pch";
-				INFOPLIST_FILE = "EZAudioOpenGLWaveformExampleTests/EZAudioOpenGLWaveformExampleTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
@@ -464,15 +355,6 @@
 			buildConfigurations = (
 				9405701E185E5EAF00EB94BA /* Debug */,
 				9405701F185E5EAF00EB94BA /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		94057020185E5EAF00EB94BA /* Build configuration list for PBXNativeTarget "EZAudioOpenGLWaveformExampleTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				94057021185E5EAF00EB94BA /* Debug */,
-				94057022185E5EAF00EB94BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

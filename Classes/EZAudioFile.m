@@ -27,7 +27,7 @@
 
 //------------------------------------------------------------------------------
 
-#import "EZAudio.h"
+#import <EZAudio/EZAudio.h>
 #import "EZAudioFloatConverter.h"
 #import "EZAudioFloatData.h"
 #include <pthread.h>

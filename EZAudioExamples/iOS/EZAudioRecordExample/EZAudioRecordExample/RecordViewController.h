@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 // Import EZAudio header
-#import "EZAudio.h"
+#import <EZAudio/EZAudio.h>
 
 // Import AVFoundation to play the file (will save EZAudioFile and EZOutput for separate example)
 #import <AVFoundation/AVFoundation.h>

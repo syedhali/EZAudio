@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
 
-#import "EZAudio.h"
+#import <EZAudio/EZAudio.h>
 
 @implementation EZAudio
 
