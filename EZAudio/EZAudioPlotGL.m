@@ -65,12 +65,14 @@ typedef struct
 - (void)dealloc
 {
     [self.displayLink stop];
+    self.displayLink = nil;
     [EZAudioUtilities freeHistoryInfo:self.info->historyInfo];
 #if !TARGET_OS_IPHONE
     glDeleteVertexArrays(1, &self.info->vab);
 #endif
     glDeleteBuffers(1, &self.info->vbo);
     free(self.info->points);
+    free(self.info);
     self.baseEffect = nil;
 }
 
@@ -173,10 +175,11 @@ typedef struct
     //
     self.gain = 1.0f;
 #if TARGET_OS_IPHONE
-    
+    self.backgroundColor = [UIColor colorWithRed:0.569f green:0.82f blue:0.478f alpha:1.0f];
+    self.color = [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f];
 #elif TARGET_OS_MAC
-    self.backgroundColor = [NSColor colorWithCalibratedRed:0.569 green:0.82 blue:0.478 alpha:1.0];
-    self.color = [NSColor colorWithCalibratedRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+    self.backgroundColor = [NSColor colorWithCalibratedRed:0.569f green:0.82f blue:0.478f alpha:1.0f];
+    self.color = [NSColor colorWithCalibratedRed:1.0f green:1.0f blue:1.0f alpha:1.0f];
 #endif
     
     //
