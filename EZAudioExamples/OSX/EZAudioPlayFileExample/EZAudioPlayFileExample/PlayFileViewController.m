@@ -313,13 +313,12 @@
     self.audioPlot.plotType     = EZPlotTypeBuffer;
     self.audioPlot.shouldFill   = YES;
     self.audioPlot.shouldMirror = YES;
-    [self.audioPlot clear];
     
     //
     // Plot the whole waveform
     //
     __weak typeof (self) weakSelf = self;
-    [self.audioFile getWaveformDataWithNumberOfPoints:256
+    [self.audioFile getWaveformDataWithNumberOfPoints:1024
                                            completion:^(float **waveformData,
                                                         int length)
     {

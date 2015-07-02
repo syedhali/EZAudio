@@ -23,126 +23,126 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "TargetConditionals.h"
+#import <GLKit/GLKit.h>
 #import "EZPlot.h"
-
-#if TARGET_OS_IPHONE
-#import <GLKit/GLKit.h>
-@class EZAudioPlotGLKViewController;
-#elif TARGET_OS_MAC
-#import <Cocoa/Cocoa.h>
-#import <GLKit/GLKit.h>
-#import <OpenGL/gl3.h>
-#import <QuartzCore/CVDisplayLink.h>
+#if !TARGET_OS_IPHONE
+#import <OpenGL/OpenGL.h>
 #endif
 
-#pragma mark - Enumerations
-/**
- Constant drawing types wrapping around the OpenGL equivalents. In the audio drawings the line strip will be the stroked graph while the triangle will provide the filled equivalent.
- */
-typedef NS_ENUM(NSUInteger,EZAudioPlotGLDrawType){
-  /**
-   *  Maps to the OpenGL constant for a line strip, which for the audio graph will correspond to a stroked drawing (no fill).
-   */
-  EZAudioPlotGLDrawTypeLineStrip     = GL_LINE_STRIP,
-  /**
-   *  Maps to the OpenGL constant for a triangle strip, which for the audio graph will correspond to a filled drawing.
-   */
-  EZAudioPlotGLDrawTypeTriangleStrip = GL_TRIANGLE_STRIP
-};
+//------------------------------------------------------------------------------
+#pragma mark - Data Structures
+//------------------------------------------------------------------------------
 
-#pragma mark - Structures
-/**
- A structure describing a 2D point (x,y) in space for an audio plot.
- */
-typedef struct {
-  GLfloat x;
-  GLfloat y;
+typedef struct
+{
+    GLfloat x;
+    GLfloat y;
 } EZAudioPlotGLPoint;
 
+//------------------------------------------------------------------------------
+#pragma mark - EZAudioPlotGL
+//------------------------------------------------------------------------------
+
 /**
- EZAudioPlotGL is a subclass of either the EZPlot on iOS or an NSOpenGLView on OSX. I apologize ahead of time for the weirdness in the docs for this class, but I had to do a bit of hackery to get a universal namespace for something works on both iOS and OSX without any additional components. The EZAudioPlotGL provides an the same utilities and interface as the EZAudioPlot with the added benefit of being GPU-accelerated. This is the recommended plot to use on iOS devices to get super fast real-time drawings of audio streams. For the methods and properties below I've included notes on the bottom just indicating which OS they correspond to. In most (if not all) use cases you can just refer to the EZPlot documentation to see which custom properties can be setup. There update function is the same as the EZPlot as well: `updateBuffer:withBufferSize:`
+ EZAudioPlotGL is a subclass of either a GLKView on iOS or an NSOpenGLView on OSX. As of 0.6.0 this class no longer depends on an embedded GLKViewController for iOS as the display link is just manually managed within this single view instead. The EZAudioPlotGL provides the same kind of audio plot as the EZAudioPlot, but uses OpenGL to GPU-accelerate the drawing of the points, which means you can fit a lot more points and complex geometries.
  */
 #if TARGET_OS_IPHONE
-@interface EZAudioPlotGL : EZPlot
+@interface EZAudioPlotGL : GLKView
 #elif TARGET_OS_MAC
 @interface EZAudioPlotGL : NSOpenGLView
 #endif
 
-#if TARGET_OS_IPHONE
-
-// Inherited from EZPlot
-
-#elif TARGET_OS_MAC
-
+//------------------------------------------------------------------------------
 #pragma mark - Properties
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Customizing The Plot's Appearance
 ///-----------------------------------------------------------
-/**
- The default background color of the plot. For iOS the color is specified as a UIColor while for OSX the color is an NSColor. The default value on both platforms is black.
- */
-@property (nonatomic,strong) id backgroundColor;
 
 /**
- The default color of the plot's data (i.e. waveform, y-axis values). For iOS the color is specified as a UIColor while for OSX the color is an NSColor. The default value on both platforms is red.
+ The default background color of the plot. For iOS the color is specified as a UIColor while for OSX the color is an NSColor. The default value on both platforms is a sweet looking green. 
+ @warning On OSX, if you set the background to a value where the alpha component is 0 then the EZAudioPlotGL will automatically set its superview to be layer-backed.
  */
-@property (nonatomic,strong) id color;
+@property (nonatomic, strong) id backgroundColor;
+
+//------------------------------------------------------------------------------
+
+/**
+ The default color of the plot's data (i.e. waveform, y-axis values). For iOS the color is specified as a UIColor while for OSX the color is an NSColor. The default value on both platforms is white.
+ */
+@property (nonatomic, strong) id color;
+
+//------------------------------------------------------------------------------
 
 /**
  The plot's gain value, which controls the scale of the y-axis values. The default value of the gain is 1.0f and should always be greater than 0.0f.
  */
-@property (nonatomic,assign,setter=setGain:) float gain;
+@property (nonatomic, assign) float gain;
+
+//------------------------------------------------------------------------------
 
 /**
- The type of plot as specified by the `EZPlotType` enumeration (i.e. a buffer or rolling plot type).
+ The type of plot as specified by the `EZPlotType` enumeration (i.e. a buffer or rolling plot type). Default is EZPlotTypeBuffer.
  */
-@property (nonatomic,assign,setter=setPlotType:) EZPlotType plotType;
+@property (nonatomic, assign) EZPlotType plotType;
+
+//------------------------------------------------------------------------------
 
 /**
- A BOOL indicating whether or not to fill in the graph. A value of YES will make a filled graph (filling in the space between the x-axis and the y-value), while a value of NO will create a stroked graph (connecting the points along the y-axis).
+ A BOOL indicating whether or not to fill in the graph. A value of YES will make a filled graph (filling in the space between the x-axis and the y-value), while a value of NO will create a stroked graph (connecting the points along the y-axis). Default is NO.
  */
-@property (nonatomic,assign,setter=setShouldFill:) BOOL shouldFill;
+@property (nonatomic, assign) BOOL shouldFill;
+
+//------------------------------------------------------------------------------
 
 /**
- A boolean indicating whether the graph should be rotated along the x-axis to give a mirrored reflection. This is typical for audio plots to produce the classic waveform look. A value of YES will produce a mirrored reflection of the y-values about the x-axis, while a value of NO will only plot the y-values.
+ A boolean indicating whether the graph should be rotated along the x-axis to give a mirrored reflection. This is typical for audio plots to produce the classic waveform look. A value of YES will produce a mirrored reflection of the y-values about the x-axis, while a value of NO will only plot the y-values. Default is NO.
  */
-@property (nonatomic,assign,setter=setShouldMirror:) BOOL shouldMirror;
+@property (nonatomic, assign) BOOL shouldMirror;
 
-#pragma mark - Get Samples
+//------------------------------------------------------------------------------
+#pragma mark - Updating The Plot
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Updating The Plot
 ///-----------------------------------------------------------
+
 /**
  Updates the plot with the new buffer data and tells the view to redraw itself. Caller will provide a float array with the values they expect to see on the y-axis. The plot will internally handle mapping the x-axis and y-axis to the current view port, any interpolation for fills effects, and mirroring.
  @param buffer     A float array of values to map to the y-axis.
  @param bufferSize The size of the float array that will be mapped to the y-axis.
- @warning The bufferSize is expected to be the same, constant value once initial triggered. For plots using OpenGL a vertex buffer object will be allocated with a maximum buffersize of (2 * the initial given buffer size) to account for any interpolation necessary for filling in the graph. Updates use the glBufferSubData(...) function, which will crash if the buffersize exceeds the initial maximum allocated size.
  */
--(void)updateBuffer:(float *)buffer
-     withBufferSize:(UInt32)bufferSize;
+-(void)updateBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize;
 
-#endif
-
+//------------------------------------------------------------------------------
 #pragma mark - Adjust Resolution
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Adjusting The Resolution
 ///-----------------------------------------------------------
 
 /**
- Sets the length of the rolling history display. Can grow or shrink the display up to the maximum size specified by the kEZAudioPlotMaxHistoryBufferLength macro. Will return the actual set value, which will be either the given value if smaller than the kEZAudioPlotMaxHistoryBufferLength or kEZAudioPlotMaxHistoryBufferLength if a larger value is attempted to be set.
+ Sets the length of the rolling history buffer (i.e. the number of points in the rolling plot's buffer). Can grow or shrink the display up to the maximum size specified by the `maximumRollingHistoryLength` method. Will return the actual set value, which will be either the given value if smaller than the `maximumRollingHistoryLength` or `maximumRollingHistoryLength` if a larger value is attempted to be set.
  @param  historyLength The new length of the rolling history buffer.
- @return The new value equal to the historyLength or the kEZAudioPlotMaxHistoryBufferLength.
+ @return The new value equal to the historyLength or the `maximumRollingHistoryLength`.
  */
 -(int)setRollingHistoryLength:(int)historyLength;
 
+//------------------------------------------------------------------------------
+
 /**
- Provides the length of the rolling history buffer
+ Provides the length of the rolling history buffer (i.e. the number of points in the rolling plot's buffer).
  *  @return An int representing the length of the rolling history buffer
  */
 -(int)rollingHistoryLength;
 
-#pragma mark - Shared Methods
+//------------------------------------------------------------------------------
+#pragma mark - Clearing The Plot
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Clearing The Plot
 ///-----------------------------------------------------------
@@ -152,32 +152,70 @@ typedef struct {
  */
 -(void)clear;
 
-///-----------------------------------------------------------
-/// @name Shared OpenGL Methods
-///-----------------------------------------------------------
-/**
- Converts a float array to an array of EZAudioPlotGLPoint structures that hold the (x,y) values the OpenGL buffer needs to properly plot its points.
- @param graph       A pointer to the array that should hold the EZAudioPlotGLPoint structures.
- @param graphSize   The size (or length) of the array with the EZAudioPlotGLPoint structures.
- @param drawingType The EZAudioPlotGLDrawType constant defining whether the plot should interpolate between points for a triangle strip (filled waveform) or not for a line strip (stroked waveform)
- @param buffer      The float array holding the audio data
- @param bufferSize  The size of the float array holding the audio data
- @param gain        The gain (always greater than 0.0) to apply to the amplitudes (y-values) of the graph. Y-values can only range from -1.0 to 1.0 so any value that's greater will be rounded to -1.0 or 1.0.
- */
-+(void)fillGraph:(EZAudioPlotGLPoint*)graph
-   withGraphSize:(UInt32)graphSize
-  forDrawingType:(EZAudioPlotGLDrawType)drawingType
-      withBuffer:(float*)buffer
-  withBufferSize:(UInt32)bufferSize
-        withGain:(float)gain;
+//------------------------------------------------------------------------------
+#pragma mark - Start/Stop Display Link
+//------------------------------------------------------------------------------
 
 /**
- Determines the proper size of a graph given a EZAudioPlotGLDrawType (line strip or triangle strip) and the size of the incoming buffer. Triangle strips require interpolating between points so the buffer becomes 2*bufferSize
- @param drawingType The EZAudioPlotGLDraw type (line strip or triangle strip)
- @param bufferSize  The size of the float array holding the audio data coming in.
- @return A Int32 representing the proper graph size that should be used to account for any necessary interpolating between points.
+ Call this method to tell the EZAudioDisplayLink to stop drawing temporarily.
  */
-+(UInt32)graphSizeForDrawingType:(EZAudioPlotGLDrawType)drawingType
-                  withBufferSize:(UInt32)bufferSize;
+- (void)pauseDrawing;
+
+//------------------------------------------------------------------------------
+
+/**
+  Call this method to manually tell the EZAudioDisplayLink to start drawing again.
+ */
+- (void)resumeDrawing;
+
+//------------------------------------------------------------------------------
+#pragma mark - Subclass
+//------------------------------------------------------------------------------
+
+///-----------------------------------------------------------
+/// @name Customizing The Drawing
+///-----------------------------------------------------------
+
+/**
+ This method is used to perform the actual OpenGL drawing code to clear the background and draw the lines representing the 2D audio plot. Subclasses can use the current implementation as an example and implement their own custom geometries. This is the analogy of overriding the drawRect: method in an NSView or UIView.
+ @param points       An array of EZAudioPlotGLPoint structures representing the mapped audio data to x,y coordinates. The x-axis goes from 0 to the number of points (pointCount) while the y-axis goes from -1 to 1. Check out the implementation of this method to see how the model view matrix of the base effect is transformed to map this properly to the viewport.
+ @param pointCount   A UInt32 representing the number of points contained in the points array.
+ @param baseEffect   An optional GLKBaseEffect to use as a default shader. Call prepareToDraw on the base effect before any glDrawArrays call.
+ @param vbo          The Vertex Buffer Object used to buffer the point data.
+ @param vab          The Vertex Array Buffer used to bind the Vertex Buffer Object. This is a Mac only thing, you can ignore this completely on iOS.
+ @param interpolated A BOOL indicating whether the data has been interpolated. This means the point data is twice as long, where every other point is 0 on the y-axis to allow drawing triangle stripes for filled in waveforms. Typically if the point data is interpolated you will be using the GL_TRIANGLE_STRIP drawing mode, while non-interpolated plots will just use a GL_LINE_STRIP drawing mode.
+ @param mirrored     A BOOL indicating whether the plot should be mirrored about the y-axis (or whatever geometry you come up with).
+ @param gain         A float representing a gain that should be used to influence the height or intensity of your geometry's shape. A gain of 0.0 means silence, a gain of 1.0 means full volume (you're welcome to boost this to whatever you want).
+ */
+- (void)redrawWithPoints:(EZAudioPlotGLPoint *)points
+              pointCount:(UInt32)pointCount
+              baseEffect:(GLKBaseEffect *)baseEffect
+      vertexBufferObject:(GLuint)vbo
+       vertexArrayBuffer:(GLuint)vab
+            interpolated:(BOOL)interpolated
+                mirrored:(BOOL)mirrored
+                    gain:(float)gain;
+
+//------------------------------------------------------------------------------
+
+///-----------------------------------------------------------
+/// @name Subclass Methods
+///-----------------------------------------------------------
+
+/**
+ Provides the default length of the rolling history buffer when the plot is initialized. Default is `EZAudioPlotDefaultHistoryBufferLength` constant.
+ @return An int describing the initial length of the rolling history buffer.
+ */
+- (int)defaultRollingHistoryLength;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the default maximum rolling history length - that is, the maximum amount of points the `setRollingHistoryLength:` method may be set to. If a length higher than this is set then the plot will likely crash because the appropriate resources are only allocated once during the plot's initialization step. Defualt is `EZAudioPlotDefaultMaxHistoryBufferLength` constant.
+ @return An int describing the maximum length of the absolute rolling history buffer.
+ */
+- (int)maximumRollingHistoryLength;
+
+//------------------------------------------------------------------------------
 
 @end

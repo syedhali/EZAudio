@@ -41,9 +41,9 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
 
 @interface EZAudioPlot () <EZAudioDisplayLinkDelegate>
 @property (nonatomic, strong) EZAudioDisplayLink *displayLink;
-@property (nonatomic, assign) EZPlotHistoryInfo *historyInfo;
-@property (nonatomic, assign) CGPoint *points;
-@property (nonatomic, assign) UInt32 pointCount;
+@property (nonatomic, assign) EZPlotHistoryInfo  *historyInfo;
+@property (nonatomic, assign) CGPoint            *points;
+@property (nonatomic, assign) UInt32              pointCount;
 @end
 
 //------------------------------------------------------------------------------

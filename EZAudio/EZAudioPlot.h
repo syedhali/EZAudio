@@ -24,8 +24,6 @@
 //  THE SOFTWARE.
 
 #import <QuartzCore/QuartzCore.h>
-#import "TargetConditionals.h"
-#import "EZAudioUtilities.h"
 #import "EZPlot.h"
 
 @class EZAudio;
@@ -115,16 +113,16 @@ FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength;
 ///-----------------------------------------------------------
 
 /**
- The length of the rolling history display. Can grow or shrink the display up to the maximum size specified by the kEZAudioPlotMaxHistoryBufferLength macro. Will return the actual set value, which will be either the given value if smaller than the kEZAudioPlotMaxHistoryBufferLength or kEZAudioPlotMaxHistoryBufferLength if a larger value is attempted to be set.
+ Sets the length of the rolling history buffer (i.e. the number of points in the rolling plot's buffer). Can grow or shrink the display up to the maximum size specified by the `maximumRollingHistoryLength` method. Will return the actual set value, which will be either the given value if smaller than the `maximumRollingHistoryLength` or `maximumRollingHistoryLength` if a larger value is attempted to be set.
  @param  historyLength The new length of the rolling history buffer.
- @return The new value equal to the historyLength or the kEZAudioPlotMaxHistoryBufferLength.
+ @return The new value equal to the historyLength or the `maximumRollingHistoryLength`.
  */
 -(int)setRollingHistoryLength:(int)historyLength;
 
 //------------------------------------------------------------------------------
 
 /**
- Provides the length of the rolling history buffer
+ Provides the length of the rolling history buffer (i.e. the number of points in the rolling plot's buffer).
  *  @return An int representing the length of the rolling history buffer
  */
 -(int)rollingHistoryLength;
@@ -187,8 +185,7 @@ FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength;
  @param data   A float array of the sample data. Subclasses should copy this data to a separate array to avoid threading issues.
  @param length The length of the float array as an int.
  */
--(void)setSampleData:(float *)data
-              length:(int)length;
+-(void)setSampleData:(float *)data length:(int)length;
 
 //------------------------------------------------------------------------------
 

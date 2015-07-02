@@ -40,7 +40,10 @@
  */
 @interface FFTViewController : UIViewController <EZMicrophoneDelegate>
 
+//------------------------------------------------------------------------------
 #pragma mark - Components
+//------------------------------------------------------------------------------
+
 /**
  EZAudioPlot for frequency plot
  */
