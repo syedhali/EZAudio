@@ -7,35 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6611CE781B45EB3200AE0EE8 /* EZAudioDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE571B45EB3200AE0EE8 /* EZAudioDevice.h */; };
+		6611CE781B45EB3200AE0EE8 /* EZAudioDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE571B45EB3200AE0EE8 /* EZAudioDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6611CE791B45EB3200AE0EE8 /* EZAudioDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 6611CE581B45EB3200AE0EE8 /* EZAudioDevice.m */; };
-		6611CE7A1B45EB3200AE0EE8 /* EZAudioFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE591B45EB3200AE0EE8 /* EZAudioFile.h */; };
+		6611CE7A1B45EB3200AE0EE8 /* EZAudioFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE591B45EB3200AE0EE8 /* EZAudioFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6611CE7B1B45EB3200AE0EE8 /* EZAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 6611CE5A1B45EB3200AE0EE8 /* EZAudioFile.m */; };
-		6611CE7C1B45EB3200AE0EE8 /* EZAudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE5B1B45EB3200AE0EE8 /* EZAudioPlayer.h */; };
+		6611CE7C1B45EB3200AE0EE8 /* EZAudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE5B1B45EB3200AE0EE8 /* EZAudioPlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6611CE7D1B45EB3200AE0EE8 /* EZAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6611CE5C1B45EB3200AE0EE8 /* EZAudioPlayer.m */; };
-		6611CE7E1B45EB3200AE0EE8 /* EZMicrophone.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE5D1B45EB3200AE0EE8 /* EZMicrophone.h */; };
+		6611CE7E1B45EB3200AE0EE8 /* EZMicrophone.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE5D1B45EB3200AE0EE8 /* EZMicrophone.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6611CE7F1B45EB3200AE0EE8 /* EZMicrophone.m in Sources */ = {isa = PBXBuildFile; fileRef = 6611CE5E1B45EB3200AE0EE8 /* EZMicrophone.m */; };
-		6611CE801B45EB3200AE0EE8 /* EZOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE5F1B45EB3200AE0EE8 /* EZOutput.h */; };
+		6611CE801B45EB3200AE0EE8 /* EZOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE5F1B45EB3200AE0EE8 /* EZOutput.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6611CE811B45EB3200AE0EE8 /* EZOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 6611CE601B45EB3200AE0EE8 /* EZOutput.m */; };
-		6611CE821B45EB3200AE0EE8 /* EZRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE611B45EB3200AE0EE8 /* EZRecorder.h */; };
+		6611CE821B45EB3200AE0EE8 /* EZRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE611B45EB3200AE0EE8 /* EZRecorder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6611CE831B45EB3200AE0EE8 /* EZRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6611CE621B45EB3200AE0EE8 /* EZRecorder.m */; };
 		6611CE841B45EB3200AE0EE8 /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 6611CE641B45EB3200AE0EE8 /* TPCircularBuffer.c */; };
-		6611CE851B45EB3200AE0EE8 /* TPCircularBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE651B45EB3200AE0EE8 /* TPCircularBuffer.h */; };
-		6611CE861B45EB3200AE0EE8 /* EZAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE661B45EB3200AE0EE8 /* EZAudio.h */; };
+		6611CE851B45EB3200AE0EE8 /* TPCircularBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE651B45EB3200AE0EE8 /* TPCircularBuffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6611CE861B45EB3200AE0EE8 /* EZAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE661B45EB3200AE0EE8 /* EZAudio.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6611CE871B45EB3200AE0EE8 /* EZAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 6611CE671B45EB3200AE0EE8 /* EZAudio.m */; };
-		6611CE881B45EB3200AE0EE8 /* EZAudioDisplayLink.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE691B45EB3200AE0EE8 /* EZAudioDisplayLink.h */; };
+		6611CE881B45EB3200AE0EE8 /* EZAudioDisplayLink.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE691B45EB3200AE0EE8 /* EZAudioDisplayLink.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6611CE891B45EB3200AE0EE8 /* EZAudioDisplayLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6611CE6A1B45EB3200AE0EE8 /* EZAudioDisplayLink.m */; };
-		6611CE8A1B45EB3200AE0EE8 /* EZAudioPlot.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE6B1B45EB3200AE0EE8 /* EZAudioPlot.h */; };
+		6611CE8A1B45EB3200AE0EE8 /* EZAudioPlot.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE6B1B45EB3200AE0EE8 /* EZAudioPlot.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6611CE8B1B45EB3200AE0EE8 /* EZAudioPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 6611CE6C1B45EB3200AE0EE8 /* EZAudioPlot.m */; };
-		6611CE8C1B45EB3200AE0EE8 /* EZAudioPlotGL.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE6D1B45EB3200AE0EE8 /* EZAudioPlotGL.h */; };
+		6611CE8C1B45EB3200AE0EE8 /* EZAudioPlotGL.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE6D1B45EB3200AE0EE8 /* EZAudioPlotGL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6611CE8D1B45EB3200AE0EE8 /* EZAudioPlotGL.m in Sources */ = {isa = PBXBuildFile; fileRef = 6611CE6E1B45EB3200AE0EE8 /* EZAudioPlotGL.m */; };
-		6611CE8E1B45EB3200AE0EE8 /* EZPlot.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE6F1B45EB3200AE0EE8 /* EZPlot.h */; };
+		6611CE8E1B45EB3200AE0EE8 /* EZPlot.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE6F1B45EB3200AE0EE8 /* EZPlot.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6611CE8F1B45EB3200AE0EE8 /* EZPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 6611CE701B45EB3200AE0EE8 /* EZPlot.m */; };
-		6611CE901B45EB3200AE0EE8 /* EZAudioFloatConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE721B45EB3200AE0EE8 /* EZAudioFloatConverter.h */; };
+		6611CE901B45EB3200AE0EE8 /* EZAudioFloatConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE721B45EB3200AE0EE8 /* EZAudioFloatConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6611CE911B45EB3200AE0EE8 /* EZAudioFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6611CE731B45EB3200AE0EE8 /* EZAudioFloatConverter.m */; };
-		6611CE921B45EB3200AE0EE8 /* EZAudioFloatData.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE741B45EB3200AE0EE8 /* EZAudioFloatData.h */; };
+		6611CE921B45EB3200AE0EE8 /* EZAudioFloatData.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE741B45EB3200AE0EE8 /* EZAudioFloatData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6611CE931B45EB3200AE0EE8 /* EZAudioFloatData.m in Sources */ = {isa = PBXBuildFile; fileRef = 6611CE751B45EB3200AE0EE8 /* EZAudioFloatData.m */; };
-		6611CE941B45EB3200AE0EE8 /* EZAudioUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE761B45EB3200AE0EE8 /* EZAudioUtilities.h */; };
+		6611CE941B45EB3200AE0EE8 /* EZAudioUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 6611CE761B45EB3200AE0EE8 /* EZAudioUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6611CE951B45EB3200AE0EE8 /* EZAudioUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 6611CE771B45EB3200AE0EE8 /* EZAudioUtilities.m */; };
 /* End PBXBuildFile section */
 

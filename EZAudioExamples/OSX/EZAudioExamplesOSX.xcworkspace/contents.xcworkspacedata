@@ -5,7 +5,7 @@
       location = "group:../../EZAudio/OSX/EZAudio.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:EZAudioCoreGraphicsWaveformExample/EZAudioCoreGraphicsWaveformExample.xcodeproj">
+      location = "container:EZAudioCoreGraphicsWaveformExample/EZAudioCoreGraphicsWaveformExample.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:EZAudioOpenGLWaveformExample/EZAudioOpenGLWaveformExample.xcodeproj">

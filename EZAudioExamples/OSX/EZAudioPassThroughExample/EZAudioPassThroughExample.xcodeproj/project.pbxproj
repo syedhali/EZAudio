@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6611CECA1B46002200AE0EE8 /* EZAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 662428F11B451B100069FFD7 /* EZAudio.framework */; };
 		941D71B81864C457007D52D8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 941D71B71864C457007D52D8 /* Cocoa.framework */; };
 		941D71C21864C457007D52D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 941D71C01864C457007D52D8 /* InfoPlist.strings */; };
 		941D71C41864C457007D52D8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 941D71C31864C457007D52D8 /* main.m */; };
@@ -26,7 +25,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		662428F11B451B100069FFD7 /* EZAudio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = EZAudio.framework; path = "/Users/haris/Library/Developer/Xcode/DerivedData/EZAudioExamplesOSX-coaaitxpxjzwgfdbxuusgvrdmjux/Build/Products/Debug/EZAudio.framework"; sourceTree = "<absolute>"; };
 		941D71B41864C457007D52D8 /* EZAudioPassThroughExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EZAudioPassThroughExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		941D71B71864C457007D52D8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		941D71BA1864C457007D52D8 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -58,7 +56,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6611CECA1B46002200AE0EE8 /* EZAudio.framework in Frameworks */,
 				941D721D1864C4C0007D52D8 /* QuartzCore.framework in Frameworks */,
 				941D721A1864C4AD007D52D8 /* GLKit.framework in Frameworks */,
 				941D721B1864C4AD007D52D8 /* OpenGL.framework in Frameworks */,
@@ -75,7 +72,6 @@
 		941D71AB1864C456007D52D8 = {
 			isa = PBXGroup;
 			children = (
-				662428F11B451B100069FFD7 /* EZAudio.framework */,
 				941D71BD1864C457007D52D8 /* EZAudioPassThroughExample */,
 				941D71B61864C457007D52D8 /* Frameworks */,
 				941D71B51864C457007D52D8 /* Products */,

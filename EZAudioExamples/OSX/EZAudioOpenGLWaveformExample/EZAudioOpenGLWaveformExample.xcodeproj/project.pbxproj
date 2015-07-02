@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6611CEC61B45FFDB00AE0EE8 /* EZAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 662428E11B451AEE0069FFD7 /* EZAudio.framework */; };
 		94056D97185BB0BC00EB94BA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056D96185BB0BC00EB94BA /* Cocoa.framework */; };
 		94056DA1185BB0BC00EB94BA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94056D9F185BB0BC00EB94BA /* InfoPlist.strings */; };
 		94056DA3185BB0BC00EB94BA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 94056DA2185BB0BC00EB94BA /* main.m */; };
@@ -26,7 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		662428E11B451AEE0069FFD7 /* EZAudio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = EZAudio.framework; path = "/Users/haris/Library/Developer/Xcode/DerivedData/EZAudioExamplesOSX-coaaitxpxjzwgfdbxuusgvrdmjux/Build/Products/Debug/EZAudio.framework"; sourceTree = "<absolute>"; };
+		662428E11B451AEE0069FFD7 /* EZAudio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = EZAudio.framework; path = ../../../EZAudio/OSX/EZAudio.framework; sourceTree = SOURCE_ROOT; };
 		94056D93185BB0BC00EB94BA /* EZAudioOpenGLWaveformExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EZAudioOpenGLWaveformExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94056D96185BB0BC00EB94BA /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		94056D99185BB0BC00EB94BA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -58,7 +57,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6611CEC61B45FFDB00AE0EE8 /* EZAudio.framework in Frameworks */,
 				94056DD8185BB0F400EB94BA /* AudioToolbox.framework in Frameworks */,
 				94056DD9185BB0F400EB94BA /* AudioUnit.framework in Frameworks */,
 				94056DDA185BB0F400EB94BA /* CoreAudio.framework in Frameworks */,
