@@ -30,7 +30,6 @@
 		66755A371B3B790D0013E67E /* EZAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755A1A1B3B790D0013E67E /* EZAudioPlayer.m */; };
 		66755A381B3B790D0013E67E /* EZAudioPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755A1C1B3B790D0013E67E /* EZAudioPlot.m */; };
 		66755A391B3B790D0013E67E /* EZAudioPlotGL.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755A1E1B3B790D0013E67E /* EZAudioPlotGL.m */; };
-		66755A3A1B3B790D0013E67E /* EZAudioPlotGLKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755A201B3B790D0013E67E /* EZAudioPlotGLKViewController.m */; };
 		66755A3B1B3B790D0013E67E /* EZAudioUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755A221B3B790D0013E67E /* EZAudioUtilities.m */; };
 		66755A3C1B3B790D0013E67E /* EZMicrophone.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755A241B3B790D0013E67E /* EZMicrophone.m */; };
 		66755A3D1B3B790D0013E67E /* EZOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 66755A261B3B790D0013E67E /* EZOutput.m */; };
@@ -89,8 +88,6 @@
 		66755A1C1B3B790D0013E67E /* EZAudioPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudioPlot.m; sourceTree = "<group>"; };
 		66755A1D1B3B790D0013E67E /* EZAudioPlotGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioPlotGL.h; sourceTree = "<group>"; };
 		66755A1E1B3B790D0013E67E /* EZAudioPlotGL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudioPlotGL.m; sourceTree = "<group>"; };
-		66755A1F1B3B790D0013E67E /* EZAudioPlotGLKViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioPlotGLKViewController.h; sourceTree = "<group>"; };
-		66755A201B3B790D0013E67E /* EZAudioPlotGLKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudioPlotGLKViewController.m; sourceTree = "<group>"; };
 		66755A211B3B790D0013E67E /* EZAudioUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioUtilities.h; sourceTree = "<group>"; };
 		66755A221B3B790D0013E67E /* EZAudioUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudioUtilities.m; sourceTree = "<group>"; };
 		66755A231B3B790D0013E67E /* EZMicrophone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZMicrophone.h; sourceTree = "<group>"; };
@@ -183,8 +180,6 @@
 				66755A1C1B3B790D0013E67E /* EZAudioPlot.m */,
 				66755A1D1B3B790D0013E67E /* EZAudioPlotGL.h */,
 				66755A1E1B3B790D0013E67E /* EZAudioPlotGL.m */,
-				66755A1F1B3B790D0013E67E /* EZAudioPlotGLKViewController.h */,
-				66755A201B3B790D0013E67E /* EZAudioPlotGLKViewController.m */,
 				66755A211B3B790D0013E67E /* EZAudioUtilities.h */,
 				66755A221B3B790D0013E67E /* EZAudioUtilities.m */,
 				66755A231B3B790D0013E67E /* EZMicrophone.h */,
@@ -425,7 +420,6 @@
 				66755A371B3B790D0013E67E /* EZAudioPlayer.m in Sources */,
 				94056D88185B97E300EB94BA /* CoreGraphicsWaveformViewController.m in Sources */,
 				66755A391B3B790D0013E67E /* EZAudioPlotGL.m in Sources */,
-				66755A3A1B3B790D0013E67E /* EZAudioPlotGLKViewController.m in Sources */,
 				66755A341B3B790D0013E67E /* EZAudioFile.m in Sources */,
 				66755A3D1B3B790D0013E67E /* EZOutput.m in Sources */,
 				66755A3B1B3B790D0013E67E /* EZAudioUtilities.m in Sources */,

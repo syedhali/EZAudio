@@ -455,7 +455,7 @@ typedef struct
     GLenum mode = interpolated ? GL_TRIANGLE_STRIP : GL_LINE_STRIP;
     float interpolatedFactor = interpolated ? 2.0f : 1.0f;
     float xscale = 2.0f / ((float)pointCount / interpolatedFactor);
-    float yscale = 0.5f * gain;
+    float yscale = 1.0f * gain;
     GLKMatrix4 transform = GLKMatrix4MakeTranslation(-1.0f, 0.0f, 0.0f);
     transform = GLKMatrix4Scale(transform, xscale, yscale, 1.0f);
     baseEffect.transform.modelviewMatrix = transform;

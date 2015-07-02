@@ -25,22 +25,25 @@
 
 #import "PassThroughViewController.h"
 
-@interface PassThroughViewController (){
-  TPCircularBuffer _circularBuffer;
-}
-#pragma mark - UI Extras
-@property (nonatomic,weak) IBOutlet UILabel *microphoneTextLabel;
-@end
+//------------------------------------------------------------------------------
+#pragma mark - PassThroughViewController (Implementation)
+//------------------------------------------------------------------------------
 
 @implementation PassThroughViewController
 
+//------------------------------------------------------------------------------
 #pragma mark - Status Bar Style
+//------------------------------------------------------------------------------
+
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - Customize the Audio Plot
+//------------------------------------------------------------------------------
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -97,62 +100,86 @@
   
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - Actions
--(void)changePlotType:(id)sender {
-  NSInteger selectedSegment = [sender selectedSegmentIndex];
-  switch(selectedSegment){
-    case 0:
-      [self drawBufferPlot];
-      break;
-    case 1:
-      [self drawRollingPlot];
-      break;
-    default:
-      break;
-  }
+//------------------------------------------------------------------------------
+
+- (void)changePlotType:(id)sender
+{
+    NSInteger selectedSegment = [sender selectedSegmentIndex];
+    switch(selectedSegment)
+    {
+        case 0:
+            [self drawBufferPlot];
+            break;
+        case 1:
+            [self drawRollingPlot];
+            break;
+        default:
+            break;
+    }
 }
 
--(void)toggleMicrophone:(id)sender {
-  if( ![(UISwitch*)sender isOn] ){
-    [[EZMicrophone sharedMicrophone] stopFetchingAudio];
-    self.microphoneTextLabel.text = @"Microphone Off";
-  }
-  else {
-    [[EZMicrophone sharedMicrophone] startFetchingAudio];
-    self.microphoneTextLabel.text = @"Microphone On";
-  }
+//------------------------------------------------------------------------------
+
+- (void)toggleMicrophone:(id)sender
+{
+    if( ![(UISwitch*)sender isOn] )
+    {
+        [[EZMicrophone sharedMicrophone] stopFetchingAudio];
+        self.microphoneTextLabel.text = @"Microphone Off";
+    }
+    else
+    {
+        [[EZMicrophone sharedMicrophone] startFetchingAudio];
+        self.microphoneTextLabel.text = @"Microphone On";
+    }
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - Action Extensions
+//------------------------------------------------------------------------------
+
 /*
  Give the visualization of the current buffer (this is almost exactly the openFrameworks audio input eample)
  */
--(void)drawBufferPlot {
-  // Change the plot type to the buffer plot
-  self.audioPlot.plotType = EZPlotTypeBuffer;
-  // Don't mirror over the x-axis
-  self.audioPlot.shouldMirror = NO;
-  // Don't fill
-  self.audioPlot.shouldFill = NO;
+- (void)drawBufferPlot
+{
+    // Change the plot type to the buffer plot
+    self.audioPlot.plotType = EZPlotTypeBuffer;
+    // Don't mirror over the x-axis
+    self.audioPlot.shouldMirror = NO;
+    // Don't fill
+    self.audioPlot.shouldFill = NO;
 }
+
+//------------------------------------------------------------------------------
 
 /*
  Give the classic mirrored, rolling waveform look
  */
--(void)drawRollingPlot {
-  self.audioPlot.plotType = EZPlotTypeRolling;
-  self.audioPlot.shouldFill = YES;
-  self.audioPlot.shouldMirror = YES;
+- (void)drawRollingPlot
+{
+    self.audioPlot.plotType = EZPlotTypeRolling;
+    self.audioPlot.shouldFill = YES;
+    self.audioPlot.shouldMirror = YES;
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - EZMicrophoneDelegate
--(void)microphone:(EZMicrophone *)microphone
- hasAudioReceived:(float **)buffer
-   withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
-  });
+//------------------------------------------------------------------------------
+
+- (void)    microphone:(EZMicrophone *)microphone
+     hasAudioReceived:(float **)buffer
+       withBufferSize:(UInt32)bufferSize
+ withNumberOfChannels:(UInt32)numberOfChannels
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
+    });
 }
+
+//------------------------------------------------------------------------------
 
 @end
