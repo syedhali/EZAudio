@@ -153,6 +153,22 @@ typedef struct
 -(void)clear;
 
 //------------------------------------------------------------------------------
+#pragma mark - Start/Stop Display Link
+//------------------------------------------------------------------------------
+
+/**
+ Call this method to tell the EZAudioDisplayLink to stop drawing temporarily.
+ */
+- (void)pauseDrawing;
+
+//------------------------------------------------------------------------------
+
+/**
+  Call this method to manually tell the EZAudioDisplayLink to start drawing again.
+ */
+- (void)resumeDrawing;
+
+//------------------------------------------------------------------------------
 #pragma mark - Subclass
 //------------------------------------------------------------------------------
 
