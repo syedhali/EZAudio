@@ -421,12 +421,12 @@ typedef NSColor EZColor;
 ///-----------------------------------------------------------
 
 /**
- <#Description#>
- @param color <#color description#>
- @param red   <#red description#>
- @param green <#green description#>
- @param blue  <#blue description#>
- @param alpha <#alpha description#>
+ Helper function to get the color components from a CGColorRef in the RGBA colorspace.
+ @param color A CGColorRef that represents a color.
+ @param red   A pointer to a CGFloat to hold the value of the red component. This value will be between 0 and 1.
+ @param green A pointer to a CGFloat to hold the value of the green component. This value will be between 0 and 1.
+ @param blue  A pointer to a CGFloat to hold the value of the blue component. This value will be between 0 and 1.
+ @param alpha A pointer to a CGFloat to hold the value of the alpha component. This value will be between 0 and 1.
  */
 + (void)getColorComponentsFromCGColor:(CGColorRef)color
                                   red:(CGFloat *)red
@@ -508,6 +508,10 @@ typedef NSColor EZColor;
 
 //------------------------------------------------------------------------------
 
+/**
+ Zeroes out a EZPlotHistoryInfo data structure without freeing the resources.
+ @param historyInfo A pointer to a EZPlotHistoryInfo data structure
+ */
 + (void)clearHistoryInfo:(EZPlotHistoryInfo *)historyInfo;
 
 //------------------------------------------------------------------------------
