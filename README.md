@@ -4,7 +4,7 @@
 A simple, intuitive audio framework for iOS and OSX.
 
 # Note as of July 2, 2015
-Over the last week I've been rewriting the core components of EZAudio to be better, faster, and much more flexible. As EZAudio gets closer its 1.0 release the API has changed a little bit for each component and as a result this repo's README for the [Examples](#Examples) and [Core Components](#CoreComponents) are in a deprecated state, but will be updated tomorrow <b>July 3rd, 2015</b>. Happy coding!
+Over the last week I've been rewriting the core components of EZAudio to be faster and much more flexible. As EZAudio gets closer its 1.0 release the API has changed a little bit for each component and as a result this repo's README for the [Examples](#Examples) and [Core Components](#CoreComponents) are in a deprecated state, but will be updated tomorrow <b>July 3rd, 2015</b>. As of the `0.7.1` release you should be able to use EZAudio and the Amazing Audio Engine by using the `EZAudio/Core` Cocoapod (see [Using EZAudio & The Amazing Audio Engine](#AmazingAudioEngineCocoapod))
 
 ##Features
 ![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/EZAudioSummary.png "EZAudioFeatures")
@@ -81,7 +81,7 @@ Shows how to calculate the real-time FFT of the audio data coming from the `EZMi
 The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/0.7.1/
 <br>You can also generate the docset yourself using appledocs by running the appledocs on the EZAudio source folder.
 
-##Getting Started
+##<a name="GettingStarted">Getting Started
 To begin using `EZAudio` you must first make sure you have the proper build requirements and frameworks. Below you'll find explanations of each component and code snippets to show how to use each to perform common tasks like getting microphone data, updating audio waveform plots, reading/seeking through audio files, and performing playback.
 
 ###Build Requirements
@@ -105,11 +105,18 @@ To begin using `EZAudio` you must first make sure you have the proper build requ
 - OpenGL
 - GLKit
 
-###Adding To Project
+###<a name="AddingToProject">Adding To Project
 You can add EZAudio to your project in a few ways: <br><br>1.) The easiest way to use EZAudio is via <a href="http://cocoapods.org/", target="_blank">Cocoapods</a>. Simply add EZAudio to your <a href="http://guides.cocoapods.org/using/the-podfile.html", target="_blank">Podfile</a> like so:
 
 `
 pod 'EZAudio', '~> 0.7.1'
+`
+
+####<a name="AmazingAudioEngineCocoapod">Using EZAudio & The Amazing Audio Engine
+If you're also using the Amazing Audio Engine then use the `EZAudio/Core` subspec like so:
+
+`
+pod 'EZAudio/Core', '~> 0.7.1'
 `
 
 2.) Alternatively, you could clone or fork this repo and just drag and drop the source into your project. 
