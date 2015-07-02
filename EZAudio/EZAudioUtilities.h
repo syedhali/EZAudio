@@ -420,6 +420,14 @@ typedef NSColor EZColor;
 /// @name Color Utility
 ///-----------------------------------------------------------
 
+/**
+ <#Description#>
+ @param color <#color description#>
+ @param red   <#red description#>
+ @param green <#green description#>
+ @param blue  <#blue description#>
+ @param alpha <#alpha description#>
+ */
 + (void)getColorComponentsFromCGColor:(CGColorRef)color
                                   red:(CGFloat *)red
                                 green:(CGFloat *)green
@@ -497,6 +505,10 @@ typedef NSColor EZColor;
 + (void)appendBuffer:(float *)buffer
       withBufferSize:(UInt32)bufferSize
        toHistoryInfo:(EZPlotHistoryInfo *)historyInfo;
+
+//------------------------------------------------------------------------------
+
++ (void)clearHistoryInfo:(EZPlotHistoryInfo *)historyInfo;
 
 //------------------------------------------------------------------------------
 

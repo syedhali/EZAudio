@@ -347,9 +347,15 @@ typedef struct
 
 - (void)clear
 {
-    //
-    // TODO: clear plot!
-    //
+    float emptyBuffer[1];
+    emptyBuffer[0] = 0.0f;
+    [self setSampleData:emptyBuffer length:1];
+    [EZAudioUtilities clearHistoryInfo:self.info->historyInfo];
+#if TARGET_OS_IPHONE
+    [self display];
+#elif TARGET_OS_MAC
+    [self redraw];
+#endif
 }
 
 //------------------------------------------------------------------------------
