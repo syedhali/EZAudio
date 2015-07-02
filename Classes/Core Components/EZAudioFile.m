@@ -24,10 +24,7 @@
 //  THE SOFTWARE.
 
 #import "EZAudioFile.h"
-
-//------------------------------------------------------------------------------
-
-#import <EZAudio/EZAudio.h>
+#import "EZAudioUtilities.h"
 #import "EZAudioFloatConverter.h"
 #import "EZAudioFloatData.h"
 #include <pthread.h>
