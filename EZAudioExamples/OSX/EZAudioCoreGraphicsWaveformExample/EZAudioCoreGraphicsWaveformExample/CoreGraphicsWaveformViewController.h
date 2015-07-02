@@ -26,7 +26,7 @@
 #import <Cocoa/Cocoa.h>
 
 // Import EZAudio header
-#import "EZAudio.h"
+#import <EZAudio/EZAudio.h>
 
 /**
  We will allow this view controller to act as an EZMicrophoneDelegate. This is how we listen for the microphone callback.

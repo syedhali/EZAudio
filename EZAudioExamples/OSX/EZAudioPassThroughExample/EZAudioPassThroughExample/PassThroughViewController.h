@@ -28,7 +28,7 @@
 /**
  Import EZAudio
  */
-#import "EZAudio.h"
+#import <EZAudio/EZAudio.h>
 
 @interface PassThroughViewController : NSViewController <EZMicrophoneDelegate>
 

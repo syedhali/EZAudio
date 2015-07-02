@@ -28,7 +28,7 @@
 /**
  EZAudio
  */
-#import "EZAudio.h"
+#import <EZAudio/EZAudio.h>
 
 /**
  Accelerate

@@ -26,7 +26,7 @@
 #import <Cocoa/Cocoa.h>
 
 // Import EZAudio header
-#import "EZAudio.h"
+#import <EZAudio/EZAudio.h>
 
 /**
  Here's the default audio file included with the example
