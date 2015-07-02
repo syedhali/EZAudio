@@ -16,10 +16,6 @@
 		9417A90A1871492100D9D37B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A9091871492100D9D37B /* AppDelegate.m */; };
 		9417A90D1871492100D9D37B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9417A90B1871492100D9D37B /* MainMenu.xib */; };
 		9417A90F1871492100D9D37B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9417A90E1871492100D9D37B /* Images.xcassets */; };
-		9417A9161871492100D9D37B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A9151871492100D9D37B /* XCTest.framework */; };
-		9417A9171871492100D9D37B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A8F61871492000D9D37B /* Cocoa.framework */; };
-		9417A91F1871492100D9D37B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9417A91D1871492100D9D37B /* InfoPlist.strings */; };
-		9417A9211871492100D9D37B /* EZAudioFFTExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A9201871492100D9D37B /* EZAudioFFTExampleTests.m */; };
 		9417A954187149EA00D9D37B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A951187149EA00D9D37B /* AudioToolbox.framework */; };
 		9417A955187149EA00D9D37B /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A952187149EA00D9D37B /* AudioUnit.framework */; };
 		9417A956187149EA00D9D37B /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A953187149EA00D9D37B /* CoreAudio.framework */; };
@@ -30,16 +26,6 @@
 		9417A9D61872130200D9D37B /* FFTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9417A9D41872130200D9D37B /* FFTViewController.m */; };
 		9417A9D71872130200D9D37B /* FFTViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9417A9D51872130200D9D37B /* FFTViewController.xib */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		9417A9181871492100D9D37B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9417A8EB1871492000D9D37B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9417A8F21871492000D9D37B;
-			remoteInfo = EZAudioFFTExample;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		662428F81B451B1C0069FFD7 /* Embed Frameworks */ = {
@@ -71,11 +57,7 @@
 		9417A9091871492100D9D37B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9417A90C1871492100D9D37B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		9417A90E1871492100D9D37B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		9417A9141871492100D9D37B /* EZAudioFFTExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EZAudioFFTExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9417A9151871492100D9D37B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		9417A91C1871492100D9D37B /* EZAudioFFTExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EZAudioFFTExampleTests-Info.plist"; sourceTree = "<group>"; };
-		9417A91E1871492100D9D37B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		9417A9201871492100D9D37B /* EZAudioFFTExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZAudioFFTExampleTests.m; sourceTree = "<group>"; };
 		9417A951187149EA00D9D37B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9417A952187149EA00D9D37B /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		9417A953187149EA00D9D37B /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -105,15 +87,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9417A9111871492100D9D37B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9417A9171871492100D9D37B /* Cocoa.framework in Frameworks */,
-				9417A9161871492100D9D37B /* XCTest.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -122,7 +95,6 @@
 			children = (
 				662428F51B451B1B0069FFD7 /* EZAudio.framework */,
 				9417A8FC1871492000D9D37B /* EZAudioFFTExample */,
-				9417A91A1871492100D9D37B /* EZAudioFFTExampleTests */,
 				9417A8F51871492000D9D37B /* Frameworks */,
 				9417A8F41871492000D9D37B /* Products */,
 			);
@@ -132,7 +104,6 @@
 			isa = PBXGroup;
 			children = (
 				9417A8F31871492000D9D37B /* EZAudioFFTExample.app */,
-				9417A9141871492100D9D37B /* EZAudioFFTExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -191,24 +162,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		9417A91A1871492100D9D37B /* EZAudioFFTExampleTests */ = {
-			isa = PBXGroup;
-			children = (
-				9417A9201871492100D9D37B /* EZAudioFFTExampleTests.m */,
-				9417A91B1871492100D9D37B /* Supporting Files */,
-			);
-			path = EZAudioFFTExampleTests;
-			sourceTree = "<group>";
-		};
-		9417A91B1871492100D9D37B /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				9417A91C1871492100D9D37B /* EZAudioFFTExampleTests-Info.plist */,
-				9417A91D1871492100D9D37B /* InfoPlist.strings */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -230,24 +183,6 @@
 			productReference = 9417A8F31871492000D9D37B /* EZAudioFFTExample.app */;
 			productType = "com.apple.product-type.application";
 		};
-		9417A9131871492100D9D37B /* EZAudioFFTExampleTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9417A9271871492100D9D37B /* Build configuration list for PBXNativeTarget "EZAudioFFTExampleTests" */;
-			buildPhases = (
-				9417A9101871492100D9D37B /* Sources */,
-				9417A9111871492100D9D37B /* Frameworks */,
-				9417A9121871492100D9D37B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				9417A9191871492100D9D37B /* PBXTargetDependency */,
-			);
-			name = EZAudioFFTExampleTests;
-			productName = EZAudioFFTExampleTests;
-			productReference = 9417A9141871492100D9D37B /* EZAudioFFTExampleTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -256,11 +191,6 @@
 			attributes = {
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Syed Haris Ali";
-				TargetAttributes = {
-					9417A9131871492100D9D37B = {
-						TestTargetID = 9417A8F21871492000D9D37B;
-					};
-				};
 			};
 			buildConfigurationList = 9417A8EE1871492000D9D37B /* Build configuration list for PBXProject "EZAudioFFTExample" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -276,7 +206,6 @@
 			projectRoot = "";
 			targets = (
 				9417A8F21871492000D9D37B /* EZAudioFFTExample */,
-				9417A9131871492100D9D37B /* EZAudioFFTExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -294,14 +223,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9417A9121871492100D9D37B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9417A91F1871492100D9D37B /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -315,23 +236,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9417A9101871492100D9D37B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9417A9211871492100D9D37B /* EZAudioFFTExampleTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		9417A9191871492100D9D37B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9417A8F21871492000D9D37B /* EZAudioFFTExample */;
-			targetProxy = 9417A9181871492100D9D37B /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		9417A8FF1871492000D9D37B /* InfoPlist.strings */ = {
@@ -356,14 +261,6 @@
 				9417A90C1871492100D9D37B /* Base */,
 			);
 			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-		9417A91D1871492100D9D37B /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9417A91E1871492100D9D37B /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -473,46 +370,6 @@
 			};
 			name = Release;
 		};
-		9417A9281871492100D9D37B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EZAudioFFTExample.app/Contents/MacOS/EZAudioFFTExample";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "EZAudioFFTExample/EZAudioFFTExample-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "EZAudioFFTExampleTests/EZAudioFFTExampleTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		9417A9291871492100D9D37B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EZAudioFFTExample.app/Contents/MacOS/EZAudioFFTExample";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "EZAudioFFTExample/EZAudioFFTExample-Prefix.pch";
-				INFOPLIST_FILE = "EZAudioFFTExampleTests/EZAudioFFTExampleTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -530,15 +387,6 @@
 			buildConfigurations = (
 				9417A9251871492100D9D37B /* Debug */,
 				9417A9261871492100D9D37B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9417A9271871492100D9D37B /* Build configuration list for PBXNativeTarget "EZAudioFFTExampleTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9417A9281871492100D9D37B /* Debug */,
-				9417A9291871492100D9D37B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

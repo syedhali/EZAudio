@@ -16,10 +16,6 @@
 		941D71CB1864C457007D52D8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 941D71CA1864C457007D52D8 /* AppDelegate.m */; };
 		941D71CE1864C457007D52D8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 941D71CC1864C457007D52D8 /* MainMenu.xib */; };
 		941D71D01864C457007D52D8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 941D71CF1864C457007D52D8 /* Images.xcassets */; };
-		941D71D71864C457007D52D8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 941D71D61864C457007D52D8 /* XCTest.framework */; };
-		941D71D81864C457007D52D8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 941D71B71864C457007D52D8 /* Cocoa.framework */; };
-		941D71E01864C457007D52D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 941D71DE1864C457007D52D8 /* InfoPlist.strings */; };
-		941D71E21864C457007D52D8 /* EZAudioPassThroughExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 941D71E11864C457007D52D8 /* EZAudioPassThroughExampleTests.m */; };
 		941D72151864C4A0007D52D8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 941D72121864C4A0007D52D8 /* AudioToolbox.framework */; };
 		941D72161864C4A0007D52D8 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 941D72131864C4A0007D52D8 /* AudioUnit.framework */; };
 		941D72171864C4A0007D52D8 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 941D72141864C4A0007D52D8 /* CoreAudio.framework */; };
@@ -29,16 +25,6 @@
 		941D72211864C4D7007D52D8 /* PassThroughViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 941D721F1864C4D7007D52D8 /* PassThroughViewController.m */; };
 		941D72221864C4D7007D52D8 /* PassThroughViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 941D72201864C4D7007D52D8 /* PassThroughViewController.xib */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		941D71D91864C457007D52D8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 941D71AC1864C456007D52D8 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 941D71B31864C457007D52D8;
-			remoteInfo = EZAudioPassThroughExample;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		662428F41B451B100069FFD7 /* Embed Frameworks */ = {
@@ -70,11 +56,7 @@
 		941D71CA1864C457007D52D8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		941D71CD1864C457007D52D8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		941D71CF1864C457007D52D8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		941D71D51864C457007D52D8 /* EZAudioPassThroughExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EZAudioPassThroughExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		941D71D61864C457007D52D8 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		941D71DD1864C457007D52D8 /* EZAudioPassThroughExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EZAudioPassThroughExampleTests-Info.plist"; sourceTree = "<group>"; };
-		941D71DF1864C457007D52D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		941D71E11864C457007D52D8 /* EZAudioPassThroughExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZAudioPassThroughExampleTests.m; sourceTree = "<group>"; };
 		941D72121864C4A0007D52D8 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		941D72131864C4A0007D52D8 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		941D72141864C4A0007D52D8 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -102,15 +84,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		941D71D21864C457007D52D8 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				941D71D81864C457007D52D8 /* Cocoa.framework in Frameworks */,
-				941D71D71864C457007D52D8 /* XCTest.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -119,7 +92,6 @@
 			children = (
 				662428F11B451B100069FFD7 /* EZAudio.framework */,
 				941D71BD1864C457007D52D8 /* EZAudioPassThroughExample */,
-				941D71DB1864C457007D52D8 /* EZAudioPassThroughExampleTests */,
 				941D71B61864C457007D52D8 /* Frameworks */,
 				941D71B51864C457007D52D8 /* Products */,
 			);
@@ -129,7 +101,6 @@
 			isa = PBXGroup;
 			children = (
 				941D71B41864C457007D52D8 /* EZAudioPassThroughExample.app */,
-				941D71D51864C457007D52D8 /* EZAudioPassThroughExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -187,24 +158,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		941D71DB1864C457007D52D8 /* EZAudioPassThroughExampleTests */ = {
-			isa = PBXGroup;
-			children = (
-				941D71E11864C457007D52D8 /* EZAudioPassThroughExampleTests.m */,
-				941D71DC1864C457007D52D8 /* Supporting Files */,
-			);
-			path = EZAudioPassThroughExampleTests;
-			sourceTree = "<group>";
-		};
-		941D71DC1864C457007D52D8 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				941D71DD1864C457007D52D8 /* EZAudioPassThroughExampleTests-Info.plist */,
-				941D71DE1864C457007D52D8 /* InfoPlist.strings */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -226,24 +179,6 @@
 			productReference = 941D71B41864C457007D52D8 /* EZAudioPassThroughExample.app */;
 			productType = "com.apple.product-type.application";
 		};
-		941D71D41864C457007D52D8 /* EZAudioPassThroughExampleTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 941D71E81864C457007D52D8 /* Build configuration list for PBXNativeTarget "EZAudioPassThroughExampleTests" */;
-			buildPhases = (
-				941D71D11864C457007D52D8 /* Sources */,
-				941D71D21864C457007D52D8 /* Frameworks */,
-				941D71D31864C457007D52D8 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				941D71DA1864C457007D52D8 /* PBXTargetDependency */,
-			);
-			name = EZAudioPassThroughExampleTests;
-			productName = EZAudioPassThroughExampleTests;
-			productReference = 941D71D51864C457007D52D8 /* EZAudioPassThroughExampleTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -252,11 +187,6 @@
 			attributes = {
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Syed Haris Ali";
-				TargetAttributes = {
-					941D71D41864C457007D52D8 = {
-						TestTargetID = 941D71B31864C457007D52D8;
-					};
-				};
 			};
 			buildConfigurationList = 941D71AF1864C456007D52D8 /* Build configuration list for PBXProject "EZAudioPassThroughExample" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -272,7 +202,6 @@
 			projectRoot = "";
 			targets = (
 				941D71B31864C457007D52D8 /* EZAudioPassThroughExample */,
-				941D71D41864C457007D52D8 /* EZAudioPassThroughExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -290,14 +219,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		941D71D31864C457007D52D8 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				941D71E01864C457007D52D8 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -311,23 +232,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		941D71D11864C457007D52D8 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				941D71E21864C457007D52D8 /* EZAudioPassThroughExampleTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		941D71DA1864C457007D52D8 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 941D71B31864C457007D52D8 /* EZAudioPassThroughExample */;
-			targetProxy = 941D71D91864C457007D52D8 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		941D71C01864C457007D52D8 /* InfoPlist.strings */ = {
@@ -352,14 +257,6 @@
 				941D71CD1864C457007D52D8 /* Base */,
 			);
 			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-		941D71DE1864C457007D52D8 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				941D71DF1864C457007D52D8 /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -469,46 +366,6 @@
 			};
 			name = Release;
 		};
-		941D71E91864C457007D52D8 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EZAudioPassThroughExample.app/Contents/MacOS/EZAudioPassThroughExample";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "EZAudioPassThroughExample/EZAudioPassThroughExample-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "EZAudioPassThroughExampleTests/EZAudioPassThroughExampleTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		941D71EA1864C457007D52D8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EZAudioPassThroughExample.app/Contents/MacOS/EZAudioPassThroughExample";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "EZAudioPassThroughExample/EZAudioPassThroughExample-Prefix.pch";
-				INFOPLIST_FILE = "EZAudioPassThroughExampleTests/EZAudioPassThroughExampleTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -526,15 +383,6 @@
 			buildConfigurations = (
 				941D71E61864C457007D52D8 /* Debug */,
 				941D71E71864C457007D52D8 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		941D71E81864C457007D52D8 /* Build configuration list for PBXNativeTarget "EZAudioPassThroughExampleTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				941D71E91864C457007D52D8 /* Debug */,
-				941D71EA1864C457007D52D8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -16,10 +16,6 @@
 		94056DAA185BB0BC00EB94BA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94056DA9185BB0BC00EB94BA /* AppDelegate.m */; };
 		94056DAD185BB0BC00EB94BA /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94056DAB185BB0BC00EB94BA /* MainMenu.xib */; };
 		94056DAF185BB0BC00EB94BA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94056DAE185BB0BC00EB94BA /* Images.xcassets */; };
-		94056DB6185BB0BC00EB94BA /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056DB5185BB0BC00EB94BA /* XCTest.framework */; };
-		94056DB7185BB0BC00EB94BA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056D96185BB0BC00EB94BA /* Cocoa.framework */; };
-		94056DBF185BB0BC00EB94BA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94056DBD185BB0BC00EB94BA /* InfoPlist.strings */; };
-		94056DC1185BB0BC00EB94BA /* EZAudioOpenGLWaveformExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94056DC0185BB0BC00EB94BA /* EZAudioOpenGLWaveformExampleTests.m */; };
 		94056DCD185BB0D600EB94BA /* OpenGLWaveformViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94056DCB185BB0D600EB94BA /* OpenGLWaveformViewController.m */; };
 		94056DCE185BB0D600EB94BA /* OpenGLWaveformViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94056DCC185BB0D600EB94BA /* OpenGLWaveformViewController.xib */; };
 		94056DD0185BB0E200EB94BA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056DCF185BB0E200EB94BA /* GLKit.framework */; };
@@ -29,16 +25,6 @@
 		94056DD9185BB0F400EB94BA /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056DD6185BB0F400EB94BA /* AudioUnit.framework */; };
 		94056DDA185BB0F400EB94BA /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056DD7185BB0F400EB94BA /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		94056DB8185BB0BC00EB94BA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 94056D8B185BB0BC00EB94BA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 94056D92185BB0BC00EB94BA;
-			remoteInfo = EZAudioOpenGLWaveformExample;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		662428E41B451AEE0069FFD7 /* Embed Frameworks */ = {
@@ -70,11 +56,7 @@
 		94056DA9185BB0BC00EB94BA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		94056DAC185BB0BC00EB94BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		94056DAE185BB0BC00EB94BA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		94056DB4185BB0BC00EB94BA /* EZAudioOpenGLWaveformExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EZAudioOpenGLWaveformExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		94056DB5185BB0BC00EB94BA /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		94056DBC185BB0BC00EB94BA /* EZAudioOpenGLWaveformExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EZAudioOpenGLWaveformExampleTests-Info.plist"; sourceTree = "<group>"; };
-		94056DBE185BB0BC00EB94BA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		94056DC0185BB0BC00EB94BA /* EZAudioOpenGLWaveformExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EZAudioOpenGLWaveformExampleTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		94056DCA185BB0D600EB94BA /* OpenGLWaveformViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = OpenGLWaveformViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		94056DCB185BB0D600EB94BA /* OpenGLWaveformViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = OpenGLWaveformViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		94056DCC185BB0D600EB94BA /* OpenGLWaveformViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OpenGLWaveformViewController.xib; sourceTree = "<group>"; };
@@ -102,15 +84,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		94056DB1185BB0BC00EB94BA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				94056DB7185BB0BC00EB94BA /* Cocoa.framework in Frameworks */,
-				94056DB6185BB0BC00EB94BA /* XCTest.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -119,7 +92,6 @@
 			children = (
 				662428E11B451AEE0069FFD7 /* EZAudio.framework */,
 				94056D9C185BB0BC00EB94BA /* EZAudioOpenGLWaveformExample */,
-				94056DBA185BB0BC00EB94BA /* EZAudioOpenGLWaveformExampleTests */,
 				94056D95185BB0BC00EB94BA /* Frameworks */,
 				94056D94185BB0BC00EB94BA /* Products */,
 			);
@@ -129,7 +101,6 @@
 			isa = PBXGroup;
 			children = (
 				94056D93185BB0BC00EB94BA /* EZAudioOpenGLWaveformExample.app */,
-				94056DB4185BB0BC00EB94BA /* EZAudioOpenGLWaveformExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -187,24 +158,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		94056DBA185BB0BC00EB94BA /* EZAudioOpenGLWaveformExampleTests */ = {
-			isa = PBXGroup;
-			children = (
-				94056DC0185BB0BC00EB94BA /* EZAudioOpenGLWaveformExampleTests.m */,
-				94056DBB185BB0BC00EB94BA /* Supporting Files */,
-			);
-			path = EZAudioOpenGLWaveformExampleTests;
-			sourceTree = "<group>";
-		};
-		94056DBB185BB0BC00EB94BA /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				94056DBC185BB0BC00EB94BA /* EZAudioOpenGLWaveformExampleTests-Info.plist */,
-				94056DBD185BB0BC00EB94BA /* InfoPlist.strings */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -226,24 +179,6 @@
 			productReference = 94056D93185BB0BC00EB94BA /* EZAudioOpenGLWaveformExample.app */;
 			productType = "com.apple.product-type.application";
 		};
-		94056DB3185BB0BC00EB94BA /* EZAudioOpenGLWaveformExampleTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 94056DC7185BB0BC00EB94BA /* Build configuration list for PBXNativeTarget "EZAudioOpenGLWaveformExampleTests" */;
-			buildPhases = (
-				94056DB0185BB0BC00EB94BA /* Sources */,
-				94056DB1185BB0BC00EB94BA /* Frameworks */,
-				94056DB2185BB0BC00EB94BA /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				94056DB9185BB0BC00EB94BA /* PBXTargetDependency */,
-			);
-			name = EZAudioOpenGLWaveformExampleTests;
-			productName = EZAudioOpenGLWaveformExampleTests;
-			productReference = 94056DB4185BB0BC00EB94BA /* EZAudioOpenGLWaveformExampleTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -252,11 +187,6 @@
 			attributes = {
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Syed Haris Ali";
-				TargetAttributes = {
-					94056DB3185BB0BC00EB94BA = {
-						TestTargetID = 94056D92185BB0BC00EB94BA;
-					};
-				};
 			};
 			buildConfigurationList = 94056D8E185BB0BC00EB94BA /* Build configuration list for PBXProject "EZAudioOpenGLWaveformExample" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -272,7 +202,6 @@
 			projectRoot = "";
 			targets = (
 				94056D92185BB0BC00EB94BA /* EZAudioOpenGLWaveformExample */,
-				94056DB3185BB0BC00EB94BA /* EZAudioOpenGLWaveformExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -290,14 +219,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		94056DB2185BB0BC00EB94BA /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				94056DBF185BB0BC00EB94BA /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -311,23 +232,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		94056DB0185BB0BC00EB94BA /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				94056DC1185BB0BC00EB94BA /* EZAudioOpenGLWaveformExampleTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		94056DB9185BB0BC00EB94BA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 94056D92185BB0BC00EB94BA /* EZAudioOpenGLWaveformExample */;
-			targetProxy = 94056DB8185BB0BC00EB94BA /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		94056D9F185BB0BC00EB94BA /* InfoPlist.strings */ = {
@@ -352,14 +257,6 @@
 				94056DAC185BB0BC00EB94BA /* Base */,
 			);
 			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-		94056DBD185BB0BC00EB94BA /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				94056DBE185BB0BC00EB94BA /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -469,46 +366,6 @@
 			};
 			name = Release;
 		};
-		94056DC8185BB0BC00EB94BA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EZAudioOpenGLWaveformExample.app/Contents/MacOS/EZAudioOpenGLWaveformExample";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "EZAudioOpenGLWaveformExample/EZAudioOpenGLWaveformExample-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "EZAudioOpenGLWaveformExampleTests/EZAudioOpenGLWaveformExampleTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		94056DC9185BB0BC00EB94BA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EZAudioOpenGLWaveformExample.app/Contents/MacOS/EZAudioOpenGLWaveformExample";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "EZAudioOpenGLWaveformExample/EZAudioOpenGLWaveformExample-Prefix.pch";
-				INFOPLIST_FILE = "EZAudioOpenGLWaveformExampleTests/EZAudioOpenGLWaveformExampleTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -526,15 +383,6 @@
 			buildConfigurations = (
 				94056DC5185BB0BC00EB94BA /* Debug */,
 				94056DC6185BB0BC00EB94BA /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		94056DC7185BB0BC00EB94BA /* Build configuration list for PBXNativeTarget "EZAudioOpenGLWaveformExampleTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				94056DC8185BB0BC00EB94BA /* Debug */,
-				94056DC9185BB0BC00EB94BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

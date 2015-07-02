@@ -74,9 +74,6 @@
 		9437303A185B931C00F315F0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		9437303C185B931C00F315F0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		94373043185B931C00F315F0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		9437304A185B931C00F315F0 /* EZAudioCoreGraphicsWaveformExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EZAudioCoreGraphicsWaveformExampleTests-Info.plist"; sourceTree = "<group>"; };
-		9437304C185B931C00F315F0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		9437304E185B931C00F315F0 /* EZAudioCoreGraphicsWaveformExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EZAudioCoreGraphicsWaveformExampleTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9437307D185B934900F315F0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9437307E185B934900F315F0 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		9437307F185B934900F315F0 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -109,7 +106,6 @@
 			children = (
 				662428DE1B451ADD0069FFD7 /* EZAudio.framework */,
 				9437302A185B931C00F315F0 /* EZAudioCoreGraphicsWaveformExample */,
-				94373048185B931C00F315F0 /* EZAudioCoreGraphicsWaveformExampleTests */,
 				94373023185B931C00F315F0 /* Frameworks */,
 				94373022185B931C00F315F0 /* Products */,
 			);
@@ -172,24 +168,6 @@
 				94373030185B931C00F315F0 /* main.m */,
 				94373032185B931C00F315F0 /* EZAudioCoreGraphicsWaveformExample-Prefix.pch */,
 				94373033185B931C00F315F0 /* Credits.rtf */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		94373048185B931C00F315F0 /* EZAudioCoreGraphicsWaveformExampleTests */ = {
-			isa = PBXGroup;
-			children = (
-				9437304E185B931C00F315F0 /* EZAudioCoreGraphicsWaveformExampleTests.m */,
-				94373049185B931C00F315F0 /* Supporting Files */,
-			);
-			path = EZAudioCoreGraphicsWaveformExampleTests;
-			sourceTree = "<group>";
-		};
-		94373049185B931C00F315F0 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				9437304A185B931C00F315F0 /* EZAudioCoreGraphicsWaveformExampleTests-Info.plist */,
-				9437304B185B931C00F315F0 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -310,14 +288,6 @@
 				9437303A185B931C00F315F0 /* Base */,
 			);
 			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-		9437304B185B931C00F315F0 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9437304C185B931C00F315F0 /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
