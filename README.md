@@ -3,6 +3,9 @@
 #EZAudio
 A simple, intuitive audio framework for iOS and OSX.
 
+# Note as of July 2, 2015
+Over the last week I've been rewriting the core components of EZAudio to be better, faster, and much more flexible. As EZAudio gets closer its 1.0 release the API has changed a little bit for each component and as a result this repo's README for the [Examples](#Examples) and [Core Components](#CoreComponents) is in a deprecated state, but will be updated tomorrow <b>July 3rd, 2015</b>. Happy coding!
+
 ##Features
 ![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/EZAudioSummary.png "EZAudioFeatures")
 
@@ -38,7 +41,7 @@ An OpenGL-based, GPU-accelerated audio waveform plot capable of visualizing any 
 
 `EZAudio` was designed to work transparently across all iOS and OSX devices. This means one universal API whether you're building for Mac or iOS. For instance, under the hood an `EZAudioPlot` knows that it will subclass a UIView for iOS or an NSView for OSX and the `EZMicrophone` knows to build on top of the RemoteIO AudioUnit for iOS, but defaults to the system defaults for input and output for OSX.
 
-##Examples & Docs
+##<a name="Examples">Examples & Docs
 
 Within this repo you'll find the examples for iOS and OSX to get you up to speed using each component and plugging them into each other. With just a few lines of code you'll be recording from the microphone, generating audio waveforms, and playing audio files like a boss. See the full Getting Started guide for an interactive look into each of components.
 
@@ -75,7 +78,7 @@ Shows how to calculate the real-time FFT of the audio data coming from the `EZMi
 ![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/fftMacExample.png)
 
 ### Documentation
-The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/0.6.0/
+The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/0.7.1/
 <br>You can also generate the docset yourself using appledocs by running the appledocs on the EZAudio source folder.
 
 ##Getting Started
@@ -85,7 +88,6 @@ To begin using `EZAudio` you must first make sure you have the proper build requ
 **iOS**
 - 6.0+
 
-
 **OSX**
 - 10.8+
 
@@ -94,7 +96,6 @@ To begin using `EZAudio` you must first make sure you have the proper build requ
 - AudioToolbox
 - AVFoundation
 - GLKit
-
 
 **OSX**
 - AudioToolbox
@@ -108,12 +109,13 @@ To begin using `EZAudio` you must first make sure you have the proper build requ
 You can add EZAudio to your project in a few ways: <br><br>1.) The easiest way to use EZAudio is via <a href="http://cocoapods.org/", target="_blank">Cocoapods</a>. Simply add EZAudio to your <a href="http://guides.cocoapods.org/using/the-podfile.html", target="_blank">Podfile</a> like so:
 
 `
-pod 'EZAudio', '~> 0.6.0'
+pod 'EZAudio', '~> 0.7.1'
 `
 
 2.) Alternatively, you could clone or fork this repo and just drag and drop the source into your project. 
 
-##Core Components
+##<a name="CoreComponents"></a>Core Components
+
 `EZAudio` currently offers four components that encompass a wide range of audio functionality. In addition to the functional aspects of these components such as pulling audio data, reading/writing from files, and performing playback they also take special care to hook into the interface components to allow developers to display visual feedback (see the Interface Components below).
 
 ###<a name="EZAudioFile"></a>EZAudioFile
