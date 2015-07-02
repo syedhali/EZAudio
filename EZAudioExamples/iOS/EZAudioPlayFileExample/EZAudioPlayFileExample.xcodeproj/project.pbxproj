@@ -41,9 +41,6 @@
 		944D03EC186038A60076EF7A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		944D03F7186038A60076EF7A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		944D03FE186038A60076EF7A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		944D0406186038A60076EF7A /* EZAudioPlayFileExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EZAudioPlayFileExampleTests-Info.plist"; sourceTree = "<group>"; };
-		944D0408186038A60076EF7A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		944D040A186038A60076EF7A /* EZAudioPlayFileExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZAudioPlayFileExampleTests.m; sourceTree = "<group>"; };
 		944D043B1860398A0076EF7A /* PlayFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayFileViewController.h; sourceTree = "<group>"; };
 		944D043C1860398A0076EF7A /* PlayFileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayFileViewController.m; sourceTree = "<group>"; };
 		94BE6F85188F55CC00841D98 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -71,7 +68,6 @@
 			isa = PBXGroup;
 			children = (
 				944D03E2186038A60076EF7A /* EZAudioPlayFileExample */,
-				944D0404186038A60076EF7A /* EZAudioPlayFileExampleTests */,
 				944D03DB186038A60076EF7A /* Frameworks */,
 				944D03DA186038A60076EF7A /* Products */,
 			);
@@ -122,24 +118,6 @@
 				944D03E5186038A60076EF7A /* InfoPlist.strings */,
 				944D03E8186038A60076EF7A /* main.m */,
 				944D03EA186038A60076EF7A /* EZAudioPlayFileExample-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		944D0404186038A60076EF7A /* EZAudioPlayFileExampleTests */ = {
-			isa = PBXGroup;
-			children = (
-				944D040A186038A60076EF7A /* EZAudioPlayFileExampleTests.m */,
-				944D0405186038A60076EF7A /* Supporting Files */,
-			);
-			path = EZAudioPlayFileExampleTests;
-			sourceTree = "<group>";
-		};
-		944D0405186038A60076EF7A /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				944D0406186038A60076EF7A /* EZAudioPlayFileExampleTests-Info.plist */,
-				944D0407186038A60076EF7A /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -223,14 +201,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				944D03E6186038A60076EF7A /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		944D0407186038A60076EF7A /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				944D0408186038A60076EF7A /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

@@ -38,9 +38,6 @@
 		9417A97B1871E88300D9D37B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9417A9861871E88300D9D37B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9417A98D1871E88300D9D37B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		9417A9951871E88300D9D37B /* EZAudioFFTExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EZAudioFFTExampleTests-Info.plist"; sourceTree = "<group>"; };
-		9417A9971871E88300D9D37B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		9417A9991871E88300D9D37B /* EZAudioFFTExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZAudioFFTExampleTests.m; sourceTree = "<group>"; };
 		9417A9A31871E89500D9D37B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9417A9A51871E8A100D9D37B /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		9417A9CE1871E97D00D9D37B /* FFTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFTViewController.h; sourceTree = "<group>"; };
@@ -72,7 +69,6 @@
 			isa = PBXGroup;
 			children = (
 				9417A9711871E88300D9D37B /* EZAudioFFTExample */,
-				9417A9931871E88300D9D37B /* EZAudioFFTExampleTests */,
 				9417A96A1871E88300D9D37B /* Frameworks */,
 				9417A9691871E88300D9D37B /* Products */,
 			);
@@ -123,24 +119,6 @@
 				9417A9741871E88300D9D37B /* InfoPlist.strings */,
 				9417A9771871E88300D9D37B /* main.m */,
 				9417A9791871E88300D9D37B /* EZAudioFFTExample-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		9417A9931871E88300D9D37B /* EZAudioFFTExampleTests */ = {
-			isa = PBXGroup;
-			children = (
-				9417A9991871E88300D9D37B /* EZAudioFFTExampleTests.m */,
-				9417A9941871E88300D9D37B /* Supporting Files */,
-			);
-			path = EZAudioFFTExampleTests;
-			sourceTree = "<group>";
-		};
-		9417A9941871E88300D9D37B /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				9417A9951871E88300D9D37B /* EZAudioFFTExampleTests-Info.plist */,
-				9417A9961871E88300D9D37B /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -223,14 +201,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				9417A9751871E88300D9D37B /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		9417A9961871E88300D9D37B /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9417A9971871E88300D9D37B /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

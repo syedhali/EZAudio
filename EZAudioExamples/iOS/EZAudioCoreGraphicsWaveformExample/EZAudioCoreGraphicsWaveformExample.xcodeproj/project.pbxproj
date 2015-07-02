@@ -39,9 +39,6 @@
 		94056F8D185E593500EB94BA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		94056F98185E593500EB94BA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		94056F9F185E593500EB94BA /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		94056FA7185E593500EB94BA /* EZAudioCoreGraphicsWaveformExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EZAudioCoreGraphicsWaveformExampleTests-Info.plist"; sourceTree = "<group>"; };
-		94056FA9185E593500EB94BA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		94056FAB185E593500EB94BA /* EZAudioCoreGraphicsWaveformExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZAudioCoreGraphicsWaveformExampleTests.m; sourceTree = "<group>"; };
 		94056FDC185E59D900EB94BA /* CoreGraphicsWaveformViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreGraphicsWaveformViewController.h; sourceTree = "<group>"; };
 		94056FDD185E59D900EB94BA /* CoreGraphicsWaveformViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreGraphicsWaveformViewController.m; sourceTree = "<group>"; };
 		94057023185E612000EB94BA /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -71,7 +68,6 @@
 			isa = PBXGroup;
 			children = (
 				94056F83185E593500EB94BA /* EZAudioCoreGraphicsWaveformExample */,
-				94056FA5185E593500EB94BA /* EZAudioCoreGraphicsWaveformExampleTests */,
 				94056F7C185E593500EB94BA /* Frameworks */,
 				94056F7B185E593500EB94BA /* Products */,
 			);
@@ -123,24 +119,6 @@
 				94056F86185E593500EB94BA /* InfoPlist.strings */,
 				94056F89185E593500EB94BA /* main.m */,
 				94056F8B185E593500EB94BA /* EZAudioCoreGraphicsWaveformExample-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		94056FA5185E593500EB94BA /* EZAudioCoreGraphicsWaveformExampleTests */ = {
-			isa = PBXGroup;
-			children = (
-				94056FAB185E593500EB94BA /* EZAudioCoreGraphicsWaveformExampleTests.m */,
-				94056FA6185E593500EB94BA /* Supporting Files */,
-			);
-			path = EZAudioCoreGraphicsWaveformExampleTests;
-			sourceTree = "<group>";
-		};
-		94056FA6185E593500EB94BA /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				94056FA7185E593500EB94BA /* EZAudioCoreGraphicsWaveformExampleTests-Info.plist */,
-				94056FA8185E593500EB94BA /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -223,14 +201,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				94056F87185E593500EB94BA /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		94056FA8185E593500EB94BA /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				94056FA9185E593500EB94BA /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

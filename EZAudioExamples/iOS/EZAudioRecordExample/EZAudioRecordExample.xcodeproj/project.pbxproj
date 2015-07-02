@@ -37,9 +37,6 @@
 		940570DB185E7F8300EB94BA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		940570E6185E7F8300EB94BA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		940570ED185E7F8300EB94BA /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		940570F5185E7F8300EB94BA /* EZAudioRecordExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EZAudioRecordExampleTests-Info.plist"; sourceTree = "<group>"; };
-		940570F7185E7F8300EB94BA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		940570F9185E7F8300EB94BA /* EZAudioRecordExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZAudioRecordExampleTests.m; sourceTree = "<group>"; };
 		94057103185E805900EB94BA /* RecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordViewController.h; sourceTree = "<group>"; };
 		94057104185E805900EB94BA /* RecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordViewController.m; sourceTree = "<group>"; };
 		948D38C3185EA1140075398B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -69,7 +66,6 @@
 			isa = PBXGroup;
 			children = (
 				940570D1185E7F8300EB94BA /* EZAudioRecordExample */,
-				940570F3185E7F8300EB94BA /* EZAudioRecordExampleTests */,
 				940570CA185E7F8300EB94BA /* Frameworks */,
 				940570C9185E7F8300EB94BA /* Products */,
 			);
@@ -119,24 +115,6 @@
 				940570D4185E7F8300EB94BA /* InfoPlist.strings */,
 				940570D7185E7F8300EB94BA /* main.m */,
 				940570D9185E7F8300EB94BA /* EZAudioRecordExample-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		940570F3185E7F8300EB94BA /* EZAudioRecordExampleTests */ = {
-			isa = PBXGroup;
-			children = (
-				940570F9185E7F8300EB94BA /* EZAudioRecordExampleTests.m */,
-				940570F4185E7F8300EB94BA /* Supporting Files */,
-			);
-			path = EZAudioRecordExampleTests;
-			sourceTree = "<group>";
-		};
-		940570F4185E7F8300EB94BA /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				940570F5185E7F8300EB94BA /* EZAudioRecordExampleTests-Info.plist */,
-				940570F6185E7F8300EB94BA /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -219,14 +197,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				940570D5185E7F8300EB94BA /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		940570F6185E7F8300EB94BA /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				940570F7185E7F8300EB94BA /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
