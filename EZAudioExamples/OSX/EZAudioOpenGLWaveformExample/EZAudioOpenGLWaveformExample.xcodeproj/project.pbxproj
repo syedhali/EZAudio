@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		662428E21B451AEE0069FFD7 /* EZAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 662428E11B451AEE0069FFD7 /* EZAudio.framework */; };
-		662428E31B451AEE0069FFD7 /* EZAudio.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 662428E11B451AEE0069FFD7 /* EZAudio.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6611CEC61B45FFDB00AE0EE8 /* EZAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 662428E11B451AEE0069FFD7 /* EZAudio.framework */; };
 		94056D97185BB0BC00EB94BA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056D96185BB0BC00EB94BA /* Cocoa.framework */; };
 		94056DA1185BB0BC00EB94BA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94056D9F185BB0BC00EB94BA /* InfoPlist.strings */; };
 		94056DA3185BB0BC00EB94BA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 94056DA2185BB0BC00EB94BA /* main.m */; };
@@ -25,20 +24,6 @@
 		94056DD9185BB0F400EB94BA /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056DD6185BB0F400EB94BA /* AudioUnit.framework */; };
 		94056DDA185BB0F400EB94BA /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056DD7185BB0F400EB94BA /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		662428E41B451AEE0069FFD7 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				662428E31B451AEE0069FFD7 /* EZAudio.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		662428E11B451AEE0069FFD7 /* EZAudio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = EZAudio.framework; path = "/Users/haris/Library/Developer/Xcode/DerivedData/EZAudioExamplesOSX-coaaitxpxjzwgfdbxuusgvrdmjux/Build/Products/Debug/EZAudio.framework"; sourceTree = "<absolute>"; };
@@ -73,13 +58,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6611CEC61B45FFDB00AE0EE8 /* EZAudio.framework in Frameworks */,
 				94056DD8185BB0F400EB94BA /* AudioToolbox.framework in Frameworks */,
 				94056DD9185BB0F400EB94BA /* AudioUnit.framework in Frameworks */,
 				94056DDA185BB0F400EB94BA /* CoreAudio.framework in Frameworks */,
 				94056DD4185BB0EF00EB94BA /* QuartzCore.framework in Frameworks */,
 				94056DD2185BB0E900EB94BA /* OpenGL.framework in Frameworks */,
 				94056DD0185BB0E200EB94BA /* GLKit.framework in Frameworks */,
-				662428E21B451AEE0069FFD7 /* EZAudio.framework in Frameworks */,
 				94056D97185BB0BC00EB94BA /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -168,7 +153,6 @@
 				94056D8F185BB0BC00EB94BA /* Sources */,
 				94056D90185BB0BC00EB94BA /* Frameworks */,
 				94056D91185BB0BC00EB94BA /* Resources */,
-				662428E41B451AEE0069FFD7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
