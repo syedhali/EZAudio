@@ -366,10 +366,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/EZAudioExamplesOSX-coaaitxpxjzwgfdbxuusgvrdmjux/Build/Products/Debug",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EZAudioCoreGraphicsWaveformExample/EZAudioCoreGraphicsWaveformExample-Prefix.pch";
 				INFOPLIST_FILE = "EZAudioCoreGraphicsWaveformExample/EZAudioCoreGraphicsWaveformExample-Info.plist";
@@ -384,10 +381,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/EZAudioExamplesOSX-coaaitxpxjzwgfdbxuusgvrdmjux/Build/Products/Debug",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EZAudioCoreGraphicsWaveformExample/EZAudioCoreGraphicsWaveformExample-Prefix.pch";
 				INFOPLIST_FILE = "EZAudioCoreGraphicsWaveformExample/EZAudioCoreGraphicsWaveformExample-Info.plist";
