@@ -21,8 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		662428DF1B451ADD0069FFD7 /* EZAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 662428DE1B451ADD0069FFD7 /* EZAudio.framework */; };
-		662428E01B451ADD0069FFD7 /* EZAudio.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 662428DE1B451ADD0069FFD7 /* EZAudio.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6611CEA71B45F42300AE0EE8 /* EZAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6611CEA61B45F42300AE0EE8 /* EZAudio.framework */; };
+		6611CEA81B45F42300AE0EE8 /* EZAudio.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6611CEA61B45F42300AE0EE8 /* EZAudio.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		94056D88185B97E300EB94BA /* CoreGraphicsWaveformViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94056D86185B97E300EB94BA /* CoreGraphicsWaveformViewController.m */; };
 		94056D89185B97E300EB94BA /* CoreGraphicsWaveformViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94056D87185B97E300EB94BA /* CoreGraphicsWaveformViewController.xib */; };
 		94373025185B931C00F315F0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94373024185B931C00F315F0 /* Cocoa.framework */; };
@@ -41,13 +41,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		662428BB1B4519D80069FFD7 /* Embed Frameworks */ = {
+		6611CEA91B45F42300AE0EE8 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				662428E01B451ADD0069FFD7 /* EZAudio.framework in Embed Frameworks */,
+				6611CEA81B45F42300AE0EE8 /* EZAudio.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -55,7 +55,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		662428DE1B451ADD0069FFD7 /* EZAudio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = EZAudio.framework; path = "/Users/haris/Library/Developer/Xcode/DerivedData/EZAudioExamplesOSX-coaaitxpxjzwgfdbxuusgvrdmjux/Build/Products/Debug/EZAudio.framework"; sourceTree = "<absolute>"; };
+		6611CEA01B45F0C700AE0EE8 /* EZAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EZAudio.framework; path = ../../../EZAudio/OSX/build/Release/EZAudio.framework; sourceTree = "<group>"; };
+		6611CEA61B45F42300AE0EE8 /* EZAudio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = EZAudio.framework; path = /Users/haris/Documents/code/openSource/EZAudio/EZAudio/OSX/build/Debug/EZAudio.framework; sourceTree = "<absolute>"; };
 		94056D85185B97E300EB94BA /* CoreGraphicsWaveformViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CoreGraphicsWaveformViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		94056D86185B97E300EB94BA /* CoreGraphicsWaveformViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CoreGraphicsWaveformViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		94056D87185B97E300EB94BA /* CoreGraphicsWaveformViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CoreGraphicsWaveformViewController.xib; sourceTree = "<group>"; };
@@ -93,7 +94,7 @@
 				94373080185B934900F315F0 /* AudioToolbox.framework in Frameworks */,
 				94373081185B934900F315F0 /* AudioUnit.framework in Frameworks */,
 				94373082185B934900F315F0 /* CoreAudio.framework in Frameworks */,
-				662428DF1B451ADD0069FFD7 /* EZAudio.framework in Frameworks */,
+				6611CEA71B45F42300AE0EE8 /* EZAudio.framework in Frameworks */,
 				94373025185B931C00F315F0 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -104,7 +105,7 @@
 		94373018185B931C00F315F0 = {
 			isa = PBXGroup;
 			children = (
-				662428DE1B451ADD0069FFD7 /* EZAudio.framework */,
+				6611CEA61B45F42300AE0EE8 /* EZAudio.framework */,
 				9437302A185B931C00F315F0 /* EZAudioCoreGraphicsWaveformExample */,
 				94373023185B931C00F315F0 /* Frameworks */,
 				94373022185B931C00F315F0 /* Products */,
@@ -122,6 +123,7 @@
 		94373023185B931C00F315F0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6611CEA01B45F0C700AE0EE8 /* EZAudio.framework */,
 				94373087185B937E00F315F0 /* QuartzCore.framework */,
 				94373085185B937100F315F0 /* OpenGL.framework */,
 				94373083185B936B00F315F0 /* GLKit.framework */,
@@ -182,7 +184,7 @@
 				9437301D185B931C00F315F0 /* Sources */,
 				9437301E185B931C00F315F0 /* Frameworks */,
 				9437301F185B931C00F315F0 /* Resources */,
-				662428BB1B4519D80069FFD7 /* Embed Frameworks */,
+				6611CEA91B45F42300AE0EE8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -366,7 +368,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EZAudioCoreGraphicsWaveformExample/EZAudioCoreGraphicsWaveformExample-Prefix.pch";
 				INFOPLIST_FILE = "EZAudioCoreGraphicsWaveformExample/EZAudioCoreGraphicsWaveformExample-Info.plist";
@@ -381,7 +382,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EZAudioCoreGraphicsWaveformExample/EZAudioCoreGraphicsWaveformExample-Prefix.pch";
 				INFOPLIST_FILE = "EZAudioCoreGraphicsWaveformExample/EZAudioCoreGraphicsWaveformExample-Info.plist";
