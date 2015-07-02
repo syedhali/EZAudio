@@ -25,8 +25,8 @@
 
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import <TargetConditionals.h>
 #import "TPCircularBuffer.h"
-
 #if TARGET_OS_IPHONE
 #import <AVFoundation/AVFoundation.h>
 #elif TARGET_OS_MAC
@@ -65,6 +65,14 @@ typedef struct
 typedef CGRect EZRect;
 #elif TARGET_OS_MAC
 typedef NSRect EZRect;
+#endif
+
+//------------------------------------------------------------------------------
+
+#if TARGET_OS_IPHONE
+typedef UIColor EZColor;
+#elif TARGET_OS_MAC
+typedef NSColor EZColor;
 #endif
 
 //------------------------------------------------------------------------------
@@ -403,6 +411,20 @@ typedef NSRect EZRect;
  @return An NSString with a human readable version of the error code.
  */
 + (NSString *)stringFromUInt32Code:(UInt32)code;
+
+//------------------------------------------------------------------------------
+#pragma mark - Color Utility
+//------------------------------------------------------------------------------
+
+///-----------------------------------------------------------
+/// @name Color Utility
+///-----------------------------------------------------------
+
++ (void)getColorComponentsFromCGColor:(CGColorRef)color
+                                  red:(CGFloat *)red
+                                green:(CGFloat *)green
+                                 blue:(CGFloat *)blue
+                                alpha:(CGFloat *)alpha;
 
 //------------------------------------------------------------------------------
 #pragma mark - Plot Utility

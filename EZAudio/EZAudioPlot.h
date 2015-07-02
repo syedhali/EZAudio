@@ -24,8 +24,6 @@
 //  THE SOFTWARE.
 
 #import <QuartzCore/QuartzCore.h>
-#import "TargetConditionals.h"
-#import "EZAudioUtilities.h"
 #import "EZPlot.h"
 
 @class EZAudio;

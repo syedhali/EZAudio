@@ -97,19 +97,6 @@
                 </textField>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="foT-nv-032" customClass="EZAudioPlotGL">
                     <rect key="frame" x="0.0" y="77" width="480" height="195"/>
-                    <subviews>
-                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LUM-Pe-2L5">
-                            <rect key="frame" x="14" y="147" width="115" height="32"/>
-                            <buttonCell key="cell" type="push" title="Test Control" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3xm-bG-IYg">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                        </button>
-                    </subviews>
-                    <constraints>
-                        <constraint firstItem="LUM-Pe-2L5" firstAttribute="top" secondItem="foT-nv-032" secondAttribute="top" constant="20" id="byH-cL-zRG"/>
-                        <constraint firstItem="LUM-Pe-2L5" firstAttribute="leading" secondItem="foT-nv-032" secondAttribute="leading" constant="20" id="jVm-zC-CWV"/>
-                    </constraints>
                 </customView>
             </subviews>
             <constraints>

@@ -34,6 +34,14 @@
 
 typedef struct
 {
+    GLfloat x;
+    GLfloat y;
+} EZAudioPlotGLPoint;
+
+//------------------------------------------------------------------------------
+
+typedef struct
+{
     BOOL                interpolated;
     EZPlotHistoryInfo  *historyInfo;
     EZAudioPlotGLPoint *points;
@@ -166,17 +174,20 @@ typedef struct
                                                               maximumLength:[self maximumRollingHistoryLength]];
     
     //
-    // Setup OpenGL properties
-    //
-    self.baseEffect = [[GLKBaseEffect alloc] init];
-    self.baseEffect.useConstantColor = YES;
-    self.baseEffect.constantColor = GLKVector4Make(1.0f, 1.0f, 1.0f, 1.0f);
-    self.gain = 1.0f;
-    
-    //
     // Setup OpenGL specific stuff
     //
     [self setupOpenGL];
+    
+    //
+    // Setup view properties
+    //
+    self.gain = 1.0f;
+#if TARGET_OS_IPHONE
+    
+#elif TARGET_OS_MAC
+    self.backgroundColor = [NSColor colorWithCalibratedRed:0.569 green:0.82 blue:0.478 alpha:1.0];
+    self.color = [NSColor colorWithCalibratedRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+#endif
     
     //
     // Create the display link
@@ -189,6 +200,8 @@ typedef struct
 
 - (void)setupOpenGL
 {
+    self.baseEffect = [[GLKBaseEffect alloc] init];
+    self.baseEffect.useConstantColor = YES;
 #if TARGET_OS_IPHONE
     if (!self.context)
     {
@@ -204,6 +217,8 @@ typedef struct
 #elif TARGET_OS_MAC
     self.wantsBestResolutionOpenGLSurface = YES;
     self.wantsLayer = YES;
+    self.layer.opaque = YES;
+    self.layer.backgroundColor = [NSColor clearColor].CGColor;
     if (!self.pixelFormat)
     {
         NSOpenGLPixelFormatAttribute attrs[] =
@@ -223,12 +238,10 @@ typedef struct
 #endif
     self.openGLContext = [[NSOpenGLContext alloc] initWithFormat:self.pixelFormat
                                                     shareContext:nil];
-    GLint swapInt = 1;
+    GLint swapInt = 1; GLint surfaceOpacity = 0;
     [self.openGLContext setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
+    [self.openGLContext setValues:&surfaceOpacity forParameter:NSOpenGLCPSurfaceOpacity];
     [self.openGLContext lock];
-    glEnable(GL_MULTISAMPLE);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glGenVertexArrays(1, &self.info->vab);
     glBindVertexArray(self.info->vab);
 #endif
@@ -238,7 +251,6 @@ typedef struct
                  self.info->pointCount * sizeof(EZAudioPlotGLPoint),
                  self.info->points,
                  GL_STREAM_DRAW);
-    glClearColor(0.686f, 0.51f, 0.663f, 1.0f);
 #if !TARGET_OS_IPHONE
     [self.openGLContext unlock];
 #endif
@@ -341,6 +353,64 @@ typedef struct
 }
 
 //------------------------------------------------------------------------------
+#pragma mark - Setters
+//------------------------------------------------------------------------------
+
+- (void)setBackgroundColor:(id)backgroundColor
+{
+    _backgroundColor = backgroundColor;
+    if (backgroundColor)
+    {
+        CGColorRef colorRef = [backgroundColor CGColor];
+        CGFloat red; CGFloat green; CGFloat blue; CGFloat alpha;
+        [EZAudioUtilities getColorComponentsFromCGColor:colorRef
+                                                    red:&red
+                                                  green:&green
+                                                   blue:&blue
+                                                  alpha:&alpha];
+        //
+        // Note! If you set the alpha to be 0 on mac for a transparent view
+        // the EZAudioPlotGL will make the superview layer-backed to make
+        // sure there is a surface to display itself on (or else you will get
+        // some pretty weird drawing glitches
+        //
+#if !TARGET_OS_IPHONE
+        if (alpha == 0.0f)
+        {
+            [self.superview setWantsLayer:YES];
+        }
+#endif
+        glClearColor(red, green, blue, alpha);
+    }
+    else
+    {
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    }
+}
+
+//------------------------------------------------------------------------------
+
+- (void)setColor:(id)color
+{
+    _color = color;
+    if (color)
+    {
+        CGColorRef colorRef = [color CGColor];
+        CGFloat red; CGFloat green; CGFloat blue; CGFloat alpha;
+        [EZAudioUtilities getColorComponentsFromCGColor:colorRef
+                                                    red:&red
+                                                  green:&green
+                                                   blue:&blue
+                                                  alpha:&alpha];
+        self.baseEffect.constantColor = GLKVector4Make(red, green, blue, alpha);
+    }
+    else
+    {
+        self.baseEffect.constantColor = GLKVector4Make(0.0f, 0.0f, 0.0f, 0.0f);
+    }
+}
+
+//------------------------------------------------------------------------------
 #pragma mark - Drawing
 //------------------------------------------------------------------------------
 
@@ -357,7 +427,7 @@ typedef struct
     [self.openGLContext makeCurrentContext];
     [self.openGLContext lock];
 #endif
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
     GLenum mode = self.info->interpolated ? GL_TRIANGLE_STRIP : GL_LINE_STRIP;
     float interpolatedFactor = self.info->interpolated ? 2.0f : 1.0f;
     float xscale = 2.0f / ((float)self.info->pointCount / interpolatedFactor);
