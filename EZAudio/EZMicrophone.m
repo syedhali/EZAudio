@@ -70,7 +70,8 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [EZAudioUtilities checkResult:AudioUnitUninitialize(self.info->audioUnit) operation:"Failed to unintialize audio unit for microphone"];
+    [EZAudioUtilities checkResult:AudioUnitUninitialize(self.info->audioUnit)
+                        operation:"Failed to unintialize audio unit for microphone"];
     [EZAudioUtilities freeBufferList:self.info->audioBufferList];
     [EZAudioUtilities freeFloatBuffers:self.info->floatData
                       numberOfChannels:self.info->streamFormat.mChannelsPerFrame];
@@ -116,11 +117,7 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
     self = [self initWithMicrophoneDelegate:delegate];
     if(self)
     {
-        self.info = (EZMicrophoneInfo *)malloc(sizeof(EZMicrophoneInfo));
-        memset(self.info, 0, sizeof(EZMicrophoneInfo));
-        self.info->streamFormat = audioStreamBasicDescription;
-        _delegate = delegate;
-        [self setup];
+        [self setAudioStreamBasicDescription:audioStreamBasicDescription];
     }
     return self;
 }
