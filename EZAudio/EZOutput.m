@@ -108,8 +108,8 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
                         operation:"Failed to stop graph"];
     [EZAudioUtilities checkResult:AUGraphClose(self.info->graph)
                         operation:"Failed to close graph"];
-    [EZAudioUtilities checkResult:AUGraphUninitialize(self.info->graph)
-                        operation:"Failed to uninitialize graph"];
+    [EZAudioUtilities checkResult:DisposeAUGraph(self.info->graph)
+                        operation:"Failed to dispose of graph"];
     free(self.info);
 }
 
