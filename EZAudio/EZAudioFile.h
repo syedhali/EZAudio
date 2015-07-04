@@ -244,7 +244,7 @@ typedef void (^EZAudioWaveformDataCompletionBlock)(float **waveformData, int len
  */
 
 /**
- Provides the AudioStreamBasicDescription structure used within the app. The file's format will be converted to this format and then sent back as either a float array or a `AudioBufferList` pointer. For instance, the file on disk could be a 22.5 kHz, float format, but we might have an audio processing graph that has a 44.1 kHz, signed integer format that we'd like to interact with. The client format lets us set that 44.1 kHz format on the audio file to properly read samples from it with any interpolation or format conversion that must take place done automatically within the EZAudioFile `readFrames:audioBufferList:bufferSize:eof:` method. Default is stereo, non-interleaved, 44.1 kHz.
+ Provides the common AudioStreamBasicDescription that will be used for in-app interaction. The file's format will be converted to this format and then sent back as either a float array or a `AudioBufferList` pointer. For instance, the file on disk could be a 22.5 kHz, float format, but we might have an audio processing graph that has a 44.1 kHz, signed integer format that we'd like to interact with. The client format lets us set that 44.1 kHz format on the audio file to properly read samples from it with any interpolation or format conversion that must take place done automatically within the EZAudioFile `readFrames:audioBufferList:bufferSize:eof:` method. Default is stereo, non-interleaved, 44.1 kHz.
  @warning This must be a linear PCM format!
  @return An AudioStreamBasicDescription structure describing the format of the audio file.
  */
