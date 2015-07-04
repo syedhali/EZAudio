@@ -69,6 +69,7 @@
     self.playingAudioPlot.plotType = EZPlotTypeRolling;
     self.playingAudioPlot.shouldFill = YES;
     self.playingAudioPlot.shouldMirror = YES;
+    self.playingAudioPlot.gain = 2.5f;
     
     // Create an instance of the microphone and tell it to use this view controller instance as the delegate
     self.microphone = [EZMicrophone microphoneWithDelegate:self];
@@ -173,6 +174,7 @@
     }
 
     EZAudioFile *audioFile = [EZAudioFile audioFileWithURL:[self testFilePathURL]];
+    NSLog(@"audiofile: %@", audioFile);
     [self.player playAudioFile:audioFile];
 }
 
@@ -204,7 +206,6 @@
         // Create the recorder
         //
         [self.microphone startFetchingAudio];
-        [EZAudioUtilities printASBD:self.microphone.audioStreamBasicDescription];
         self.recorder = [EZRecorder recorderWithURL:[self testFilePathURL]
                                        clientFormat:[self.microphone audioStreamBasicDescription]
                                            fileType:EZRecorderFileTypeM4A

@@ -150,7 +150,7 @@ BOOL __shouldExitOnCheckResultFail = YES;
                                                          NULL,
                                                          &propSize,
                                                          &asbd)
-                        operation:"Failed to fill out the rest of the m4a AudioStreamBasicDescription"];
+                        operation:"Failed to fill out the rest of the iLBC AudioStreamBasicDescription"];
     
     return asbd;
 }
