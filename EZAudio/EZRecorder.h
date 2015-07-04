@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
  @param destinationFileType A constant described by the EZRecorderFileType that corresponds to the type of destination file that should be written. For instance, an AAC file written using an '.m4a' extension would correspond to EZRecorderFileTypeM4A. See EZRecorderFileType for all the constants and mapping combinations.
  @return The newly created EZRecorder instance.
  */
--(EZRecorder*)initWithDestinationURL:(NSURL*)url
+-(instancetype)initWithDestinationURL:(NSURL*)url
                         sourceFormat:(AudioStreamBasicDescription)sourceFormat
                  destinationFileType:(EZRecorderFileType)destinationFileType;
 
@@ -84,19 +84,68 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
  @param destinationFileType A constant described by the EZRecorderFileType that corresponds to the type of destination file that should be written. For instance, an AAC file written using an '.m4a' extension would correspond to EZRecorderFileTypeM4A. See EZRecorderFileType for all the constants and mapping combinations.
  @return The newly created EZRecorder instance.
  */
-+(EZRecorder*)recorderWithDestinationURL:(NSURL*)url
++(instancetype)recorderWithDestinationURL:(NSURL*)url
                             sourceFormat:(AudioStreamBasicDescription)sourceFormat
                      destinationFileType:(EZRecorderFileType)destinationFileType;
 
+//------------------------------------------------------------------------------
 #pragma mark - Getters
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Getting The Recorder's Properties
 ///-----------------------------------------------------------
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the current offset in the audio file as an NSTimeInterval (i.e. in seconds).  When setting this it will determine the correct frame offset and perform a `seekToFrame` to the new time offset.
+ @warning Make sure the new current time offset is less than the `duration` or you will receive an invalid seek assertion.
+ */
+@property (nonatomic, readwrite) NSTimeInterval currentTime;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the duration of the audio file in seconds.
+ */
+@property (readonly) NSTimeInterval duration;
+//------------------------------------------------------------------------------
+
+/**
+ Provides the current time as an NSString with the time format MM:SS.
+ */
+@property (readonly) NSString *formattedCurrentTime;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the duration as an NSString with the time format MM:SS.
+ */
+@property (readonly) NSString *formattedDuration;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the frame index (a.k.a the seek positon) within the audio file as SInt64. This can be helpful when seeking through the audio file.
+ @return The current frame index within the audio file as a SInt64.
+ */
+@property (readonly) SInt64 frameIndex;
+//------------------------------------------------------------------------------
+
+/**
+ Provides the total frame count of the audio file in the file format.
+ @return The total number of frames in the audio file in the AudioStreamBasicDescription representing the file format as a SInt64.
+ */
+@property (readonly) SInt64 totalFrames;
+
+//------------------------------------------------------------------------------
+
 /**
  Provides the file path that's currently being used by the recorder.
  @return  The NSURL representing the file path of the audio file path being used for recording.
  */
--(NSURL*)url;
+- (NSURL *)url;
 
 #pragma mark - Events
 ///-----------------------------------------------------------
@@ -119,5 +168,15 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
  Finishes writes to the audio file and closes it.
  */
 -(void)closeAudioFile;
+
+//------------------------------------------------------------------------------
+#pragma mark - Subclass
+//------------------------------------------------------------------------------
+
+/**
+ By default the output file is written out with 2 channels (so whatever the 
+ @return <#return value description#>
+ */
+- (int)numberOfChannels;
 
 @end

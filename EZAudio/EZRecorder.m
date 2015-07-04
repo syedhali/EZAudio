@@ -26,20 +26,23 @@
 #import "EZRecorder.h"
 #import "EZAudioUtilities.h"
 
-@interface EZRecorder (){
-    ExtAudioFileRef             _destinationFile;
-    AudioFileTypeID             _destinationFileTypeID;
-    CFURLRef                    _destinationFileURL;
-    AudioStreamBasicDescription _destinationFormat;
-    AudioStreamBasicDescription _sourceFormat;
-}
+typedef struct
+{
+    ExtAudioFileRef             extAudioFileRef;
+    AudioStreamBasicDescription clientFormat;
+    AudioFileTypeID             fileTypeID;
+    CFURLRef                    fileURL;
+    AudioStreamBasicDescription fileFormat;
+} EZRecorderInfo;
 
+@interface EZRecorder ()
+@property (nonatomic, assign) EZRecorderInfo *info;
 @end
 
 @implementation EZRecorder
 
 #pragma mark - Initializers
--(EZRecorder*)initWithDestinationURL:(NSURL*)url
+- (EZRecorder*)initWithDestinationURL:(NSURL*)url
                         sourceFormat:(AudioStreamBasicDescription)sourceFormat
                  destinationFileType:(EZRecorderFileType)destinationFileType
 {
@@ -47,16 +50,12 @@
     if (self)
     {
         // Set defaults
-        _destinationFile        = NULL;
-        _destinationFileURL     = (__bridge CFURLRef)url;
-        _sourceFormat           = sourceFormat;
-        _destinationFormat      = [EZRecorder recorderFormatForFileType:destinationFileType
-                                                       withSourceFormat:_sourceFormat];
-        _destinationFileTypeID  = [EZRecorder recorderFileTypeIdForFileType:destinationFileType
-                                                           withSourceFormat:_sourceFormat];
-        
-        // Initializer the recorder instance
-        [self _initializeRecorder];
+        self.info = (EZRecorderInfo *)calloc(1, sizeof(EZRecorderInfo));
+        self.info->fileURL = (__bridge CFURLRef)url;
+        self.info->clientFormat = sourceFormat;
+        self.info->fileFormat = [EZRecorder recorderFormatForFileType:destinationFileType withSourceFormat:self.info->clientFormat];
+        self.info->fileTypeID  = [EZRecorder recorderFileTypeIdForFileType:destinationFileType withSourceFormat:self.info->clientFormat];
+        [self setup];
     }
     return self;
 }
@@ -72,11 +71,11 @@
 }
 
 #pragma mark - Private Configuration
-+(AudioStreamBasicDescription)recorderFormatForFileType:(EZRecorderFileType)fileType
-                                       withSourceFormat:(AudioStreamBasicDescription)sourceFormat
++ (AudioStreamBasicDescription)recorderFormatForFileType:(EZRecorderFileType)fileType
+                                        withSourceFormat:(AudioStreamBasicDescription)sourceFormat
 {
     AudioStreamBasicDescription asbd;
-    switch ( fileType)
+    switch (fileType)
     {
         case EZRecorderFileTypeAIFF:
             asbd = [EZAudioUtilities AIFFFormatWithNumberOfChannels:sourceFormat.mChannelsPerFrame
@@ -98,8 +97,10 @@
     return asbd;
 }
 
-+(AudioFileTypeID)recorderFileTypeIdForFileType:(EZRecorderFileType)fileType
-                               withSourceFormat:(AudioStreamBasicDescription)sourceFormat
+//------------------------------------------------------------------------------
+
++ (AudioFileTypeID)recorderFileTypeIdForFileType:(EZRecorderFileType)fileType
+                                withSourceFormat:(AudioStreamBasicDescription)sourceFormat
 {
     AudioFileTypeID audioFileTypeID;
     switch ( fileType)
@@ -123,68 +124,127 @@
     return audioFileTypeID;
 }
 
--(void)_initializeRecorder
+//------------------------------------------------------------------------------
+
+- (void)setup
 {
     // Finish filling out the destination format description
-    UInt32 propSize = sizeof(_destinationFormat);
+    UInt32 propSize = sizeof(self.info->fileFormat);
     [EZAudioUtilities checkResult:AudioFormatGetProperty(kAudioFormatProperty_FormatInfo,
                                                          0,
                                                          NULL,
                                                          &propSize,
-                                                         &_destinationFormat)
+                                                         &self.info->fileFormat)
                         operation:"Failed to fill out rest of destination format"];
     
     // Create the audio file
-    [EZAudioUtilities checkResult:ExtAudioFileCreateWithURL(_destinationFileURL,
-                                                            _destinationFileTypeID,
-                                                            &_destinationFormat,
+    [EZAudioUtilities checkResult:ExtAudioFileCreateWithURL(self.info->fileURL,
+                                                            self.info->fileTypeID,
+                                                            &self.info->fileFormat,
                                                             NULL,
                                                             kAudioFileFlags_EraseFile,
-                                                            &_destinationFile)
+                                                            &self.info->extAudioFileRef)
                         operation:"Failed to create audio file"];
     
     // Set the client format (which should be equal to the source format)
-    [EZAudioUtilities checkResult:ExtAudioFileSetProperty(_destinationFile,
+    [EZAudioUtilities checkResult:ExtAudioFileSetProperty(self.info->extAudioFileRef,
                                                           kExtAudioFileProperty_ClientDataFormat,
-                                                          sizeof(_sourceFormat),
-                                                          &_sourceFormat)
+                                                          sizeof(self.info->clientFormat),
+                                                          &self.info->clientFormat)
                         operation:"Failed to set client format on recorded audio file"];
     
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - Events
--(void)appendDataFromBufferList:(AudioBufferList *)bufferList
-                 withBufferSize:(UInt32)bufferSize
+//------------------------------------------------------------------------------
+
+- (void)appendDataFromBufferList:(AudioBufferList *)bufferList
+                  withBufferSize:(UInt32)bufferSize
 {
-    if (_destinationFile)
+    if (self.info->extAudioFileRef)
     {
-        [EZAudioUtilities checkResult:ExtAudioFileWriteAsync(_destinationFile,
+        [EZAudioUtilities checkResult:ExtAudioFileWriteAsync(self.info->extAudioFileRef,
                                                              bufferSize,
                                                              bufferList)
                    operation:"Failed to write audio data to recorded audio file"];
+        
+        SInt64 outFrameOffset;
+        [EZAudioUtilities checkResult:ExtAudioFileTell(self.info->extAudioFileRef,
+                                                       &outFrameOffset) operation:"Failed to get current frame"];
+        NSLog(@"out frame: %lli", outFrameOffset);
     }
 }
 
--(void)closeAudioFile
+- (void)closeAudioFile
 {
-    if (_destinationFile)
+    if (self.info->extAudioFileRef)
     {
         // Dispose of the audio file reference
-        [EZAudioUtilities checkResult:ExtAudioFileDispose(_destinationFile)
+        [EZAudioUtilities checkResult:ExtAudioFileDispose(self.info->extAudioFileRef)
                             operation:"Failed to close audio file"];
         
         // Null out the file reference
-        _destinationFile = NULL;
+        self.info->extAudioFileRef = NULL;
     }
 }
 
--(NSURL *)url
+//------------------------------------------------------------------------------
+#pragma mark - Getters
+//------------------------------------------------------------------------------
+
+//- (NSTimeInterval)currentTime
+//{
+//    
+//}
+
+//------------------------------------------------------------------------------
+
+//- (NSTimeInterval)duration
+//{
+//
+//}
+
+//------------------------------------------------------------------------------
+
+//- (NSString *)formattedCurrentTime
+//{
+//    
+//}
+
+//------------------------------------------------------------------------------
+
+//- (NSString *)formattedDuration
+//{
+//    
+//}
+
+//------------------------------------------------------------------------------
+
+- (SInt64)frameIndex
 {
-    return (__bridge NSURL*)_destinationFileURL;
+    SInt64 frameIndex;
+    [EZAudioUtilities checkResult:ExtAudioFileTell(self.info->extAudioFileRef, &frameIndex)
+                        operation:"Failed to get frame index"];
+    return frameIndex;
+}
+
+//------------------------------------------------------------------------------
+
+//- (SInt64)totalFrames
+//{
+//    
+//}
+
+//------------------------------------------------------------------------------
+
+- (NSURL *)url
+{
+    return (__bridge NSURL*)self.info->fileURL;
 }
 
 #pragma mark - Dealloc
--(void)dealloc
+- (void)dealloc
 {
     [self closeAudioFile];
 }
