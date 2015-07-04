@@ -25,21 +25,33 @@
 
 #import <Foundation/Foundation.h>
 
+//------------------------------------------------------------------------------
 #pragma mark - Core Components
+//------------------------------------------------------------------------------
+
+#import "EZAudioDevice.h"
 #import "EZAudioFile.h"
-#import "EZAudioFloatData.h"
 #import "EZMicrophone.h"
 #import "EZOutput.h"
 #import "EZRecorder.h"
-#import "EZAudioUtilities.h"
-
-#pragma mark - Extended Components
 #import "EZAudioPlayer.h"
 
+//------------------------------------------------------------------------------
 #pragma mark - Interface Components
+//------------------------------------------------------------------------------
+
 #import "EZPlot.h"
+#import "EZAudioDisplayLink.h"
 #import "EZAudioPlot.h"
 #import "EZAudioPlotGL.h"
+
+//------------------------------------------------------------------------------
+#pragma mark - Utility Components
+//------------------------------------------------------------------------------
+
+#import "EZAudioFloatConverter.h"
+#import "EZAudioFloatData.h"
+#import "EZAudioUtilities.h"
 
 //------------------------------------------------------------------------------
 

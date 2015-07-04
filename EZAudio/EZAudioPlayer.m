@@ -391,12 +391,12 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
 #pragma mark - EZAudioFileDelegate
 //------------------------------------------------------------------------------
 
-- (void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition
+- (void)audioFileUpdatedPosition:(EZAudioFile *)audioFile
 {
     if ([self.delegate respondsToSelector:@selector(audioPlayer:updatedPosition:inAudioFile:)])
     {
         [self.delegate audioPlayer:self
-                   updatedPosition:framePosition
+                   updatedPosition:[audioFile frameIndex]
                        inAudioFile:audioFile];
     }
 }

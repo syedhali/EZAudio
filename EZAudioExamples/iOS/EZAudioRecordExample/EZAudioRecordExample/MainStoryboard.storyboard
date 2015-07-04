@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="llE-BN-jHz">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="llE-BN-jHz">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
         <!--Record View Controller-->
@@ -20,70 +20,91 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2wj-z5-SgU" customClass="EZAudioPlotGL">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1hg-FO-pPe">
-                                        <rect key="frame" x="18" y="512" width="51" height="31"/>
-                                        <color key="onTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <connections>
-                                            <action selector="toggleMicrophone:" destination="llE-BN-jHz" eventType="valueChanged" id="gDV-6T-Whu"/>
-                                        </connections>
-                                    </switch>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Microphone On" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0aj-Ap-Ylp">
-                                        <rect key="frame" x="85" y="520" width="497" height="16"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="x5e-xg-u5V">
-                                        <rect key="frame" x="18" y="551" width="51" height="31"/>
-                                        <connections>
-                                            <action selector="toggleRecording:" destination="llE-BN-jHz" eventType="valueChanged" id="XcR-8d-Kcd"/>
-                                        </connections>
-                                    </switch>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recording On" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e1t-nE-3QJ">
-                                        <rect key="frame" x="85" y="559" width="497" height="16"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r8j-qU-fh6">
-                                        <rect key="frame" x="18" y="474" width="49" height="30"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ua2-c0-har">
+                                        <rect key="frame" x="0.0" y="455" width="600" height="145"/>
+                                        <subviews>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1hg-FO-pPe">
+                                                <rect key="frame" x="18" y="57" width="51" height="31"/>
+                                                <color key="onTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <connections>
+                                                    <action selector="toggleMicrophone:" destination="llE-BN-jHz" eventType="valueChanged" id="gDV-6T-Whu"/>
+                                                </connections>
+                                            </switch>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Microphone On" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0aj-Ap-Ylp">
+                                                <rect key="frame" x="85" y="65" width="497" height="16"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="x5e-xg-u5V">
+                                                <rect key="frame" x="18" y="96" width="51" height="31"/>
+                                                <color key="onTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <connections>
+                                                    <action selector="toggleRecording:" destination="llE-BN-jHz" eventType="valueChanged" id="XcR-8d-Kcd"/>
+                                                </connections>
+                                            </switch>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Recording On" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e1t-nE-3QJ">
+                                                <rect key="frame" x="85" y="104" width="497" height="16"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not Playing" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zeh-I6-Na6">
+                                                <rect key="frame" x="85" y="26" width="497" height="16"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lex-aP-CGX">
+                                                <rect key="frame" x="13" y="19" width="59" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="LDk-Y3-uk0"/>
+                                                    <constraint firstAttribute="width" constant="59" id="zqS-lz-oEK"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="13"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <state key="normal" title="Play">
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="playFile:" destination="llE-BN-jHz" eventType="touchUpInside" id="DDY-Cz-2IW"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.70000000000000007" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="dbU-fb-Yp6"/>
-                                            <constraint firstAttribute="width" constant="49" id="jPi-0p-2oF"/>
+                                            <constraint firstAttribute="height" constant="145" id="84N-gU-Dz9"/>
+                                            <constraint firstAttribute="trailing" secondItem="zeh-I6-Na6" secondAttribute="trailing" constant="18" id="Nnf-8H-wts"/>
+                                            <constraint firstItem="Lex-aP-CGX" firstAttribute="leading" secondItem="Ua2-c0-har" secondAttribute="leading" constant="13" id="Zb4-yY-8dM"/>
+                                            <constraint firstItem="zeh-I6-Na6" firstAttribute="top" secondItem="Ua2-c0-har" secondAttribute="top" constant="26" id="l3q-uD-w0G"/>
+                                            <constraint firstItem="zeh-I6-Na6" firstAttribute="leading" secondItem="Lex-aP-CGX" secondAttribute="trailing" constant="13" id="mnu-nJ-xAa"/>
+                                            <constraint firstItem="Lex-aP-CGX" firstAttribute="top" secondItem="Ua2-c0-har" secondAttribute="top" constant="19" id="tAe-da-Jb2"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <state key="normal" title="Play">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="playFile:" destination="llE-BN-jHz" eventType="touchUpInside" id="IbI-bz-M5D"/>
-                                        </connections>
-                                    </button>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not Playing" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zeh-I6-Na6">
-                                        <rect key="frame" x="85" y="481" width="497" height="16"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QZk-8t-iz0">
+                                        <rect key="frame" x="18" y="18" width="80" height="39"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="32"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NK6-i1-Kjf" customClass="EZAudioPlot">
+                                        <rect key="frame" x="107" y="18" width="475" height="39"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="39" id="pnN-yp-8eE"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="0aj-Ap-Ylp" firstAttribute="centerY" secondItem="1hg-FO-pPe" secondAttribute="centerY" id="2ID-SH-h0n"/>
-                                    <constraint firstItem="x5e-xg-u5V" firstAttribute="centerY" secondItem="e1t-nE-3QJ" secondAttribute="centerY" id="3TN-JD-fXs"/>
-                                    <constraint firstAttribute="trailing" secondItem="0aj-Ap-Ylp" secondAttribute="trailing" constant="18" id="Nzq-x0-Bn3"/>
-                                    <constraint firstItem="1hg-FO-pPe" firstAttribute="leading" secondItem="2wj-z5-SgU" secondAttribute="leading" constant="18" id="SGf-Ot-ydT"/>
-                                    <constraint firstItem="zeh-I6-Na6" firstAttribute="centerY" secondItem="r8j-qU-fh6" secondAttribute="centerY" id="SV5-g6-nAm"/>
-                                    <constraint firstItem="zeh-I6-Na6" firstAttribute="leading" secondItem="r8j-qU-fh6" secondAttribute="trailing" constant="18" id="WrE-fc-eWU"/>
-                                    <constraint firstItem="0aj-Ap-Ylp" firstAttribute="leading" secondItem="1hg-FO-pPe" secondAttribute="trailing" constant="18" id="Zlu-hy-toc"/>
-                                    <constraint firstItem="r8j-qU-fh6" firstAttribute="leading" secondItem="2wj-z5-SgU" secondAttribute="leading" constant="18" id="bfv-fU-4be"/>
-                                    <constraint firstItem="e1t-nE-3QJ" firstAttribute="leading" secondItem="x5e-xg-u5V" secondAttribute="trailing" constant="18" id="cyW-VV-2vF"/>
-                                    <constraint firstItem="x5e-xg-u5V" firstAttribute="leading" secondItem="2wj-z5-SgU" secondAttribute="leading" constant="18" id="d1D-pw-daz"/>
-                                    <constraint firstAttribute="bottom" secondItem="x5e-xg-u5V" secondAttribute="bottom" constant="18" id="j5C-Pr-Qr1"/>
-                                    <constraint firstItem="1hg-FO-pPe" firstAttribute="top" secondItem="r8j-qU-fh6" secondAttribute="bottom" constant="8" id="kGE-En-5oO"/>
-                                    <constraint firstAttribute="trailing" secondItem="zeh-I6-Na6" secondAttribute="trailing" constant="18" id="lgq-o9-XKk"/>
-                                    <constraint firstAttribute="trailing" secondItem="e1t-nE-3QJ" secondAttribute="trailing" constant="18" id="yg8-Wi-4FL"/>
-                                    <constraint firstItem="x5e-xg-u5V" firstAttribute="top" secondItem="1hg-FO-pPe" secondAttribute="bottom" constant="8" id="zO4-XU-4yd"/>
+                                    <constraint firstItem="QZk-8t-iz0" firstAttribute="top" secondItem="2wj-z5-SgU" secondAttribute="top" constant="18" id="7aU-qh-lzs"/>
+                                    <constraint firstItem="QZk-8t-iz0" firstAttribute="leading" secondItem="2wj-z5-SgU" secondAttribute="leading" constant="18" id="Aac-ba-fJG"/>
+                                    <constraint firstAttribute="trailing" secondItem="NK6-i1-Kjf" secondAttribute="trailing" constant="18" id="BAg-ql-P64"/>
+                                    <constraint firstAttribute="trailing" secondItem="Ua2-c0-har" secondAttribute="trailing" id="DFS-Lr-ap6"/>
+                                    <constraint firstAttribute="bottom" secondItem="Ua2-c0-har" secondAttribute="bottom" id="hWL-2I-U11"/>
+                                    <constraint firstItem="Ua2-c0-har" firstAttribute="leading" secondItem="2wj-z5-SgU" secondAttribute="leading" id="jV7-AG-ClO"/>
+                                    <constraint firstItem="NK6-i1-Kjf" firstAttribute="leading" secondItem="QZk-8t-iz0" secondAttribute="trailing" constant="9" id="rqh-Ib-RFU"/>
+                                    <constraint firstItem="NK6-i1-Kjf" firstAttribute="top" secondItem="2wj-z5-SgU" secondAttribute="top" constant="18" id="tRd-Ee-lnl"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -96,13 +117,15 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="audioPlot" destination="2wj-z5-SgU" id="1ih-MQ-w9g"/>
+                        <outlet property="currentTimeLabel" destination="QZk-8t-iz0" id="MP6-0t-jhv"/>
+                        <outlet property="microphoneStateLabel" destination="0aj-Ap-Ylp" id="fb1-B6-aY6"/>
                         <outlet property="microphoneSwitch" destination="1hg-FO-pPe" id="SFI-AX-IjC"/>
-                        <outlet property="microphoneTextField" destination="0aj-Ap-Ylp" id="748-Fq-ubg"/>
-                        <outlet property="playButton" destination="r8j-qU-fh6" id="tmR-Nt-pKO"/>
-                        <outlet property="playingTextField" destination="zeh-I6-Na6" id="bsZ-bd-HDD"/>
+                        <outlet property="playButton" destination="Lex-aP-CGX" id="K8T-X8-Tfy"/>
+                        <outlet property="playingAudioPlot" destination="NK6-i1-Kjf" id="bes-5F-Cfa"/>
+                        <outlet property="playingStateLabel" destination="zeh-I6-Na6" id="Tpj-mT-wwx"/>
                         <outlet property="recordSwitch" destination="x5e-xg-u5V" id="yZ8-zX-x4o"/>
-                        <outlet property="recordingTextField" destination="e1t-nE-3QJ" id="Vr4-cl-5zt"/>
+                        <outlet property="recordingAudioPlot" destination="2wj-z5-SgU" id="2hH-vO-WSb"/>
+                        <outlet property="recordingStateLabel" destination="e1t-nE-3QJ" id="PDc-R4-k0n"/>
                         <outlet property="view" destination="PCx-Sz-N5f" id="fk5-lV-jnA"/>
                     </connections>
                 </viewController>

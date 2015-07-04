@@ -25,12 +25,9 @@
 
 #import "RecordViewController.h"
 
-@interface RecordViewController ()
-@property (nonatomic,strong) AVAudioPlayer *audioPlayer;
-@property (nonatomic,weak) IBOutlet NSButton *microphoneToggle;
-@property (nonatomic,weak) IBOutlet NSButton *playButton;
-@property (nonatomic,weak) IBOutlet NSButton *recordingToggle;
-@end
+//------------------------------------------------------------------------------
+#pragma mark - RecordViewController (Implementation)
+//------------------------------------------------------------------------------
 
 @implementation RecordViewController
 
@@ -38,52 +35,106 @@
 #pragma mark - Customize the Audio Plot
 //------------------------------------------------------------------------------
 
--(void)awakeFromNib
+- (void)awakeFromNib
 {
-    /*
-     Customizing the audio plot's look
-    */
-    // Background color
-    self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.984 green: 0.71 blue: 0.365 alpha: 1];
-    // Waveform color
-    self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
-    // Plot type
-    self.audioPlot.plotType        = EZPlotTypeRolling;
-    // Fill
-    self.audioPlot.shouldFill      = YES;
-    // Mirror
-    self.audioPlot.shouldMirror    = YES;
+    
+    //
+    // Customizing the audio plot that'll show the current microphone input/recording
+    //
+    self.recordingAudioPlot.backgroundColor = [NSColor colorWithRed: 0.984 green: 0.71 blue: 0.365 alpha: 1];
+    self.recordingAudioPlot.color           = [NSColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+    self.recordingAudioPlot.plotType        = EZPlotTypeRolling;
+    self.recordingAudioPlot.shouldFill      = YES;
+    self.recordingAudioPlot.shouldMirror    = YES;
+    
+    //
+    // Customizing the audio plot that'll show the playback
+    //
+    self.playingAudioPlot.color = [NSColor whiteColor];
+    self.playingAudioPlot.plotType = EZPlotTypeRolling;
+    self.playingAudioPlot.shouldFill = YES;
+    self.playingAudioPlot.shouldMirror = YES;
+    self.playingAudioPlot.gain = 2.5f;
+    
+    // Create an instance of the microphone and tell it to use this view controller instance as the delegate
+    self.microphone = [EZMicrophone microphoneWithDelegate:self];
+    self.player = [EZAudioPlayer audioPlayerWithDelegate:self];
+    
+    //
+    // Initialize UI components
+    //
+    [self setTitle:@"Microphone On" forButton:self.microphoneSwitch];
+    [self setTitle:@"Not Recording" forButton:self.recordSwitch];
+    self.playingStateLabel.stringValue = @"Not Playing";
+    self.playButton.enabled = NO;
+    
+    //
+    // Setup notifications
+    //
+    [self setupNotifications];
+    
+    //
+    // Start the microphone
+    //
+    [self.microphone startFetchingAudio];
+}
 
-    // Configure the play button
-    [self.playButton setHidden:YES];
 
-    /*
-     Start the microphone
-    */
-    self.microphone = [EZMicrophone microphoneWithDelegate:self startsImmediately:YES];
-  
+//------------------------------------------------------------------------------
+
+- (void)setupNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playerDidChangePlayState:)
+                                                 name:EZAudioPlayerDidChangePlayStateNotification
+                                               object:self.player];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playerDidReachEndOfFile:)
+                                                 name:EZAudioPlayerDidReachEndOfFileNotification
+                                               object:self.player];
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Notifications
+//------------------------------------------------------------------------------
+
+- (void)playerDidChangePlayState:(NSNotification *)notification
+{
+    EZAudioPlayer *player = [notification object];
+    BOOL isPlaying = [player isPlaying];
+    if (isPlaying)
+    {
+        self.recorder.delegate = nil;
+    }
+    self.playingStateLabel.stringValue = isPlaying ? @"Playing" : @"Not Playing";
+    self.playingAudioPlot.hidden = !isPlaying;
+}
+
+//------------------------------------------------------------------------------
+
+- (void)playerDidReachEndOfFile:(NSNotification *)notification
+{
+    [self.playingAudioPlot clear];
 }
 
 //------------------------------------------------------------------------------
 #pragma mark - Actions
 //------------------------------------------------------------------------------
 
--(void)playFile:(id)sender
+- (void)playFile:(id)sender
 {
     //
     // Update microphone state
     //
     [self.microphone stopFetchingAudio];
-    self.microphoneToggle.state = NSOffState;
-    [self.microphoneToggle setEnabled:NO];
-
+    
     //
     // Update recording state
     //
     self.isRecording = NO;
-    self.recordingToggle.state = NSOffState;
-    [self.recordingToggle setEnabled:NO];
-
+    [self setTitle:@"Not Recording" forButton:self.recordSwitch];
+    self.recordSwitch.state = NSOffState;
+    
     //
     // Close the audio file
     //
@@ -92,122 +143,157 @@
         [self.recorder closeAudioFile];
     }
     
-    //
-    // Create audio player
-    //
-    if (self.audioPlayer)
-    {
-        if (self.audioPlayer.playing) [self.audioPlayer stop];
-        self.audioPlayer = nil;
-    }
-    NSError *err;
-    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:kAudioFilePath]
-                                                              error:&err];
+    EZAudioFile *audioFile = [EZAudioFile audioFileWithURL:[NSURL fileURLWithPath:kAudioFilePath]];
+    [self.player playAudioFile:audioFile];
+}
+
+//------------------------------------------------------------------------------
+
+- (void)toggleMicrophone:(id)sender
+{
+    [self.player pause];
     
-    [self.audioPlayer play];
-    self.audioPlayer.delegate = self;
-}
-
-//------------------------------------------------------------------------------
-
--(void)toggleMicrophone:(id)sender
-{
-    switch([sender state])
+    NSInteger state = [(NSButton *)sender state];
+    if (state == NSOffState)
     {
-        case NSOffState:
-            [self.microphone stopFetchingAudio];
-            break;
-        case NSOnState:
-            [self.microphone startFetchingAudio];
-            break;
-        default:
-            break;
+        [self.microphone stopFetchingAudio];
+    }
+    else
+    {
+        [self.microphone startFetchingAudio];
     }
 }
 
 //------------------------------------------------------------------------------
 
--(void)toggleRecording:(id)sender
+- (void)toggleRecording:(id)sender
 {
-    [self.playButton setHidden:NO];
-    switch( [sender state])
+    [self.player pause];
+    
+    NSInteger state = [(NSButton *)sender state];
+    if (state == NSOnState)
     {
-        case NSOffState:
-            [self.recorder closeAudioFile];
-            break;
-        case NSOnState:
-            /*
-             Create the recorder
-             */
-            self.recorder = [EZRecorder recorderWithDestinationURL:[NSURL fileURLWithPath:kAudioFilePath]
-                                                      sourceFormat:[self.microphone audioStreamBasicDescription]
-                                               destinationFileType:EZRecorderFileTypeM4A];
-            break;
-        default:
-            break;
+        //
+        // Create the recorder
+        //
+        [self.microphone startFetchingAudio];
+        self.recorder = [EZRecorder recorderWithURL:[NSURL fileURLWithPath:kAudioFilePath]
+                                       clientFormat:[self.microphone audioStreamBasicDescription]
+                                           fileType:EZRecorderFileTypeM4A
+                                           delegate:self];
+        self.playButton.enabled = YES;
     }
-    self.isRecording = (BOOL)[sender state];
+    self.isRecording = state;
+    NSString *title = self.isRecording ? @"Recording" : @"Not Recording";
+    [self setTitle:title forButton:self.recordSwitch];
 }
 
 //------------------------------------------------------------------------------
 #pragma mark - EZMicrophoneDelegate
 //------------------------------------------------------------------------------
 
+- (void)microphone:(EZMicrophone *)microphone changedPlayingState:(BOOL)isPlaying
+{
+    self.microphoneSwitch.state = isPlaying;
+    NSString *title = isPlaying ? @"Microphone On" : @"Microphone Off";
+    [self setTitle:title forButton:self.microphoneSwitch];
+}
+
+//------------------------------------------------------------------------------
+
 #warning Thread Safety
 // Note that any callback that provides streamed audio data (like streaming microphone input) happens on a separate audio thread that should not be blocked. When we feed audio data into any of the UI components we need to explicity create a GCD block on the main thread to properly get the UI to work.
--(void)microphone:(EZMicrophone *)microphone
- hasAudioReceived:(float **)buffer
-   withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels
+- (void)   microphone:(EZMicrophone *)microphone
+     hasAudioReceived:(float **)buffer
+       withBufferSize:(UInt32)bufferSize
+ withNumberOfChannels:(UInt32)numberOfChannels
 {
-  // Getting audio data as an array of float buffer arrays. What does that mean? Because the audio is coming in as a stereo signal the data is split into a left and right channel. So buffer[0] corresponds to the float* data for the left channel while buffer[1] corresponds to the float* data for the right channel.
-  
-  // See the Thread Safety warning above, but in a nutshell these callbacks happen on a separate audio thread. We wrap any UI updating in a GCD block on the main thread to avoid blocking that audio flow.
+    // Getting audio data as an array of float buffer arrays. What does that mean? Because the audio is coming in as a stereo signal the data is split into a left and right channel. So buffer[0] corresponds to the float* data for the left channel while buffer[1] corresponds to the float* data for the right channel.
+
+    // See the Thread Safety warning above, but in a nutshell these callbacks happen on a separate audio thread. We wrap any UI updating in a GCD block on the main thread to avoid blocking that audio flow.
     __weak typeof (self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(),^{
-    // All the audio plot needs is the buffer data (float*) and the size. Internally the audio plot will handle all the drawing related code, history management, and freeing its own resources. Hence, one badass line of code gets you a pretty plot :)
-        [weakSelf.audioPlot updateBuffer:buffer[0]
-                          withBufferSize:bufferSize];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // All the audio plot needs is the buffer data (float*) and the size. Internally the audio plot will handle all the drawing related code, history management, and freeing its own resources. Hence, one badass line of code gets you a pretty plot :)
+        [weakSelf.recordingAudioPlot updateBuffer:buffer[0]
+                                   withBufferSize:bufferSize];
     });
 }
 
 //------------------------------------------------------------------------------
 
-// Append the microphone data coming as a AudioBufferList with the specified buffer size to the recorder
--(void)    microphone:(EZMicrophone *)microphone
+- (void)   microphone:(EZMicrophone *)microphone
         hasBufferList:(AudioBufferList *)bufferList
        withBufferSize:(UInt32)bufferSize
  withNumberOfChannels:(UInt32)numberOfChannels
 {
-    // Getting audio data as a buffer list that can be directly fed into the EZRecorder. This is happening on the audio thread - any UI updating needs a GCD main queue block.
+    // Getting audio data as a buffer list that can be directly fed into the EZRecorder. This is happening on the audio thread - any UI updating needs a GCD main queue block. This will keep appending data to the tail of the audio file.
     if (self.isRecording)
     {
         [self.recorder appendDataFromBufferList:bufferList
                                  withBufferSize:bufferSize];
-    }  
+    }
 }
 
 //------------------------------------------------------------------------------
-#pragma mark - AVAudioPlayerDelegate
+#pragma mark - EZRecorderDelegate
 //------------------------------------------------------------------------------
 
-/*
- Occurs when the audio player instance completes playback
- */
--(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player
-                      successfully:(BOOL)flag
+- (void)recorderDidClose:(EZRecorder *)recorder
 {
-    // Update microphone state
-    self.microphoneToggle.state = NSOnState;
-    [self.microphoneToggle setEnabled:YES];
-    [self.microphone startFetchingAudio];
-
-    // Update recording state
-    self.isRecording = NO;
-    self.recordingToggle.state = NSOffState;
-    [self.recordingToggle setEnabled:YES];
+    recorder.delegate = nil;
 }
 
 //------------------------------------------------------------------------------
+
+- (void)recorderUpdatedCurrentTime:(EZRecorder *)recorder
+{
+    __weak typeof (self) weakSelf = self;
+    NSString *formattedCurrentTime = [recorder formattedCurrentTime];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.currentTimeLabel.stringValue = formattedCurrentTime;
+    });
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - EZAudioPlayerDelegate
+//------------------------------------------------------------------------------
+
+- (void) audioPlayer:(EZAudioPlayer *)audioPlayer
+         playedAudio:(float **)buffer
+      withBufferSize:(UInt32)bufferSize
+ withNumberOfChannels:(UInt32)numberOfChannels
+          inAudioFile:(EZAudioFile *)audioFile
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.playingAudioPlot updateBuffer:buffer[0]
+                                 withBufferSize:bufferSize];
+    });
+}
+
+//------------------------------------------------------------------------------
+
+- (void)audioPlayer:(EZAudioPlayer *)audioPlayer
+    updatedPosition:(SInt64)framePosition
+        inAudioFile:(EZAudioFile *)audioFile
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.currentTimeLabel.stringValue = [audioPlayer formattedCurrentTime];
+    });
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Utility
+//------------------------------------------------------------------------------
+
+- (void)setTitle:(NSString *)title forButton:(NSButton *)button
+{
+    NSDictionary *attributes = @{ NSForegroundColorAttributeName : [NSColor whiteColor] };
+    NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title
+                                                                          attributes:attributes];
+    button.attributedTitle = attributedTitle;
+    button.attributedAlternateTitle = attributedTitle;
+}
 
 @end

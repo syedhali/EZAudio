@@ -313,11 +313,24 @@ typedef struct
         *bufferSize = frames;
         *eof = frames == 0;
         
-        // notify delegate
+        //
+        // Notify delegate
+        //
+        if ([self.delegate respondsToSelector:@selector(audioFileUpdatedPosition:)])
+        {
+            [self.delegate audioFileUpdatedPosition:self];
+        }
+        
+        //
+        // Deprecated, but supported until 1.0
+        //
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         if ([self.delegate respondsToSelector:@selector(audioFile:updatedPosition:)])
         {
-            [self.delegate audioFile:self updatedPosition:self.frameIndex];
+            [self.delegate audioFile:self updatedPosition:[self frameIndex]];
         }
+#pragma GCC diagnostic pop
         
         if ([self.delegate respondsToSelector:@selector(audioFile:readAudio:withBufferSize:withNumberOfChannels:)])
         {
@@ -351,12 +364,24 @@ typedef struct
 
         pthread_mutex_unlock(&_lock);
         
-        // notify delegate
+        //
+        // Notify delegate
+        //
+        if ([self.delegate respondsToSelector:@selector(audioFileUpdatedPosition:)])
+        {
+            [self.delegate audioFileUpdatedPosition:self];
+        }
+        
+        //
+        // Deprecated, but supported until 1.0
+        //
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         if ([self.delegate respondsToSelector:@selector(audioFile:updatedPosition:)])
         {
-            [self.delegate audioFile:self
-                     updatedPosition:self.frameIndex];
+            [self.delegate audioFile:self updatedPosition:[self frameIndex]];
         }
+#pragma GCC diagnostic pop
     }
 }
 

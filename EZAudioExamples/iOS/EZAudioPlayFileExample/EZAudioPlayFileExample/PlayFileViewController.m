@@ -29,7 +29,7 @@
 }
 
 //------------------------------------------------------------------------------
-#pragma mark - Customize the Audio Plot
+#pragma mark - Setup
 //------------------------------------------------------------------------------
 
 - (void)viewDidLoad
@@ -42,7 +42,7 @@
     //
     AVAudioSession *session = [AVAudioSession sharedInstance];
     NSError *error;
-    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+    [session setCategory:AVAudioSessionCategoryPlayback error:&error];
     if (error)
     {
         NSLog(@"Error setting up audio session category: %@", error.localizedDescription);
@@ -61,6 +61,8 @@
     self.audioPlot.plotType        = EZPlotTypeBuffer;
     self.audioPlot.shouldFill      = YES;
     self.audioPlot.shouldMirror    = YES;
+    
+    NSLog(@"outputs: %@", [EZAudioDevice outputDevices]);
     
     //
     // Create the audio player
@@ -197,7 +199,8 @@
     [self.audioFile getWaveformDataWithCompletionBlock:^(float **waveformData,
                                                          int length)
     {
-        [weakSelf.audioPlot updateBuffer:waveformData[0] withBufferSize:length];
+        [weakSelf.audioPlot updateBuffer:waveformData[0]
+                          withBufferSize:length];
     }];
     
     //
@@ -216,6 +219,11 @@
     }
     else
     {
+        if (self.audioPlot.shouldMirror && (self.audioPlot.plotType == EZPlotTypeBuffer))
+        {
+            self.audioPlot.shouldMirror = NO;
+            self.audioPlot.shouldFill = NO;
+        }
         [self.player play];
     }
 }
