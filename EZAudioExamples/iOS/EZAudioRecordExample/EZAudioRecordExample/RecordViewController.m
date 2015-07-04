@@ -131,6 +131,10 @@
 {
     EZAudioPlayer *player = [notification object];
     BOOL isPlaying = [player isPlaying];
+    if (isPlaying)
+    {
+        self.recorder.delegate = nil;
+    }
     self.playingStateLabel.text = isPlaying ? @"Playing" : @"Not Playing";
     self.playingAudioPlot.hidden = !isPlaying;
 }
@@ -148,18 +152,22 @@
 
 - (void)playFile:(id)sender
 {
+    //
     // Update microphone state
+    //
     [self.microphone stopFetchingAudio];
-    self.microphoneStateLabel.text = @"Microphone Off";
-    self.microphoneSwitch.on = NO;
 
+    //
     // Update recording state
+    //
     self.isRecording = NO;
     self.recordingStateLabel.text = @"Not Recording";
     self.recordSwitch.on = NO;
 
+    //
     // Close the audio file
-    if ( self.recorder )
+    //
+    if (self.recorder)
     {
         [self.recorder closeAudioFile];
     }
@@ -172,19 +180,16 @@
 
 - (void)toggleMicrophone:(id)sender
 {
-    BOOL isOn = [(UISwitch*)sender isOn];
-    
     [self.player pause];
-
+    
+    BOOL isOn = [(UISwitch*)sender isOn];
     if (!isOn)
     {
         [self.microphone stopFetchingAudio];
-        self.microphoneStateLabel.text = @"Microphone Off";
     }
     else
     {
         [self.microphone startFetchingAudio];
-        self.microphoneStateLabel.text = @"Microphone On";
     }
 }
 
@@ -198,15 +203,13 @@
         //
         // Create the recorder
         //
+        [self.microphone startFetchingAudio];
         [EZAudioUtilities printASBD:self.microphone.audioStreamBasicDescription];
-        self.recorder = [EZRecorder recorderWithDestinationURL:[self testFilePathURL]
-                                                  sourceFormat:self.microphone.audioStreamBasicDescription
-                                           destinationFileType:EZRecorderFileTypeM4A];
+        self.recorder = [EZRecorder recorderWithURL:[self testFilePathURL]
+                                       clientFormat:[self.microphone audioStreamBasicDescription]
+                                           fileType:EZRecorderFileTypeM4A
+                                           delegate:self];
         self.playButton.enabled = YES;
-    }
-    else
-    {
-        [self.recorder closeAudioFile];
     }
     self.isRecording = (BOOL)[sender isOn];
     self.recordingStateLabel.text = self.isRecording ? @"Recording" : @"Not Recording";
@@ -214,6 +217,14 @@
 
 //------------------------------------------------------------------------------
 #pragma mark - EZMicrophoneDelegate
+//------------------------------------------------------------------------------
+
+- (void)microphone:(EZMicrophone *)microphone changedPlayingState:(BOOL)isPlaying
+{
+    self.microphoneStateLabel.text = isPlaying ? @"Microphone On" : @"Microphone Off";
+    self.microphoneSwitch.on = isPlaying;
+}
+
 //------------------------------------------------------------------------------
 
 #warning Thread Safety
@@ -250,6 +261,26 @@
 }
 
 //------------------------------------------------------------------------------
+#pragma mark - EZRecorderDelegate
+//------------------------------------------------------------------------------
+
+- (void)recorderDidClose:(EZRecorder *)recorder
+{
+    recorder.delegate = nil;
+}
+
+//------------------------------------------------------------------------------
+
+- (void)recorderUpdatedCurrentTime:(EZRecorder *)recorder
+{
+    __weak typeof (self) weakSelf = self;
+    NSString *formattedCurrentTime = [recorder formattedCurrentTime];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.currentTimeLabel.text = formattedCurrentTime;
+    });
+}
+
+//------------------------------------------------------------------------------
 #pragma mark - EZAudioPlayerDelegate
 //------------------------------------------------------------------------------
 
@@ -278,11 +309,16 @@
     });
 }
 
+//------------------------------------------------------------------------------
 #pragma mark - Utility
+//------------------------------------------------------------------------------
+
 - (NSArray *)applicationDocuments
 {
   return NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 }
+
+//------------------------------------------------------------------------------
 
 - (NSString *)applicationDocumentsDirectory
 {
@@ -290,6 +326,8 @@
     NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
     return basePath;
 }
+
+//------------------------------------------------------------------------------
 
 - (NSURL *)testFilePathURL
 {
