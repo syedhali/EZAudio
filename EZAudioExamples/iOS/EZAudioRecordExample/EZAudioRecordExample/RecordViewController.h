@@ -23,7 +23,7 @@
                                                     EZRecorderDelegate>
 
 /**
- <#Description#>
+ The label used to display the current time for recording/playback in the top left
  */
 @property (nonatomic, weak) IBOutlet UILabel *currentTimeLabel;
 
@@ -32,7 +32,7 @@
 /**
  Use a OpenGL based plot to visualize the data coming in
  */
-@property (nonatomic, weak) IBOutlet EZAudioPlot *recordingAudioPlot;
+@property (nonatomic, weak) IBOutlet EZAudioPlotGL *recordingAudioPlot;
 
 //------------------------------------------------------------------------------
 

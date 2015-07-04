@@ -104,10 +104,6 @@
 - (void)setupNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(playerDidChangeAudioFile:)
-                                                 name:EZAudioPlayerDidChangeAudioFileNotification
-                                               object:self.player];
-    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(playerDidChangePlayState:)
                                                  name:EZAudioPlayerDidChangePlayStateNotification
                                                object:self.player];
@@ -119,13 +115,6 @@
 
 //------------------------------------------------------------------------------
 #pragma mark - Notifications
-//------------------------------------------------------------------------------
-
-- (void)playerDidChangeAudioFile:(NSNotification *)notification
-{
-    
-}
-
 //------------------------------------------------------------------------------
 
 - (void)playerDidChangePlayState:(NSNotification *)notification
@@ -174,7 +163,6 @@
     }
 
     EZAudioFile *audioFile = [EZAudioFile audioFileWithURL:[self testFilePathURL]];
-    NSLog(@"audiofile: %@", audioFile);
     [self.player playAudioFile:audioFile];
 }
 
