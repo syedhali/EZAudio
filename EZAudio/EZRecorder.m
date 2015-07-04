@@ -26,6 +26,10 @@
 #import "EZRecorder.h"
 #import "EZAudioUtilities.h"
 
+//------------------------------------------------------------------------------
+#pragma mark - Data Structures
+//------------------------------------------------------------------------------
+
 typedef struct
 {
     AudioFileTypeID             audioFileTypeID;
@@ -36,9 +40,17 @@ typedef struct
     AudioStreamBasicDescription fileFormat;
 } EZRecorderInfo;
 
+//------------------------------------------------------------------------------
+#pragma mark - EZRecorder (Interface Extension)
+//------------------------------------------------------------------------------
+
 @interface EZRecorder ()
 @property (nonatomic, assign) EZRecorderInfo *info;
 @end
+
+//------------------------------------------------------------------------------
+#pragma mark - EZRecorder (Implementation)
+//------------------------------------------------------------------------------
 
 @implementation EZRecorder
 
@@ -52,7 +64,7 @@ typedef struct
     {
         [self closeAudioFile];
     }
-    
+    free(self.info);
 }
 
 //------------------------------------------------------------------------------
@@ -271,7 +283,9 @@ typedef struct
                                                          &self.info->fileFormat)
                         operation:"Failed to fill out rest of destination format"];
     
+    //
     // Create the audio file
+    //
     [EZAudioUtilities checkResult:ExtAudioFileCreateWithURL(self.info->fileURL,
                                                             self.info->audioFileTypeID,
                                                             &self.info->fileFormat,
@@ -280,13 +294,10 @@ typedef struct
                                                             &self.info->extAudioFileRef)
                         operation:"Failed to create audio file"];
     
-    // Set the client format (which should be equal to the source format)
-    [EZAudioUtilities checkResult:ExtAudioFileSetProperty(self.info->extAudioFileRef,
-                                                          kExtAudioFileProperty_ClientDataFormat,
-                                                          sizeof(self.info->clientFormat),
-                                                          &self.info->clientFormat)
-                        operation:"Failed to set client format on recorded audio file"];
-    
+    //
+    // Set the client format
+    //
+    [self setClientFormat:self.info->clientFormat];
 }
 
 //------------------------------------------------------------------------------
@@ -296,8 +307,15 @@ typedef struct
 - (void)appendDataFromBufferList:(AudioBufferList *)bufferList
                   withBufferSize:(UInt32)bufferSize
 {
+    //
+    // Make sure the audio file is not closed
+    //
     NSAssert(!self.info->closed, @"Cannot append data when EZRecorder has been closed. You must create a new instance.;");
-    [EZAudioUtilities checkResult:ExtAudioFileWriteAsync(self.info->extAudioFileRef,
+    
+    //
+    // Perform the write
+    //
+    [EZAudioUtilities checkResult:ExtAudioFileWrite(self.info->extAudioFileRef,
                                                          bufferSize,
                                                          bufferList)
                operation:"Failed to write audio data to recorded audio file"];
@@ -315,40 +333,79 @@ typedef struct
 
 - (void)closeAudioFile
 {
-    [EZAudioUtilities checkResult:ExtAudioFileDispose(self.info->extAudioFileRef)
-                        operation:"Failed to close audio file"];
-    self.info->closed = YES;
+    if (!self.info->closed)
+    {
+        //
+        // Close, audio file can no longer be written to
+        //
+        [EZAudioUtilities checkResult:ExtAudioFileDispose(self.info->extAudioFileRef)
+                            operation:"Failed to close audio file"];
+        self.info->closed = YES;
+        
+        //
+        // Notify delegate
+        //
+        if ([self.delegate respondsToSelector:@selector(recorderDidClose:)])
+        {
+            [self.delegate recorderDidClose:self];
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
 #pragma mark - Getters
 //------------------------------------------------------------------------------
 
-//- (NSTimeInterval)currentTime
-//{
-//    
-//}
+- (AudioStreamBasicDescription)clientFormat
+{
+    return self.info->clientFormat;
+}
+
+//-----------------------------------------------------------------------------
+
+- (NSTimeInterval)currentTime
+{
+    NSTimeInterval currentTime = 0.0;
+    NSTimeInterval duration = [self duration];
+    if (duration != 0.0)
+    {
+        currentTime = (NSTimeInterval)[EZAudioUtilities MAP:(float)[self frameIndex]
+                                                    leftMin:0.0f
+                                                    leftMax:(float)[self totalFrames]
+                                                   rightMin:0.0f
+                                                   rightMax:duration];
+    }
+    return currentTime;
+}
 
 //------------------------------------------------------------------------------
 
-//- (NSTimeInterval)duration
-//{
-//
-//}
+- (NSTimeInterval)duration
+{
+    NSTimeInterval frames = (NSTimeInterval)[self totalFrames];
+    return (NSTimeInterval) frames / self.info->fileFormat.mSampleRate;
+}
 
 //------------------------------------------------------------------------------
 
-//- (NSString *)formattedCurrentTime
-//{
-//    
-//}
+- (AudioStreamBasicDescription)fileFormat
+{
+    return self.info->fileFormat;
+}
 
 //------------------------------------------------------------------------------
 
-//- (NSString *)formattedDuration
-//{
-//    
-//}
+- (NSString *)formattedCurrentTime
+{
+    return [EZAudioUtilities displayTimeStringFromSeconds:[self currentTime]];
+}
+
+//------------------------------------------------------------------------------
+
+- (NSString *)formattedDuration
+{
+    return [EZAudioUtilities displayTimeStringFromSeconds:[self duration]];
+}
 
 //------------------------------------------------------------------------------
 
@@ -363,10 +420,17 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-//- (SInt64)totalFrames
-//{
-//    
-//}
+- (SInt64)totalFrames
+{
+    SInt64 totalFrames;
+    UInt32 propSize = sizeof(SInt64);
+    [EZAudioUtilities checkResult:ExtAudioFileGetProperty(self.info->extAudioFileRef,
+                                                          kExtAudioFileProperty_FileLengthFrames,
+                                                          &propSize,
+                                                          &totalFrames)
+                        operation:"Recorder failed to get total frames."];
+    return totalFrames;
+}
 
 //------------------------------------------------------------------------------
 
@@ -376,7 +440,17 @@ typedef struct
 }
 
 //------------------------------------------------------------------------------
-#pragma mark - Subclass
+#pragma mark - Setters
 //------------------------------------------------------------------------------
+
+- (void)setClientFormat:(AudioStreamBasicDescription)clientFormat
+{
+    [EZAudioUtilities checkResult:ExtAudioFileSetProperty(self.info->extAudioFileRef,
+                                                          kExtAudioFileProperty_ClientDataFormat,
+                                                          sizeof(clientFormat),
+                                                          &clientFormat)
+                        operation:"Failed to set client format on recorded audio file"];
+    self.info->clientFormat = clientFormat;
+}
 
 @end

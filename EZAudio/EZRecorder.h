@@ -62,6 +62,9 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
 
 @protocol EZRecorderDelegate <NSObject>
 
+@optional
+
+- (void)recorderDidClose:(EZRecorder *)recorder;
 - (void)recorderUpdatedCurrentTime:(EZRecorder *)recorder;
 
 @end
@@ -112,6 +115,15 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
 
 //------------------------------------------------------------------------------
 
+/**
+ <#Description#>
+ @param url             <#url description#>
+ @param clientFormat    <#clientFormat description#>
+ @param fileFormat      <#fileFormat description#>
+ @param audioFileTypeID <#audioFileTypeID description#>
+ @param delegate        <#delegate description#>
+ @return <#return value description#>
+ */
 - (instancetype)initWithURL:(NSURL *)url
                clientFormat:(AudioStreamBasicDescription)clientFormat
                  fileFormat:(AudioStreamBasicDescription)fileFormat
@@ -189,7 +201,15 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
 ///-----------------------------------------------------------
 
 /**
- Provides the current offset in the audio file as an NSTimeInterval (i.e. in seconds).  When setting this it will determine the correct frame offset and perform a `seekToFrame` to the new time offset.
+ Provides the common AudioStreamBasicDescription that will be used for in-app interaction. The recorder's format will be converted from this format to the `fileFormat`. For instance, the file on disk could be a 22.5 kHz, float format, but we might have an audio processing graph that has a 44.1 kHz, signed integer format that we'd like to interact with. The client format lets us set that 44.1 kHz format on the recorder to properly write samples from the graph out to the file in the desired destination format.
+ @warning This must be a linear PCM format!
+ @return An AudioStreamBasicDescription structure describing the format of the audio file.
+ */
+@property (readwrite) AudioStreamBasicDescription clientFormat;
+//------------------------------------------------------------------------------
+
+/**
+ Provides the current write offset in the audio file as an NSTimeInterval (i.e. in seconds).  When setting this it will determine the correct frame offset and perform a `seekToFrame` to the new time offset.
  @warning Make sure the new current time offset is less than the `duration` or you will receive an invalid seek assertion.
  */
 @property (nonatomic, readwrite) NSTimeInterval currentTime;
@@ -200,6 +220,14 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
  Provides the duration of the audio file in seconds.
  */
 @property (readonly) NSTimeInterval duration;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the AudioStreamBasicDescription structure containing the format of the recorder's audio file.
+ @return An AudioStreamBasicDescription structure describing the format of the audio file.
+ */
+@property (readonly) AudioStreamBasicDescription fileFormat;
 
 //------------------------------------------------------------------------------
 
@@ -218,7 +246,7 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
 //------------------------------------------------------------------------------
 
 /**
- Provides the frame index (a.k.a the seek positon) within the audio file as SInt64. This can be helpful when seeking through the audio file.
+ Provides the frame index (a.k.a the write positon) within the audio file as SInt64. This can be helpful when seeking through the audio file.
  @return The current frame index within the audio file as a SInt64.
  */
 @property (readonly) SInt64 frameIndex;
@@ -226,8 +254,8 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
 //------------------------------------------------------------------------------
 
 /**
- Provides the total frame count of the audio file in the file format.
- @return The total number of frames in the audio file in the AudioStreamBasicDescription representing the file format as a SInt64.
+ Provides the total frame count of the recorder's audio file in the file format.
+ @return The total number of frames in the recorder in the AudioStreamBasicDescription representing the file format as a SInt64.
  */
 @property (readonly) SInt64 totalFrames;
 
@@ -235,7 +263,7 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
 
 /**
  Provides the file path that's currently being used by the recorder.
- @return  The NSURL representing the file path of the audio file path being used for recording.
+ @return  The NSURL representing the file path of the recorder path being used for recording.
  */
 - (NSURL *)url;
 
@@ -244,7 +272,7 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
 //------------------------------------------------------------------------------
 
 ///-----------------------------------------------------------
-/// @name Appending Data To The Audio File
+/// @name Appending Data To The Recorder
 ///-----------------------------------------------------------
 
 /**
@@ -252,17 +280,17 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
  @param bufferList The AudioBufferList holding the audio data to append
  @param bufferSize The size of each of the buffers in the buffer list.
  */
-- (void)appendDataFromBufferList:(AudioBufferList*)bufferList
+- (void)appendDataFromBufferList:(AudioBufferList *)bufferList
                   withBufferSize:(UInt32)bufferSize;
 
 //------------------------------------------------------------------------------
 
 ///-----------------------------------------------------------
-/// @name Closing The Audio File
+/// @name Closing The Recorder
 ///-----------------------------------------------------------
 
 /**
- Finishes writes to the audio file and closes it.
+ Finishes writes to the recorder's audio file and closes it.
  */
 - (void)closeAudioFile;
 
