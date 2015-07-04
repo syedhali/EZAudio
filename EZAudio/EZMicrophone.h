@@ -55,6 +55,15 @@
 ///-----------------------------------------------------------
 
 /**
+ Called anytime the EZMicrophone starts or stops.
+ @param output The instance of the EZMicrophone that triggered the event.
+ @param isPlaying A BOOL indicating whether the EZMicrophone instance is playing or not.
+ */
+- (void)microphone:(EZMicrophone *)microphone changedPlayingState:(BOOL)isPlaying;
+
+//------------------------------------------------------------------------------
+
+/**
  Called anytime the input device changes on an `EZMicrophone` instance.
  @param microphone The instance of the EZMicrophone that triggered the event.
  @param device The instance of the new EZAudioDevice the microphone is using to pull input.

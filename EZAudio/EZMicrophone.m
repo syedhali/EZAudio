@@ -346,16 +346,38 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 
 -(void)startFetchingAudio
 {
+    //
+    // Start output unit
+    //
     [EZAudioUtilities checkResult:AudioOutputUnitStart(self.info->audioUnit)
                         operation:"Failed to start microphone audio unit"];
+    
+    //
+    // Notify delegate
+    //
+    if ([self.delegate respondsToSelector:@selector(microphone:changedPlayingState:)])
+    {
+        [self.delegate microphone:self changedPlayingState:YES];
+    }
 }
 
 //------------------------------------------------------------------------------
 
 -(void)stopFetchingAudio
 {
+    //
+    // Stop output unit
+    //
     [EZAudioUtilities checkResult:AudioOutputUnitStop(self.info->audioUnit)
                         operation:"Failed to stop microphone audio unit"];
+    
+    //
+    // Notify delegate
+    //
+    if ([self.delegate respondsToSelector:@selector(microphone:changedPlayingState:)])
+    {
+        [self.delegate microphone:self changedPlayingState:NO];
+    }
 }
 
 //------------------------------------------------------------------------------
