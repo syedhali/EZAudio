@@ -26,6 +26,12 @@
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 
+@class EZRecorder;
+
+//------------------------------------------------------------------------------
+#pragma mark - Data Structures
+//------------------------------------------------------------------------------
+
 /**
  To ensure valid recording formats are used when recording to a file the EZRecorderFileType describes the most common file types that a file can be encoded in. Each of these types can be used to output recordings as such:
  
@@ -50,32 +56,118 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
     EZRecorderFileTypeWAV
 };
 
+//------------------------------------------------------------------------------
+#pragma mark - EZRecorderDelegate
+//------------------------------------------------------------------------------
+
+@protocol EZRecorderDelegate <NSObject>
+
+- (void)recorderUpdatedCurrentTime:(EZRecorder *)recorder;
+
+@end
+
+//------------------------------------------------------------------------------
+#pragma mark - EZRecorder
+//------------------------------------------------------------------------------
+
 /**
  The EZRecorder provides a flexible way to create an audio file and append raw audio data to it. The EZRecorder will convert the incoming audio on the fly to the destination format so no conversion is needed between this and any other component. Right now the only supported output format is 'caf'. Each output file should have its own EZRecorder instance (think 1 EZRecorder = 1 audio file).
  */
 @interface EZRecorder : NSObject
 
+//------------------------------------------------------------------------------
+#pragma mark - Properties
+//------------------------------------------------------------------------------
+
+/**
+ <#Description#>
+ */
+@property (nonatomic, weak) id<EZRecorderDelegate> delegate;
+
+//------------------------------------------------------------------------------
 #pragma mark - Initializers
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Initializers
 ///-----------------------------------------------------------
+
+- (instancetype)initWithURL:(NSURL *)url
+               clientFormat:(AudioStreamBasicDescription)clientFormat
+                   fileType:(EZRecorderFileType)fileType;
+
+//------------------------------------------------------------------------------
+
+- (instancetype)initWithURL:(NSURL *)url
+               clientFormat:(AudioStreamBasicDescription)clientFormat
+                   fileType:(EZRecorderFileType)fileType
+                   delegate:(id<EZRecorderDelegate>)delegate;
+
+//------------------------------------------------------------------------------
+
+- (instancetype)initWithURL:(NSURL *)url
+               clientFormat:(AudioStreamBasicDescription)clientFormat
+                 fileFormat:(AudioStreamBasicDescription)fileFormat
+            audioFileTypeID:(AudioFileTypeID)audioFileTypeID;
+
+//------------------------------------------------------------------------------
+
+- (instancetype)initWithURL:(NSURL *)url
+               clientFormat:(AudioStreamBasicDescription)clientFormat
+                 fileFormat:(AudioStreamBasicDescription)fileFormat
+            audioFileTypeID:(AudioFileTypeID)audioFileTypeID
+                   delegate:(id<EZRecorderDelegate>)delegate;
+
+//------------------------------------------------------------------------------
 
 /**
  Creates a new instance of an EZRecorder using a destination file path URL and the source format of the incoming audio.
  @param url                 An NSURL specifying the file path location of where the audio file should be written to.
  @param sourceFormat        The AudioStreamBasicDescription for the incoming audio that will be written to the file.
  @param destinationFileType A constant described by the EZRecorderFileType that corresponds to the type of destination file that should be written. For instance, an AAC file written using an '.m4a' extension would correspond to EZRecorderFileTypeM4A. See EZRecorderFileType for all the constants and mapping combinations.
+ @deprecated This property is deprecated starting in version 0.8.0.
+ @note Please use `initWithURL:clientFormat:fileType:` initializer instead.
  @return The newly created EZRecorder instance.
  */
--(instancetype)initWithDestinationURL:(NSURL*)url
+- (instancetype)initWithDestinationURL:(NSURL*)url
                         sourceFormat:(AudioStreamBasicDescription)sourceFormat
-                 destinationFileType:(EZRecorderFileType)destinationFileType;
+                 destinationFileType:(EZRecorderFileType)destinationFileType __attribute__((deprecated));
 
-
+//------------------------------------------------------------------------------
 #pragma mark - Class Initializers
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Class Initializers
 ///-----------------------------------------------------------
+
++ (instancetype)recorderWithURL:(NSURL *)url
+                   clientFormat:(AudioStreamBasicDescription)clientFormat
+                       fileType:(EZRecorderFileType)fileType;
+
+//------------------------------------------------------------------------------
+
++ (instancetype)recorderWithURL:(NSURL *)url
+                   clientFormat:(AudioStreamBasicDescription)clientFormat
+                       fileType:(EZRecorderFileType)fileType
+                       delegate:(id<EZRecorderDelegate>)delegate;
+
+//------------------------------------------------------------------------------
+
++ (instancetype)recorderWithURL:(NSURL *)url
+                   clientFormat:(AudioStreamBasicDescription)clientFormat
+                     fileFormat:(AudioStreamBasicDescription)fileFormat
+                audioFileTypeID:(AudioFileTypeID)audioFileTypeID;
+
+//------------------------------------------------------------------------------
+
++ (instancetype)recorderWithURL:(NSURL *)url
+                   clientFormat:(AudioStreamBasicDescription)clientFormat
+                     fileFormat:(AudioStreamBasicDescription)fileFormat
+                audioFileTypeID:(AudioFileTypeID)audioFileTypeID
+                       delegate:(id<EZRecorderDelegate>)delegate;
+
+//------------------------------------------------------------------------------
 
 /**
  Class method to create a new instance of an EZRecorder using a destination file path URL and the source format of the incoming audio.
@@ -84,19 +176,17 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
  @param destinationFileType A constant described by the EZRecorderFileType that corresponds to the type of destination file that should be written. For instance, an AAC file written using an '.m4a' extension would correspond to EZRecorderFileTypeM4A. See EZRecorderFileType for all the constants and mapping combinations.
  @return The newly created EZRecorder instance.
  */
-+(instancetype)recorderWithDestinationURL:(NSURL*)url
-                            sourceFormat:(AudioStreamBasicDescription)sourceFormat
-                     destinationFileType:(EZRecorderFileType)destinationFileType;
++ (instancetype)recorderWithDestinationURL:(NSURL*)url
+                             sourceFormat:(AudioStreamBasicDescription)sourceFormat
+                      destinationFileType:(EZRecorderFileType)destinationFileType __attribute__((deprecated));
 
 //------------------------------------------------------------------------------
-#pragma mark - Getters
+#pragma mark - Properties
 //------------------------------------------------------------------------------
 
 ///-----------------------------------------------------------
 /// @name Getting The Recorder's Properties
 ///-----------------------------------------------------------
-
-//------------------------------------------------------------------------------
 
 /**
  Provides the current offset in the audio file as an NSTimeInterval (i.e. in seconds).  When setting this it will determine the correct frame offset and perform a `seekToFrame` to the new time offset.
@@ -110,6 +200,7 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
  Provides the duration of the audio file in seconds.
  */
 @property (readonly) NSTimeInterval duration;
+
 //------------------------------------------------------------------------------
 
 /**
@@ -131,6 +222,7 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
  @return The current frame index within the audio file as a SInt64.
  */
 @property (readonly) SInt64 frameIndex;
+
 //------------------------------------------------------------------------------
 
 /**
@@ -147,7 +239,10 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
  */
 - (NSURL *)url;
 
+//------------------------------------------------------------------------------
 #pragma mark - Events
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Appending Data To The Audio File
 ///-----------------------------------------------------------
@@ -157,8 +252,10 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
  @param bufferList The AudioBufferList holding the audio data to append
  @param bufferSize The size of each of the buffers in the buffer list.
  */
--(void)appendDataFromBufferList:(AudioBufferList*)bufferList
-                 withBufferSize:(UInt32)bufferSize;
+- (void)appendDataFromBufferList:(AudioBufferList*)bufferList
+                  withBufferSize:(UInt32)bufferSize;
+
+//------------------------------------------------------------------------------
 
 ///-----------------------------------------------------------
 /// @name Closing The Audio File
@@ -167,16 +264,6 @@ typedef NS_ENUM(NSInteger, EZRecorderFileType)
 /**
  Finishes writes to the audio file and closes it.
  */
--(void)closeAudioFile;
-
-//------------------------------------------------------------------------------
-#pragma mark - Subclass
-//------------------------------------------------------------------------------
-
-/**
- By default the output file is written out with 2 channels (so whatever the 
- @return <#return value description#>
- */
-- (int)numberOfChannels;
+- (void)closeAudioFile;
 
 @end

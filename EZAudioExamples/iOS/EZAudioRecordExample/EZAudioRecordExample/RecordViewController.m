@@ -202,6 +202,7 @@
         self.recorder = [EZRecorder recorderWithDestinationURL:[self testFilePathURL]
                                                   sourceFormat:self.microphone.audioStreamBasicDescription
                                            destinationFileType:EZRecorderFileTypeM4A];
+        self.playButton.enabled = YES;
     }
     else
     {

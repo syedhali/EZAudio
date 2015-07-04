@@ -66,11 +66,22 @@ typedef void (^EZAudioWaveformDataCompletionBlock)(float **waveformData, int len
 //------------------------------------------------------------------------------
 
 /**
+ Occurs when the audio file's internal seek position has been updated by the EZAudioFile functions `readFrames:audioBufferList:bufferSize:eof:` or `audioFile:updatedPosition:`. As of 0.8.0 this is the preferred method of listening for position updates on the audio file since a user may want the pull the currentTime, formattedCurrentTime, or the frame index from the EZAudioFile instance provided.
+ @param audioFile The instance of the EZAudio in which the change occured.
+ */
+- (void)audioFileUpdatedPosition:(EZAudioFile *)audioFile;
+
+//------------------------------------------------------------------------------
+
+/**
  Occurs when the audio file's internal seek position has been updated by the EZAudioFile functions `readFrames:audioBufferList:bufferSize:eof:` or `audioFile:updatedPosition:`.
  @param audioFile     The instance of the EZAudio in which the change occured
  @param framePosition The new frame index as a 64-bit signed integer
+ @deprecated This property is deprecated starting in version 0.8.0.
+ @note Please use `audioFileUpdatedPosition:` property instead.
  */
-- (void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition;
+- (void)audioFile:(EZAudioFile *)audioFile
+  updatedPosition:(SInt64)framePosition  __attribute__((deprecated));
 
 @end
 
@@ -85,6 +96,7 @@ typedef void (^EZAudioWaveformDataCompletionBlock)(float **waveformData, int len
 //------------------------------------------------------------------------------
 #pragma mark - Properties
 //------------------------------------------------------------------------------
+
 /**
  A EZAudioFileDelegate for the audio file that is used to return events such as new seek positions within the file and the read audio data as a float array.
  */
@@ -299,7 +311,7 @@ typedef void (^EZAudioWaveformDataCompletionBlock)(float **waveformData, int len
  @note Please use `duration` property instead.
  @return The total duration of the audio file as a Float32.
  */
-@property (readonly) NSTimeInterval totalDuration __attribute__((deprecated));;
+@property (readonly) NSTimeInterval totalDuration __attribute__((deprecated));
 
 //------------------------------------------------------------------------------
 

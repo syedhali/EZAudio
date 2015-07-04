@@ -28,9 +28,10 @@
 
 typedef struct
 {
+    AudioFileTypeID             audioFileTypeID;
     ExtAudioFileRef             extAudioFileRef;
     AudioStreamBasicDescription clientFormat;
-    AudioFileTypeID             fileTypeID;
+    BOOL                        closed;
     CFURLRef                    fileURL;
     AudioStreamBasicDescription fileFormat;
 } EZRecorderInfo;
@@ -41,38 +42,171 @@ typedef struct
 
 @implementation EZRecorder
 
-#pragma mark - Initializers
-- (EZRecorder*)initWithDestinationURL:(NSURL*)url
-                        sourceFormat:(AudioStreamBasicDescription)sourceFormat
-                 destinationFileType:(EZRecorderFileType)destinationFileType
+//------------------------------------------------------------------------------
+#pragma mark - Dealloc
+//------------------------------------------------------------------------------
+
+- (void)dealloc
 {
+    if (!self.info->closed)
+    {
+        [self closeAudioFile];
+    }
+    
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Initializers
+//------------------------------------------------------------------------------
+
+- (instancetype)initWithURL:(NSURL *)url
+               clientFormat:(AudioStreamBasicDescription)clientFormat
+                   fileType:(EZRecorderFileType)fileType
+{
+    return [self initWithURL:url
+                clientFormat:clientFormat
+                    fileType:fileType
+                    delegate:nil];
+}
+
+//------------------------------------------------------------------------------
+
+- (instancetype)initWithURL:(NSURL *)url
+               clientFormat:(AudioStreamBasicDescription)clientFormat
+                   fileType:(EZRecorderFileType)fileType
+                   delegate:(id<EZRecorderDelegate>)delegate
+{
+    AudioStreamBasicDescription fileFormat = [EZRecorder formatForFileType:fileType
+                                                          withSourceFormat:clientFormat];
+    AudioFileTypeID audioFileTypeID = [EZRecorder fileTypeIdForFileType:fileType
+                                                       withSourceFormat:clientFormat];
+    return [self initWithURL:url
+                clientFormat:clientFormat
+                  fileFormat:fileFormat
+             audioFileTypeID:audioFileTypeID
+                    delegate:delegate];
+}
+
+//------------------------------------------------------------------------------
+
+- (instancetype)initWithURL:(NSURL *)url
+               clientFormat:(AudioStreamBasicDescription)clientFormat
+                 fileFormat:(AudioStreamBasicDescription)fileFormat
+            audioFileTypeID:(AudioFileTypeID)audioFileTypeID
+{
+    return [self initWithURL:url
+                clientFormat:clientFormat
+                  fileFormat:fileFormat
+             audioFileTypeID:audioFileTypeID
+                    delegate:nil];
+}
+
+//------------------------------------------------------------------------------
+
+- (instancetype)initWithURL:(NSURL *)url
+               clientFormat:(AudioStreamBasicDescription)clientFormat
+                 fileFormat:(AudioStreamBasicDescription)fileFormat
+            audioFileTypeID:(AudioFileTypeID)audioFileTypeID
+                   delegate:(id<EZRecorderDelegate>)delegate
+{
+    
     self = [super init];
     if (self)
     {
         // Set defaults
         self.info = (EZRecorderInfo *)calloc(1, sizeof(EZRecorderInfo));
+        self.info->audioFileTypeID  = audioFileTypeID;
         self.info->fileURL = (__bridge CFURLRef)url;
-        self.info->clientFormat = sourceFormat;
-        self.info->fileFormat = [EZRecorder recorderFormatForFileType:destinationFileType withSourceFormat:self.info->clientFormat];
-        self.info->fileTypeID  = [EZRecorder recorderFileTypeIdForFileType:destinationFileType withSourceFormat:self.info->clientFormat];
+        self.info->clientFormat = clientFormat;
+        self.info->fileFormat = fileFormat;
+        self.delegate = delegate;
         [self setup];
     }
     return self;
 }
 
+//------------------------------------------------------------------------------
+
+- (instancetype)initWithDestinationURL:(NSURL*)url
+                        sourceFormat:(AudioStreamBasicDescription)sourceFormat
+                 destinationFileType:(EZRecorderFileType)destinationFileType
+{
+    return [self initWithURL:url
+                clientFormat:sourceFormat
+                    fileType:destinationFileType];
+}
+
+//------------------------------------------------------------------------------
 #pragma mark - Class Initializers
-+(EZRecorder*)recorderWithDestinationURL:(NSURL*)url
-                            sourceFormat:(AudioStreamBasicDescription)sourceFormat
-                     destinationFileType:(EZRecorderFileType)destinationFileType
+//------------------------------------------------------------------------------
+
++ (instancetype)recorderWithURL:(NSURL *)url
+                   clientFormat:(AudioStreamBasicDescription)clientFormat
+                       fileType:(EZRecorderFileType)fileType
+{
+    return [[self alloc] initWithURL:url
+                        clientFormat:clientFormat
+                            fileType:fileType];
+}
+
+//------------------------------------------------------------------------------
+
++ (instancetype)recorderWithURL:(NSURL *)url
+                   clientFormat:(AudioStreamBasicDescription)clientFormat
+                       fileType:(EZRecorderFileType)fileType
+                       delegate:(id<EZRecorderDelegate>)delegate
+{
+    return [[self alloc] initWithURL:url
+                        clientFormat:clientFormat
+                            fileType:fileType
+                            delegate:delegate];
+}
+
+//------------------------------------------------------------------------------
+
++ (instancetype)recorderWithURL:(NSURL *)url
+                   clientFormat:(AudioStreamBasicDescription)clientFormat
+                     fileFormat:(AudioStreamBasicDescription)fileFormat
+                audioFileTypeID:(AudioFileTypeID)audioFileTypeID
+{
+    return [[self alloc] initWithURL:url
+                        clientFormat:clientFormat
+                          fileFormat:fileFormat
+                     audioFileTypeID:audioFileTypeID];
+}
+
+//------------------------------------------------------------------------------
+
++ (instancetype)recorderWithURL:(NSURL *)url
+                   clientFormat:(AudioStreamBasicDescription)clientFormat
+                     fileFormat:(AudioStreamBasicDescription)fileFormat
+                audioFileTypeID:(AudioFileTypeID)audioFileTypeID
+                       delegate:(id<EZRecorderDelegate>)delegate
+{
+    return [[self alloc] initWithURL:url
+                        clientFormat:clientFormat
+                          fileFormat:fileFormat
+                     audioFileTypeID:audioFileTypeID
+                            delegate:delegate];
+}
+
+//------------------------------------------------------------------------------
+
++ (instancetype)recorderWithDestinationURL:(NSURL*)url
+                             sourceFormat:(AudioStreamBasicDescription)sourceFormat
+                      destinationFileType:(EZRecorderFileType)destinationFileType
 {
     return [[EZRecorder alloc] initWithDestinationURL:url
                                          sourceFormat:sourceFormat
                                   destinationFileType:destinationFileType];
 }
 
-#pragma mark - Private Configuration
-+ (AudioStreamBasicDescription)recorderFormatForFileType:(EZRecorderFileType)fileType
-                                        withSourceFormat:(AudioStreamBasicDescription)sourceFormat
+//------------------------------------------------------------------------------
+#pragma mark - Class Methods
+//------------------------------------------------------------------------------
+
++ (AudioStreamBasicDescription)formatForFileType:(EZRecorderFileType)fileType
+                                withSourceFormat:(AudioStreamBasicDescription)sourceFormat
 {
     AudioStreamBasicDescription asbd;
     switch (fileType)
@@ -99,11 +233,11 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-+ (AudioFileTypeID)recorderFileTypeIdForFileType:(EZRecorderFileType)fileType
-                                withSourceFormat:(AudioStreamBasicDescription)sourceFormat
++ (AudioFileTypeID)fileTypeIdForFileType:(EZRecorderFileType)fileType
+                        withSourceFormat:(AudioStreamBasicDescription)sourceFormat
 {
     AudioFileTypeID audioFileTypeID;
-    switch ( fileType)
+    switch (fileType)
     {
         case EZRecorderFileTypeAIFF:
             audioFileTypeID = kAudioFileAIFFType;
@@ -139,7 +273,7 @@ typedef struct
     
     // Create the audio file
     [EZAudioUtilities checkResult:ExtAudioFileCreateWithURL(self.info->fileURL,
-                                                            self.info->fileTypeID,
+                                                            self.info->audioFileTypeID,
                                                             &self.info->fileFormat,
                                                             NULL,
                                                             kAudioFileFlags_EraseFile,
@@ -162,31 +296,28 @@ typedef struct
 - (void)appendDataFromBufferList:(AudioBufferList *)bufferList
                   withBufferSize:(UInt32)bufferSize
 {
-    if (self.info->extAudioFileRef)
+    NSAssert(!self.info->closed, @"Cannot append data when EZRecorder has been closed. You must create a new instance.;");
+    [EZAudioUtilities checkResult:ExtAudioFileWriteAsync(self.info->extAudioFileRef,
+                                                         bufferSize,
+                                                         bufferList)
+               operation:"Failed to write audio data to recorded audio file"];
+    
+    //
+    // Notify delegate
+    //
+    if ([self.delegate respondsToSelector:@selector(recorderUpdatedCurrentTime:)])
     {
-        [EZAudioUtilities checkResult:ExtAudioFileWriteAsync(self.info->extAudioFileRef,
-                                                             bufferSize,
-                                                             bufferList)
-                   operation:"Failed to write audio data to recorded audio file"];
-        
-        SInt64 outFrameOffset;
-        [EZAudioUtilities checkResult:ExtAudioFileTell(self.info->extAudioFileRef,
-                                                       &outFrameOffset) operation:"Failed to get current frame"];
-        NSLog(@"out frame: %lli", outFrameOffset);
+        [self.delegate recorderUpdatedCurrentTime:self];
     }
 }
 
+//------------------------------------------------------------------------------
+
 - (void)closeAudioFile
 {
-    if (self.info->extAudioFileRef)
-    {
-        // Dispose of the audio file reference
-        [EZAudioUtilities checkResult:ExtAudioFileDispose(self.info->extAudioFileRef)
-                            operation:"Failed to close audio file"];
-        
-        // Null out the file reference
-        self.info->extAudioFileRef = NULL;
-    }
+    [EZAudioUtilities checkResult:ExtAudioFileDispose(self.info->extAudioFileRef)
+                        operation:"Failed to close audio file"];
+    self.info->closed = YES;
 }
 
 //------------------------------------------------------------------------------
@@ -224,7 +355,8 @@ typedef struct
 - (SInt64)frameIndex
 {
     SInt64 frameIndex;
-    [EZAudioUtilities checkResult:ExtAudioFileTell(self.info->extAudioFileRef, &frameIndex)
+    [EZAudioUtilities checkResult:ExtAudioFileTell(self.info->extAudioFileRef,
+                                                   &frameIndex)
                         operation:"Failed to get frame index"];
     return frameIndex;
 }
@@ -243,10 +375,8 @@ typedef struct
     return (__bridge NSURL*)self.info->fileURL;
 }
 
-#pragma mark - Dealloc
-- (void)dealloc
-{
-    [self closeAudioFile];
-}
+//------------------------------------------------------------------------------
+#pragma mark - Subclass
+//------------------------------------------------------------------------------
 
 @end
