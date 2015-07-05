@@ -217,11 +217,11 @@
     AudioObjectPropertyAddress address = [self addressForPropertySelector:kAudioHardwarePropertyDevices];
     UInt32 devicesDataSize;
     [EZAudioUtilities checkResult:AudioObjectGetPropertyDataSize(kAudioObjectSystemObject,
-                                                     &address,
-                                                     0,
-                                                     NULL,
-                                                     &devicesDataSize)
-            operation:"Failed to get data size"];
+                                                                 &address,
+                                                                 0,
+                                                                 NULL,
+                                                                 &devicesDataSize)
+                        operation:"Failed to get data size"];
     
     // enumerate devices
     NSInteger count = devicesDataSize / sizeof(AudioDeviceID);
@@ -267,6 +267,44 @@
         [devices addObject:device];
     }];
     return devices;
+}
+
+//------------------------------------------------------------------------------
+
++ (EZAudioDevice *)deviceWithPropertySelector:(AudioObjectPropertySelector)propertySelector
+{
+    AudioDeviceID deviceID;
+    UInt32 propSize = sizeof(AudioDeviceID);
+    AudioObjectPropertyAddress address = [self addressForPropertySelector:propertySelector];
+    [EZAudioUtilities checkResult:AudioObjectGetPropertyData(kAudioObjectSystemObject,
+                                                             &address,
+                                                             0,
+                                                             NULL,
+                                                             &propSize,
+                                                             &deviceID)
+                        operation:"Failed to get device device on OSX"];
+    EZAudioDevice *device = [[EZAudioDevice alloc] init];
+    device.deviceID = deviceID;
+    device.manufacturer = [self manufacturerForDeviceID:deviceID];
+    device.name = [self namePropertyForDeviceID:deviceID];
+    device.UID = [self UIDPropertyForDeviceID:deviceID];
+    device.inputChannelCount = [self channelCountForScope:kAudioObjectPropertyScopeInput forDeviceID:deviceID];
+    device.outputChannelCount = [self channelCountForScope:kAudioObjectPropertyScopeOutput forDeviceID:deviceID];
+    return device;
+}
+
+//------------------------------------------------------------------------------
+
++ (EZAudioDevice *)currentInputDevice
+{
+    return [self deviceWithPropertySelector:kAudioHardwarePropertyDefaultInputDevice];
+}
+
+//------------------------------------------------------------------------------
+
++ (EZAudioDevice *)currentOutputDevice
+{
+    return [self deviceWithPropertySelector:kAudioHardwarePropertyDefaultOutputDevice];
 }
 
 //------------------------------------------------------------------------------

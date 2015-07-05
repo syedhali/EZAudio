@@ -236,13 +236,8 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
                                                        &flag,
                                                        sizeof(flag))
                         operation:"Couldn't enable input on remote IO unit."];
-    EZAudioDevice *currentInputDevice = [EZAudioDevice currentInputDevice];
-    [self setDevice:currentInputDevice];
-#elif TARGET_OS_MAC
-    NSArray *inputDevices = [EZAudioDevice inputDevices];
-    EZAudioDevice *defaultMicrophone = [inputDevices lastObject];
-    [self setDevice:defaultMicrophone];
 #endif
+    [self setDevice:[EZAudioDevice currentInputDevice]];
     
     UInt32 propSize = sizeof(self.info->inputFormat);
     [EZAudioUtilities checkResult:AudioUnitGetProperty(self.info->audioUnit,
@@ -257,11 +252,7 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
     NSAssert(self.info->inputFormat.mSampleRate, @"Expected AVAudioSession sample rate to be greater than 0.0. Did you setup the audio session?");
 #elif TARGET_OS_MAC
 #endif
-    if (self.info->streamFormat.mSampleRate == 0.0)
-    {
-        self.info->streamFormat = [self defaultStreamFormat];
-    }
-    [self setAudioStreamBasicDescription:self.info->streamFormat];
+    [self setAudioStreamBasicDescription:[self defaultStreamFormat]];
     
     // render callback
     AURenderCallbackStruct renderCallbackStruct;

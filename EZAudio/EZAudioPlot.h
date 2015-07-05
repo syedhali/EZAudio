@@ -156,6 +156,10 @@ FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength;
 
 //------------------------------------------------------------------------------
 
+- (void)initPlot;
+
+//------------------------------------------------------------------------------
+
 /**
  Provides the default number of points that will be used to initialize the graph's points data structure that holds. Essentially the plot starts off as a flat line of this many points. Default is 100.
  @return An int describing the initial number of points the plot should have when flat lined.

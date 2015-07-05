@@ -193,6 +193,7 @@
         //
         // Create the recorder
         //
+        [self.recordingAudioPlot clear];
         [self.microphone startFetchingAudio];
         self.recorder = [EZRecorder recorderWithURL:[self testFilePathURL]
                                        clientFormat:[self.microphone audioStreamBasicDescription]

@@ -19,104 +19,107 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <button translatesAutoresizingMaskIntoConstraints="NO" id="TbW-ha-PgJ">
-                    <rect key="frame" x="339" y="44" width="123" height="18"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="119" id="xPL-Un-c5O"/>
-                    </constraints>
-                    <buttonCell key="cell" type="check" title="Microphone On" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="DaM-FV-gba">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="toggleMicrophone:" target="-2" id="Zb5-tE-lf2"/>
-                    </connections>
-                </button>
-                <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UPI-59-15v">
-                    <rect key="frame" x="335" y="15" width="127" height="24"/>
-                    <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="VRd-fb-9nH">
-                        <font key="font" metaFont="system"/>
-                        <segments>
-                            <segment label="Buffer" selected="YES"/>
-                            <segment label="Rolling" tag="1"/>
-                        </segments>
-                    </segmentedCell>
-                    <connections>
-                        <action selector="changePlotType:" target="-2" id="BMJ-vA-3ce"/>
-                    </connections>
-                </segmentedControl>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wBG-jf-wVy" userLabel="microphoneInputPopUpButton">
-                    <rect key="frame" x="18" y="14" width="180" height="26"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="175" id="aMw-9p-rHt"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="cAL-rs-h1w" id="H5k-ea-wV5">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="menu"/>
-                        <menu key="menu" id="15c-sS-jR2">
-                            <items>
-                                <menuItem title="Item 1" state="on" id="cAL-rs-h1w"/>
-                                <menuItem title="Item 2" id="LTz-i3-N0M"/>
-                                <menuItem title="Item 3" id="twD-3N-rcl"/>
-                            </items>
-                        </menu>
-                    </popUpButtonCell>
-                </popUpButton>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Usd-lp-n8s" userLabel="microphoneInputChannelPopUpButton">
-                    <rect key="frame" x="204" y="14" width="79" height="26"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="74" id="oDB-ke-aGz"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" title="1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Oit-zz-O9w" id="Eyb-QQ-0bg">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="menu"/>
-                        <menu key="menu" id="IPB-NH-My1">
-                            <items>
-                                <menuItem title="1" state="on" id="Oit-zz-O9w"/>
-                                <menuItem title="Item 2" id="v3y-Nn-80j"/>
-                                <menuItem title="Item 3" id="IHk-VR-fPC"/>
-                            </items>
-                        </menu>
-                    </popUpButtonCell>
-                </popUpButton>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AuX-d2-dD9">
-                    <rect key="frame" x="18" y="43" width="36" height="17"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Input" id="Fq3-tX-8aU">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PMV-Zt-Wg6">
-                    <rect key="frame" x="204" y="43" width="55" height="17"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Channel" id="PTE-g2-mTV">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="foT-nv-032" customClass="EZAudioPlotGL">
-                    <rect key="frame" x="0.0" y="77" width="480" height="195"/>
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+                    <subviews>
+                        <button translatesAutoresizingMaskIntoConstraints="NO" id="TbW-ha-PgJ">
+                            <rect key="frame" x="339" y="47" width="123" height="18"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="119" id="xPL-Un-c5O"/>
+                            </constraints>
+                            <buttonCell key="cell" type="check" title="Microphone On" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="DaM-FV-gba">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="toggleMicrophone:" target="-2" id="Zb5-tE-lf2"/>
+                            </connections>
+                        </button>
+                        <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UPI-59-15v">
+                            <rect key="frame" x="335" y="18" width="127" height="24"/>
+                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="VRd-fb-9nH">
+                                <font key="font" metaFont="system"/>
+                                <segments>
+                                    <segment label="Buffer" selected="YES"/>
+                                    <segment label="Rolling" tag="1"/>
+                                </segments>
+                            </segmentedCell>
+                            <connections>
+                                <action selector="changePlotType:" target="-2" id="BMJ-vA-3ce"/>
+                            </connections>
+                        </segmentedControl>
+                        <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wBG-jf-wVy" userLabel="microphoneInputPopUpButton">
+                            <rect key="frame" x="18" y="17" width="180" height="26"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="175" id="aMw-9p-rHt"/>
+                            </constraints>
+                            <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="cAL-rs-h1w" id="H5k-ea-wV5">
+                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="menu"/>
+                                <menu key="menu" id="15c-sS-jR2">
+                                    <items>
+                                        <menuItem title="Item 1" state="on" id="cAL-rs-h1w"/>
+                                        <menuItem title="Item 2" id="LTz-i3-N0M"/>
+                                        <menuItem title="Item 3" id="twD-3N-rcl"/>
+                                    </items>
+                                </menu>
+                            </popUpButtonCell>
+                        </popUpButton>
+                        <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Usd-lp-n8s" userLabel="microphoneInputChannelPopUpButton">
+                            <rect key="frame" x="204" y="17" width="79" height="26"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="74" id="oDB-ke-aGz"/>
+                            </constraints>
+                            <popUpButtonCell key="cell" type="push" title="1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Oit-zz-O9w" id="Eyb-QQ-0bg">
+                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="menu"/>
+                                <menu key="menu" id="IPB-NH-My1">
+                                    <items>
+                                        <menuItem title="1" state="on" id="Oit-zz-O9w"/>
+                                        <menuItem title="Item 2" id="v3y-Nn-80j"/>
+                                        <menuItem title="Item 3" id="IHk-VR-fPC"/>
+                                    </items>
+                                </menu>
+                            </popUpButtonCell>
+                        </popUpButton>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AuX-d2-dD9">
+                            <rect key="frame" x="18" y="46" width="36" height="17"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Input" id="Fq3-tX-8aU">
+                                <font key="font" metaFont="system"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PMV-Zt-Wg6">
+                            <rect key="frame" x="204" y="46" width="55" height="17"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Channel" id="PTE-g2-mTV">
+                                <font key="font" metaFont="system"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="AuX-d2-dD9" firstAttribute="leading" secondItem="foT-nv-032" secondAttribute="leading" constant="20" id="251-JP-6Sa"/>
+                        <constraint firstItem="PMV-Zt-Wg6" firstAttribute="leading" secondItem="AuX-d2-dD9" secondAttribute="trailing" constant="154" id="2EP-1U-pH4"/>
+                        <constraint firstAttribute="bottom" secondItem="wBG-jf-wVy" secondAttribute="bottom" constant="20" id="3kE-rV-Xyk"/>
+                        <constraint firstItem="wBG-jf-wVy" firstAttribute="leading" secondItem="foT-nv-032" secondAttribute="leading" constant="20" id="5BJ-zk-KIK"/>
+                        <constraint firstItem="wBG-jf-wVy" firstAttribute="top" secondItem="AuX-d2-dD9" secondAttribute="bottom" constant="5" id="GPm-pn-f3f"/>
+                        <constraint firstAttribute="bottom" secondItem="UPI-59-15v" secondAttribute="bottom" constant="20" id="NIO-kU-qxG"/>
+                        <constraint firstItem="UPI-59-15v" firstAttribute="top" secondItem="TbW-ha-PgJ" secondAttribute="bottom" constant="8" id="TZN-2g-Vnf"/>
+                        <constraint firstAttribute="trailing" secondItem="TbW-ha-PgJ" secondAttribute="trailing" constant="20" id="mg0-av-TaM"/>
+                        <constraint firstItem="Usd-lp-n8s" firstAttribute="top" secondItem="PMV-Zt-Wg6" secondAttribute="bottom" constant="5" id="nD0-WN-DIk"/>
+                        <constraint firstAttribute="trailing" secondItem="UPI-59-15v" secondAttribute="trailing" constant="20" id="rW1-1W-2K8"/>
+                        <constraint firstItem="Usd-lp-n8s" firstAttribute="leading" secondItem="wBG-jf-wVy" secondAttribute="trailing" constant="11" id="uWS-Ht-6JY"/>
+                        <constraint firstAttribute="bottom" secondItem="Usd-lp-n8s" secondAttribute="bottom" constant="20" id="yZL-HJ-0px"/>
+                    </constraints>
                 </customView>
             </subviews>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="wBG-jf-wVy" secondAttribute="bottom" constant="17" id="39Q-dq-Ifx"/>
                 <constraint firstAttribute="trailing" secondItem="foT-nv-032" secondAttribute="trailing" id="4QC-HO-oMa"/>
                 <constraint firstItem="foT-nv-032" firstAttribute="top" secondItem="hFn-jA-9Se" secondAttribute="top" id="5zo-Yc-OKX"/>
-                <constraint firstItem="UPI-59-15v" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Usd-lp-n8s" secondAttribute="trailing" constant="11" id="AXw-KY-VEi"/>
-                <constraint firstItem="Usd-lp-n8s" firstAttribute="top" secondItem="PMV-Zt-Wg6" secondAttribute="bottom" constant="5" id="GZn-x5-gDa"/>
-                <constraint firstAttribute="trailing" secondItem="UPI-59-15v" secondAttribute="trailing" constant="20" id="Ihi-YB-8cN"/>
-                <constraint firstItem="AuX-d2-dD9" firstAttribute="leading" secondItem="hFn-jA-9Se" secondAttribute="leading" constant="20" id="RFU-gK-hRd"/>
-                <constraint firstItem="TbW-ha-PgJ" firstAttribute="top" secondItem="foT-nv-032" secondAttribute="bottom" constant="17" id="aWO-qE-S52"/>
-                <constraint firstAttribute="bottom" secondItem="UPI-59-15v" secondAttribute="bottom" constant="17" id="biy-0r-WsW"/>
-                <constraint firstItem="wBG-jf-wVy" firstAttribute="top" secondItem="AuX-d2-dD9" secondAttribute="bottom" constant="5" id="fEE-bx-NVl"/>
-                <constraint firstItem="UPI-59-15v" firstAttribute="top" secondItem="TbW-ha-PgJ" secondAttribute="bottom" constant="8" id="gMX-Q1-9Ly"/>
-                <constraint firstAttribute="trailing" secondItem="TbW-ha-PgJ" secondAttribute="trailing" constant="20" id="gek-Wl-IPz"/>
-                <constraint firstItem="Usd-lp-n8s" firstAttribute="leading" secondItem="wBG-jf-wVy" secondAttribute="trailing" constant="11" id="gqi-4E-1Wf"/>
-                <constraint firstItem="Usd-lp-n8s" firstAttribute="leading" secondItem="PMV-Zt-Wg6" secondAttribute="leading" id="lT3-RX-en8"/>
+                <constraint firstAttribute="bottom" secondItem="foT-nv-032" secondAttribute="bottom" id="VKs-UL-eU4"/>
                 <constraint firstItem="foT-nv-032" firstAttribute="leading" secondItem="hFn-jA-9Se" secondAttribute="leading" id="o4A-j4-xiR"/>
-                <constraint firstItem="wBG-jf-wVy" firstAttribute="leading" secondItem="hFn-jA-9Se" secondAttribute="leading" constant="20" id="uyC-v9-bP1"/>
-                <constraint firstAttribute="bottom" secondItem="Usd-lp-n8s" secondAttribute="bottom" constant="17" id="yk6-Fm-gXu"/>
             </constraints>
         </customView>
     </objects>

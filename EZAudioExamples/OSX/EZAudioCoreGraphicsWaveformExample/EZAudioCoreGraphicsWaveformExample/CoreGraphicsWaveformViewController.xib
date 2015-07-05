@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1070" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CoreGraphicsWaveformViewController">
@@ -111,7 +111,7 @@
                 <constraint firstItem="SjR-qx-mWV" firstAttribute="top" secondItem="fi6-Uh-bvr" secondAttribute="bottom" constant="5" id="qkS-wp-O0d"/>
                 <constraint firstAttribute="trailing" secondItem="HTa-6n-EPo" secondAttribute="trailing" constant="20" id="rGZ-5W-ZDN"/>
             </constraints>
-            <point key="canvasLocation" x="178" y="314"/>
+            <point key="canvasLocation" x="226" y="324"/>
         </customView>
     </objects>
 </document>

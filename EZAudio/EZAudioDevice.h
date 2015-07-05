@@ -28,6 +28,22 @@
 //------------------------------------------------------------------------------
 
 /**
+ Provides the current EZAudioDevice that is being used to pull input.
+ @return An EZAudioDevice instance representing the currently selected input device.
+ */
++ (EZAudioDevice *)currentInputDevice;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the current EZAudioDevice that is being used to output audio.
+ @return An EZAudioDevice instance representing the currently selected ouotput device.
+ */
++ (EZAudioDevice *)currentOutputDevice;
+
+//------------------------------------------------------------------------------
+
+/**
  Enumerates all the available input devices and returns the result in an NSArray of EZAudioDevice instances.
  @return An NSArray containing EZAudioDevice instances, one for each available input device.
  */
@@ -42,20 +58,6 @@
 + (NSArray *)outputDevices;
 
 #if TARGET_OS_IPHONE
-
-/**
- Provides the current EZAudioDevice that is being used to pull input.
-    - iOS only
- @return An EZAudioDevice instance representing the currently selected input device.
- */
-+ (EZAudioDevice *)currentInputDevice;
-
-/**
- Provides the current EZAudioDevice that is being used to output audio.
-    - iOS only
- @return An EZAudioDevice instance representing the currently selected ouotput device.
- */
-+ (EZAudioDevice *)currentOutputDevice;
 
 //------------------------------------------------------------------------------
 
