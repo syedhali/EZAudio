@@ -110,6 +110,11 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
         inAudioFile:(EZAudioFile *)audioFile;
 
 
+/**
+ Triggered by EZAudioPlayer's internal EZAudioFile's EZAudioFileDelegate callback and notifies the delegate that the end of the file has been reached. 
+ @param audioPlayer The instance of the EZAudioPlayer that triggered the event
+ @param audioFile   The instance of the EZAudioFile that the event was triggered from
+ */
 - (void)audioPlayer:(EZAudioPlayer *)audioPlayer
 reachedEndOfAudioFile:(EZAudioFile *)audioFile;
 
