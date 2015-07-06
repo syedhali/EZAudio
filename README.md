@@ -174,8 +174,8 @@ Reading audio data from a file requires you to create an AudioBufferList to hold
 
 **Note: You have to free the AudioBufferList, even in ARC.**
 ```objectivec
-// Allocate an AudioBufferList to hold the audio data (the client format is the in-app format that is used for reading, it's different than the file format which is usually something compressed like an mp3 or m4a)
-AudioStreamBasicDescription clientFormat = self.audioFile.clientFormat;
+// Allocate an AudioBufferList to hold the audio data (the client format is the non-compressed in-app format that is used for reading, it's different than the file format which is usually something compressed like an mp3 or m4a)
+AudioStreamBasicDescription clientFormat = [self.audioFile clientFormat];
 UInt32 numberOfFramesToRead = 512;
 UInt32 channels = clientFormat.mChannelsPerFrame;
 BOOL isInterleaved = [EZAudioUtilities isInterleaved:clientFormat];
@@ -183,7 +183,7 @@ AudioBufferList *bufferList = [EZAudioUtilities audioBufferListWithNumberOfFrame
                                                                  numberOfChannels:channels
                                                                       interleaved:isInterleaved];
 
-//
+// Read the frames from the EZAudioFile into the AudioBufferList
 UInt32 framesRead;
 UInt32 isEndOfFile;
 [self.audioFile readFrames:numberOfFramesToRead
@@ -196,25 +196,26 @@ When a read occurs the `EZAudioFileDelegate` receives two events.
 
 An event notifying the delegate of the read audio data as float arrays:
 ```objectivec
-// The EZAudioFile method `readFrames:audioBufferList:bufferSize:eof:` triggers an event notifying the delegate of the read audio data as float arrays
 -(void)     audioFile:(EZAudioFile *)audioFile
             readAudio:(float **)buffer
        withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels {
-  // The audio data from the read as a float buffer. You can feed this into an audio plot!
-  dispatch_async(dispatch_get_main_queue(), ^{
-    // Update that audio plot!
-    [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
-  });
+ withNumberOfChannels:(UInt32)numberOfChannels
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.audioPlot updateBuffer:buffer[0]
+                          withBufferSize:bufferSize];
+    });
 }
 ```
 and an event notifying the delegate of the new frame position within the `EZAudioFile`:
 ```objectivec
-// The EZAudioFile method `readFrames:audioBufferList:bufferSize:eof:` triggers an event notifying the delegate of the new frame position within the file.
--(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    // Move that slider to this new position!
-  });
+-(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+		// Update UI
+    });
 }
 ```
 
@@ -224,16 +225,18 @@ You can seek very easily through an audio file using the `EZAudioFile`'s seekToF
 ```objectivec
 // Get the total number of frames for the audio file
 SInt64 totalFrames = [self.audioFile totalFrames];
+
 // Seeks halfway through the audio file
 [self.audioFile seekToFrame:(totalFrames/2)];
 ```
 When a seek occurs the `EZAudioFileDelegate` receives the seek event:
 ```objectivec
-// The EZAudioFile method `seekToFrame:` triggers an event notifying the delegate of the new frame position within the file.
--(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    // Move that slider to this new position!
-  });
+-(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+		// Update UI
+    });
 }
 ```
 ###<a name="EZMicrophone"></a>EZMicrophone
