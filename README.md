@@ -54,13 +54,13 @@ Shows how to use the `EZMicrophone` and `EZAudioPlot` to visualize the audio dat
 
 ![OpenGLWaveformExampleGif](https://cloud.githubusercontent.com/assets/1275640/8516234/499f6fd2-2366-11e5-9771-7d0afae59391.gif)
 
-Shows how to use the `EZMicrophone` and `EZAudioPlotGL` to visualize the audio data from the microphone in real-time. The drawing is using OpenGL so it is much faster and like the first example can display a buffer or rolling waveform.
+Shows how to use the `EZMicrophone` and `EZAudioPlotGL` to visualize the audio data from the microphone in real-time. The drawing is using OpenGL so the performance much better for plots needing a lot of points.
 
 **_EZAudioPlayFileExample_**
 
 ![PlayFileExample](https://cloud.githubusercontent.com/assets/1275640/8516245/711ca232-2366-11e5-8d20-2538164f3307.gif)
 
-Shows how to use the `EZAudioFile`, `EZOutput`, and `EZAudioPlotGL` to playback, pause, and seek through an audio file while displaying its waveform as a buffer or a rolling waveform plot.
+Shows how to use the `EZAudioPlayer` and `EZAudioPlotGL` to playback, pause, and seek through an audio file while displaying its waveform as a buffer or a rolling waveform plot.
 
 **_EZAudioRecordWaveformExample_**
 
@@ -72,7 +72,7 @@ Shows how to use the `EZMicrophone`, `EZRecorder`, and `EZAudioPlotGL` to record
 
 ![WaveformExample](https://cloud.githubusercontent.com/assets/1275640/8516597/f27240ea-236a-11e5-8ecd-68cf05b7ce40.gif)
 
-Shows how to use the `EZAudioFile` and `EZAudioPlot` to display the audio waveform an entire audio file. 
+Shows how to use the `EZAudioFile` and `EZAudioPlot` to animate in an audio waveform for an entire audio file. 
 
 **_EZAudioPassThroughExample_**
 
@@ -84,7 +84,7 @@ Shows how to use the `EZMicrophone`, `EZOutput`, and the `EZAudioPlotGL` to pass
 
 ![FFTExample](https://cloud.githubusercontent.com/assets/1275640/8516750/4bf07522-236d-11e5-9112-685d80424e5f.gif)
 
-Shows how to calculate the real-time FFT of the audio data coming from the `EZMicrophone` and the Accelerate framework. The audio data is plotted using the `EZAudioPlotGL` for the time domain plot and the `EZAudioPlot` for the frequency domain plot. 
+Shows how to calculate the real-time FFT of the audio data coming from the `EZMicrophone` and the Accelerate framework. The audio data is plotted using two `EZAudioPlots` for the time and frequency displays.
 
 ### Documentation
 The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/0.9.1/
@@ -132,7 +132,7 @@ pod 'EZAudio/Core', '~> 0.9.1'
 
 ##<a name="CoreComponents"></a>Core Components
 
-`EZAudio` currently offers four components that encompass a wide range of audio functionality. In addition to the functional aspects of these components such as pulling audio data, reading/writing from files, and performing playback they also take special care to hook into the interface components to allow developers to display visual feedback (see the Interface Components below).
+`EZAudio` currently offers six audio components that encompass a wide range of functionality. In addition to the functional aspects of these components such as pulling audio data, reading/writing from files, and performing playback they also take special care to hook into the interface components to allow developers to display visual feedback (see the [Interface Components](#InterfaceComponents) below).
 
 ###<a name="EZAudioFile"></a>EZAudioFile
 Provides simple read/seek operations, pulls waveform amplitude data, and provides the `EZAudioFileDelegate` to notify of any read/seek action occuring on the `EZAudioFile`.
@@ -470,7 +470,7 @@ Once you've initialized your `EZRecorder` you can append data by passing in an A
 }
 ```
 
-###Interface Components
+##<a name="InterfaceComponents"></a>Interface Components
 `EZAudio` currently offers two drop in audio waveform components that help simplify the process of visualizing audio.
 
 ###<a name="EZAudioPlot"></a>EZAudioPlot
