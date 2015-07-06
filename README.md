@@ -3,11 +3,8 @@
 #EZAudio
 A simple, intuitive audio framework for iOS and OSX.
 
-# Note as of July 2, 2015
-Over the last week I've been rewriting the core components of EZAudio to be faster and much more flexible. As EZAudio gets closer its 1.0 release the API has changed a little bit for each component and as a result this repo's README for the [Examples](#Examples) and [Core Components](#CoreComponents) are in a deprecated state, but will be updated tomorrow <b>July 3rd, 2015</b>. As of the `0.7.1` release you should be able to use EZAudio and the Amazing Audio Engine by using the `EZAudio/Core` Cocoapod (see [Using EZAudio & The Amazing Audio Engine](#AmazingAudioEngineCocoapod))
-
 ##Features
-![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/EZAudioSummary.png "EZAudioFeatures")
+
 
 **Awesome Components**
 
@@ -47,35 +44,49 @@ Within this repo you'll find the examples for iOS and OSX to get you up to speed
 
 ### Example Projects
 
+![CoreGraphicsWaveformExampleGif](https://cloud.githubusercontent.com/assets/1275640/8516226/1eb885ec-2366-11e5-8d76-3a4b4d982eb0.gif)
+
 **_EZAudioCoreGraphicsWaveformExample_** 
 
 Shows how to use the `EZMicrophone` and `EZAudioPlot` to visualize the audio data from the microphone in real-time. The waveform can be displayed as a buffer or a rolling waveform plot (traditional waveform look). 
+
+![OpenGLWaveformExampleGif](https://cloud.githubusercontent.com/assets/1275640/8516234/499f6fd2-2366-11e5-9771-7d0afae59391.gif)
 
 **_EZAudioOpenGLWaveformExample_**
 
 Shows how to use the `EZMicrophone` and `EZAudioPlotGL` to visualize the audio data from the microphone in real-time. The drawing is using OpenGL so it is much faster and like the first example can display a buffer or rolling waveform.
 
+![PlayFileExample](https://cloud.githubusercontent.com/assets/1275640/8516245/711ca232-2366-11e5-8d20-2538164f3307.gif)
+
 **_EZAudioPlayFileExample_**
 
 Shows how to use the `EZAudioFile`, `EZOutput`, and `EZAudioPlotGL` to playback, pause, and seek through an audio file while displaying its waveform as a buffer or a rolling waveform plot.
+
+![RecordWaveformExample](https://cloud.githubusercontent.com/assets/1275640/8516310/86da80f2-2367-11e5-84aa-aea25a439a76.gif)
 
 **_EZAudioRecordWaveformExample_**
 
 Shows how to use the `EZMicrophone`, `EZRecorder`, and `EZAudioPlotGL` to record the audio from the microphone input to a file while displaying the audio waveform of the incoming data. You can then playback the newly recorded audio file using AVFoundation and keep adding more audio data to the tail of the file.
 
+![WaveformExample](https://cloud.githubusercontent.com/assets/1275640/8516597/f27240ea-236a-11e5-8ecd-68cf05b7ce40.gif)
+
 **_EZAudioWaveformFromFileExample_**
 
 Shows how to use the `EZAudioFile` and `EZAudioPlot` to display the audio waveform an entire audio file. 
 
+![PassthroughExample](https://cloud.githubusercontent.com/assets/1275640/8516692/7abfbe36-236c-11e5-9d69-4f82956177b3.gif)
+
 **_EZAudioPassThroughExample_**
 
+
+
 Shows how to use the `EZMicrophone`, `EZOutput`, and the `EZAudioPlotGL` to pass the microphone input to the output for playback while displaying the audio waveform (as a buffer or rolling plot) in real-time. 
+
+![FFTExample](https://cloud.githubusercontent.com/assets/1275640/8516750/4bf07522-236d-11e5-9112-685d80424e5f.gif)
 
 **_EZAudioFFTExample_**
 
 Shows how to calculate the real-time FFT of the audio data coming from the `EZMicrophone` and the Accelerate framework. The audio data is plotted using the `EZAudioPlotGL` for the time domain plot and the `EZAudioPlot` for the frequency domain plot. 
-
-![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/fftMacExample.png)
 
 ### Documentation
 The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/0.9.1/
