@@ -135,7 +135,7 @@ pod 'EZAudio/Core', '~> 0.9.1'
 `EZAudio` currently offers six audio components that encompass a wide range of functionality. In addition to the functional aspects of these components such as pulling audio data, reading/writing from files, and performing playback they also take special care to hook into the interface components to allow developers to display visual feedback (see the [Interface Components](#InterfaceComponents) below).
 
 ###<a name="EZAudioFile"></a>EZAudioFile
-Provides simple read/seek operations, pulls waveform amplitude data, and provides the `EZAudioFileDelegate` to notify of any read/seek action occuring on the `EZAudioFile`.
+Provides simple read/seek operations, pulls waveform amplitude data, and provides the `EZAudioFileDelegate` to notify of any read/seek action occuring on the `EZAudioFile`. This can be thought of as the NSImage/UIImage equivalent of the audio world.
 
 **_Relevant Example Projects_**
 - EZAudioWaveformFromFileExample (iOS)
@@ -156,13 +156,15 @@ self.audioFile = [EZAudioFile audioFileWithURL:[NSURL fileURLWithPath:@"/path/to
 
 ####Getting Waveform Data
 
-There is a `getWaveformDataWithCompletionBlock:` method to allow you to easily and asynchronously get the waveform amplitude data that will best represent the whole audio file (will calculate the best fit that's constrainted to ~2048 data points)
+The EZAudioFile allows you to quickly fetch waveform data from an audio file with as much or little detail as you'd like.
 ```objectivec
-// Get the waveform data from the audio file asynchronously 
-[audioFile getWaveformDataWithCompletionBlock:^(float *waveformData, UInt32 length) {
-  // Update the audio plot with the waveform data (use the EZPlotTypeBuffer in this case)
-  self.audioPlot.plotType = EZPlotTypeBuffer;
-  [self.audioPlot updateBuffer:waveformData withBufferSize:length];
+__weak typeof (self) weakSelf = self;
+[self.audioFile getWaveformDataWithNumberOfPoints:1024
+                                  completionBlock:^(float **waveformData,
+                                                    int length)
+{
+     [weakSelf.audioPlot updateBuffer:waveformData[0]
+                       withBufferSize:length];
 }];
 ```
 
@@ -172,18 +174,22 @@ Reading audio data from a file requires you to create an AudioBufferList to hold
 
 **Note: You have to free the AudioBufferList, even in ARC.**
 ```objectivec
-// Allocate a buffer list to hold the file's data
-UInt32          frames      = 512;
-AudioBufferList *bufferList = [EZAudio audioBufferList];
-UInt32          bufferSize; // Read function will populate this value
-BOOL            eof;        // Read function will populate this value
-// Reads 512 frames from the audio file
-[audioFile readFrames:frames
-      audioBufferList:bufferList
-           bufferSize:&bufferSize
-                  eof:&eof];
-// Cleanup when done working with audio data (yes, even in ARC)
-[EZAudio freeBufferList:bufferList];
+// Allocate an AudioBufferList to hold the audio data (the client format is the in-app format that is used for reading, it's different than the file format which is usually something compressed like an mp3 or m4a)
+AudioStreamBasicDescription clientFormat = self.audioFile.clientFormat;
+UInt32 numberOfFramesToRead = 512;
+UInt32 channels = clientFormat.mChannelsPerFrame;
+BOOL isInterleaved = [EZAudioUtilities isInterleaved:clientFormat];
+AudioBufferList *bufferList = [EZAudioUtilities audioBufferListWithNumberOfFrames:numberOfFramesToRead
+                                                                 numberOfChannels:channels
+                                                                      interleaved:isInterleaved];
+
+//
+UInt32 framesRead;
+UInt32 isEndOfFile;
+[self.audioFile readFrames:numberOfFramesToRead
+           audioBufferList:bufferList
+                bufferSize:&framesRead
+                       eof:&isEndOfFile]
 ```
 
 When a read occurs the `EZAudioFileDelegate` receives two events.
