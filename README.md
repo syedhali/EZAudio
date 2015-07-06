@@ -10,6 +10,10 @@ A simple, intuitive audio framework for iOS and OSX.
 
 I've designed six core components to allow you to immediately get your hands dirty recording, playing, and visualizing audio data. These components simply plug into each other and build on top of the high-performance, low-latency AudioUnits API and give you an easy to use API written in Objective-C instead of pure C.
 
+[EZAudioDevice](#EZAudioDevice)
+
+A useful class for getting all the current and available inputs/output on any Apple device. The EZMicrophone and EZOutput use this to direct sound in/out from different hardware components.
+
 [EZMicrophone](#EZMicrophone)
 
 A microphone class that provides its delegate audio data from the default device microphone with one line of code.
@@ -133,6 +137,37 @@ pod 'EZAudio/Core', '~> 0.9.1'
 ##<a name="CoreComponents"></a>Core Components
 
 `EZAudio` currently offers six audio components that encompass a wide range of functionality. In addition to the functional aspects of these components such as pulling audio data, reading/writing from files, and performing playback they also take special care to hook into the interface components to allow developers to display visual feedback (see the [Interface Components](#InterfaceComponents) below).
+
+###<a name="EZAudioDevice"></a>EZAudioDevice
+Provides a simple interface for obtaining the current and all available inputs and output for any Apple device. For instance, the iPhone 6 has three microphones available for input, while on OSX you can choose the Built-In Microphone or any available HAL device on your system. Similarly, for iOS you can choose from a pair of headphones connected or speaker, while on OSX you can choose from the Built-In Output, any available HAL device, or Airplay. 
+
+![EZAudioDeviceInputsExample](https://cloud.githubusercontent.com/assets/1275640/8535722/51e8f702-23fd-11e5-9f1c-8c45e80d19ef.gif)
+
+####Getting Input Devices
+To get all the available input devices use the `inputDevices` class method:
+```objectivec
+NSArray *inputDevices = [EZAudioDevice inputDevices];
+```
+
+or to just get the currently selected input device use the `currentInputDevice` method:
+```objectivec
+// On iOS this will default to the headset device or bottom microphone, while on OSX this will
+// be your selected inpupt device from the Sound preferences
+EZAudioDevice *currentInputDevice = [EZAudioDevice currentInputDevice];
+```
+
+####Getting Output Devices
+Similarly, to get all the available output devices use the `outputDevices` class method:
+```objectivec
+NSArray *outputDevices = [EZAudioDevice outputDevices];
+```
+
+or to just get the currently selected output device use the `currentInputDevice` method:
+```objectivec
+// On iOS this will default to the headset speaker, while on OSX this will be your selected 
+// output device from the Sound preferences
+EZAudioDevice *currentOutputDevice = [EZAudioDevice currentOutputDevice];
+```
 
 ###<a name="EZAudioFile"></a>EZAudioFile
 Provides simple read/seek operations, pulls waveform amplitude data, and provides the `EZAudioFileDelegate` to notify of any read/seek action occuring on the `EZAudioFile`. This can be thought of as the NSImage/UIImage equivalent of the audio world.
@@ -379,11 +414,27 @@ Alternatively, you could also use the shared output instance and just assign it 
 // Assign a delegate to the shared instance of the output to provide the output audio data
 [EZOutput sharedOutput].delegate = self;
 ```
+####Setting The Device
+The EZOutput uses an `EZAudioDevice` instance to select what specific hardware destination it will output audio to. You'd use this if you wanted to change the output device like in the [EZAudioPlayFileExample](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/EZAudioPlayFileExample) for OSX. At any time you can change which output device is used by setting the `device` property:
+```objectivec
+// By default the EZOutput uses the default output device, but you can change this at any time
+EZAudioDevice *currentOutputDevice = [EZAudioDevice currentOutputDevice];
+[self.output setDevice:currentOutputDevice];
+```
+
+Anytime the `EZOutput` changes its device it will trigger the `EZOutputDelegate` event:
+```objectivec
+- (void)output:(EZOutput *)output changedDevice:(EZAudioDevice *)device
+{
+    NSLog(@"Change output device to: %@", device);
+}
+```
+
 ####Playback Using An AudioBufferList
 
 #####Setting The Input Format
 
-When providing audio data the EZOutputDataSource will expect you to fill out the AudioBufferList provided with whatever `inputFormat` that is set on the `EZOutput`. By default the input format is a stereo, non-interleaved, float format (see [defaultInputFormat](http://cocoadocs.org/docsets/EZAudio/0.9.1/Classes/EZOutput.html#//api/name/defaultInputFormat) for more information). If you're dealing with a different input format (which is typically the case), just set the `inputFormat` property. For instance:
+When providing audio data the `EZOutputDataSource` will expect you to fill out the AudioBufferList provided with whatever `inputFormat` that is set on the `EZOutput`. By default the input format is a stereo, non-interleaved, float format (see [defaultInputFormat](http://cocoadocs.org/docsets/EZAudio/0.9.1/Classes/EZOutput.html#//api/name/defaultInputFormat) for more information). If you're dealing with a different input format (which is typically the case), just set the `inputFormat` property. For instance:
 ```objectivec
 // Set a mono, float format with a sample rate of 44.1 kHz
 AudioStreamBasicDescription monoFloatFormat = [EZAudioUtilities monoFloatFormatWithSampleRate:44100.0f];
