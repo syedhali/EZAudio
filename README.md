@@ -546,15 +546,21 @@ All plots have only one update function, `updateBuffer:withBufferSize:`, which e
 ```
 
 ###<a name="EZAudioPlotGL"></a>EZAudioPlotGL
-Provides an audio waveform plot that uses OpenGL to perform the drawing. The API this class are exactly the same as those for the EZAudioPlot above. On iOS this is a subclass of the EZPlot and uses an embedded GLKViewController to perform the OpenGL drawing while on OSX this is a subclass of the NSOpenGLView. In most cases this is the plot you want to use, it's GPU-accelerated, has a low memory footprint, and performs amazingly on all devices.
+Provides an audio waveform plot that uses OpenGL to perform the drawing. The API this class are exactly the same as those for the EZAudioPlot above. On iOS this is a subclass of the GLKView while on OSX this is a subclass of the NSOpenGLView. In most cases this is the plot you want to use, it's GPU-accelerated, can handle lots of points  while displaying 60 frames per second (the EZAudioPlot starts to choke on anything greater than 1024), and performs amazingly on all devices. The only downside is that you can only have one OpenGL plot onscreen at a time. However, you can combine OpenGL plots with Core Graphics plots in the view hierachy (see the EZAudioRecordExample for an example of how to do this).
 
 *Relevant Example Projects*
 - EZAudioOpenGLWaveformExample (iOS)
 - EZAudioOpenGLWaveformExample (OSX)
+- EZAudioPlayFileExample (iOS)
+- EZAudioPlayFileExample (OSX)
+- EZAudioRecordExample (iOS)
+- EZAudioRecordExample (OSX)
+- EZAudioPassThroughExample (iOS)
+- EZAudioPassThroughExample (OSX)
 
 ####Creating An OpenGL Audio Plot
 
-You can create an audio plot in the interface builder by dragging in a UIView on iOS or an NSOpenGLView on OSX onto your content area. Then change the custom class of the UIView/NSView to `EZAudioPlotGL`.
+You can create an audio plot in the interface builder by dragging in a UIView on iOS or an NSView on OSX onto your content area. Then change the custom class of the UIView/NSView to `EZAudioPlotGL`.
 
 ![EZAudioPlotGLInterfaceBuilder](https://cloud.githubusercontent.com/assets/1275640/8532900/47d62346-23e6-11e5-8128-07c6641f4af8.gif)
 
