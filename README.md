@@ -373,12 +373,15 @@ Alternatively, you could also use the shared output instance and just assign it 
 ```
 ####Playback Using An AudioBufferList
 
+#####Setting The Input Format
+
 When providing audio data the EZOutputDataSource will expect you to fill out the AudioBufferList provided with whatever `inputFormat` that is set on the `EZOutput`. By default the input format is a stereo, non-interleaved, float format (see [defaultInputFormat](http://cocoadocs.org/docsets/EZAudio/0.9.1/Classes/EZOutput.html#//api/name/defaultInputFormat) for more information). If you're dealing with a different input format (which is typically the case), just set the `inputFormat` property. For instance:
 ```objectivec
 // Set a mono, float format with a sample rate of 44.1 kHz
 AudioStreamBasicDescription monoFloatFormat = [EZAudioUtilities monoFloatFormatWithSampleRate:44100.0f];
 [self.output setInputFormat:monoFloatFormat];
 ```
+#####Implementing the EZOutputDataSource
 
 An example of implementing the EZOutputDataSource is done internally in the `EZAudioPlayer` using an `EZAudioFile` to read audio from an audio file on disk like so:
 ```objectivec
