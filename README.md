@@ -138,8 +138,6 @@ pod 'EZAudio/Core', '~> 0.9.1'
 Provides simple read/seek operations, pulls waveform amplitude data, and provides the `EZAudioFileDelegate` to notify of any read/seek action occuring on the `EZAudioFile`.
 
 **_Relevant Example Projects_**
-- EZAudioPlayFileExample (iOS)
-- EZAudioPlayFileExample (OSX)
 - EZAudioWaveformFromFileExample (iOS)
 - EZAudioWaveformFromFileExample (OSX)
 
@@ -147,13 +145,13 @@ Provides simple read/seek operations, pulls waveform amplitude data, and provide
 To open an audio file create a new instance of the `EZAudioFile` class.
 ```objectivec
 // Declare the EZAudioFile as a strong property
-@property (nonatomic,strong) EZAudioFile *audioFile;
+@property (nonatomic, strong) EZAudioFile *audioFile;
 
 ...
 
 // Initialize the EZAudioFile instance and assign it a delegate to receive the read/seek callbacks
 self.audioFile = [EZAudioFile audioFileWithURL:[NSURL fileURLWithPath:@"/path/to/your/file"] 
-                                   andDelegate:self];
+									   delegate:self];
 ```
 
 ####Getting Waveform Data
