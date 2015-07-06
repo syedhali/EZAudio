@@ -174,7 +174,9 @@ Reading audio data from a file requires you to create an AudioBufferList to hold
 
 **Note: You have to free the AudioBufferList, even in ARC.**
 ```objectivec
-// Allocate an AudioBufferList to hold the audio data (the client format is the non-compressed in-app format that is used for reading, it's different than the file format which is usually something compressed like an mp3 or m4a)
+// Allocate an AudioBufferList to hold the audio data (the client format is the non-compressed
+// in-app format that is used for reading, it's different than the file format which is usually 
+// something compressed like an mp3 or m4a)
 AudioStreamBasicDescription clientFormat = [self.audioFile clientFormat];
 UInt32 numberOfFramesToRead = 512;
 UInt32 channels = clientFormat.mChannelsPerFrame;
@@ -264,12 +266,14 @@ Create an `EZMicrophone` instance by declaring a property and initializing it li
 
 ...
 
-// Initialize the microphone instance and assign it a delegate to receive the audio data callbacks
+// Initialize the microphone instance and assign it a delegate to receive the audio data
+// callbacks
 self.microphone = [EZMicrophone microphoneWithDelegate:self];
 ```
 Alternatively, you could also use the shared `EZMicrophone` instance and just assign its `EZMicrophoneDelegate`.
 ```objectivec
-// Assign a delegate to the shared instance of the microphone to receive the audio data callbacks
+// Assign a delegate to the shared instance of the microphone to receive the audio data 
+// callbacks
 [EZMicrophone sharedMicrophone].delegate = self;
 ```
 
@@ -295,7 +299,9 @@ An array of float arrays:
 withNumberOfChannels:(UInt32)numberOfChannels 
 {
     __weak typeof (self) weakSelf = self;
-	// Getting audio data as an array of float buffer arrays that can be fed into the EZAudioPlot, EZAudioPlotGL, or whatever visualization you would like to do with the microphone data.
+	// Getting audio data as an array of float buffer arrays that can be fed into the 
+	// EZAudioPlot, EZAudioPlotGL, or whatever visualization you would like to do with 
+	// the microphone data.
 	dispatch_async(dispatch_get_main_queue(),^{
 		// Visualize this data brah, buffer[0] = left channel, buffer[1] = right channel
 		[weakSelf.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
@@ -497,7 +503,7 @@ Pause or resume the output component at any time like so:
 ```
 
 ###<a name="EZRecorder"></a>EZRecorder
-Provides a way to record any audio source to an audio file. This hooks into the other components quite nicely to do something like plot the audio waveform while recording to give visual feedback as to what is happening.
+Provides a way to record any audio source to an audio file. This hooks into the other components quite nicely to do something like plot the audio waveform while recording to give visual feedback as to what is happening. The `EZRecorderDelegate` provides methods to listen to write events and a final close event on the `EZRecorder` (explained [below](#EZRecorderDelegateExplanation)).
 
 *Relevant Example Projects*
 - EZAudioRecordExample (iOS)
@@ -505,24 +511,57 @@ Provides a way to record any audio source to an audio file. This hooks into the 
 
 ####Creating A Recorder
 
-To create an `EZRecorder` you must start with an AudioStreamBasicDescription, which is just a CoreAudio structure representing the audio format of a file. The `EZMicrophone` and `EZAudioFile` both provide the AudioStreamBasicDescription as properties (for the `EZAudioFile` use the clientFormat property) that you can use when initializing the `EZRecorder`.
+To create an `EZRecorder` you must provide at least 3 things: an NSURL representing the file path of where the audio file should be written to (an existing file will be overwritten), a `clientFormat` representing the format in which you will be providing the audio data, and either an `EZRecorderFileType` or an `AudioStreamBasicDescription` representing the file format of the audio data on disk. 
+
+```objectivec
+// Provide a file path url to write to, a client format (always linear PCM, this is the format 
+// coming from another component like the EZMicrophone's audioStreamBasicDescription property), 
+// and a EZRecorderFileType constant representing either a wav (EZRecorderFileTypeWAV), 
+// aiff (EZRecorderFileTypeAIFF), or m4a (EZRecorderFileTypeM4A) file format. The advantage of 
+// this is that the `fileFormat` property will be automatically filled out for you.
++ (instancetype)recorderWithURL:(NSURL *)url
+                   clientFormat:(AudioStreamBasicDescription)clientFormat
+                       fileType:(EZRecorderFileType)fileType;
+                       
+// Alternatively, you can provide a file path url to write to, a client format (always linear 
+// PCM, this is the format coming from another component like the EZMicrophone's 
+// audioStreamBasicDescription property), a `fileFormat` representing your custom
+// AudioStreamBasicDescription, and an AudioFileTypeID that corresponds with your `fileFormat`.
++ (instancetype)recorderWithURL:(NSURL *)url
+                   clientFormat:(AudioStreamBasicDescription)clientFormat
+                     fileFormat:(AudioStreamBasicDescription)fileFormat
+                audioFileTypeID:(AudioFileTypeID)audioFileTypeID;
+
+```
+
+Start by declaring an instance of the EZRecorder (you will have one of these per audio file written out)
 
 ```objectivec
 // Declare the EZRecorder as a strong property
-@property (nonatomic,strong) EZRecorder *recorder;
-
-...
-
-// Here's how we would initialize the recorder for an EZMicrophone instance
-self.recorder = [EZRecorder recorderWithDestinationURL:[NSURL fileURLWithPath:@"path/to/file.caf"]
-                                       andSourceFormat:microphone.audioStreamBasicDescription];
-                                       
-// Here's how we would initialize the recorder for an EZAudioFile instance
-self.recorder = [EZRecorder recorderWithDestinationURL:[NSURL fileURLWithPath:@"path/to/file.caf"]
-                                       andSourceFormat:audioFile.clientFormat];
+@property (nonatomic, strong) EZRecorder *recorder;
 ```
 
-##Recording Some Audio
+and initialize it using one of the two initializers from above. For instance, using the `EZRecorderFileType` shortcut initializer you could create an instance like so:
+```objectivec
+// Example using an EZMicrophone and a string called kAudioFilePath representing a file
+// path location on your computer to write out a M4A file.
+self.recorder = [EZRecorder recorderWithURL:[NSURL fileURLWithPath:kAudioFilePath]
+                               clientFormat:[self.microphone audioStreamBasicDescription]
+                                   fileType:EZRecorderFileTypeM4A];
+```
+
+or to configure your own custom file format, say to write out a 8000 Hz, iLBC file:
+```objectivec
+// Example using an EZMicrophone, a string called kAudioFilePath representing a file
+// path location on your computer, and an iLBC file format.
+AudioStreamBasicDescription iLBCFormat = [EZAudioUtilities iLBCFormatWithSampleRate:8000];
+self.recorder = [EZRecorder recorderWithURL:[NSURL fileURLWithPath:kAudioFilePath]
+                               clientFormat:[self.microphone audioStreamBasicDescription]
+                                 fileFormat:iLBCFormat
+                            audioFileTypeID:kAudioFileCAFType];
+```
+
+####Recording Some Audio
 
 Once you've initialized your `EZRecorder` you can append data by passing in an AudioBufferList and its buffer size like so:
 ```objectivec
@@ -530,12 +569,56 @@ Once you've initialized your `EZRecorder` you can append data by passing in an A
 -(void)    microphone:(EZMicrophone *)microphone
         hasBufferList:(AudioBufferList *)bufferList
        withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels {
-  // Getting audio data as a buffer list that can be directly fed into the EZRecorder. This is happening on the audio thread - any UI updating needs a GCD main queue block.
-  if( self.isRecording ){
-    [self.recorder appendDataFromBufferList:bufferList
-                             withBufferSize:bufferSize];
-  } 
+ withNumberOfChannels:(UInt32)numberOfChannels 
+{
+    // Getting audio data as a buffer list that can be directly fed into the EZRecorder. This is 
+    // happening on the audio thread - any UI updating needs a GCD main queue block.
+    if(self.isRecording)
+    {
+        // Since we set the recorder's client format to be that of the EZMicrophone instance, 
+        // the audio data coming in represented by the AudioBufferList can directly be provided 
+        // to the EZRecorder. The EZRecorder will internally convert the audio data from the 
+        // `clientFormat` to `fileFormat`.
+        [self.recorder appendDataFromBufferList:bufferList
+                                 withBufferSize:bufferSize];
+    } 
+}
+```
+
+#####<a name="EZRecorderDelegateExplanation"></a>Responding to an EZRecorder after it has written audio data
+
+Once audio data has been successfully written with the `EZRecorder` it will notify the `EZRecorderDelegate` of the event so it can respond via:
+```objectivec
+// Triggers after the EZRecorder's `appendDataFromBufferList:withBufferSize:` method is called
+// so you can update your interface accordingly.
+- (void)recorderUpdatedCurrentTime:(EZRecorder *)recorder
+{
+    __weak typeof (self) weakSelf = self;
+    // This will get triggerd on the thread that the write occured on so be sure to wrap your UI 
+    // updates in a GCD main queue block! However, I highly recommend you first pull the values 
+    // you'd like to update the interface with before entering the GCD block to avoid trying to 
+    // fetch a value after the audio file has been closed.
+    NSString *formattedCurrentTime = [recorder formattedCurrentTime]; // MM:SS formatted from NSTimeInterval seconds
+    dispatch_async(dispatch_get_main_queue(), ^{
+    	// Update label
+        weakSelf.currentTimeLabel.stringValue = formattedCurrentTime;
+    });
+}
+```
+
+####Closing An Audio File
+When you're recording is done be sure to call the `closeAudioFile` method to make sure the audio file written to disk is properly closed before you attempt to read it again.
+
+```objectivec
+// Close the EZRecorder's audio file BEFORE reading
+[self.recorder closeAudioFile];
+```
+
+This will trigger the EZRecorder's delegate method:
+```objectivec
+- (void)recorderDidClose:(EZRecorder *)recorder
+{
+    recorder.delegate = nil;
 }
 ```
 
