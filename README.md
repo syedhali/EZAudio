@@ -82,7 +82,7 @@ Shows how to use the `EZMicrophone`, `EZOutput`, and the `EZAudioPlotGL` to pass
 
 **_EZAudioFFTExample_**
 
-![FFTExample](https://cloud.githubusercontent.com/assets/1275640/8516750/4bf07522-236d-11e5-9112-685d80424e5f.gif)
+![FFTExample](https://cloud.githubusercontent.com/assets/1275640/8535242/deb7b006-23f8-11e5-94f8-983517e035ff.gif)
 
 Shows how to calculate the real-time FFT of the audio data coming from the `EZMicrophone` and the Accelerate framework. The audio data is plotted using two `EZAudioPlots` for the time and frequency displays.
 
