@@ -321,7 +321,8 @@ or the AudioBufferList representation:
        withBufferSize:(UInt32)bufferSize
  withNumberOfChannels:(UInt32)numberOfChannels 
 {
-	// Getting audio data as an AudioBufferList that can be directly fed into the EZRecorder or EZOutput. Say whattt...
+	// Getting audio data as an AudioBufferList that can be directly fed into the EZRecorder 
+	// or EZOutput. Say whattt...
 }
 ```
 ####Pausing/Resuming The Microphone
@@ -347,7 +348,8 @@ self.microphone.microphoneOn = YES;
 ###<a name="EZOutput"></a>EZOutput
 Provides flexible playback to the default output device by asking the `EZOutputDataSource` for audio data to play. Doesn't care where the buffers come from (microphone, audio file, streaming audio, etc). As of 1.0.0 the `EZOutputDataSource` has been simplified to have only one method to provide audio data to your `EZOutput` instance.
 ```objectivec
-// The EZOutputDataSource should fill out the audioBufferList with the given frame count. The timestamp is provided for sample accurate calculation, but for basic use cases can be ignored.
+// The EZOutputDataSource should fill out the audioBufferList with the given frame count. 
+// The timestamp is provided for sample accurate calculation, but for basic use cases can be ignored.
 - (OSStatus)        output:(EZOutput *)output
  shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
         withNumberOfFrames:(UInt32)frames
@@ -545,7 +547,7 @@ and initialize it using one of the two initializers from above. For instance, us
 ```objectivec
 // Example using an EZMicrophone and a string called kAudioFilePath representing a file
 // path location on your computer to write out a M4A file.
-self.recorder = [EZRecorder recorderWithURL:[NSURL fileURLWithPath:kAudioFilePath]
+self.recorder = [EZRecorder recorderWithURL:[NSURL fileURLWithPath:@"/path/to/your/file.m4a"]
                                clientFormat:[self.microphone audioStreamBasicDescription]
                                    fileType:EZRecorderFileTypeM4A];
 ```
@@ -555,7 +557,7 @@ or to configure your own custom file format, say to write out a 8000 Hz, iLBC fi
 // Example using an EZMicrophone, a string called kAudioFilePath representing a file
 // path location on your computer, and an iLBC file format.
 AudioStreamBasicDescription iLBCFormat = [EZAudioUtilities iLBCFormatWithSampleRate:8000];
-self.recorder = [EZRecorder recorderWithURL:[NSURL fileURLWithPath:kAudioFilePath]
+self.recorder = [EZRecorder recorderWithURL:[NSURL fileURLWithPath:@"/path/to/your/file.caf"]
                                clientFormat:[self.microphone audioStreamBasicDescription]
                                  fileFormat:iLBCFormat
                             audioFileTypeID:kAudioFileCAFType];
