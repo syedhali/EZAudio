@@ -214,7 +214,7 @@ typedef struct
 //------------------------------------------------------------------------------
 
 /**
- Called after the view has been created. Subclasses should use to add any additional methods needed instead of overriding the init methods. Make sure to called super!
+ Called after the view has been created. Subclasses should use to add any additional methods needed instead of overriding the init methods.
  */
 - (void)setup;
 
