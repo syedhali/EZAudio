@@ -10,6 +10,7 @@
                 <outlet property="audioPlot" destination="foT-nv-032" id="Baw-Le-z98"/>
                 <outlet property="microphoneInputChannelPopUpButton" destination="Usd-lp-n8s" id="FbQ-hj-24k"/>
                 <outlet property="microphoneInputPopUpButton" destination="wBG-jf-wVy" id="thS-Ur-IMj"/>
+                <outlet property="microphoneSwitch" destination="TbW-ha-PgJ" id="wEZ-dt-f7t"/>
                 <outlet property="view" destination="hFn-jA-9Se" id="cfu-I4-qhQ"/>
             </connections>
         </customObject>
@@ -86,7 +87,7 @@
                             <rect key="frame" x="18" y="46" width="36" height="17"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Input" id="Fq3-tX-8aU">
                                 <font key="font" metaFont="system"/>
-                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
@@ -94,7 +95,7 @@
                             <rect key="frame" x="204" y="46" width="55" height="17"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Channel" id="PTE-g2-mTV">
                                 <font key="font" metaFont="system"/>
-                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>

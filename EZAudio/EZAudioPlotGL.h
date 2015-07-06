@@ -206,6 +206,28 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
+/**
+ Called during the OpenGL run loop to constantly update the drawing 60 fps. Callers can use this force update the screen while subclasses can override this for complete control over their rendering. However, subclasses are more encouraged to use the `redrawWithPoints:pointCount:baseEffect:vertexBufferObject:vertexArrayBuffer:interpolated:mirrored:gain:`
+ */
+- (void)redraw;
+
+//------------------------------------------------------------------------------
+
+/**
+ Called after the view has been created. Subclasses should use to add any additional methods needed instead of overriding the init methods.
+ */
+- (void)setup;
+
+//------------------------------------------------------------------------------
+
+/**
+ Main method used to copy the sample data from the source buffer and update the
+ plot. Subclasses can overwrite this method for custom behavior.
+ @param data   A float array of the sample data. Subclasses should copy this data to a separate array to avoid threading issues.
+ @param length The length of the float array as an int.
+ */
+- (void)setSampleData:(float *)data length:(int)length;
+
 ///-----------------------------------------------------------
 /// @name Subclass Methods
 ///-----------------------------------------------------------

@@ -10,6 +10,7 @@
                 <outlet property="audioPlot" destination="wpL-Ou-GSb" id="OME-Hf-I27"/>
                 <outlet property="microphoneInputChannelPopUpButton" destination="Yi6-fS-Cob" id="pLg-4c-klV"/>
                 <outlet property="microphoneInputPopUpButton" destination="SjR-qx-mWV" id="NuN-SS-ESg"/>
+                <outlet property="microphoneSwitch" destination="kAI-gs-c31" id="ADZ-Fg-aCN"/>
                 <outlet property="view" destination="wpL-Ou-GSb" id="oxJ-iT-SKO"/>
             </connections>
         </customObject>
@@ -83,7 +84,7 @@
                     <rect key="frame" x="18" y="43" width="36" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Input" id="Png-Pk-fMc">
                         <font key="font" metaFont="system"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
@@ -91,7 +92,7 @@
                     <rect key="frame" x="204" y="43" width="55" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Channel" id="lkh-zp-WCY">
                         <font key="font" metaFont="system"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>

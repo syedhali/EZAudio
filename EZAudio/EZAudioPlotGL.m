@@ -183,10 +183,24 @@ typedef struct
 #endif
     
     //
+    // Allow subclass to initialize plot
+    //
+    [self setupPlot];
+    
+    //
     // Create the display link
     //
     self.displayLink = [EZAudioDisplayLink displayLinkWithDelegate:self];
     [self.displayLink start];
+}
+
+//------------------------------------------------------------------------------
+
+- (void)setupPlot
+{
+    //
+    // Override in subclass
+    //
 }
 
 //------------------------------------------------------------------------------
@@ -247,6 +261,7 @@ typedef struct
 #if !TARGET_OS_IPHONE
     [self.openGLContext unlock];
 #endif
+    self.frame = self.frame;
 }
 
 //------------------------------------------------------------------------------

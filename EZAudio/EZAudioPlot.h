@@ -156,7 +156,10 @@ FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength;
 
 //------------------------------------------------------------------------------
 
-- (void)initPlot;
+/**
+ Called after the view has been created. Subclasses should use to add any additional methods needed instead of overriding the init methods.
+ */
+- (void)setupPlot;
 
 //------------------------------------------------------------------------------
 

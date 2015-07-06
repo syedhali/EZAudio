@@ -226,8 +226,7 @@ withNumberOfChannels:(UInt32)numberOfChannels
 
 //------------------------------------------------------------------------------
 
-- (void)microphone:(EZMicrophone *)microphone
-     changedDevice:(EZAudioDevice *)device
+- (void)microphone:(EZMicrophone *)microphone changedDevice:(EZAudioDevice *)device
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         //
@@ -242,6 +241,27 @@ withNumberOfChannels:(UInt32)numberOfChannels
         //
         [self reloadMicrophoneInputChannelPopUpButtonMenu];
     });
+}
+
+//------------------------------------------------------------------------------
+
+- (void)microphone:(EZMicrophone *)microphone changedPlayingState:(BOOL)isPlaying
+{
+    NSString *title = isPlaying ? @"Microphone On" : @"Microphone Off";
+    [self setTitle:title forButton:self.microphoneSwitch];
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Utility
+//------------------------------------------------------------------------------
+
+- (void)setTitle:(NSString *)title forButton:(NSButton *)button
+{
+    NSDictionary *attributes = @{ NSForegroundColorAttributeName : [NSColor whiteColor] };
+    NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title
+                                                                          attributes:attributes];
+    button.attributedTitle = attributedTitle;
+    button.attributedAlternateTitle = attributedTitle;
 }
 
 //------------------------------------------------------------------------------

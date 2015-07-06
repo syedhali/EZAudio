@@ -151,9 +151,23 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
     self.backgroundColor = nil;
     [self.layer insertSublayer:self.waveformLayer atIndex:0];
     
+    //
+    // Allow subclass to initialize plot
+    //
+    [self setupPlot];
+    
     self.points = calloc(EZAudioPlotDefaultMaxHistoryBufferLength, sizeof(CGPoint));
     self.pointCount = [self initialPointCount];
     [self redraw];
+}
+
+//------------------------------------------------------------------------------
+
+- (void)setupPlot
+{
+    //
+    // Override in subclass
+    //
 }
 
 //------------------------------------------------------------------------------

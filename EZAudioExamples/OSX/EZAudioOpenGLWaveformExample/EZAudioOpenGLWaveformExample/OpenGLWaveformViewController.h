@@ -61,6 +61,11 @@
  */
 @property (nonatomic, weak) IBOutlet NSPopUpButton *microphoneInputChannelPopUpButton;
 
+/**
+ The checkbox button used to turn the microphone off/on
+ */
+@property (nonatomic, weak) IBOutlet NSButton *microphoneSwitch;
+
 //------------------------------------------------------------------------------
 #pragma mark - Actions
 //------------------------------------------------------------------------------
