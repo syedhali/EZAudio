@@ -3,11 +3,8 @@
 #EZAudio
 A simple, intuitive audio framework for iOS and OSX.
 
-# Note as of July 2, 2015
-Over the last week I've been rewriting the core components of EZAudio to be faster and much more flexible. As EZAudio gets closer its 1.0 release the API has changed a little bit for each component and as a result this repo's README for the [Examples](#Examples) and [Core Components](#CoreComponents) are in a deprecated state, but will be updated tomorrow <b>July 3rd, 2015</b>. As of the `0.7.1` release you should be able to use EZAudio and the Amazing Audio Engine by using the `EZAudio/Core` Cocoapod (see [Using EZAudio & The Amazing Audio Engine](#AmazingAudioEngineCocoapod))
-
 ##Features
-![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/EZAudioSummary.png "EZAudioFeatures")
+
 
 **Awesome Components**
 
@@ -49,33 +46,45 @@ Within this repo you'll find the examples for iOS and OSX to get you up to speed
 
 **_EZAudioCoreGraphicsWaveformExample_** 
 
+![CoreGraphicsWaveformExampleGif](https://cloud.githubusercontent.com/assets/1275640/8516226/1eb885ec-2366-11e5-8d76-3a4b4d982eb0.gif)
+
 Shows how to use the `EZMicrophone` and `EZAudioPlot` to visualize the audio data from the microphone in real-time. The waveform can be displayed as a buffer or a rolling waveform plot (traditional waveform look). 
 
 **_EZAudioOpenGLWaveformExample_**
 
-Shows how to use the `EZMicrophone` and `EZAudioPlotGL` to visualize the audio data from the microphone in real-time. The drawing is using OpenGL so it is much faster and like the first example can display a buffer or rolling waveform.
+![OpenGLWaveformExampleGif](https://cloud.githubusercontent.com/assets/1275640/8516234/499f6fd2-2366-11e5-9771-7d0afae59391.gif)
+
+Shows how to use the `EZMicrophone` and `EZAudioPlotGL` to visualize the audio data from the microphone in real-time. The drawing is using OpenGL so the performance much better for plots needing a lot of points.
 
 **_EZAudioPlayFileExample_**
 
-Shows how to use the `EZAudioFile`, `EZOutput`, and `EZAudioPlotGL` to playback, pause, and seek through an audio file while displaying its waveform as a buffer or a rolling waveform plot.
+![PlayFileExample](https://cloud.githubusercontent.com/assets/1275640/8516245/711ca232-2366-11e5-8d20-2538164f3307.gif)
+
+Shows how to use the `EZAudioPlayer` and `EZAudioPlotGL` to playback, pause, and seek through an audio file while displaying its waveform as a buffer or a rolling waveform plot.
 
 **_EZAudioRecordWaveformExample_**
+
+![RecordWaveformExample](https://cloud.githubusercontent.com/assets/1275640/8516310/86da80f2-2367-11e5-84aa-aea25a439a76.gif)
 
 Shows how to use the `EZMicrophone`, `EZRecorder`, and `EZAudioPlotGL` to record the audio from the microphone input to a file while displaying the audio waveform of the incoming data. You can then playback the newly recorded audio file using AVFoundation and keep adding more audio data to the tail of the file.
 
 **_EZAudioWaveformFromFileExample_**
 
-Shows how to use the `EZAudioFile` and `EZAudioPlot` to display the audio waveform an entire audio file. 
+![WaveformExample](https://cloud.githubusercontent.com/assets/1275640/8516597/f27240ea-236a-11e5-8ecd-68cf05b7ce40.gif)
+
+Shows how to use the `EZAudioFile` and `EZAudioPlot` to animate in an audio waveform for an entire audio file. 
 
 **_EZAudioPassThroughExample_**
+
+![PassthroughExample](https://cloud.githubusercontent.com/assets/1275640/8516692/7abfbe36-236c-11e5-9d69-4f82956177b3.gif)
 
 Shows how to use the `EZMicrophone`, `EZOutput`, and the `EZAudioPlotGL` to pass the microphone input to the output for playback while displaying the audio waveform (as a buffer or rolling plot) in real-time. 
 
 **_EZAudioFFTExample_**
 
-Shows how to calculate the real-time FFT of the audio data coming from the `EZMicrophone` and the Accelerate framework. The audio data is plotted using the `EZAudioPlotGL` for the time domain plot and the `EZAudioPlot` for the frequency domain plot. 
+![FFTExample](https://cloud.githubusercontent.com/assets/1275640/8516750/4bf07522-236d-11e5-9112-685d80424e5f.gif)
 
-![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/fftMacExample.png)
+Shows how to calculate the real-time FFT of the audio data coming from the `EZMicrophone` and the Accelerate framework. The audio data is plotted using two `EZAudioPlots` for the time and frequency displays.
 
 ### Documentation
 The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/0.9.1/
@@ -123,14 +132,12 @@ pod 'EZAudio/Core', '~> 0.9.1'
 
 ##<a name="CoreComponents"></a>Core Components
 
-`EZAudio` currently offers four components that encompass a wide range of audio functionality. In addition to the functional aspects of these components such as pulling audio data, reading/writing from files, and performing playback they also take special care to hook into the interface components to allow developers to display visual feedback (see the Interface Components below).
+`EZAudio` currently offers six audio components that encompass a wide range of functionality. In addition to the functional aspects of these components such as pulling audio data, reading/writing from files, and performing playback they also take special care to hook into the interface components to allow developers to display visual feedback (see the [Interface Components](#InterfaceComponents) below).
 
 ###<a name="EZAudioFile"></a>EZAudioFile
-Provides simple read/seek operations, pulls waveform amplitude data, and provides the `EZAudioFileDelegate` to notify of any read/seek action occuring on the `EZAudioFile`.
+Provides simple read/seek operations, pulls waveform amplitude data, and provides the `EZAudioFileDelegate` to notify of any read/seek action occuring on the `EZAudioFile`. This can be thought of as the NSImage/UIImage equivalent of the audio world.
 
 **_Relevant Example Projects_**
-- EZAudioPlayFileExample (iOS)
-- EZAudioPlayFileExample (OSX)
 - EZAudioWaveformFromFileExample (iOS)
 - EZAudioWaveformFromFileExample (OSX)
 
@@ -138,24 +145,26 @@ Provides simple read/seek operations, pulls waveform amplitude data, and provide
 To open an audio file create a new instance of the `EZAudioFile` class.
 ```objectivec
 // Declare the EZAudioFile as a strong property
-@property (nonatomic,strong) EZAudioFile *audioFile;
+@property (nonatomic, strong) EZAudioFile *audioFile;
 
 ...
 
 // Initialize the EZAudioFile instance and assign it a delegate to receive the read/seek callbacks
 self.audioFile = [EZAudioFile audioFileWithURL:[NSURL fileURLWithPath:@"/path/to/your/file"] 
-                                   andDelegate:self];
+									   delegate:self];
 ```
 
 ####Getting Waveform Data
 
-There is a `getWaveformDataWithCompletionBlock:` method to allow you to easily and asynchronously get the waveform amplitude data that will best represent the whole audio file (will calculate the best fit that's constrainted to ~2048 data points)
+The EZAudioFile allows you to quickly fetch waveform data from an audio file with as much or little detail as you'd like.
 ```objectivec
-// Get the waveform data from the audio file asynchronously 
-[audioFile getWaveformDataWithCompletionBlock:^(float *waveformData, UInt32 length) {
-  // Update the audio plot with the waveform data (use the EZPlotTypeBuffer in this case)
-  self.audioPlot.plotType = EZPlotTypeBuffer;
-  [self.audioPlot updateBuffer:waveformData withBufferSize:length];
+__weak typeof (self) weakSelf = self;
+[self.audioFile getWaveformDataWithNumberOfPoints:1024
+                                  completionBlock:^(float **waveformData,
+                                                    int length)
+{
+     [weakSelf.audioPlot updateBuffer:waveformData[0]
+                       withBufferSize:length];
 }];
 ```
 
@@ -165,43 +174,48 @@ Reading audio data from a file requires you to create an AudioBufferList to hold
 
 **Note: You have to free the AudioBufferList, even in ARC.**
 ```objectivec
-// Allocate a buffer list to hold the file's data
-UInt32          frames      = 512;
-AudioBufferList *bufferList = [EZAudio audioBufferList];
-UInt32          bufferSize; // Read function will populate this value
-BOOL            eof;        // Read function will populate this value
-// Reads 512 frames from the audio file
-[audioFile readFrames:frames
-      audioBufferList:bufferList
-           bufferSize:&bufferSize
-                  eof:&eof];
-// Cleanup when done working with audio data (yes, even in ARC)
-[EZAudio freeBufferList:bufferList];
+// Allocate an AudioBufferList to hold the audio data (the client format is the non-compressed in-app format that is used for reading, it's different than the file format which is usually something compressed like an mp3 or m4a)
+AudioStreamBasicDescription clientFormat = [self.audioFile clientFormat];
+UInt32 numberOfFramesToRead = 512;
+UInt32 channels = clientFormat.mChannelsPerFrame;
+BOOL isInterleaved = [EZAudioUtilities isInterleaved:clientFormat];
+AudioBufferList *bufferList = [EZAudioUtilities audioBufferListWithNumberOfFrames:numberOfFramesToRead
+                                                                 numberOfChannels:channels
+                                                                      interleaved:isInterleaved];
+
+// Read the frames from the EZAudioFile into the AudioBufferList
+UInt32 framesRead;
+UInt32 isEndOfFile;
+[self.audioFile readFrames:numberOfFramesToRead
+           audioBufferList:bufferList
+                bufferSize:&framesRead
+                       eof:&isEndOfFile]
 ```
 
 When a read occurs the `EZAudioFileDelegate` receives two events.
 
 An event notifying the delegate of the read audio data as float arrays:
 ```objectivec
-// The EZAudioFile method `readFrames:audioBufferList:bufferSize:eof:` triggers an event notifying the delegate of the read audio data as float arrays
 -(void)     audioFile:(EZAudioFile *)audioFile
             readAudio:(float **)buffer
        withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels {
-  // The audio data from the read as a float buffer. You can feed this into an audio plot!
-  dispatch_async(dispatch_get_main_queue(), ^{
-    // Update that audio plot!
-    [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
-  });
+ withNumberOfChannels:(UInt32)numberOfChannels
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.audioPlot updateBuffer:buffer[0]
+                          withBufferSize:bufferSize];
+    });
 }
 ```
 and an event notifying the delegate of the new frame position within the `EZAudioFile`:
 ```objectivec
-// The EZAudioFile method `readFrames:audioBufferList:bufferSize:eof:` triggers an event notifying the delegate of the new frame position within the file.
--(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    // Move that slider to this new position!
-  });
+-(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+		// Update UI
+    });
 }
 ```
 
@@ -211,16 +225,18 @@ You can seek very easily through an audio file using the `EZAudioFile`'s seekToF
 ```objectivec
 // Get the total number of frames for the audio file
 SInt64 totalFrames = [self.audioFile totalFrames];
+
 // Seeks halfway through the audio file
 [self.audioFile seekToFrame:(totalFrames/2)];
 ```
 When a seek occurs the `EZAudioFileDelegate` receives the seek event:
 ```objectivec
-// The EZAudioFile method `seekToFrame:` triggers an event notifying the delegate of the new frame position within the file.
--(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    // Move that slider to this new position!
-  });
+-(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+		// Update UI
+    });
 }
 ```
 ###<a name="EZMicrophone"></a>EZMicrophone
@@ -233,6 +249,10 @@ Provides access to the default device microphone in one line of code and provide
 - EZAudioOpenGLWaveformExample (OSX)
 - EZAudioRecordExample (iOS)
 - EZAudioRecordExample (OSX)
+- EZAudioPassThroughExample (iOS)
+- EZAudioPassThroughExample (OSX)
+- EZAudioFFTExample (iOS)
+- EZAudioFFTExample (OSX)
 
 ####Creating A Microphone
 
@@ -240,7 +260,7 @@ Create an `EZMicrophone` instance by declaring a property and initializing it li
 
 ```objectivec
 // Declare the EZMicrophone as a strong property
-@property (nonatomic,strong) EZMicrophone *microphone;
+@property (nonatomic, strong) EZMicrophone *microphone;
 
 ...
 
@@ -250,7 +270,7 @@ self.microphone = [EZMicrophone microphoneWithDelegate:self];
 Alternatively, you could also use the shared `EZMicrophone` instance and just assign its `EZMicrophoneDelegate`.
 ```objectivec
 // Assign a delegate to the shared instance of the microphone to receive the audio data callbacks
-[EZMicrophone sharedMicrophone].microphoneDelegate = self;
+[EZMicrophone sharedMicrophone].delegate = self;
 ```
 
 ####Getting Microphone Data
@@ -265,18 +285,20 @@ Once the `EZMicrophone` has started it will send the `EZMicrophoneDelegate` the 
 An array of float arrays:
 ```objectivec
 /**
- The microphone data represented as float arrays useful for:
+ The microphone data represented as non-interleaved float arrays useful for:
     - Creating real-time waveforms using EZAudioPlot or EZAudioPlotGL
     - Creating any number of custom visualizations that utilize audio!
  */
 -(void)   microphone:(EZMicrophone *)microphone
     hasAudioReceived:(float **)buffer
       withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
-  // Getting audio data as an array of float buffer arrays that can be fed into the EZAudioPlot, EZAudioPlotGL, or whatever visualization you would like to do with the microphone data.
-  dispatch_async(dispatch_get_main_queue(),^{
-    // Visualize this data brah, buffer[0] = left channel, buffer[1] = right channel
-    [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
+withNumberOfChannels:(UInt32)numberOfChannels 
+{
+    __weak typeof (self) weakSelf = self;
+	// Getting audio data as an array of float buffer arrays that can be fed into the EZAudioPlot, EZAudioPlotGL, or whatever visualization you would like to do with the microphone data.
+	dispatch_async(dispatch_get_main_queue(),^{
+		// Visualize this data brah, buffer[0] = left channel, buffer[1] = right channel
+		[weakSelf.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
   });
 }
 ```
@@ -291,8 +313,9 @@ or the AudioBufferList representation:
 -(void)    microphone:(EZMicrophone *)microphone
         hasBufferList:(AudioBufferList *)bufferList
        withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels {
-    // Getting audio data as an AudioBufferList that can be directly fed into the EZRecorder or EZOutput. Say whattt...
+ withNumberOfChannels:(UInt32)numberOfChannels 
+ {
+	// Getting audio data as an AudioBufferList that can be directly fed into the EZRecorder or EZOutput. Say whattt...
 }
 ```
 ####Pausing/Resuming The Microphone
@@ -461,7 +484,7 @@ Once you've initialized your `EZRecorder` you can append data by passing in an A
 }
 ```
 
-###Interface Components
+##<a name="InterfaceComponents"></a>Interface Components
 `EZAudio` currently offers two drop in audio waveform components that help simplify the process of visualizing audio.
 
 ###<a name="EZAudioPlot"></a>EZAudioPlot
