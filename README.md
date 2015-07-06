@@ -418,8 +418,19 @@ An example of implementing the EZOutputDataSource is done internally in the `EZA
 I created a sample project that uses the EZOutput to act as a signal generator to play sine, square, triangle, sawtooth, and noise waveforms. Here's a snippet of that code:
 ```objectivec
 ...
+double const SAMPLE_RATE = 44100.0;
+
 - (void)awakeFromNib
 {
+    //
+    // Create EZOutput to play audio data with mono format (EZOutput will convert this mono, float "inputFormat" to a clientFormat, i.e. the stereo output format).
+    //
+    AudioStreamBasicDescription inputFormat = [EZAudioUtilities monoFloatFormatWithSampleRate:SAMPLE_RATE];
+    self.output = [EZOutput outputWithDataSource:self inputFormat:inputFormat];
+    [self.output setDelegate:self];
+    self.frequency = 200.0;
+    self.sampleRate = SAMPLE_RATE;
+    self.amplitude = 0.80;
 }
 
 - (OSStatus)        output:(EZOutput *)output
