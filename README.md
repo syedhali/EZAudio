@@ -482,6 +482,8 @@ Provides an audio waveform plot that uses CoreGraphics to perform the drawing. O
 
 You can create an audio plot in the interface builder by dragging in a UIView on iOS or an NSView on OSX onto your content area. Then change the custom class of the UIView/NSView to `EZAudioPlot`.
 
+![EZAudioPlotInterfaceBuilder](https://cloud.githubusercontent.com/assets/1275640/8532901/47d6f9ce-23e6-11e5-9766-d9969e630338.gif)
+
 Alternatively, you can could create the audio plot programmatically
 
 ```objectivec
@@ -553,6 +555,8 @@ Provides an audio waveform plot that uses OpenGL to perform the drawing. The API
 ####Creating An OpenGL Audio Plot
 
 You can create an audio plot in the interface builder by dragging in a UIView on iOS or an NSOpenGLView on OSX onto your content area. Then change the custom class of the UIView/NSView to `EZAudioPlotGL`.
+
+![EZAudioPlotGLInterfaceBuilder](https://cloud.githubusercontent.com/assets/1275640/8532900/47d62346-23e6-11e5-8128-07c6641f4af8.gif)
 
 Alternatively, you can could create the `EZAudioPlotGL` programmatically
 ```objectivec
