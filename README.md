@@ -299,7 +299,7 @@ withNumberOfChannels:(UInt32)numberOfChannels
 	dispatch_async(dispatch_get_main_queue(),^{
 		// Visualize this data brah, buffer[0] = left channel, buffer[1] = right channel
 		[weakSelf.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
-  });
+    });
 }
 ```
 or the AudioBufferList representation:
@@ -314,7 +314,7 @@ or the AudioBufferList representation:
         hasBufferList:(AudioBufferList *)bufferList
        withBufferSize:(UInt32)bufferSize
  withNumberOfChannels:(UInt32)numberOfChannels 
- {
+{
 	// Getting audio data as an AudioBufferList that can be directly fed into the EZRecorder or EZOutput. Say whattt...
 }
 ```
@@ -404,29 +404,7 @@ One method to play back audio is to provide an AudioBufferList (for instance, re
   }
 }
 ```
-####Playback Using A Circular Buffer
 
-Another method is to provide a circular buffer via Michael Tyson's (who, btw is a serious badass and also wrote the Amazing Audio Engine for iOS) TPCircularBuffer containing the data. For instance, for passing the microphone input to the output for a basic passthrough:
-```objectivec
-// Declare circular buffer as global
-TPCircularBuffer circularBuffer;
-...
-// Using an EZMicrophone, append the AudioBufferList from the microphone callback to the global circular buffer
--(void)    microphone:(EZMicrophone *)microphone
-        hasBufferList:(AudioBufferList *)bufferList
-       withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels {
-  /**
-   Append the audio data to a circular buffer
-   */
-  [EZAudio appendDataToCircularBuffer:&circularBuffer
-                  fromAudioBufferList:bufferList];
-}
-// Pass the circular buffer to the EZOutputDataSource using the circular buffer callback
--(TPCircularBuffer *)outputShouldUseCircularBuffer:(EZOutput *)output {
-  return &circularBuffer;
-}
-```
 ####Playback By Manual Override
 
 And the last method is to completely override the output callback method and populate the AudioBufferList however you can imagine:
