@@ -328,6 +328,7 @@ Pause or resume fetching audio at any time like so:
 // Resume fetching audio
 [self.microphone startFetchingAudio];
 ```
+
 Alternatively, you could also toggle the `microphoneOn` property (safe to use with Cocoa Bindings)
 ```objectivec
 // Stop fetching audio
@@ -338,23 +339,13 @@ self.microphone.microphoneOn = YES;
 ```
 
 ###<a name="EZOutput"></a>EZOutput
-Provides flexible playback to the default output device by asking the `EZOutputDataSource` for audio data to play. Doesn't care where the buffers come from (microphone, audio file, streaming audio, etc). The `EZOutputDataSource` has three functions that can provide audio data for the output callback. You should implement only **ONE** of these functions:
+Provides flexible playback to the default output device by asking the `EZOutputDataSource` for audio data to play. Doesn't care where the buffers come from (microphone, audio file, streaming audio, etc). As of 1.0.0 the `EZOutputDataSource` has been simplified to have only one method to provide audio data to your `EZOutput` instance.
 ```objectivec
-// Full override of the audio callback 
--(void)           output:(EZOutput*)output
- callbackWithActionFlags:(AudioUnitRenderActionFlags*)ioActionFlags
-             inTimeStamp:(const AudioTimeStamp*)inTimeStamp
-             inBusNumber:(UInt32)inBusNumber
-          inNumberFrames:(UInt32)inNumberFrames
-                  ioData:(AudioBufferList*)ioData;
-                 
-// Provides the audio callback with a circular buffer holding the audio data
--(TPCircularBuffer*)outputShouldUseCircularBuffer:(EZOutput *)output;
-
-// Provides the audio callback with a buffer list, number of frames, and buffer size to use
--(void)             output:(EZOutput *)output
+// The EZOutputDataSource should fill out the audioBufferList with the given frame count. The timestamp is provided for sample accurate calculation, but for basic use cases can be ignored.
+- (OSStatus)        output:(EZOutput *)output
  shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
-        withNumberOfFrames:(UInt32)frames;
+        withNumberOfFrames:(UInt32)frames
+                 timestamp:(const AudioTimeStamp *)timestamp;
 ```
 
 **_Relevant Example Projects_**
@@ -369,56 +360,128 @@ Create an `EZOutput` by declaring a property and initializing it like so:
 
 ```objectivec
 // Declare the EZOutput as a strong property
-@property (nonatomic,strong) EZOutput *output;
-
+@property (nonatomic, strong) EZOutput *output;
 ...
 
 // Initialize the EZOutput instance and assign it a delegate to provide the output audio data
 self.output = [EZOutput outputWithDataSource:self];
 ```
-Alternatively, you could also use the shared output instance and just assign it an `EZOutputDataSource`. This is the preferred way to use the `EZOutput` (usually just have one per app).
+Alternatively, you could also use the shared output instance and just assign it an `EZOutputDataSource` if you will only have one EZOutput instance for your application.
 ```objectivec
 // Assign a delegate to the shared instance of the output to provide the output audio data
-[EZOutput sharedOutput].outputDataSource = self;
+[EZOutput sharedOutput].delegate = self;
 ```
 ####Playback Using An AudioBufferList
 
-One method to play back audio is to provide an AudioBufferList (for instance, reading from an `EZAudioFile`):
+When providing audio data the EZOutputDataSource will expect you to fill out the AudioBufferList provided with whatever `inputFormat` that is set on the `EZOutput`. By default the input format is a stereo, non-interleaved, float format (see [defaultInputFormat](http://cocoadocs.org/docsets/EZAudio/0.9.1/Classes/EZOutput.html#//api/name/defaultInputFormat) for more information). If you're dealing with a different input format (which is typically the case), just set the `inputFormat` property. For instance:
 ```objectivec
-// Use the AudioBufferList datasource method to read from an EZAudioFile
--(void)             output:(EZOutput *)output
+// Set a mono, float format with a sample rate of 44.1 kHz
+AudioStreamBasicDescription monoFloatFormat = [EZAudioUtilities monoFloatFormatWithSampleRate:44100.0f];
+[self.output setInputFormat:monoFloatFormat];
+```
+
+An example of implementing the EZOutputDataSource is done internally in the `EZAudioPlayer` using an `EZAudioFile` to read audio from an audio file on disk like so:
+```objectivec
+- (OSStatus)        output:(EZOutput *)output
  shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
         withNumberOfFrames:(UInt32)frames
+                 timestamp:(const AudioTimeStamp *)timestamp
 {
-  if( self.audioFile )
-  {
-    UInt32 bufferSize;
-    [self.audioFile readFrames:frames
-               audioBufferList:audioBufferList
-                    bufferSize:&bufferSize
-                           eof:&_eof];
-    if( _eof )
+    if (self.audioFile)
     {
-      [self seekToFrame:0];
+        UInt32 bufferSize; // amount of frames actually read
+        BOOL eof; // end of file
+        [self.audioFile readFrames:frames
+                   audioBufferList:audioBufferList
+                        bufferSize:&bufferSize
+                               eof:&eof];
+        if (eof && [self.delegate respondsToSelector:@selector(audioPlayer:reachedEndOfAudioFile:)]) 
+        {
+            [self.delegate audioPlayer:self reachedEndOfAudioFile:self.audioFile];
+        }
+        if (eof && self.shouldLoop)
+        {
+            [self seekToFrame:0];
+        }
+        else if (eof)
+        {
+            [self pause];
+            [self seekToFrame:0];
+            [[NSNotificationCenter defaultCenter] postNotificationName:EZAudioPlayerDidReachEndOfFileNotification
+                                                                object:self];
+        }
     }
-  }
+    return noErr;
 }
 ```
 
-####Playback By Manual Override
-
-And the last method is to completely override the output callback method and populate the AudioBufferList however you can imagine:
+I created a sample project that uses the EZOutput to act as a signal generator to play sine, square, triangle, sawtooth, and noise waveforms. Here's a snippet of that code:
 ```objectivec
-// Completely override the output callback function
--(void)           output:(EZOutput *)output
- callbackWithActionFlags:(AudioUnitRenderActionFlags *)ioActionFlags
-             inTimeStamp:(const AudioTimeStamp *)inTimeStamp
-             inBusNumber:(UInt32)inBusNumber
-          inNumberFrames:(UInt32)inNumberFrames
-                  ioData:(AudioBufferList *)ioData {
- // Fill the ioData with your audio data from anywhere
+...
+- (void)awakeFromNib
+{
+}
+
+- (OSStatus)        output:(EZOutput *)output
+ shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
+        withNumberOfFrames:(UInt32)frames
+                 timestamp:(const AudioTimeStamp *)timestamp
+{
+    Float32 *buffer = (Float32 *)audioBufferList->mBuffers[0].mData;
+    size_t bufferByteSize = (size_t)audioBufferList->mBuffers[0].mDataByteSize;
+    double theta = self.theta;
+    double frequency = self.frequency;
+    double thetaIncrement = 2.0 * M_PI * frequency / SAMPLE_RATE;
+    if (self.type == GeneratorTypeSine)
+    {
+        for (UInt32 frame = 0; frame < frames; frame++)
+        {
+            buffer[frame] = self.amplitude * sin(theta);
+            theta += thetaIncrement;
+            if (theta > 2.0 * M_PI)
+            {
+                theta -= 2.0 * M_PI;
+            }
+        }
+        self.theta = theta;
+    }
+    else if (... other shapes in full source)
 }
 ```
+
+For the full implementation of the square, triangle, sawtooth, and noise functions here: (https://github.com/syedhali/SineExample/blob/master/SineExample/GeneratorViewController.m#L220-L305)
+
+Once the `EZOutput` has started it will send the `EZOutputDelegate` the audio back as float arrays for visualizing. These are converted inside the EZOutput component from whatever input format you may have provided. For instance, if you provide an interleaved, signed integer AudioStreamBasicDescription for the `inputFormat` property then that will be automatically converted to a stereo, non-interleaved, float format when sent back in the delegate `playedAudio:...` method below:
+An array of float arrays:
+```objectivec
+/**
+ The output data represented as non-interleaved float arrays useful for:
+    - Creating real-time waveforms using EZAudioPlot or EZAudioPlotGL
+    - Creating any number of custom visualizations that utilize audio!
+ */
+- (void)       output:(EZOutput *)output
+          playedAudio:(float **)buffer
+       withBufferSize:(UInt32)bufferSize
+ withNumberOfChannels:(UInt32)numberOfChannels
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+	// Update plot, buffer[0] = left channel, buffer[1] = right channel
+    });
+}
+```
+
+####Pausing/Resuming The Output
+
+Pause or resume the output component at any time like so:
+```objectivec
+// Stop fetching audio
+[self.output stopPlayback];
+
+// Resume fetching audio
+[self.output startPlayback];
+```
+
 ###<a name="EZRecorder"></a>EZRecorder
 Provides a way to record any audio source to an audio file. This hooks into the other components quite nicely to do something like plot the audio waveform while recording to give visual feedback as to what is happening.
 
