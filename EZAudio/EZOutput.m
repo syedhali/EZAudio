@@ -314,14 +314,11 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
     [self setClientFormat:[self defaultClientFormat]];
     [self setInputFormat:[self defaultInputFormat]];
     
-#if TARGET_OS_IPHONE
+    //
+    // Use the default device
+    //
     EZAudioDevice *currentOutputDevice = [EZAudioDevice currentOutputDevice];
     [self setDevice:currentOutputDevice];
-#elif TARGET_OS_MAC
-    NSArray *outputDevices = [EZAudioDevice outputDevices];
-    EZAudioDevice *defaultOutput = [outputDevices firstObject];
-    [self setDevice:defaultOutput];
-#endif
     
     //
     // Set maximum frames per slice to 4096 to allow playback during

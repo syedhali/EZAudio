@@ -39,7 +39,14 @@
 /**
  The OpenGL based audio plot
  */
-@property (nonatomic,weak) IBOutlet EZAudioPlotGL *audioPlot;
+@property (nonatomic, weak) IBOutlet EZAudioPlotGL *audioPlot;
+
+//------------------------------------------------------------------------------
+
+/**
+ The label used to display the microphone state
+ */
+@property (nonatomic, weak) IBOutlet NSButton *microphoneSwitch;
 
 //------------------------------------------------------------------------------
 #pragma mark - Actions

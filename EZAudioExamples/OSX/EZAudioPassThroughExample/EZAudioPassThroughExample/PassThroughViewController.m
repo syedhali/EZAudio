@@ -132,6 +132,14 @@
 #pragma mark - EZMicrophoneDelegate
 //------------------------------------------------------------------------------
 
+- (void)microphone:(EZMicrophone *)microphone changedPlayingState:(BOOL)isPlaying
+{
+    NSString *title = isPlaying ? @"Microphone On" : @"Microphone Off";
+    [self setTitle:title forButton:self.microphoneSwitch];
+}
+
+//------------------------------------------------------------------------------
+
 -(void)    microphone:(EZMicrophone *)microphone
      hasAudioReceived:(float **)buffer
        withBufferSize:(UInt32)bufferSize
@@ -142,6 +150,19 @@
         [weakSelf.audioPlot updateBuffer:buffer[0]
                           withBufferSize:bufferSize];
     });
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Utility
+//------------------------------------------------------------------------------
+
+- (void)setTitle:(NSString *)title forButton:(NSButton *)button
+{
+    NSDictionary *attributes = @{ NSForegroundColorAttributeName : [NSColor whiteColor] };
+    NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title
+                                                                          attributes:attributes];
+    button.attributedTitle = attributedTitle;
+    button.attributedAlternateTitle = attributedTitle;
 }
 
 //------------------------------------------------------------------------------
