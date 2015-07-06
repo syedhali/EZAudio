@@ -249,6 +249,10 @@ Provides access to the default device microphone in one line of code and provide
 - EZAudioOpenGLWaveformExample (OSX)
 - EZAudioRecordExample (iOS)
 - EZAudioRecordExample (OSX)
+- EZAudioPassThroughExample (iOS)
+- EZAudioPassThroughExample (OSX)
+- EZAudioFFTExample (iOS)
+- EZAudioFFTExample (OSX)
 
 ####Creating A Microphone
 
@@ -256,7 +260,7 @@ Create an `EZMicrophone` instance by declaring a property and initializing it li
 
 ```objectivec
 // Declare the EZMicrophone as a strong property
-@property (nonatomic,strong) EZMicrophone *microphone;
+@property (nonatomic, strong) EZMicrophone *microphone;
 
 ...
 
@@ -266,7 +270,7 @@ self.microphone = [EZMicrophone microphoneWithDelegate:self];
 Alternatively, you could also use the shared `EZMicrophone` instance and just assign its `EZMicrophoneDelegate`.
 ```objectivec
 // Assign a delegate to the shared instance of the microphone to receive the audio data callbacks
-[EZMicrophone sharedMicrophone].microphoneDelegate = self;
+[EZMicrophone sharedMicrophone].delegate = self;
 ```
 
 ####Getting Microphone Data
@@ -281,18 +285,20 @@ Once the `EZMicrophone` has started it will send the `EZMicrophoneDelegate` the 
 An array of float arrays:
 ```objectivec
 /**
- The microphone data represented as float arrays useful for:
+ The microphone data represented as non-interleaved float arrays useful for:
     - Creating real-time waveforms using EZAudioPlot or EZAudioPlotGL
     - Creating any number of custom visualizations that utilize audio!
  */
 -(void)   microphone:(EZMicrophone *)microphone
     hasAudioReceived:(float **)buffer
       withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
-  // Getting audio data as an array of float buffer arrays that can be fed into the EZAudioPlot, EZAudioPlotGL, or whatever visualization you would like to do with the microphone data.
-  dispatch_async(dispatch_get_main_queue(),^{
-    // Visualize this data brah, buffer[0] = left channel, buffer[1] = right channel
-    [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
+withNumberOfChannels:(UInt32)numberOfChannels 
+{
+    __weak typeof (self) weakSelf = self;
+	// Getting audio data as an array of float buffer arrays that can be fed into the EZAudioPlot, EZAudioPlotGL, or whatever visualization you would like to do with the microphone data.
+	dispatch_async(dispatch_get_main_queue(),^{
+		// Visualize this data brah, buffer[0] = left channel, buffer[1] = right channel
+		[weakSelf.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
   });
 }
 ```
@@ -307,8 +313,9 @@ or the AudioBufferList representation:
 -(void)    microphone:(EZMicrophone *)microphone
         hasBufferList:(AudioBufferList *)bufferList
        withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels {
-    // Getting audio data as an AudioBufferList that can be directly fed into the EZRecorder or EZOutput. Say whattt...
+ withNumberOfChannels:(UInt32)numberOfChannels 
+ {
+	// Getting audio data as an AudioBufferList that can be directly fed into the EZRecorder or EZOutput. Say whattt...
 }
 ```
 ####Pausing/Resuming The Microphone
