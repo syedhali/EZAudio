@@ -64,21 +64,29 @@ typedef struct
  The default background color of the plot. For iOS the color is specified as a UIColor while for OSX the color is an NSColor. The default value on both platforms is a sweet looking green. 
  @warning On OSX, if you set the background to a value where the alpha component is 0 then the EZAudioPlotGL will automatically set its superview to be layer-backed.
  */
-@property (nonatomic, strong) id backgroundColor;
+#if TARGET_OS_IPHONE
+@property (nonatomic, strong) IBInspectable UIColor *backgroundColor;
+#elif TARGET_OS_MAC
+@property (nonatomic, strong) IBInspectable NSColor *backgroundColor;
+#endif
 
 //------------------------------------------------------------------------------
 
 /**
  The default color of the plot's data (i.e. waveform, y-axis values). For iOS the color is specified as a UIColor while for OSX the color is an NSColor. The default value on both platforms is white.
  */
-@property (nonatomic, strong) id color;
+#if TARGET_OS_IPHONE
+@property (nonatomic, strong) IBInspectable UIColor *color;
+#elif TARGET_OS_MAC
+@property (nonatomic, strong) IBInspectable NSColor *color;
+#endif
 
 //------------------------------------------------------------------------------
 
 /**
  The plot's gain value, which controls the scale of the y-axis values. The default value of the gain is 1.0f and should always be greater than 0.0f.
  */
-@property (nonatomic, assign) float gain;
+@property (nonatomic, assign) IBInspectable  float gain;
 
 //------------------------------------------------------------------------------
 
@@ -92,14 +100,14 @@ typedef struct
 /**
  A BOOL indicating whether or not to fill in the graph. A value of YES will make a filled graph (filling in the space between the x-axis and the y-value), while a value of NO will create a stroked graph (connecting the points along the y-axis). Default is NO.
  */
-@property (nonatomic, assign) BOOL shouldFill;
+@property (nonatomic, assign) IBInspectable BOOL shouldFill;
 
 //------------------------------------------------------------------------------
 
 /**
  A boolean indicating whether the graph should be rotated along the x-axis to give a mirrored reflection. This is typical for audio plots to produce the classic waveform look. A value of YES will produce a mirrored reflection of the y-values about the x-axis, while a value of NO will only plot the y-values. Default is NO.
  */
-@property (nonatomic, assign) BOOL shouldMirror;
+@property (nonatomic, assign) IBInspectable BOOL shouldMirror;
 
 //------------------------------------------------------------------------------
 #pragma mark - Updating The Plot
