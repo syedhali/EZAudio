@@ -466,11 +466,17 @@ Once you've initialized your `EZRecorder` you can append data by passing in an A
 `EZAudio` currently offers two drop in audio waveform components that help simplify the process of visualizing audio.
 
 ###<a name="EZAudioPlot"></a>EZAudioPlot
-Provides an audio waveform plot that uses CoreGraphics to perform the drawing. On iOS this is a subclass of UIView while on OSX this is a subclass of NSView. Best used on OSX as the drawing falls on the CPU and needs to redisplay after every audio data update, but useful in iOS apps for displaying full, static waveforms.
+Provides an audio waveform plot that uses CoreGraphics to perform the drawing. On iOS this is a subclass of UIView while on OSX this is a subclass of NSView. As of the 1.0.0 release, the waveforms are drawn using CALayers where compositing is done on the GPU. As a result, there have been some huge performance gains and CPU usage per real-time (i.e. 60 frames per second redrawing) plot is now about 2-3% CPU as opposed to the 20-30% we were experiencing before.
 
 *Relevant Example Projects*
 - EZAudioCoreGraphicsWaveformExample (iOS)
 - EZAudioCoreGraphicsWaveformExample (OSX)
+- EZAudioRecordExample (iOS)
+- EZAudioRecordExample (OSX)
+- EZAudioWaveformFromFileExample (iOS)
+- EZAudioWaveformFromFileExample (OSX)
+- EZAudioFFTExample (iOS)
+- EZAudioFFTExample (OSX)
 
 ####Creating An Audio Plot
 
@@ -500,32 +506,40 @@ audioPlot.color = [NSColor colorWithCalibratedRed:1.000
                                              blue:1.000
                                             alpha:1];
 // Plot type
-audioPlot.plotType     = EZPlotTypeBuffer;
+audioPlot.plotType = EZPlotTypeBuffer;
 // Fill
-audioPlot.shouldFill   = YES;
+audioPlot.shouldFill = YES;
 // Mirror
 audioPlot.shouldMirror = YES;
 ```
+
+####IBInspectable Attributes
+
+Also, as of iOS 8 you can adjust the background color, color, gain, shouldFill, and shouldMirror parameters directly in the Interface Builder via the IBInspectable attributes:
+
+![EZAudioPlotInspectableAttributes](https://cloud.githubusercontent.com/assets/1275640/8530670/288840c8-23d7-11e5-954b-644ed4ed67b4.png)
 
 ####Updating The Audio Plot
 
 All plots have only one update function, `updateBuffer:withBufferSize:`, which expects a float array and its length.
 ```objectivec
 // The microphone component provides audio data to its delegate as an array of float buffer arrays.
--(void)    microphone:(EZMicrophone *)microphone
+- (void)   microphone:(EZMicrophone *)microphone
      hasAudioReceived:(float **)buffer
        withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels {
-  /** 
-   Update the audio plot using the float array provided by the microphone:
-     buffer[0] = left channel
-     buffer[1] = right channel
-   Note: Audio updates happen asynchronously so we need to make sure
+ withNumberOfChannels:(UInt32)numberOfChannels 
+{
+    /** 
+     Update the audio plot using the float array provided by the microphone:
+       buffer[0] = left channel
+       buffer[1] = right channel
+     Note: Audio updates happen asynchronously so we need to make sure
          sure to update the plot on the main thread
-   */
-  dispatch_async(dispatch_get_main_queue(),^{
-    [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
-  });
+     */
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
+    });
 }
 ```
 
@@ -562,32 +576,40 @@ audioPlotGL.color = [NSColor colorWithCalibratedRed:1.000
                                                blue:1.000
                                               alpha:1];
 // Plot type
-audioPlotGL.plotType     = EZPlotTypeBuffer;
+audioPlotGL.plotType = EZPlotTypeBuffer;
 // Fill
-audioPlotGL.shouldFill   = YES;
+audioPlotGL.shouldFill = YES;
 // Mirror
 audioPlotGL.shouldMirror = YES;
 ```
+
+####IBInspectable Attributes
+
+Also, as of iOS 8 you can adjust the background color, color, gain, shouldFill, and shouldMirror parameters directly in the Interface Builder via the IBInspectable attributes:
+
+![EZAudioPlotGLInspectableAttributes](https://cloud.githubusercontent.com/assets/1275640/8530670/288840c8-23d7-11e5-954b-644ed4ed67b4.png)
 
 ####Updating The OpenGL Audio Plot
 
 All plots have only one update function, `updateBuffer:withBufferSize:`, which expects a float array and its length.
 ```objectivec
 // The microphone component provides audio data to its delegate as an array of float buffer arrays.
--(void)    microphone:(EZMicrophone *)microphone
+- (void)   microphone:(EZMicrophone *)microphone
      hasAudioReceived:(float **)buffer
        withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels {
-  /** 
-   Update the audio plot using the float array provided by the microphone:
-     buffer[0] = left channel
-     buffer[1] = right channel
-   Note: Audio updates happen asynchronously so we need to make sure
+ withNumberOfChannels:(UInt32)numberOfChannels 
+{
+    /** 
+     Update the audio plot using the float array provided by the microphone:
+       buffer[0] = left channel
+       buffer[1] = right channel
+     Note: Audio updates happen asynchronously so we need to make sure
          sure to update the plot on the main thread
-   */
-  dispatch_async(dispatch_get_main_queue(),^{
-    [self.audioPlotGL updateBuffer:buffer[0] withBufferSize:bufferSize];
-  });
+     */
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.audioPlotGL updateBuffer:buffer[0] withBufferSize:bufferSize];
+    });
 }
 ```
 
