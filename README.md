@@ -325,13 +325,13 @@ Create an `EZOutput` by declaring a property and initializing it like so:
 // Initialize the EZOutput instance and assign it a delegate to provide the output audio data
 self.output = [EZOutput outputWithDataSource:self];
 ```
-Alternatively, you could also use the shared output instance and just assign it an `EZOutputDataSource` if you will only have one EZOutput instance for your application.
+Alternatively, you could also use the shared output instance and just assign it an `EZOutputDataSource` if you will only have one `EZOutput` instance for your application.
 ```objectivec
 // Assign a delegate to the shared instance of the output to provide the output audio data
 [EZOutput sharedOutput].delegate = self;
 ```
 ####Setting The Device
-The EZOutput uses an `EZAudioDevice` instance to select what specific hardware destination it will output audio to. You'd use this if you wanted to change the output device like in the [EZAudioPlayFileExample](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/EZAudioPlayFileExample) for OSX. At any time you can change which output device is used by setting the `device` property:
+The `EZOutput` uses an `EZAudioDevice` instance to select what specific hardware destination it will output audio to. You'd use this if you wanted to change the output device like in the [EZAudioPlayFileExample](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/EZAudioPlayFileExample) for OSX. At any time you can change which output device is used by setting the `device` property:
 ```objectivec
 // By default the EZOutput uses the default output device, but you can change this at any time
 EZAudioDevice *currentOutputDevice = [EZAudioDevice currentOutputDevice];
@@ -393,7 +393,7 @@ An example of implementing the `EZOutputDataSource` is done internally in the `E
 }
 ```
 
-I created a sample project that uses the EZOutput to act as a signal generator to play sine, square, triangle, sawtooth, and noise waveforms. **Here's a snippet of code to generate a sine tone**:
+I created a sample project that uses the `EZOutput` to act as a signal generator to play sine, square, triangle, sawtooth, and noise waveforms. **Here's a snippet of code to generate a sine tone**:
 ```objectivec
 ...
 double const SAMPLE_RATE = 44100.0;
@@ -441,7 +441,7 @@ double const SAMPLE_RATE = 44100.0;
 
 For the full implementation of the square, triangle, sawtooth, and noise functions here: (https://github.com/syedhali/SineExample/blob/master/SineExample/GeneratorViewController.m#L220-L305)
 
-Once the `EZOutput` has started it will send the `EZOutputDelegate` the audio back as float arrays for visualizing. These are converted inside the EZOutput component from whatever input format you may have provided. For instance, if you provide an interleaved, signed integer AudioStreamBasicDescription for the `inputFormat` property then that will be automatically converted to a stereo, non-interleaved, float format when sent back in the delegate `playedAudio:...` method below:
+Once the `EZOutput` has started it will send the `EZOutputDelegate` the audio back as float arrays for visualizing. These are converted inside the `EZOutput` component from whatever input format you may have provided. For instance, if you provide an interleaved, signed integer AudioStreamBasicDescription for the `inputFormat` property then that will be automatically converted to a stereo, non-interleaved, float format when sent back in the delegate `playedAudio:...` method below:
 An array of float arrays:
 ```objectivec
 /**
@@ -462,7 +462,6 @@ An array of float arrays:
 ```
 
 ####Pausing/Resuming The Output
-
 Pause or resume the output component at any time like so:
 ```objectivec
 // Stop fetching audio
@@ -471,6 +470,24 @@ Pause or resume the output component at any time like so:
 // Resume fetching audio
 [self.output startPlayback];
 ```
+
+####Chaining Audio Unit Effects
+Internally the `EZOutput` is using an AUGraph to chain together a converter, mixer, and output audio units. You can hook into this graph by subclassing `EZOutput` and implementing the method:
+```objectivec
+// By default this method connects the AUNode representing the input format converter to
+// the mixer node. In subclasses you can add effects in the chain between the converter 
+// and mixer by creating additional AUNodes, adding them to the AUGraph provided below, 
+// and then connecting them together.
+- (OSStatus)connectOutputOfSourceNode:(AUNode)sourceNode
+                  sourceNodeOutputBus:(UInt32)sourceNodeOutputBus
+                    toDestinationNode:(AUNode)destinationNode
+              destinationNodeInputBus:(UInt32)destinationNodeInputBus
+                              inGraph:(AUGraph)graph;
+```
+
+This was inspired by the audio processing graph from CocoaLibSpotify (Daniel Kennett of Spotify has [an excellent blog post](http://ikennd.ac/blog/2012/04/augraph-basics-in-cocoalibspotify/) explaining how to add an EQ to the CocoaLibSpotify AUGraph). 
+
+
 
 ###<a name="EZAudioFile"></a>EZAudioFile
 Provides simple read/seek operations, pulls waveform amplitude data, and provides the `EZAudioFileDelegate` to notify of any read/seek action occuring on the `EZAudioFile`. This can be thought of as the NSImage/UIImage equivalent of the audio world.
@@ -873,6 +890,9 @@ www.syedharisali.com<br>
 syedhali07[at]gmail.com
 
 ##Acknowledgements
-EZAudio could not have been created without the invaluable help of:
-- <a href="http://atastypixel.com/blog/">Michael Tyson</a> for creating the <a href="http://atastypixel.com/blog/a-simple-fast-circular-buffer-implementation-for-audio-processing/">TPCircularBuffer</a> and the <a href="http://theamazingaudioengine.com/">Amazing Audio Engine</a>'s `AEFloatConverter`.
-- Chris Adamson and Kevin Avila for writing the amazing book <a href="http://www.amazon.com/Learning-Core-Audio-Hands-On-Programming/dp/0321636848">Learning Core Audio</a>
+The following people rock:
+- My brother, [Reza Ali](http://www.syedrezaali.com/), for walking me through all the gritty details of OpenGL and his constant encouragement through this journey to 1.0.0.
+- [Aure Prochazka](http://aure.com/) for his amazing work on [AudioKit](http://audiokit.io/) and his encouragement to bring EZAudio to 1.0.0
+- [Daniel Kennett](http://ikennd.ac/) for writing [this great blog post](http://ikennd.ac/blog/2012/04/augraph-basics-in-cocoalibspotify/) that inspired the rewrite of the `EZOutput` in 1.0.0.
+- [Michael Tyson](http://atastypixel.com/blog/) for creating the [TPCircularBuffer](http://atastypixel.com/blog/a-simple-fast-circular-buffer-implementation-for-audio-processing/) and all his contributions to the community including the Amazing Audio Engine, Audiobus, and all the tasty pixel blog posts.
+- Chris Adamson and Kevin Avila for writing the amazing [Learning Core Audio](http://www.amazon.com/Learning-Core-Audio-Hands-On-Programming/dp/0321636848) book.
