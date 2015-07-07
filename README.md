@@ -452,7 +452,7 @@ Anytime the `EZOutput` changes its device it will trigger the `EZOutputDelegate`
 }
 ```
 
-####Playback Using An AudioBufferList
+####Playing Audio
 
 #####Setting The Input Format
 
