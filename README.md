@@ -299,7 +299,8 @@ self.microphone.microphoneOn = YES;
 Provides flexible playback to the default output device by asking the `EZOutputDataSource` for audio data to play. Doesn't care where the buffers come from (microphone, audio file, streaming audio, etc). As of 1.0.0 the `EZOutputDataSource` has been simplified to have only one method to provide audio data to your `EZOutput` instance.
 ```objectivec
 // The EZOutputDataSource should fill out the audioBufferList with the given frame count. 
-// The timestamp is provided for sample accurate calculation, but for basic use cases can be ignored.
+// The timestamp is provided for sample accurate calculation, but for basic use cases can 
+// be ignored.
 - (OSStatus)        output:(EZOutput *)output
  shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
         withNumberOfFrames:(UInt32)frames
@@ -644,7 +645,8 @@ self.recorder = [EZRecorder recorderWithURL:[NSURL fileURLWithPath:@"/path/to/yo
 
 Once you've initialized your `EZRecorder` you can append data by passing in an AudioBufferList and its buffer size like so:
 ```objectivec
-// Append the microphone data coming as a AudioBufferList with the specified buffer size to the recorder
+// Append the microphone data coming as a AudioBufferList with the specified buffer size
+// to the recorder
 -(void)    microphone:(EZMicrophone *)microphone
         hasBufferList:(AudioBufferList *)bufferList
        withBufferSize:(UInt32)bufferSize
@@ -677,7 +679,7 @@ Once audio data has been successfully written with the `EZRecorder` it will noti
     // updates in a GCD main queue block! However, I highly recommend you first pull the values 
     // you'd like to update the interface with before entering the GCD block to avoid trying to 
     // fetch a value after the audio file has been closed.
-    NSString *formattedCurrentTime = [recorder formattedCurrentTime]; // MM:SS formatted from NSTimeInterval seconds
+    NSString *formattedCurrentTime = [recorder formattedCurrentTime]; // MM:SS formatted
     dispatch_async(dispatch_get_main_queue(), ^{
     	// Update label
         weakSelf.currentTimeLabel.stringValue = formattedCurrentTime;
