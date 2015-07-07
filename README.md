@@ -664,7 +664,7 @@ When a seek occurs the `EZAudioFileDelegate` receives the seek event:
 ```
 
 ###<a name="EZAudioPlayer"></a>EZAudioPlayer
-Provides a class that combines the `EZAudioFile` and `EZOutput` for file playback of all Core Audio supported formats to any hardware device. Because the `EZAudioPlayer` internally hooks into the `EZAudioFileDelegate` and `EZOutputDelegate`, you should implement the `EZAudioPlayerDelegate` to receive the `playedAudio:...` and `updatedPosition:` events. The EZAudioPlayFileExample projects for [iOS] and [OSX] shows how to use the `EZAudioPlayer` to play audio files, visualize the samples with an audio plot, adjust the volume, and change the output device using the `EZAudioDevice` class. The `EZAudioPlayer` primarily uses `NSNotificationCenter` to post notifications because often times you have one audio player and multiple UI elements that need to listen for player events to properly update.
+Provides a class that combines the `EZAudioFile` and `EZOutput` for file playback of all Core Audio supported formats to any hardware device. Because the `EZAudioPlayer` internally hooks into the `EZAudioFileDelegate` and `EZOutputDelegate`, you should implement the `EZAudioPlayerDelegate` to receive the `playedAudio:...` and `updatedPosition:` events. The EZAudioPlayFileExample projects for [iOS](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/iOS/EZAudioPlayFileExample) and [OSX](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/EZAudioPlayFileExample) shows how to use the `EZAudioPlayer` to play audio files, visualize the samples with an audio plot, adjust the volume, and change the output device using the `EZAudioDevice` class. The `EZAudioPlayer` primarily uses `NSNotificationCenter` to post notifications because often times you have one audio player and multiple UI elements that need to listen for player events to properly update.
 
 ####Creating An Audio Player
 ```objectivec
@@ -693,10 +693,6 @@ EZAudioFile *audioFile = [EZAudioFile audioFileWithURL:[NSURL fileURLWithPath:@"
 
 As audio is played the `EZAudioPlayerDelegate` will receive the `playedAudio:...`, `updatedPosition:...`, and, if the audio file reaches the end of the file, the `reachedEndOfAudioFile:` events. A typical implementation of the `EZAudioPlayerDelegate` would be something like:
 ```objectivec
-//------------------------------------------------------------------------------
-#pragma mark - EZAudioPlayerDelegate
-//------------------------------------------------------------------------------
-
 - (void)  audioPlayer:(EZAudioPlayer *)audioPlayer
           playedAudio:(float **)buffer
        withBufferSize:(UInt32)bufferSize
