@@ -3,8 +3,15 @@
 #EZAudio
 A simple, intuitive audio framework for iOS and OSX.
 
-##Features
+## Welcome to 1.0.0! 
+Thank you guys for being so patient over the last year - I've been working like crazy the last few weeks rewriting and extending the EZAudio core and interface components and squashing bugs. Finally, EZAudio is now at its 1.0.0 release with all new updated components, examples, and documentation. Happy coding!
 
+## Apps Using EZAudio
+I'd really like to start creating a list of projects made using EZAudio. If you've used EZAudio to make something cool, whether it's an app or open source visualization or whatever, please email me at syedhali07[at]gmail.com and I'll add it to our wall of fame! 
+To start it off:
+- [Detour](https://www.detour.com/) - Gorgeous location-aware audio walks
+
+##Features
 
 **Awesome Components**
 
@@ -840,7 +847,6 @@ To create an `EZRecorder` you must provide at least 3 things: an NSURL represent
 ```
 
 Start by declaring an instance of the EZRecorder (you will have one of these per audio file written out)
-
 ```objectivec
 // Declare the EZRecorder as a strong property
 @property (nonatomic, strong) EZRecorder *recorder;
