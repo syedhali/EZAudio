@@ -728,7 +728,7 @@ Once you've initialized your `EZRecorder` you can append data by passing in an A
 {
     // Getting audio data as a buffer list that can be directly fed into the EZRecorder. This is 
     // happening on the audio thread - any UI updating needs a GCD main queue block.
-    if(self.isRecording)
+    if (self.isRecording)
     {
         // Since we set the recorder's client format to be that of the EZMicrophone instance, 
         // the audio data coming in represented by the AudioBufferList can directly be provided 
