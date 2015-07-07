@@ -18,17 +18,17 @@ A useful class for getting all the current and available inputs/output on any Ap
 
 A microphone class that provides its delegate audio data from the default device microphone with one line of code.
 
-[EZRecorder](#EZRecorder)
+[EZOutput](#EZOutput)
 
-A recorder class that provides a quick and easy way to write audio files from any datasource.
+An output class that will playback any audio it is provided by its datasource. 
 
 [EZAudioFile](#EZAudioFile)
 
 An audio file class that reads/seeks through audio files and provides useful delegate callbacks. 
 
-[EZOutput](#EZOutput)
+[EZRecorder](#EZRecorder)
 
-An output class that will playback any audio it is provided by its datasource. 
+A recorder class that provides a quick and easy way to write audio files from any datasource.
 
 [EZAudioPlot](#EZAudioPlot)
 
@@ -169,113 +169,6 @@ or to just get the currently selected output device use the `currentInputDevice`
 EZAudioDevice *currentOutputDevice = [EZAudioDevice currentOutputDevice];
 ```
 
-###<a name="EZAudioFile"></a>EZAudioFile
-Provides simple read/seek operations, pulls waveform amplitude data, and provides the `EZAudioFileDelegate` to notify of any read/seek action occuring on the `EZAudioFile`. This can be thought of as the NSImage/UIImage equivalent of the audio world.
-
-**_Relevant Example Projects_**
-- EZAudioWaveformFromFileExample (iOS)
-- EZAudioWaveformFromFileExample (OSX)
-
-####Opening An Audio File
-To open an audio file create a new instance of the `EZAudioFile` class.
-```objectivec
-// Declare the EZAudioFile as a strong property
-@property (nonatomic, strong) EZAudioFile *audioFile;
-
-...
-
-// Initialize the EZAudioFile instance and assign it a delegate to receive the read/seek callbacks
-self.audioFile = [EZAudioFile audioFileWithURL:[NSURL fileURLWithPath:@"/path/to/your/file"] 
-									   delegate:self];
-```
-
-####Getting Waveform Data
-
-The EZAudioFile allows you to quickly fetch waveform data from an audio file with as much or little detail as you'd like.
-```objectivec
-__weak typeof (self) weakSelf = self;
-[self.audioFile getWaveformDataWithNumberOfPoints:1024
-                                  completionBlock:^(float **waveformData,
-                                                    int length)
-{
-     [weakSelf.audioPlot updateBuffer:waveformData[0]
-                       withBufferSize:length];
-}];
-```
-
-####Reading From An Audio File
-
-Reading audio data from a file requires you to create an AudioBufferList to hold the data. The `EZAudio` utility function, `audioBufferList`, provides a convenient way to get an allocated AudioBufferList to use. There is also a utility function, `freeBufferList:`, to use to free (or release) the AudioBufferList when you are done using that audio data.
-
-**Note: You have to free the AudioBufferList, even in ARC.**
-```objectivec
-// Allocate an AudioBufferList to hold the audio data (the client format is the non-compressed
-// in-app format that is used for reading, it's different than the file format which is usually 
-// something compressed like an mp3 or m4a)
-AudioStreamBasicDescription clientFormat = [self.audioFile clientFormat];
-UInt32 numberOfFramesToRead = 512;
-UInt32 channels = clientFormat.mChannelsPerFrame;
-BOOL isInterleaved = [EZAudioUtilities isInterleaved:clientFormat];
-AudioBufferList *bufferList = [EZAudioUtilities audioBufferListWithNumberOfFrames:numberOfFramesToRead
-                                                                 numberOfChannels:channels
-                                                                      interleaved:isInterleaved];
-
-// Read the frames from the EZAudioFile into the AudioBufferList
-UInt32 framesRead;
-UInt32 isEndOfFile;
-[self.audioFile readFrames:numberOfFramesToRead
-           audioBufferList:bufferList
-                bufferSize:&framesRead
-                       eof:&isEndOfFile]
-```
-
-When a read occurs the `EZAudioFileDelegate` receives two events.
-
-An event notifying the delegate of the read audio data as float arrays:
-```objectivec
--(void)     audioFile:(EZAudioFile *)audioFile
-            readAudio:(float **)buffer
-       withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels
-{
-    __weak typeof (self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.audioPlot updateBuffer:buffer[0]
-                          withBufferSize:bufferSize];
-    });
-}
-```
-and an event notifying the delegate of the new frame position within the `EZAudioFile`:
-```objectivec
--(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition
-{
-    __weak typeof (self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-		// Update UI
-    });
-}
-```
-
-####Seeking Through An Audio File
-
-You can seek very easily through an audio file using the `EZAudioFile`'s seekToFrame: method. The `EZAudioFile` provides a `totalFrames` method to provide you the total amount of frames in an audio file so you can calculate a proper offset.
-```objectivec
-// Get the total number of frames for the audio file
-SInt64 totalFrames = [self.audioFile totalFrames];
-
-// Seeks halfway through the audio file
-[self.audioFile seekToFrame:(totalFrames/2)];
-```
-When a seek occurs the `EZAudioFileDelegate` receives the seek event:
-```objectivec
--(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition
-{
-    __weak typeof (self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-		// Update UI
-    });
-}
-```
 ###<a name="EZMicrophone"></a>EZMicrophone
 Provides access to the default device microphone in one line of code and provides delegate callbacks to receive the audio data as an AudioBufferList and float arrays.
 
@@ -576,6 +469,116 @@ Pause or resume the output component at any time like so:
 
 // Resume fetching audio
 [self.output startPlayback];
+```
+
+###<a name="EZAudioFile"></a>EZAudioFile
+Provides simple read/seek operations, pulls waveform amplitude data, and provides the `EZAudioFileDelegate` to notify of any read/seek action occuring on the `EZAudioFile`. This can be thought of as the NSImage/UIImage equivalent of the audio world.
+
+**_Relevant Example Projects_**
+- EZAudioWaveformFromFileExample (iOS)
+- EZAudioWaveformFromFileExample (OSX)
+
+####Opening An Audio File
+To open an audio file create a new instance of the `EZAudioFile` class.
+```objectivec
+// Declare the EZAudioFile as a strong property
+@property (nonatomic, strong) EZAudioFile *audioFile;
+
+...
+
+// Initialize the EZAudioFile instance and assign it a delegate to receive the read/seek callbacks
+self.audioFile = [EZAudioFile audioFileWithURL:[NSURL fileURLWithPath:@"/path/to/your/file"] 
+									   delegate:self];
+```
+
+####Getting Waveform Data
+
+The EZAudioFile allows you to quickly fetch waveform data from an audio file with as much or little detail as you'd like.
+```objectivec
+__weak typeof (self) weakSelf = self;
+// Get a waveform with 1024 points of data. We can adjust the number of points to whatever level 
+// of detail is needed by the application
+[self.audioFile getWaveformDataWithNumberOfPoints:1024
+                                  completionBlock:^(float **waveformData,
+                                                    int length)
+{
+     [weakSelf.audioPlot updateBuffer:waveformData[0]
+                       withBufferSize:length];
+}];
+```
+
+####Reading From An Audio File
+
+Reading audio data from a file requires you to create an AudioBufferList to hold the data. The `EZAudio` utility function, `audioBufferList`, provides a convenient way to get an allocated AudioBufferList to use. There is also a utility function, `freeBufferList:`, to use to free (or release) the AudioBufferList when you are done using that audio data.
+
+**Note: You have to free the AudioBufferList, even in ARC.**
+```objectivec
+// Allocate an AudioBufferList to hold the audio data (the client format is the non-compressed
+// in-app format that is used for reading, it's different than the file format which is usually 
+// something compressed like an mp3 or m4a)
+AudioStreamBasicDescription clientFormat = [self.audioFile clientFormat];
+UInt32 numberOfFramesToRead = 512;
+UInt32 channels = clientFormat.mChannelsPerFrame;
+BOOL isInterleaved = [EZAudioUtilities isInterleaved:clientFormat];
+AudioBufferList *bufferList = [EZAudioUtilities audioBufferListWithNumberOfFrames:numberOfFramesToRead
+                                                                 numberOfChannels:channels
+                                                                      interleaved:isInterleaved];
+
+// Read the frames from the EZAudioFile into the AudioBufferList
+UInt32 framesRead;
+UInt32 isEndOfFile;
+[self.audioFile readFrames:numberOfFramesToRead
+           audioBufferList:bufferList
+                bufferSize:&framesRead
+                       eof:&isEndOfFile]
+```
+
+When a read occurs the `EZAudioFileDelegate` receives two events.
+
+An event notifying the delegate of the read audio data as float arrays:
+```objectivec
+-(void)     audioFile:(EZAudioFile *)audioFile
+            readAudio:(float **)buffer
+       withBufferSize:(UInt32)bufferSize
+ withNumberOfChannels:(UInt32)numberOfChannels
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.audioPlot updateBuffer:buffer[0]
+                          withBufferSize:bufferSize];
+    });
+}
+```
+and an event notifying the delegate of the new frame position within the `EZAudioFile`:
+```objectivec
+-(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+		// Update UI
+    });
+}
+```
+
+####Seeking Through An Audio File
+
+You can seek very easily through an audio file using the `EZAudioFile`'s seekToFrame: method. The `EZAudioFile` provides a `totalFrames` method to provide you the total amount of frames in an audio file so you can calculate a proper offset.
+```objectivec
+// Get the total number of frames for the audio file
+SInt64 totalFrames = [self.audioFile totalFrames];
+
+// Seeks halfway through the audio file
+[self.audioFile seekToFrame:(totalFrames/2)];
+```
+When a seek occurs the `EZAudioFileDelegate` receives the seek event:
+```objectivec
+-(void)audioFile:(EZAudioFile *)audioFile updatedPosition:(SInt64)framePosition
+{
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+		// Update UI
+    });
+}
 ```
 
 ###<a name="EZRecorder"></a>EZRecorder
