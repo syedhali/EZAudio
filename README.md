@@ -487,7 +487,64 @@ Internally the `EZOutput` is using an AUGraph to chain together a converter, mix
 
 This was inspired by the audio processing graph from CocoaLibSpotify (Daniel Kennett of Spotify has [an excellent blog post](http://ikennd.ac/blog/2012/04/augraph-basics-in-cocoalibspotify/) explaining how to add an EQ to the CocoaLibSpotify AUGraph). 
 
+Here's an example of how to add a delay audio unit (`kAudioUnitSubType_Delay`):
+```objectivec
+// In interface, declare delay node info property
+@property (nonatomic, assign) EZAudioNodeInfo *delayNodeInfo;
 
+// In implementation, overwrite the connection method
+- (OSStatus)connectOutputOfSourceNode:(AUNode)sourceNode
+                  sourceNodeOutputBus:(UInt32)sourceNodeOutputBus
+                    toDestinationNode:(AUNode)destinationNode
+              destinationNodeInputBus:(UInt32)destinationNodeInputBus
+                              inGraph:(AUGraph)graph
+{
+    self.delayNodeInfo = (EZAudioNodeInfo *)malloc(sizeof(EZAudioNodeInfo));
+    
+    // A description for the time/pitch shifter Device
+    AudioComponentDescription delayComponentDescription;
+    delayComponentDescription.componentType = kAudioUnitType_Effect;
+    delayComponentDescription.componentSubType = kAudioUnitSubType_Delay;
+    delayComponentDescription.componentManufacturer = kAudioUnitManufacturer_Apple;
+    delayComponentDescription.componentFlags = 0;
+    delayComponentDescription.componentFlagsMask = 0;
+    
+    [EZAudioUtilities checkResult:AUGraphAddNode(graph,
+                                                 &delayComponentDescription,
+                                                 &self.delayNodeInfo->node)
+                        operation:"Failed to add node for time shift"];
+    
+    // Get the time/pitch shifter Audio Unit from the node
+    [EZAudioUtilities checkResult:AUGraphNodeInfo(graph,
+                                                  self.delayNodeInfo->node,
+                                                  NULL,
+                                                  &self.delayNodeInfo->audioUnit)
+                        operation:"Failed to get audio unit for delay node"];
+    
+    // connect the output of the input source node to the input of the time/pitch shifter node
+    [EZAudioUtilities checkResult:AUGraphConnectNodeInput(graph,
+                                                          sourceNode,
+                                                          sourceNodeOutputBus,
+                                                          self.delayNodeInfo->node,
+                                                          0)
+                        operation:"Failed to connect source node into delay node"];
+    
+    // connect the output of the time/pitch shifter node to the input of the destination node, thus completing the chain.
+    [EZAudioUtilities checkResult:AUGraphConnectNodeInput(graph,
+                                                          self.delayNodeInfo->node,
+                                                          0,
+                                                          destinationNode,
+                                                          destinationNodeInputBus)
+                        operation:"Failed to connect delay to destination node"];
+    return noErr;
+}
+
+// Clean up
+- (void)dealloc
+{
+    free(self.delayNodeInfo);
+}
+```
 
 ###<a name="EZAudioFile"></a>EZAudioFile
 Provides simple read/seek operations, pulls waveform amplitude data, and provides the `EZAudioFileDelegate` to notify of any read/seek action occuring on the `EZAudioFile`. This can be thought of as the NSImage/UIImage equivalent of the audio world.
