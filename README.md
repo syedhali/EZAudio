@@ -393,7 +393,7 @@ An example of implementing the `EZOutputDataSource` is done internally in the `E
 }
 ```
 
-I created a sample project that uses the EZOutput to act as a signal generator to play sine, square, triangle, sawtooth, and noise waveforms. Here's a snippet of that code:
+I created a sample project that uses the EZOutput to act as a signal generator to play sine, square, triangle, sawtooth, and noise waveforms. **Here's a snippet of code to generate a sine tone**:
 ```objectivec
 ...
 double const SAMPLE_RATE = 44100.0;
