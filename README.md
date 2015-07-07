@@ -647,6 +647,10 @@ SInt64 totalFrames = [self.audioFile totalFrames];
 
 // Seeks halfway through the audio file
 [self.audioFile seekToFrame:(totalFrames/2)];
+
+// Alternatively, you can seek using seconds
+NSTimeInterval duration = [self.audioFile duration];
+[self.audioFile setCurrentTime:duration/2.0];
 ```
 When a seek occurs the `EZAudioFileDelegate` receives the seek event:
 ```objectivec
@@ -663,7 +667,7 @@ When a seek occurs the `EZAudioFileDelegate` receives the seek event:
 Provides a class that combines the `EZAudioFile` and `EZOutput` for file playback of all Core Audio supported formats to any hardware device. Because the `EZAudioPlayer` internally hooks into the `EZAudioFileDelegate` and `EZOutputDelegate`, you should implement the `EZAudioPlayerDelegate` to receive the `playedAudio:...` and `updatedPosition:` events. The EZAudioPlayFileExample projects for [iOS] and [OSX] shows how to use the `EZAudioPlayer` to play audio files, visualize the samples with an audio plot, adjust the volume, and change the output device using the `EZAudioDevice` class. The `EZAudioPlayer` primarily uses `NSNotificationCenter` to post notifications because often times you have one audio player and multiple UI elements that need to listen for player events to properly update.
 
 ####Creating An Audio Player
-```
+```objectivec
 // Declare the EZAudioFile as a strong property
 @property (nonatomic, strong) EZAudioFile *audioFile;
 
@@ -685,6 +689,126 @@ EZAudioFile *audioFile = [EZAudioFile audioFileWithURL:[NSURL fileURLWithPath:@"
 // audio file while playback is already running
 EZAudioFile *audioFile = [EZAudioFile audioFileWithURL:[NSURL fileURLWithPath:@"/path/to/your/file"]];
 [self.player playAudioFile:audioFile];
+```
+
+As audio is played the `EZAudioPlayerDelegate` will receive the `playedAudio:...`, `updatedPosition:...`, and, if the audio file reaches the end of the file, the `reachedEndOfAudioFile:` events. A typical implementation of the `EZAudioPlayerDelegate` would be something like:
+```objectivec
+//------------------------------------------------------------------------------
+#pragma mark - EZAudioPlayerDelegate
+//------------------------------------------------------------------------------
+
+- (void)  audioPlayer:(EZAudioPlayer *)audioPlayer
+          playedAudio:(float **)buffer
+       withBufferSize:(UInt32)bufferSize
+ withNumberOfChannels:(UInt32)numberOfChannels
+          inAudioFile:(EZAudioFile *)audioFile
+{
+    __weak typeof (self) weakSelf = self;
+    // Update an EZAudioPlot or EZAudioPlotGL to reflect the audio data coming out
+    // of the EZAudioPlayer (post volume and pan)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.audioPlot updateBuffer:buffer[0]
+                          withBufferSize:bufferSize];
+    });
+}
+
+//------------------------------------------------------------------------------
+
+- (void)audioPlayer:(EZAudioPlayer *)audioPlayer
+    updatedPosition:(SInt64)framePosition
+        inAudioFile:(EZAudioFile *)audioFile
+{
+    __weak typeof (self) weakSelf = self;
+    // Update any UI controls including sliders and labels
+    // display current time/duration
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!weakSelf.positionSlider.highlighted)
+        {
+            weakSelf.positionSlider.floatValue = (float)framePosition;
+            weakSelf.positionLabel.integerValue = framePosition;
+        }
+    });
+}
+```
+
+####Seeking
+You can seek through the audio file in a similar fashion as with the `EZAudioFile`. That is, using the `seekToFrame:` or `currentTime` property.
+```objectivec
+// Get the total number of frames and seek halfway
+SInt64 totalFrames = [self.player totalFrames];
+[self.player seekToFrame:(totalFrames/2)];
+
+// Alternatively, you can seek using seconds
+NSTimeInterval duration = [self.player duration];
+[self.player setCurrentTime:duration/2.0];
+```
+
+####Setting Playback Parameters
+Because the `EZAudioPlayer` wraps the `EZOutput` you can adjust the volume and pan parameters for playback.
+```objectivec
+// Make it half as loud, 0 = silence, 1 = full volume. Default is 1.
+[self.player setVolume:0.5];
+
+// Make it only play on the left, -1 = left, 1 = right. Default is 0.0 (center)
+[self.player setPan:-1.0];
+```
+
+####Getting Audio File Parameters
+The `EZAudioPlayer` wraps the `EZAudioFile` and provides a high level interface for pulling values like current time, duration, the frame index, total frames, etc.
+```objectivec
+NSTimeInterval  currentTime          = [self.player currentTime];
+NSTimeInterval  duration             = [self.player duration];
+NSString       *formattedCurrentTime = [self.player formattedCurrentTime]; // MM:SS formatted
+NSString       *formattedDuration    = [self.player formattedDuration];    // MM:SS formatted
+SInt64          frameIndex           = [self.player frameIndex];
+SInt64          totalFrames          = [self.player totalFrames];
+```
+
+In addition, the `EZOutput` properties are also offered at a high level as well:
+```objectivec
+EZAudioDevice *outputDevice = [self.player device];
+BOOL 	       isPlaying    = [self.player isPlaying];
+float          pan          = [self.player pan];
+float          volume       = [self.player volume];
+```
+
+####Notifications
+The `EZAudioPlayer` provides the following notifications (as of 1.0.0):
+```objectivec
+/**
+ Notification that occurs whenever the EZAudioPlayer changes its `audioFile` property. Check the new value using the EZAudioPlayer's `audioFile` property.
+ */
+FOUNDATION_EXPORT NSString * const EZAudioPlayerDidChangeAudioFileNotification;
+
+/**
+ Notification that occurs whenever the EZAudioPlayer changes its `device` property. Check the new value using the EZAudioPlayer's `device` property.
+ */
+FOUNDATION_EXPORT NSString * const EZAudioPlayerDidChangeOutputDeviceNotification;
+
+/**
+ Notification that occurs whenever the EZAudioPlayer changes its `output` component's `pan` property. Check the new value using the EZAudioPlayer's `pan` property.
+ */
+FOUNDATION_EXPORT NSString * const EZAudioPlayerDidChangePanNotification;
+
+/**
+ Notification that occurs whenever the EZAudioPlayer changes its `output` component's play state. Check the new value using the EZAudioPlayer's `isPlaying` property.
+ */
+FOUNDATION_EXPORT NSString * const EZAudioPlayerDidChangePlayStateNotification;
+
+/**
+ Notification that occurs whenever the EZAudioPlayer changes its `output` component's `volume` property. Check the new value using the EZAudioPlayer's `volume` property.
+ */
+FOUNDATION_EXPORT NSString * const EZAudioPlayerDidChangeVolumeNotification;
+
+/**
+ Notification that occurs whenever the EZAudioPlayer has reached the end of a file and its `shouldLoop` property has been set to NO.
+ */
+FOUNDATION_EXPORT NSString * const EZAudioPlayerDidReachEndOfFileNotification;
+
+/**
+ Notification that occurs whenever the EZAudioPlayer performs a seek via the `seekToFrame` method or `setCurrentTime:` property setter. Check the new `currentTime` or `frameIndex` value using the EZAudioPlayer's `currentTime` or `frameIndex` property, respectively.
+ */
+FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
 ```
 
 ###<a name="EZRecorder"></a>EZRecorder
