@@ -312,6 +312,28 @@ Alternatively, you could also use the shared `EZMicrophone` instance and just as
 [EZMicrophone sharedMicrophone].delegate = self;
 ```
 
+####Setting The Device
+The `EZMicrophone` uses an `EZAudioDevice` instance to select what specific hardware destination it will use to pull audio data. You'd use this if you wanted to change the input device like in the EZAudioCoreGraphicsWaveformExample for [iOS](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/iOS/EZAudioCoreGraphicsWaveformExample) or [OSX](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/EZAudioCoreGraphicsWaveformExample). At any time you can change which input device is used by setting the device property:
+```objectivec
+NSArray *inputs = [EZAudioDevice inputDevices];
+[self.microphone setDevice:[inputs lastObject]];
+```
+
+Anytime the `EZMicrophone` changes its device it will trigger the `EZMicrophoneDelegate` event:
+```objectivec
+
+- (void)microphone:(EZMicrophone *)microphone changedDevice:(EZAudioDevice *)device
+{
+    // This is not always guaranteed to occur on the main thread so make sure you 
+    // wrap it in a GCD block
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // Update UI here
+	    NSLog(@"Changed input device: %@", device);
+    });
+}
+```
+**Note: For iOS this can happen automatically if the AVAudioSession changes the current device.**
+
 ####Getting Microphone Data
 
 To tell the microphone to start fetching audio use the `startFetchingAudio` function.
@@ -485,7 +507,8 @@ double const SAMPLE_RATE = 44100.0;
 - (void)awakeFromNib
 {
     //
-    // Create EZOutput to play audio data with mono format (EZOutput will convert this mono, float "inputFormat" to a clientFormat, i.e. the stereo output format).
+    // Create EZOutput to play audio data with mono format (EZOutput will convert 
+    // this mono, float "inputFormat" to a clientFormat, i.e. the stereo output format).
     //
     AudioStreamBasicDescription inputFormat = [EZAudioUtilities monoFloatFormatWithSampleRate:SAMPLE_RATE];
     self.output = [EZOutput outputWithDataSource:self inputFormat:inputFormat];
