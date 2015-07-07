@@ -12,7 +12,7 @@ I've designed six core components to allow you to immediately get your hands dir
 
 [EZAudioDevice](#EZAudioDevice)
 
-A useful class for getting all the current and available inputs/output on any Apple device. The EZMicrophone and EZOutput use this to direct sound in/out from different hardware components.
+A useful class for getting all the current and available inputs/output on any Apple device. The `EZMicrophone`  and `EZOutput` use this to direct sound in/out from different hardware components.
 
 [EZMicrophone](#EZMicrophone)
 
@@ -32,7 +32,7 @@ A recorder class that provides a quick and easy way to write audio files from an
 
 [EZAudioPlot](#EZAudioPlot)
 
-A CoreGraphics-based audio waveform plot capable of visualizing any float array as a buffer or rolling plot.
+A Core Graphics-based audio waveform plot capable of visualizing any float array as a buffer or rolling plot.
 
 [EZAudioPlotGL](#EZAudioPlotGL)
 
@@ -358,7 +358,7 @@ AudioStreamBasicDescription monoFloatFormat = [EZAudioUtilities monoFloatFormatW
 ```
 #####Implementing the EZOutputDataSource
 
-An example of implementing the EZOutputDataSource is done internally in the `EZAudioPlayer` using an `EZAudioFile` to read audio from an audio file on disk like so:
+An example of implementing the `EZOutputDataSource` is done internally in the `EZAudioPlayer` using an `EZAudioFile` to read audio from an audio file on disk like so:
 ```objectivec
 - (OSStatus)        output:(EZOutput *)output
  shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
