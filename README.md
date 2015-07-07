@@ -8,7 +8,7 @@ A simple, intuitive audio framework for iOS and OSX.
 
 **Awesome Components**
 
-I've designed six core components to allow you to immediately get your hands dirty recording, playing, and visualizing audio data. These components simply plug into each other and build on top of the high-performance, low-latency AudioUnits API and give you an easy to use API written in Objective-C instead of pure C.
+I've designed six audio components and two interface components to allow you to immediately get your hands dirty recording, playing, and visualizing audio data. These components simply plug into each other and build on top of the high-performance, low-latency AudioUnits API and give you an easy to use API written in Objective-C instead of pure C.
 
 [EZAudioDevice](#EZAudioDevice)
 
@@ -25,6 +25,10 @@ An output class that will playback any audio it is provided by its datasource.
 [EZAudioFile](#EZAudioFile)
 
 An audio file class that reads/seeks through audio files and provides useful delegate callbacks. 
+
+[EZAudioPlayer](#EZAudioPlayer)
+
+A replacement for AVAudioPlayer that combines an EZAudioFile and a EZOutput to perform robust playback of any file on any piece of hardware.
 
 [EZRecorder](#EZRecorder)
 
@@ -562,8 +566,7 @@ To open an audio file create a new instance of the `EZAudioFile` class.
 ...
 
 // Initialize the EZAudioFile instance and assign it a delegate to receive the read/seek callbacks
-self.audioFile = [EZAudioFile audioFileWithURL:[NSURL fileURLWithPath:@"/path/to/your/file"] 
-									   delegate:self];
+self.audioFile = [EZAudioFile audioFileWithURL:[NSURL fileURLWithPath:@"/path/to/your/file"] delegate:self];
 ```
 
 ####Getting Waveform Data
@@ -654,6 +657,34 @@ When a seek occurs the `EZAudioFileDelegate` receives the seek event:
 		// Update UI
     });
 }
+```
+
+###<a name="EZAudioPlayer"></a>EZAudioPlayer
+Provides a class that combines the `EZAudioFile` and `EZOutput` for file playback of all Core Audio supported formats to any hardware device. Because the `EZAudioPlayer` internally hooks into the `EZAudioFileDelegate` and `EZOutputDelegate`, you should implement the `EZAudioPlayerDelegate` to receive the `playedAudio:...` and `updatedPosition:` events. The EZAudioPlayFileExample projects for [iOS] and [OSX] shows how to use the `EZAudioPlayer` to play audio files, visualize the samples with an audio plot, adjust the volume, and change the output device using the `EZAudioDevice` class. The `EZAudioPlayer` primarily uses `NSNotificationCenter` to post notifications because often times you have one audio player and multiple UI elements that need to listen for player events to properly update.
+
+####Creating An Audio Player
+```
+// Declare the EZAudioFile as a strong property
+@property (nonatomic, strong) EZAudioFile *audioFile;
+
+...
+
+// Create an EZAudioPlayer with a delegate that conforms to EZAudioPlayerDelegate
+self.player = [EZAudioPlayer audioPlayerWithDelegate:self];
+```
+
+####Playing An Audio File
+The `EZAudioPlayer` uses an internal `EZAudioFile` to provide data to its `EZOutput` for output via the `EZOutputDataSource`. You can provide an `EZAudioFile` by just setting the `audioFile` property on the `EZAudioPlayer` will make a copy of the `EZAudioFile` at that file path url for its own use. 
+```objectivec
+// Set the EZAudioFile for playback by setting the `audioFile` property
+EZAudioFile *audioFile = [EZAudioFile audioFileWithURL:[NSURL fileURLWithPath:@"/path/to/your/file"]];
+[self.player setAudioFile:audioFile];
+
+// This, however, will not pause playback if a current file is playing. Instead
+// it's encouraged to use `playAudioFile:` instead if you're swapping in a new
+// audio file while playback is already running
+EZAudioFile *audioFile = [EZAudioFile audioFileWithURL:[NSURL fileURLWithPath:@"/path/to/your/file"]];
+[self.player playAudioFile:audioFile];
 ```
 
 ###<a name="EZRecorder"></a>EZRecorder
