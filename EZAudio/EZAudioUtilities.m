@@ -106,6 +106,11 @@ BOOL __shouldExitOnCheckResultFail = YES;
 
 + (void)freeFloatBuffers:(float **)buffers numberOfChannels:(UInt32)channels
 {
+    if (!buffers || !*buffers)
+    {
+        return;
+    }
+
     for (int i = 0; i < channels; i++)
     {
         free(buffers[i]);
