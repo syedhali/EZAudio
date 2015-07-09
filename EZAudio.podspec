@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = "EZAudio"
-    s.version      = "1.0.0"
+    s.version      = "1.0.1"
     s.summary      = "A simple, intuitive audio framework for iOS and OSX useful for anyone doing audio processing and/or audio-based visualizations."
     s.homepage     = "https://github.com/syedhali/EZAudio"
     s.screenshots  = "https://s3-us-west-1.amazonaws.com/ezaudio-media/EZAudioSummary.png"
@@ -14,7 +14,6 @@ Pod::Spec.new do |s|
     s.osx.frameworks = 'AudioToolbox','AudioUnit','CoreAudio','QuartzCore','OpenGL','GLKit'
     s.requires_arc = true;
     s.default_subspec = 'Full'
-
     s.subspec 'Core' do |core|
         core.source_files  = 'EZAudio/*.{h,m,c}'
     end
@@ -23,5 +22,4 @@ Pod::Spec.new do |s|
         full.dependency 'TPCircularBuffer', '~> 0.0'
         full.dependency 'EZAudio/Core'
     end
-
 end
