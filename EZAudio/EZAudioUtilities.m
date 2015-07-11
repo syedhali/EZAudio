@@ -595,6 +595,21 @@ BOOL __shouldExitOnCheckResultFail = YES;
 #pragma mark - EZPlotHistoryInfo Utility
 //------------------------------------------------------------------------------
 
++ (void)appendBufferRMS:(float *)buffer
+         withBufferSize:(UInt32)bufferSize
+          toHistoryInfo:(EZPlotHistoryInfo *)historyInfo
+{
+    //
+    // Calculate RMS and append to buffer
+    //
+    float rms = [EZAudioUtilities RMS:buffer length:bufferSize];
+    float src[1];
+    src[0] = isnan(rms) ? 0.0 : rms;
+    [self appendBuffer:src withBufferSize:1 toHistoryInfo:historyInfo];
+}
+
+//------------------------------------------------------------------------------
+
 + (void)appendBuffer:(float *)buffer
       withBufferSize:(UInt32)bufferSize
        toHistoryInfo:(EZPlotHistoryInfo *)historyInfo
@@ -610,10 +625,7 @@ BOOL __shouldExitOnCheckResultFail = YES;
     //
     // Update the scroll history datasource
     //
-    float rms = [EZAudioUtilities RMS:buffer length:bufferSize];
-    float src[1];
-    src[0] = isnan(rms) ? 0.0 : rms;
-    TPCircularBufferProduceBytes(&historyInfo->circularBuffer, src, sizeof(src));
+    TPCircularBufferProduceBytes(&historyInfo->circularBuffer, buffer, bufferSize * sizeof(float));
     int32_t targetBytes = historyInfo->bufferSize * sizeof(float);
     int32_t availableBytes = 0;
     float *historyBuffer = TPCircularBufferTail(&historyInfo->circularBuffer, &availableBytes);
@@ -621,7 +633,7 @@ BOOL __shouldExitOnCheckResultFail = YES;
     memmove(historyInfo->buffer, historyBuffer, bytes);
     if (targetBytes <= availableBytes)
     {
-        TPCircularBufferConsume(&historyInfo->circularBuffer, availableBytes - targetBytes);
+        TPCircularBufferConsume(&historyInfo->circularBuffer, targetBytes);
     }
 }
 
