@@ -273,9 +273,9 @@ typedef struct
     //
     // Update history
     //
-    [EZAudioUtilities appendBuffer:buffer
-                    withBufferSize:bufferSize
-                     toHistoryInfo:self.info->historyInfo];
+    [EZAudioUtilities appendBufferRMS:buffer
+                       withBufferSize:bufferSize
+                        toHistoryInfo:self.info->historyInfo];
 
     //
     // Convert this data to point data

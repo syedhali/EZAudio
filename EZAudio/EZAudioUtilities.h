@@ -494,6 +494,18 @@ typedef NSRect EZRect;
  @param bufferSize  A UInt32 representing the length of the incoming audio buffer
  @param historyInfo A pointer to a EZPlotHistoryInfo structure to use for managing the history buffers
  */
++ (void)appendBufferRMS:(float *)buffer
+         withBufferSize:(UInt32)bufferSize
+          toHistoryInfo:(EZPlotHistoryInfo *)historyInfo;
+
+//------------------------------------------------------------------------------
+
+/**
+ Appends a buffer of audio data to the tail of a EZPlotHistoryInfo data structure. Thread-safe.
+ @param buffer      A float array containing the incoming audio buffer to append to the history buffer
+ @param bufferSize  A UInt32 representing the length of the incoming audio buffer
+ @param historyInfo A pointer to a EZPlotHistoryInfo structure to use for managing the history buffers
+ */
 + (void)appendBuffer:(float *)buffer
       withBufferSize:(UInt32)bufferSize
        toHistoryInfo:(EZPlotHistoryInfo *)historyInfo;
