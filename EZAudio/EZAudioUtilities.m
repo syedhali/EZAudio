@@ -633,7 +633,7 @@ BOOL __shouldExitOnCheckResultFail = YES;
     memmove(historyInfo->buffer, historyBuffer, bytes);
     if (targetBytes <= availableBytes)
     {
-        TPCircularBufferConsume(&historyInfo->circularBuffer, targetBytes);
+        TPCircularBufferConsume(&historyInfo->circularBuffer, availableBytes - targetBytes);
     }
 }
 
