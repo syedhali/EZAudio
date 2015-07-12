@@ -13,39 +13,53 @@
                         <viewControllerLayoutGuide type="top" id="Gb6-mY-qlI"/>
                         <viewControllerLayoutGuide type="bottom" id="YgU-XB-3Wp"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="qdz-w1-Fnd">
+                    <view key="view" contentMode="scaleToFill" id="qdz-w1-Fnd" customClass="EZAudioPlot">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rTC-r5-1nY" customClass="EZAudioPlot">
-                                <rect key="frame" x="0.0" y="300" width="600" height="300"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2rO-IY-dvl" customClass="EZAudioPlot">
+                                <rect key="frame" x="18" y="18" width="564" height="64"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="V1K-Jj-DhO"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                        <color key="value" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
+                                        <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OQU-xT-TSP" customClass="EZAudioPlot">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="300"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jcb-nb-Ibd">
+                                <rect key="frame" x="18" y="100" width="0.0" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="28"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="rTC-r5-1nY" firstAttribute="top" secondItem="OQU-xT-TSP" secondAttribute="bottom" id="Gvx-p5-QUo"/>
-                            <constraint firstAttribute="trailing" secondItem="OQU-xT-TSP" secondAttribute="trailing" id="Jas-mw-vJx"/>
-                            <constraint firstItem="rTC-r5-1nY" firstAttribute="leading" secondItem="qdz-w1-Fnd" secondAttribute="leading" id="L4g-Ae-9tj"/>
-                            <constraint firstItem="rTC-r5-1nY" firstAttribute="leading" secondItem="qdz-w1-Fnd" secondAttribute="leading" id="R76-NA-7Bd"/>
-                            <constraint firstAttribute="trailing" secondItem="rTC-r5-1nY" secondAttribute="trailing" id="SD1-rQ-K9f"/>
-                            <constraint firstItem="OQU-xT-TSP" firstAttribute="leading" secondItem="qdz-w1-Fnd" secondAttribute="leading" id="Ylv-YL-VNN"/>
-                            <constraint firstItem="rTC-r5-1nY" firstAttribute="height" secondItem="OQU-xT-TSP" secondAttribute="height" id="c8v-Wf-j6b"/>
-                            <constraint firstItem="OQU-xT-TSP" firstAttribute="leading" secondItem="qdz-w1-Fnd" secondAttribute="leading" id="cky-9G-OUa"/>
-                            <constraint firstItem="YgU-XB-3Wp" firstAttribute="top" secondItem="rTC-r5-1nY" secondAttribute="bottom" id="diI-fy-02O"/>
-                            <constraint firstAttribute="trailing" secondItem="OQU-xT-TSP" secondAttribute="trailing" id="eU7-t0-VFY"/>
-                            <constraint firstItem="OQU-xT-TSP" firstAttribute="top" secondItem="qdz-w1-Fnd" secondAttribute="top" id="vV1-yG-7ff"/>
-                            <constraint firstAttribute="trailing" secondItem="rTC-r5-1nY" secondAttribute="trailing" id="whu-w2-7Ne"/>
-                            <constraint firstItem="OQU-xT-TSP" firstAttribute="top" secondItem="qdz-w1-Fnd" secondAttribute="top" id="zIe-GV-q0c"/>
+                            <constraint firstItem="2rO-IY-dvl" firstAttribute="leading" secondItem="qdz-w1-Fnd" secondAttribute="leading" constant="18" id="8Ww-vp-FX4"/>
+                            <constraint firstAttribute="trailing" secondItem="2rO-IY-dvl" secondAttribute="trailing" constant="18" id="AJT-fs-rh8"/>
+                            <constraint firstItem="Jcb-nb-Ibd" firstAttribute="top" secondItem="2rO-IY-dvl" secondAttribute="bottom" constant="18" id="LrN-Wx-JIp"/>
+                            <constraint firstItem="Jcb-nb-Ibd" firstAttribute="leading" secondItem="2rO-IY-dvl" secondAttribute="leading" id="QHW-YQ-Jh0"/>
+                            <constraint firstItem="2rO-IY-dvl" firstAttribute="top" secondItem="qdz-w1-Fnd" secondAttribute="top" constant="18" id="Thl-Cl-cSH"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                <color key="value" red="0.0078431372550000003" green="0.72156862749999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="color">
+                                <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </view>
                     <connections>
-                        <outlet property="audioPlotFreq" destination="rTC-r5-1nY" id="CRN-vl-avP"/>
-                        <outlet property="audioPlotTime" destination="OQU-xT-TSP" id="zfe-04-ywd"/>
+                        <outlet property="audioPlotFreq" destination="qdz-w1-Fnd" id="TKq-sR-dWl"/>
+                        <outlet property="audioPlotTime" destination="2rO-IY-dvl" id="14G-ei-FpB"/>
+                        <outlet property="maxFrequencyLabel" destination="Jcb-nb-Ibd" id="F5A-UP-Fik"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xe6-rr-s1W" userLabel="First Responder" sceneMemberID="firstResponder"/>
