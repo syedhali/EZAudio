@@ -104,7 +104,6 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     __weak typeof (self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         weakSelf.maxFrequencyLabel.stringValue = [NSString stringWithFormat:@"Highest Note: %@,\nFrequency: %.2f", noteName, maxFrequency];
-        [EZAudioUtilities noteNameStringForFrequency:[fft maxFrequency] includeOctave:YES];
         [weakSelf.audioPlotFreq updateBuffer:fftData withBufferSize:(UInt32)bufferSize];
     });
 }
