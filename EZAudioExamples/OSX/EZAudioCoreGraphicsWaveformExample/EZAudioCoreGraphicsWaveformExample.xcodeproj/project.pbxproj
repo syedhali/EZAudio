@@ -38,6 +38,8 @@
 		66755A401B3B790D0013E67E /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 66755A2B1B3B790D0013E67E /* TPCircularBuffer.c */; };
 		66755A411B3B790D0013E67E /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 66755A2E1B3B790D0013E67E /* CHANGELOG */; };
 		66755A421B3B790D0013E67E /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 66755A2F1B3B790D0013E67E /* VERSION */; };
+		667EEA541B51EF9400D57FB2 /* EZAudioFFT.m in Sources */ = {isa = PBXBuildFile; fileRef = 667EEA531B51EF9400D57FB2 /* EZAudioFFT.m */; };
+		667EEA681B51F0C000D57FB2 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 667EEA671B51F0C000D57FB2 /* Accelerate.framework */; };
 		94056D88185B97E300EB94BA /* CoreGraphicsWaveformViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94056D86185B97E300EB94BA /* CoreGraphicsWaveformViewController.m */; };
 		94056D89185B97E300EB94BA /* CoreGraphicsWaveformViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94056D87185B97E300EB94BA /* CoreGraphicsWaveformViewController.xib */; };
 		94373025185B931C00F315F0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94373024185B931C00F315F0 /* Cocoa.framework */; };
@@ -102,6 +104,9 @@
 		66755A2C1B3B790D0013E67E /* TPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPCircularBuffer.h; sourceTree = "<group>"; };
 		66755A2E1B3B790D0013E67E /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		66755A2F1B3B790D0013E67E /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
+		667EEA521B51EF9400D57FB2 /* EZAudioFFT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioFFT.h; sourceTree = "<group>"; };
+		667EEA531B51EF9400D57FB2 /* EZAudioFFT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudioFFT.m; sourceTree = "<group>"; };
+		667EEA671B51F0C000D57FB2 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		94056D85185B97E300EB94BA /* CoreGraphicsWaveformViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CoreGraphicsWaveformViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		94056D86185B97E300EB94BA /* CoreGraphicsWaveformViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CoreGraphicsWaveformViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		94056D87185B97E300EB94BA /* CoreGraphicsWaveformViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CoreGraphicsWaveformViewController.xib; sourceTree = "<group>"; };
@@ -137,6 +142,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				667EEA681B51F0C000D57FB2 /* Accelerate.framework in Frameworks */,
 				94373088185B937E00F315F0 /* QuartzCore.framework in Frameworks */,
 				94373086185B937100F315F0 /* OpenGL.framework in Frameworks */,
 				94373084185B936B00F315F0 /* GLKit.framework in Frameworks */,
@@ -168,6 +174,8 @@
 				66755A101B3B790D0013E67E /* EZAudioDevice.m */,
 				66755A111B3B790D0013E67E /* EZAudioDisplayLink.h */,
 				66755A121B3B790D0013E67E /* EZAudioDisplayLink.m */,
+				667EEA521B51EF9400D57FB2 /* EZAudioFFT.h */,
+				667EEA531B51EF9400D57FB2 /* EZAudioFFT.m */,
 				66755A131B3B790D0013E67E /* EZAudioFile.h */,
 				66755A141B3B790D0013E67E /* EZAudioFile.m */,
 				66755A151B3B790D0013E67E /* EZAudioFloatConverter.h */,
@@ -229,6 +237,7 @@
 		94373023185B931C00F315F0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				667EEA671B51F0C000D57FB2 /* Accelerate.framework */,
 				94373087185B937E00F315F0 /* QuartzCore.framework */,
 				94373085185B937100F315F0 /* OpenGL.framework */,
 				94373083185B936B00F315F0 /* GLKit.framework */,
@@ -420,6 +429,7 @@
 				66755A371B3B790D0013E67E /* EZAudioPlayer.m in Sources */,
 				94056D88185B97E300EB94BA /* CoreGraphicsWaveformViewController.m in Sources */,
 				66755A391B3B790D0013E67E /* EZAudioPlotGL.m in Sources */,
+				667EEA541B51EF9400D57FB2 /* EZAudioFFT.m in Sources */,
 				66755A341B3B790D0013E67E /* EZAudioFile.m in Sources */,
 				66755A3D1B3B790D0013E67E /* EZOutput.m in Sources */,
 				66755A3B1B3B790D0013E67E /* EZAudioUtilities.m in Sources */,

@@ -117,11 +117,13 @@ To begin using `EZAudio` you must first make sure you have the proper build requ
 
 ###Frameworks
 **iOS**
+- Accelerate
 - AudioToolbox
 - AVFoundation
 - GLKit
 
 **OSX**
+- Accelerate
 - AudioToolbox
 - AudioUnit
 - CoreAudio

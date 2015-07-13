@@ -1,47 +1,60 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1070" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="FFTViewController">
             <connections>
-                <outlet property="audioPlotFreq" destination="4V2-1I-w64" id="SkA-7R-4V8"/>
-                <outlet property="audioPlotTime" destination="Zcc-CT-67u" id="lE0-d7-KUs"/>
+                <outlet property="audioPlotFreq" destination="1" id="9lp-OU-kM3"/>
+                <outlet property="audioPlotTime" destination="aUO-zv-aqE" id="0TL-T2-imj"/>
+                <outlet property="maxFrequencyLabel" destination="dlx-e6-5CC" id="3QV-3c-qki"/>
                 <outlet property="view" destination="1" id="2"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView id="1">
+        <customView id="1" customClass="EZAudioPlot">
             <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <splitView dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="78b-rz-Bpl">
-                    <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
-                    <subviews>
-                        <customView fixedFrame="YES" id="Zcc-CT-67u" customClass="EZAudioPlot">
-                            <rect key="frame" x="0.0" y="0.0" width="480" height="132"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </customView>
-                        <customView fixedFrame="YES" id="4V2-1I-w64" customClass="EZAudioPlot">
-                            <rect key="frame" x="0.0" y="133" width="480" height="139"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </customView>
-                    </subviews>
-                    <holdingPriorities>
-                        <real value="250"/>
-                        <real value="250"/>
-                    </holdingPriorities>
-                </splitView>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="aUO-zv-aqE" customClass="EZAudioPlot">
+                    <rect key="frame" x="18" y="190" width="444" height="64"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="oiN-dY-Vey"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="color">
+                            <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </customView>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dlx-e6-5CC">
+                    <rect key="frame" x="16" y="159" width="4" height="22"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="IFE-um-tWr">
+                        <font key="font" size="18" name="HelveticaNeue-Light"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
             </subviews>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="78b-rz-Bpl" secondAttribute="bottom" id="CZL-aU-xpy"/>
-                <constraint firstAttribute="trailing" secondItem="78b-rz-Bpl" secondAttribute="trailing" id="eXt-EL-upz"/>
-                <constraint firstItem="78b-rz-Bpl" firstAttribute="top" secondItem="1" secondAttribute="top" id="lFP-vc-nHC"/>
-                <constraint firstItem="78b-rz-Bpl" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="lWl-1T-nHB"/>
+                <constraint firstItem="aUO-zv-aqE" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="18" id="9RE-pT-LZj"/>
+                <constraint firstItem="dlx-e6-5CC" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="18" id="MGj-LS-3mw"/>
+                <constraint firstAttribute="trailing" secondItem="aUO-zv-aqE" secondAttribute="trailing" constant="18" id="XiD-Ij-Mxf"/>
+                <constraint firstItem="dlx-e6-5CC" firstAttribute="top" secondItem="aUO-zv-aqE" secondAttribute="bottom" constant="9" id="Z3k-6W-KAH"/>
+                <constraint firstItem="aUO-zv-aqE" firstAttribute="top" secondItem="1" secondAttribute="top" constant="18" id="jk5-aa-dMV"/>
             </constraints>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                    <color key="value" red="0.0078431372550000003" green="0.72156862749999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                </userDefinedRuntimeAttribute>
+                <userDefinedRuntimeAttribute type="color" keyPath="color">
+                    <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+            <point key="canvasLocation" x="156" y="183"/>
         </customView>
     </objects>
 </document>

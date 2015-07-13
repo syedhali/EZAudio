@@ -25,6 +25,7 @@
 		667558EA1B3B60B80013E67E /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 667558D51B3B60B80013E67E /* TPCircularBuffer.c */; };
 		667558EB1B3B60B80013E67E /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 667558D81B3B60B80013E67E /* CHANGELOG */; };
 		667558EC1B3B60B80013E67E /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 667558D91B3B60B80013E67E /* VERSION */; };
+		667EEA3F1B51EF2D00D57FB2 /* EZAudioFFT.m in Sources */ = {isa = PBXBuildFile; fileRef = 667EEA3E1B51EF2D00D57FB2 /* EZAudioFFT.m */; };
 		9417A6C718658FB500D9D37B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A6C618658FB500D9D37B /* AudioToolbox.framework */; };
 		9417A6C918658FC000D9D37B /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9417A6C818658FC000D9D37B /* GLKit.framework */; };
 		9417A6D1186591CA00D9D37B /* simple-drum-beat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9417A6D0186591CA00D9D37B /* simple-drum-beat.wav */; };
@@ -88,6 +89,8 @@
 		667558D61B3B60B80013E67E /* TPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPCircularBuffer.h; sourceTree = "<group>"; };
 		667558D81B3B60B80013E67E /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		667558D91B3B60B80013E67E /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
+		667EEA3D1B51EF2D00D57FB2 /* EZAudioFFT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioFFT.h; sourceTree = "<group>"; };
+		667EEA3E1B51EF2D00D57FB2 /* EZAudioFFT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudioFFT.m; sourceTree = "<group>"; };
 		9417A6C618658FB500D9D37B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9417A6C818658FC000D9D37B /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		9417A6D0186591CA00D9D37B /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "simple-drum-beat.wav"; path = "../../../simple-drum-beat.wav"; sourceTree = "<group>"; };
@@ -148,6 +151,8 @@
 				667558BA1B3B60B80013E67E /* EZAudioDevice.m */,
 				667558BB1B3B60B80013E67E /* EZAudioDisplayLink.h */,
 				667558BC1B3B60B80013E67E /* EZAudioDisplayLink.m */,
+				667EEA3D1B51EF2D00D57FB2 /* EZAudioFFT.h */,
+				667EEA3E1B51EF2D00D57FB2 /* EZAudioFFT.m */,
 				667558BD1B3B60B80013E67E /* EZAudioFile.h */,
 				667558BE1B3B60B80013E67E /* EZAudioFile.m */,
 				667558BF1B3B60B80013E67E /* EZAudioFloatConverter.h */,
@@ -369,6 +374,7 @@
 				667558E11B3B60B80013E67E /* EZAudioPlayer.m in Sources */,
 				944D03ED186038A60076EF7A /* AppDelegate.m in Sources */,
 				667558E31B3B60B80013E67E /* EZAudioPlotGL.m in Sources */,
+				667EEA3F1B51EF2D00D57FB2 /* EZAudioFFT.m in Sources */,
 				667558DE1B3B60B80013E67E /* EZAudioFile.m in Sources */,
 				667558E71B3B60B80013E67E /* EZOutput.m in Sources */,
 				667558E51B3B60B80013E67E /* EZAudioUtilities.m in Sources */,

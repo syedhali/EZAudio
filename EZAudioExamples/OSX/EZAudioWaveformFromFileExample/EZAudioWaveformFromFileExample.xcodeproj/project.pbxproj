@@ -24,6 +24,8 @@
 		66755B241B3B792A0013E67E /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 66755B0F1B3B792A0013E67E /* TPCircularBuffer.c */; };
 		66755B251B3B792A0013E67E /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 66755B121B3B792A0013E67E /* CHANGELOG */; };
 		66755B261B3B792A0013E67E /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 66755B131B3B792A0013E67E /* VERSION */; };
+		667EEA601B51EFC400D57FB2 /* EZAudioFFT.m in Sources */ = {isa = PBXBuildFile; fileRef = 667EEA5F1B51EFC400D57FB2 /* EZAudioFFT.m */; };
+		667EEA701B51F0EC00D57FB2 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 667EEA6F1B51F0EC00D57FB2 /* Accelerate.framework */; };
 		94056E83185BCBC000EB94BA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94056E82185BCBC000EB94BA /* Cocoa.framework */; };
 		94056E8D185BCBC000EB94BA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94056E8B185BCBC000EB94BA /* InfoPlist.strings */; };
 		94056E8F185BCBC000EB94BA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 94056E8E185BCBC000EB94BA /* main.m */; };
@@ -89,6 +91,9 @@
 		66755B101B3B792A0013E67E /* TPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPCircularBuffer.h; sourceTree = "<group>"; };
 		66755B121B3B792A0013E67E /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		66755B131B3B792A0013E67E /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
+		667EEA5E1B51EFC400D57FB2 /* EZAudioFFT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioFFT.h; sourceTree = "<group>"; };
+		667EEA5F1B51EFC400D57FB2 /* EZAudioFFT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAudioFFT.m; sourceTree = "<group>"; };
+		667EEA6F1B51F0EC00D57FB2 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		94056E7F185BCBC000EB94BA /* EZAudioWaveformFromFileExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EZAudioWaveformFromFileExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94056E82185BCBC000EB94BA /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		94056E85185BCBC000EB94BA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -125,6 +130,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				667EEA701B51F0EC00D57FB2 /* Accelerate.framework in Frameworks */,
 				94056EEB185BCDC500EB94BA /* QuartzCore.framework in Frameworks */,
 				94056EE7185BCDBF00EB94BA /* AudioToolbox.framework in Frameworks */,
 				94056EE8185BCDBF00EB94BA /* AudioUnit.framework in Frameworks */,
@@ -156,6 +162,8 @@
 				66755AF41B3B792A0013E67E /* EZAudioDevice.m */,
 				66755AF51B3B792A0013E67E /* EZAudioDisplayLink.h */,
 				66755AF61B3B792A0013E67E /* EZAudioDisplayLink.m */,
+				667EEA5E1B51EFC400D57FB2 /* EZAudioFFT.h */,
+				667EEA5F1B51EFC400D57FB2 /* EZAudioFFT.m */,
 				66755AF71B3B792A0013E67E /* EZAudioFile.h */,
 				66755AF81B3B792A0013E67E /* EZAudioFile.m */,
 				66755AF91B3B792A0013E67E /* EZAudioFloatConverter.h */,
@@ -217,6 +225,7 @@
 		94056E81185BCBC000EB94BA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				667EEA6F1B51F0EC00D57FB2 /* Accelerate.framework */,
 				94056EEA185BCDC500EB94BA /* QuartzCore.framework */,
 				94056EE4185BCDBF00EB94BA /* AudioToolbox.framework */,
 				94056EE5185BCDBF00EB94BA /* AudioUnit.framework */,
@@ -393,6 +402,7 @@
 				66755B1B1B3B792A0013E67E /* EZAudioPlayer.m in Sources */,
 				94056E96185BCBC000EB94BA /* AppDelegate.m in Sources */,
 				66755B1D1B3B792A0013E67E /* EZAudioPlotGL.m in Sources */,
+				667EEA601B51EFC400D57FB2 /* EZAudioFFT.m in Sources */,
 				66755B181B3B792A0013E67E /* EZAudioFile.m in Sources */,
 				66755B211B3B792A0013E67E /* EZOutput.m in Sources */,
 				66755B1F1B3B792A0013E67E /* EZAudioUtilities.m in Sources */,
