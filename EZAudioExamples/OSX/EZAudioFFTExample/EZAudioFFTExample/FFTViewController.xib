@@ -30,10 +30,10 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </customView>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dlx-e6-5CC">
-                    <rect key="frame" x="16" y="147" width="70" height="34"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="IFE-um-tWr">
-                        <font key="font" size="28" name="HelveticaNeue-Light"/>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dlx-e6-5CC">
+                    <rect key="frame" x="16" y="159" width="4" height="22"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="IFE-um-tWr">
+                        <font key="font" size="18" name="HelveticaNeue-Light"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>

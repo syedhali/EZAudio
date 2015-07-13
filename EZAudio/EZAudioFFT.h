@@ -217,6 +217,24 @@
  */
 - (float *)computeFFTWithBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize;
 
+//------------------------------------------------------------------------------
+
+/**
+ Provides the frequency corresponding to an index in the last computed FFT data.
+ @param index A vDSP_Length (unsigned integer) representing the index of the frequency bin value you'd like to get
+ @return A float representing the frequency value at that index.
+ */
+- (float)frequencyAtIndex:(vDSP_Length)index;
+
+//------------------------------------------------------------------------------
+
+/**
+ Provides the magnitude of the frequenecy corresponding to an index in the last computed FFT data.
+ @param index A vDSP_Length (unsigned integer) representing the index of the frequency bin value you'd like to get
+ @return A float representing the frequency magnitude value at that index.
+ */
+- (float)frequencyMagnitudeAtIndex:(vDSP_Length)index;
+
 @end
 
 //------------------------------------------------------------------------------

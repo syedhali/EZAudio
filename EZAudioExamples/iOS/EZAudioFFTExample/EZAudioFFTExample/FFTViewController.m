@@ -50,6 +50,7 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     // Setup time domain audio plot
     //
     self.audioPlotTime.plotType = EZPlotTypeBuffer;
+    self.maxFrequencyLabel.numberOfLines = 0;
     
     //
     // Setup frequency domain audio plot
@@ -105,9 +106,14 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
  updatedWithFFTData:(float *)fftData
          bufferSize:(vDSP_Length)bufferSize
 {
+    float maxFrequency = [fft maxFrequency];
+    NSString *noteName = [EZAudioUtilities noteNameStringForFrequency:maxFrequency
+                                                        includeOctave:YES];
+    
     __weak typeof (self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.maxFrequencyLabel.text = [NSString stringWithFormat:@"Highest frequency: %.0f", [fft maxFrequency]];
+        weakSelf.maxFrequencyLabel.text = [NSString stringWithFormat:@"Highest Note: %@,\nFrequency: %.2f", noteName, maxFrequency];
+        [EZAudioUtilities noteNameStringForFrequency:[fft maxFrequency] includeOctave:YES];
         [weakSelf.audioPlotFreq updateBuffer:fftData withBufferSize:(UInt32)bufferSize];
     });
 }

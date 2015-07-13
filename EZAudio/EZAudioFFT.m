@@ -35,6 +35,7 @@ typedef struct EZAudioFFTInfo
     FFTSetup       fftSetup;
     COMPLEX_SPLIT  complexA;
     float         *outFFTData;
+    vDSP_Length    outFFTDataLength;
     float         *inversedFFTData;
     vDSP_Length    maxFrequencyIndex;
     float          maxFrequencyMangitude;
@@ -168,6 +169,7 @@ typedef struct EZAudioFFTInfo
     vDSP_zvmags(&(self.info->complexA), 1, self.info->outFFTData, 1, nOver2);
     vDSP_fft_zrip(self.info->fftSetup, &(self.info->complexA), 1, log2n, FFT_INVERSE);
     vDSP_ztoc(&(self.info->complexA), 1, (COMPLEX *) self.info->inversedFFTData , 2, nOver2);
+    self.info->outFFTDataLength = nOver2;
     
     //
     // Calculate max freq
@@ -175,8 +177,7 @@ typedef struct EZAudioFFTInfo
     if (self.sampleRate > 0.0f)
     {
         vDSP_maxvi(self.info->outFFTData, 1, &self.info->maxFrequencyMangitude, &self.info->maxFrequencyIndex, nOver2);
-        float nyquistMaxFreq = self.sampleRate / 2.0;
-        self.info->maxFrequency = ((float)self.info->maxFrequencyIndex / ((float)bufferSize/2.0)) * nyquistMaxFreq;
+        self.info->maxFrequency = [self frequencyAtIndex:self.info->maxFrequencyIndex];
     }
     
     //
@@ -193,6 +194,29 @@ typedef struct EZAudioFFTInfo
     // Return the FFT
     //
     return self.info->outFFTData;
+}
+
+//------------------------------------------------------------------------------
+
+- (float)frequencyAtIndex:(vDSP_Length)index
+{
+    if (!(self.info->outFFTData == NULL || self.sampleRate == 0.0f))
+    {
+        float nyquistMaxFreq = self.sampleRate / 2.0;
+        return ((float)index / (float)self.info->outFFTDataLength) * nyquistMaxFreq;
+    }
+    return NSNotFound;
+}
+
+//------------------------------------------------------------------------------
+
+- (float)frequencyMagnitudeAtIndex:(vDSP_Length)index
+{
+    if (self.info->outFFTData != NULL)
+    {
+        return self.info->outFFTData[index];
+    }
+    return NSNotFound;
 }
 
 //------------------------------------------------------------------------------
