@@ -47,6 +47,23 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     [super viewDidLoad];
     
     //
+    // Setup the AVAudioSession. EZMicrophone will not work properly on iOS
+    // if you don't do this!
+    //
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error;
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session category: %@", error.localizedDescription);
+    }
+    [session setActive:YES error:&error];
+    if (error)
+    {
+        NSLog(@"Error setting up audio session active: %@", error.localizedDescription);
+    }
+    
+    //
     // Setup time domain audio plot
     //
     self.audioPlotTime.plotType = EZPlotTypeBuffer;
