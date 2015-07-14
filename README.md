@@ -102,7 +102,7 @@ Shows how to use the `EZMicrophone`, `EZOutput`, and the `EZAudioPlotGL` to pass
 Shows how to calculate the real-time FFT of the audio data coming from the `EZMicrophone` and the Accelerate framework. The audio data is plotted using two `EZAudioPlots` for the time and frequency displays.
 
 ### Documentation
-The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/1.1.1/
+The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/1.1.2/
 <br>You can also generate the docset yourself using appledocs by running the appledocs on the EZAudio source folder.
 
 ##<a name="GettingStarted">Getting Started
@@ -135,14 +135,14 @@ To begin using `EZAudio` you must first make sure you have the proper build requ
 You can add EZAudio to your project in a few ways: <br><br>1.) The easiest way to use EZAudio is via <a href="http://cocoapods.org/", target="_blank">Cocoapods</a>. Simply add EZAudio to your <a href="http://guides.cocoapods.org/using/the-podfile.html", target="_blank">Podfile</a> like so:
 
 `
-pod 'EZAudio', '~> 1.1.1'
+pod 'EZAudio', '~> 1.1.2'
 `
 
 ####<a name="AmazingAudioEngineCocoapod">Using EZAudio & The Amazing Audio Engine
 If you're also using the Amazing Audio Engine then use the `EZAudio/Core` subspec like so:
 
 `
-pod 'EZAudio/Core', '~> 1.1.1'
+pod 'EZAudio/Core', '~> 1.1.2'
 `
 
 2.) Alternatively, you could clone or fork this repo and just drag and drop the source into your project. 
@@ -363,7 +363,7 @@ Anytime the `EZOutput` changes its device it will trigger the `EZOutputDelegate`
 
 #####Setting The Input Format
 
-When providing audio data the `EZOutputDataSource` will expect you to fill out the AudioBufferList provided with whatever `inputFormat` that is set on the `EZOutput`. By default the input format is a stereo, non-interleaved, float format (see [defaultInputFormat](http://cocoadocs.org/docsets/EZAudio/1.1.1/Classes/EZOutput.html#//api/name/defaultInputFormat) for more information). If you're dealing with a different input format (which is typically the case), just set the `inputFormat` property. For instance:
+When providing audio data the `EZOutputDataSource` will expect you to fill out the AudioBufferList provided with whatever `inputFormat` that is set on the `EZOutput`. By default the input format is a stereo, non-interleaved, float format (see [defaultInputFormat](http://cocoadocs.org/docsets/EZAudio/1.1.2/Classes/EZOutput.html#//api/name/defaultInputFormat) for more information). If you're dealing with a different input format (which is typically the case), just set the `inputFormat` property. For instance:
 ```objectivec
 // Set a mono, float format with a sample rate of 44.1 kHz
 AudioStreamBasicDescription monoFloatFormat = [EZAudioUtilities monoFloatFormatWithSampleRate:44100.0f];
@@ -778,7 +778,7 @@ float          volume       = [self.player volume];
 ```
 
 ####Notifications
-The `EZAudioPlayer` provides the following notifications (as of 1.1.1):
+The `EZAudioPlayer` provides the following notifications (as of 1.1.2):
 ```objectivec
 /**
  Notification that occurs whenever the EZAudioPlayer changes its `audioFile` property. Check the new value using the EZAudioPlayer's `audioFile` property.
