@@ -69,15 +69,26 @@ BOOL __shouldExitOnCheckResultFail = YES;
                                       numberOfChannels:(UInt32)channels
                                            interleaved:(BOOL)interleaved
 {
+    unsigned nBuffers;
+    unsigned bufferSize;
+    unsigned channelsPerBuffer;
+    if (interleaved) {
+        nBuffers = 1;
+        bufferSize = sizeof(float) * frames * channels;
+        channelsPerBuffer = channels;
+    } else {
+        nBuffers = channels;
+        bufferSize = sizeof(float) * frames;
+        channelsPerBuffer = 1;
+    }
+    
     AudioBufferList *audioBufferList = (AudioBufferList*)malloc(sizeof(AudioBufferList) + sizeof(AudioBuffer) * (channels-1));
-    UInt32 outputBufferSize = 32 * frames; // 32 KB
-    audioBufferList->mNumberBuffers = interleaved ? 1 : channels;
-    for(int i = 0; i < audioBufferList->mNumberBuffers; i++)
+    audioBufferList->mNumberBuffers = nBuffers;
+    for(unsigned i = 0; i < nBuffers; i++)
     {
-        audioBufferList->mBuffers[i].mNumberChannels = channels;
-        audioBufferList->mBuffers[i].mDataByteSize = channels * outputBufferSize;
-        audioBufferList->mBuffers[i].mData = (float *)malloc(channels * sizeof(float) *outputBufferSize);
-        memset(audioBufferList->mBuffers[i].mData, 0, frames);
+        audioBufferList->mBuffers[i].mNumberChannels = channelsPerBuffer;
+        audioBufferList->mBuffers[i].mDataByteSize = bufferSize;
+        audioBufferList->mBuffers[i].mData = calloc(bufferSize, 1);
     }
     return audioBufferList;
 }
