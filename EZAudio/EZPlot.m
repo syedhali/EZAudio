@@ -34,7 +34,7 @@
 }
 
 #pragma mark - Get Samples
--(void)updateBuffer:(float *)buffer
+-(void)updateBuffer:(const float *)buffer
      withBufferSize:(UInt32)bufferSize
 {
   // Override in subclass

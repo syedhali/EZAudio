@@ -366,7 +366,7 @@ typedef NSRect EZRect;
  @param 	bufferSize 	The size of the float buffer
  @return	The root mean squared of the buffer
  */
-+ (float)RMS:(float*)buffer length:(int)bufferSize;
++ (float)RMS:(const float*)buffer length:(int)bufferSize;
 
 //------------------------------------------------------------------------------
 
@@ -501,7 +501,7 @@ typedef NSRect EZRect;
  @param bufferSize  A UInt32 representing the length of the incoming audio buffer
  @param historyInfo A pointer to a EZPlotHistoryInfo structure to use for managing the history buffers
  */
-+ (void)appendBufferRMS:(float *)buffer
++ (void)appendBufferRMS:(const float *)buffer
          withBufferSize:(UInt32)bufferSize
           toHistoryInfo:(EZPlotHistoryInfo *)historyInfo;
 
@@ -513,7 +513,7 @@ typedef NSRect EZRect;
  @param bufferSize  A UInt32 representing the length of the incoming audio buffer
  @param historyInfo A pointer to a EZPlotHistoryInfo structure to use for managing the history buffers
  */
-+ (void)appendBuffer:(float *)buffer
++ (void)appendBuffer:(const float *)buffer
       withBufferSize:(UInt32)bufferSize
        toHistoryInfo:(EZPlotHistoryInfo *)historyInfo;
 
