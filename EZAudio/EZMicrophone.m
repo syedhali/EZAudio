@@ -559,6 +559,7 @@ static OSStatus inputCallback(void                          *inRefCon,
 -(void)_configureFloatConverterWithFrameSize:(UInt32)bufferFrameSize {
   UInt32 bufferSizeBytes = bufferFrameSize * streamFormat.mBytesPerFrame;
   converter              = [[AEFloatConverter alloc] initWithSourceFormat:streamFormat];
+  assert(streamFormat.mChannelsPerFrame);
   floatBuffers           = (float**)malloc(sizeof(float*)*streamFormat.mChannelsPerFrame);
   assert(floatBuffers);
   for ( int i=0; i<streamFormat.mChannelsPerFrame; i++ ) {
