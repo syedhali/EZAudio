@@ -201,8 +201,7 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
     //
     // Create structure to hold state data
     //
-    self.info = (EZOutputInfo *)malloc(sizeof(EZOutputInfo));
-    memset(self.info, 0, sizeof(EZOutputInfo));
+    self.info = (EZOutputInfo *)calloc(1, sizeof(EZOutputInfo));
     
     //
     // Setup the audio graph
@@ -227,11 +226,7 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
     //
     AudioComponentDescription mixerDescription;
     mixerDescription.componentType = kAudioUnitType_Mixer;
-#if TARGET_OS_IPHONE
     mixerDescription.componentSubType = kAudioUnitSubType_MultiChannelMixer;
-#elif TARGET_OS_MAC
-    mixerDescription.componentSubType = kAudioUnitSubType_StereoMixer;
-#endif
     mixerDescription.componentManufacturer = kAudioUnitManufacturer_Apple;
     [EZAudioUtilities checkResult:AUGraphAddNode(self.info->graph,
                                                  &mixerDescription,
@@ -339,6 +334,23 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
     [EZAudioUtilities checkResult:AUGraphInitialize(self.info->graph)
                         operation:"Failed to initialize graph"];
     
+    //
+    // Make sure the volume is up on the mixer unit
+    //
+    [EZAudioUtilities checkResult:AudioUnitSetParameter(self.info->mixerNodeInfo.audioUnit,
+                                                        kMultiChannelMixerParam_Volume,
+                                                        kAudioUnitScope_Output,
+                                                        0,
+                                                        1.0,
+                                                        0)
+                        operation:"Failed to set volume on output scope of mixer unit"];
+    [EZAudioUtilities checkResult:AudioUnitSetParameter(self.info->mixerNodeInfo.audioUnit,
+                                                        kMultiChannelMixerParam_Volume,
+                                                        kAudioUnitScope_Input,
+                                                        0,
+                                                        1.0,
+                                                        0)
+                        operation:"Failed to set volume on input scope of mixer unit"];
     //
     // Add render callback
     //
@@ -475,13 +487,13 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
                                                        &self.info->clientFormat,
                                                        sizeof(self.info->clientFormat))
                         operation:"Failed to set output client format on converter audio unit"];
-    [EZAudioUtilities checkResult:AudioUnitSetProperty(self.info->mixerNodeInfo.audioUnit,
-                                                       kAudioUnitProperty_StreamFormat,
-                                                       kAudioUnitScope_Input,
-                                                       0,
-                                                       &self.info->clientFormat,
-                                                       sizeof(self.info->clientFormat))
-                        operation:"Failed to set input client format on mixer audio unit"];
+//    [EZAudioUtilities checkResult:AudioUnitSetProperty(self.info->mixerNodeInfo.audioUnit,
+//                                                       kAudioUnitProperty_StreamFormat,
+//                                                       kAudioUnitScope_Input,
+//                                                       0,
+//                                                       &self.info->clientFormat,
+//                                                       sizeof(self.info->clientFormat))
+//                        operation:"Failed to set input client format on mixer audio unit"];
     [EZAudioUtilities checkResult:AudioUnitSetProperty(self.info->mixerNodeInfo.audioUnit,
                                                        kAudioUnitProperty_StreamFormat,
                                                        kAudioUnitScope_Output,
@@ -489,6 +501,13 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
                                                        &self.info->clientFormat,
                                                        sizeof(self.info->clientFormat))
                         operation:"Failed to set output client format on mixer audio unit"];
+    [EZAudioUtilities checkResult:AudioUnitSetProperty(self.info->outputNodeInfo.audioUnit,
+                                                       kAudioUnitProperty_StreamFormat,
+                                                       kAudioUnitScope_Input,
+                                                       0,
+                                                       &self.info->clientFormat,
+                                                       sizeof(self.info->clientFormat))
+                        operation:"Failed to set input client format on output audio unit"];
     
     self.floatConverter = [[EZAudioFloatConverter alloc] initWithInputFormat:clientFormat];
     self.info->floatData = [EZAudioUtilities floatBuffersWithNumberOfFrames:EZOutputMaximumFramesPerSlice

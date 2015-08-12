@@ -72,7 +72,7 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     //
     // Setup frequency domain audio plot
     //
-    self.audioPlotFreq.shouldFill = YES;
+    self.audioPlotFreq.shouldFill = NO;
     self.audioPlotFreq.plotType = EZPlotTypeBuffer;
     self.audioPlotFreq.shouldCenterYAxis = NO;
     
