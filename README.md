@@ -1,4 +1,4 @@
-![alt text](http://i.imgur.com/uucWmrp.png "EZAudioLogo")
+![alt text](http://i.imgur.com/ll5q68r.png "EZAudioLogo")
 
 A simple, intuitive audio framework for iOS and OSX.
 
