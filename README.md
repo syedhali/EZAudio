@@ -1,6 +1,5 @@
-![alt text](https://s3-us-west-1.amazonaws.com/ezaudio-media/EZAudioJumbo-Alt.png "EZAudioLogo")
+![alt text](http://i.imgur.com/ll5q68r.png "EZAudioLogo")
 
-#EZAudio
 A simple, intuitive audio framework for iOS and OSX.
 
 ## Welcome to 1.0.0! 
