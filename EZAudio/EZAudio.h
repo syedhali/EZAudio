@@ -255,7 +255,7 @@
  @note Please use same method in EZAudioUtilities class instead.
  @return A new AudioStreamBasicDescription with the specified format.
  */
-+ (AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sameRate __attribute__((deprecated));
++ (AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sampleRate __attribute__((deprecated));
 
 //------------------------------------------------------------------------------
 // @name AudioStreamBasicDescription Helper Functions
