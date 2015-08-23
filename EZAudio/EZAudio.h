@@ -499,8 +499,8 @@
 
 /**
  Initializes the circular buffer (just a wrapper around the C method)
- *  @param circularBuffer Pointer to an instance of the TPCircularBuffer
- *  @param size           The length of the TPCircularBuffer (usually 1024)
+ @param circularBuffer Pointer to an instance of the TPCircularBuffer
+ @param size           The length of the TPCircularBuffer (usually 1024)
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
  */
