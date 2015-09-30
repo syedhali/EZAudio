@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "469F4CF21B749F7800666A46"
-               BuildableName = "EZAudio.framework"
-               BlueprintName = "EZAudio"
+               BlueprintIdentifier = "8A5A4B9B1BBBDCB200A8A048"
+               BuildableName = "EZAudioOSX.framework"
+               BlueprintName = "EZAudioOSX"
                ReferencedContainer = "container:EZAudio.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8A5A4BA41BBBDCB200A8A048"
+               BuildableName = "EZAudioOSXTests.xctest"
+               BlueprintName = "EZAudioOSXTests"
+               ReferencedContainer = "container:EZAudio.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "8A5A4B9B1BBBDCB200A8A048"
+            BuildableName = "EZAudioOSX.framework"
+            BlueprintName = "EZAudioOSX"
+            ReferencedContainer = "container:EZAudio.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -45,9 +64,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "469F4CF21B749F7800666A46"
-            BuildableName = "EZAudio.framework"
-            BlueprintName = "EZAudio"
+            BlueprintIdentifier = "8A5A4B9B1BBBDCB200A8A048"
+            BuildableName = "EZAudioOSX.framework"
+            BlueprintName = "EZAudioOSX"
             ReferencedContainer = "container:EZAudio.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,9 +82,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "469F4CF21B749F7800666A46"
-            BuildableName = "EZAudio.framework"
-            BlueprintName = "EZAudio"
+            BlueprintIdentifier = "8A5A4B9B1BBBDCB200A8A048"
+            BuildableName = "EZAudioOSX.framework"
+            BlueprintName = "EZAudioOSX"
             ReferencedContainer = "container:EZAudio.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
