@@ -71,6 +71,8 @@
 		8A5A4BD01BBBDD7E00A8A048 /* EZPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 469F4D191B749FEC00666A46 /* EZPlot.m */; };
 		8A5A4BD11BBBDD7E00A8A048 /* EZRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 469F4D1B1B749FEC00666A46 /* EZRecorder.m */; };
 		8A5A4BD21BBBDE2800A8A048 /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 469F4D1C1B749FEC00666A46 /* TPCircularBuffer.c */; };
+		8A5A4BF31BBBFFA000A8A048 /* EZAudioOSX.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A5A4BF11BBBFF5600A8A048 /* EZAudioOSX.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A5A4BF41BBC025600A8A048 /* EZAudioiOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A5A4BEF1BBBFF0A00A8A048 /* EZAudioiOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -109,6 +111,8 @@
 		469F4D1C1B749FEC00666A46 /* TPCircularBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = TPCircularBuffer.c; sourceTree = "<group>"; };
 		469F4D1D1B749FEC00666A46 /* TPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPCircularBuffer.h; sourceTree = "<group>"; };
 		8A5A4B9C1BBBDCB200A8A048 /* EZAudioOSX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EZAudioOSX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A5A4BEF1BBBFF0A00A8A048 /* EZAudioiOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioiOS.h; sourceTree = "<group>"; };
+		8A5A4BF11BBBFF5600A8A048 /* EZAudioOSX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudioOSX.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +185,8 @@
 				469F4D1B1B749FEC00666A46 /* EZRecorder.m */,
 				469F4D1C1B749FEC00666A46 /* TPCircularBuffer.c */,
 				469F4D1D1B749FEC00666A46 /* TPCircularBuffer.h */,
+				8A5A4BEF1BBBFF0A00A8A048 /* EZAudioiOS.h */,
+				8A5A4BF11BBBFF5600A8A048 /* EZAudioOSX.h */,
 				469F4D3E1B749FF000666A46 /* Supporting Files */,
 			);
 			path = EZAudio;
@@ -201,6 +207,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A5A4BF41BBC025600A8A048 /* EZAudioiOS.h in Headers */,
 				469F4D301B749FEC00666A46 /* EZAudioPlotGL.h in Headers */,
 				469F4D2A1B749FEC00666A46 /* EZAudioFloatData.h in Headers */,
 				469F4D221B749FEC00666A46 /* EZAudioDisplayLink.h in Headers */,
@@ -224,6 +231,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A5A4BF31BBBFFA000A8A048 /* EZAudioOSX.h in Headers */,
 				8A5A4BB31BBBDD6D00A8A048 /* EZAudio.h in Headers */,
 				8A5A4BB41BBBDD6D00A8A048 /* EZAudioDevice.h in Headers */,
 				8A5A4BB51BBBDD6D00A8A048 /* EZAudioDisplayLink.h in Headers */,

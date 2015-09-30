@@ -25,6 +25,12 @@
 
 #import <Foundation/Foundation.h>
 
+//! Project version number for teat.
+FOUNDATION_EXPORT double EZAudioVersionNumber;
+
+//! Project version string for teat.
+FOUNDATION_EXPORT const unsigned char EZAudioVersionString[];
+
 //------------------------------------------------------------------------------
 #pragma mark - Core Components
 //------------------------------------------------------------------------------
