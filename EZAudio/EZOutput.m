@@ -537,6 +537,7 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
                                                        &deviceId,
                                                        sizeof(AudioDeviceID))
                         operation:"Couldn't set default device on I/O unit"];
+
 #endif
     
     // store device
@@ -547,6 +548,65 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
     {
         [self.delegate output:self changedDevice:device];
     }
+}
+
+//------------------------------------------------------------------------------
+
+- (void)setChannelMapping:(NSArray *)channelMapping {
+    
+#if TARGET_OS_MAC
+    
+    if (channelMapping && _device) {
+    
+        //
+        // Channel mapping
+        //
+        
+        NSInteger channelCount = _device.outputChannelCount;
+        
+        if ([channelMapping count]<= channelCount) {
+        
+
+        
+            // create the C array which will contain the channel mapping table
+            UInt32 channelMap[channelCount];
+            
+            // first of all clear the current mapping table
+            for (NSInteger i=0;i<_device.outputChannelCount;i++) {
+                
+                channelMap[i] = -1;
+                
+            }
+            
+            // set the new values
+            for (int i=0;i<[channelMapping count];i++) {
+                
+                channelMap[[[channelMapping objectAtIndex:i] unsignedIntValue]] = i;
+                
+            }
+            
+            UInt32 propertySize = (int)channelCount*sizeof(UInt32);
+            
+            [EZAudioUtilities checkResult:AudioUnitSetProperty(self.info->outputNodeInfo.audioUnit,
+                                                               kAudioOutputUnitProperty_ChannelMap,
+                                                               kAudioUnitScope_Global,
+                                                               0,
+                                                               &channelMap,
+                                                               propertySize)
+                                operation:"Couldn't set channel mapping"];
+
+            
+            // store channel mapping
+            _channelMapping = channelMapping;
+
+        }
+        
+
+    }
+    
+
+#endif
+    
 }
 
 //------------------------------------------------------------------------------

@@ -71,6 +71,7 @@
     // Reload the menu for the output device selector popup button
     //
     [self reloadOutputDevicePopUpButtonMenu];
+    [self reloadOutputChannelMappingPopUpButtonMenu];
     
     //
     // Configure UI components
@@ -89,7 +90,8 @@
     //
     // Try opening the sample file
     //
-    [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
+  //  [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
+    [self openFileWithFilePathURL:[NSURL fileURLWithPath:@"/Users/tamasnagy/Desktop/asztal/testloops/Mitti Test Loops/Hebopula Hap HD.mov"]];
 }
 
 //------------------------------------------------------------------------------
@@ -158,9 +160,22 @@
 {
     EZAudioDevice *device = [item representedObject];
     [self.player setDevice:device];
+    
+    [self reloadOutputChannelMappingPopUpButtonMenu];
 }
 
 //------------------------------------------------------------------------------
+
+- (void)changedChannelMapping:(NSMenuItem *)item
+{
+
+    NSArray *mapping = [item representedObject];
+    [self.player.output setChannelMapping:mapping];
+    
+}
+
+//------------------------------------------------------------------------------
+
 
 - (void)changePlotType:(id)sender
 {
@@ -366,6 +381,31 @@
     // microphone input popup button
     //
     [self.outputDevicePopUpButton selectItem:defaultOutputDeviceItem];
+}
+
+- (void)reloadOutputChannelMappingPopUpButtonMenu {
+    
+    [[self outputChannelMappingPopUpButton] removeAllItems];
+    
+    NSInteger outputchannels = [[self.player device] outputChannelCount];
+    
+    NSMenu *menu = [[NSMenu alloc] init];
+    
+    for (NSInteger i=0;i<outputchannels;i+=2) {
+    
+        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%ld & %ld", i+1, i+2]
+                                                      action:@selector(changedChannelMapping:)
+                                               keyEquivalent:@""];
+        
+        item.representedObject = [NSArray arrayWithObjects:[NSNumber numberWithInteger:i],[NSNumber numberWithInteger:i+1], nil];
+        item.target = self;
+        [menu addItem:item];
+    }
+    
+
+    self.outputChannelMappingPopUpButton.menu = menu;
+    [self.outputChannelMappingPopUpButton selectItem:[[menu itemArray] firstObject]];
+
 }
 
 //------------------------------------------------------------------------------

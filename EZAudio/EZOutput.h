@@ -303,6 +303,16 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
  */
 @property (nonatomic, strong, readwrite) EZAudioDevice *device;
 
+
+///-----------------------------------------------------------
+/// @name Getting/Setting The Output's Channel Mapping
+///-----------------------------------------------------------
+
+/**
+ The receiver’s audio-channel–to–device–channel mappings.
+ */
+@property (nonatomic, strong, readwrite) NSArray *channelMapping;
+
 //------------------------------------------------------------------------------
 #pragma mark - Actions
 //------------------------------------------------------------------------------
