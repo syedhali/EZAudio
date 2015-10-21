@@ -9,6 +9,7 @@ Thank you guys for being so patient over the last year - I've been working like 
 I'd really like to start creating a list of projects made using EZAudio. If you've used EZAudio to make something cool, whether it's an app or open source visualization or whatever, please email me at syedhali07[at]gmail.com and I'll add it to our wall of fame! 
 To start it off:
 - [Detour](https://www.detour.com/) - Gorgeous location-aware audio walks
+- [Jumpshare](https://jumpshare.com/) - Incredibly fast, real-time file sharing
 
 ##Features
 
