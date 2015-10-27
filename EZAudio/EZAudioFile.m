@@ -412,6 +412,12 @@ typedef struct
         SInt64 currentFrame = self.frameIndex;
         BOOL interleaved = [EZAudioUtilities isInterleaved:self.clientFormat];
         UInt32 channels = self.clientFormat.mChannelsPerFrame;
+        if (channels == 0)
+        {
+            // prevent division by zero
+            pthread_mutex_unlock(&_lock);
+            return nil;
+        }
         float **data = (float **)malloc( sizeof(float*) * channels );
         for (int i = 0; i < channels; i++)
         {

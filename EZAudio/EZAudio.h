@@ -25,6 +25,12 @@
 
 #import <Foundation/Foundation.h>
 
+//! Project version number for teat.
+FOUNDATION_EXPORT double EZAudioVersionNumber;
+
+//! Project version string for teat.
+FOUNDATION_EXPORT const unsigned char EZAudioVersionString[];
+
 //------------------------------------------------------------------------------
 #pragma mark - Core Components
 //------------------------------------------------------------------------------
@@ -255,7 +261,7 @@
  @note Please use same method in EZAudioUtilities class instead.
  @return A new AudioStreamBasicDescription with the specified format.
  */
-+ (AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sameRate __attribute__((deprecated));
++ (AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sampleRate __attribute__((deprecated));
 
 //------------------------------------------------------------------------------
 // @name AudioStreamBasicDescription Helper Functions
@@ -499,8 +505,8 @@
 
 /**
  Initializes the circular buffer (just a wrapper around the C method)
- *  @param circularBuffer Pointer to an instance of the TPCircularBuffer
- *  @param size           The length of the TPCircularBuffer (usually 1024)
+ @param circularBuffer Pointer to an instance of the TPCircularBuffer
+ @param size           The length of the TPCircularBuffer (usually 1024)
  @deprecated This method is deprecated starting in version 0.1.0.
  @note Please use same method in EZAudioUtilities class instead.
  */
