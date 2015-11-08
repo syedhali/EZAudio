@@ -106,6 +106,11 @@
  */
 @property (nonatomic, weak) IBOutlet NSPopUpButton *outputDevicePopUpButton;
 
+/**
+ The microphone pop up button (contains the menu for choosing a microphone input)
+ */
+@property (nonatomic, weak) IBOutlet NSPopUpButton *outputChannelMappingPopUpButton;
+
 #pragma mark - Actions
 /**
  Switches the plot drawing type between a buffer plot (visualizes the current stream of audio data from the update function) or a rolling plot (visualizes the audio data over time, this is the classic waveform look)
