@@ -1,8 +1,9 @@
 //
 //  AppDelegate.h
-//  EZAudioCoreGraphicsWaveformExample
+//  CoreGraphicsWaveform
 //
 //  Created by Syed Haris Ali on 12/1/13.
+//  Updated by Syed Haris Ali on 1/23/16.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
