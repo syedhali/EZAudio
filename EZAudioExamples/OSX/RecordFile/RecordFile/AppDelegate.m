@@ -1,8 +1,9 @@
 //
-//  RecordViewController.m
-//  EZAudioRecordExample
+//  AppDelegate.m
+//  RecordFile
 //
 //  Created by Syed Haris Ali on 12/1/13.
+//  Updated by Syed Haris Ali on 1/23/16.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,30 +24,28 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "RecordViewController.h"
+#import "AppDelegate.h"
 
-//------------------------------------------------------------------------------
-#pragma mark - RecordViewController (Implementation)
-//------------------------------------------------------------------------------
+@implementation AppDelegate
 
-@implementation RecordViewController
+////------------------------------------------------------------------------------
+//#pragma mark - Customize the Audio Plot
+////------------------------------------------------------------------------------
+//
+//- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+//}
 
-//------------------------------------------------------------------------------
-#pragma mark - Customize the Audio Plot
-//------------------------------------------------------------------------------
-
-- (void)awakeFromNib
-{
-    
+- (void)applicationDidFinishLaunching:(NSNotification *)notification {
     //
-    // Customizing the audio plot that'll show the current microphone input/recording
+    // Customizing the audio plot that'll show the current microphone
+    // input/recording
     //
     self.recordingAudioPlot.backgroundColor = [NSColor colorWithRed: 0.984 green: 0.71 blue: 0.365 alpha: 1];
     self.recordingAudioPlot.color           = [NSColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
     self.recordingAudioPlot.plotType        = EZPlotTypeRolling;
     self.recordingAudioPlot.shouldFill      = YES;
     self.recordingAudioPlot.shouldMirror    = YES;
-    
+
     //
     // Customizing the audio plot that'll show the playback
     //
@@ -55,11 +54,14 @@
     self.playingAudioPlot.shouldFill = YES;
     self.playingAudioPlot.shouldMirror = YES;
     self.playingAudioPlot.gain = 2.5f;
-    
-    // Create an instance of the microphone and tell it to use this view controller instance as the delegate
+
+    //
+    // Create an instance of the microphone and tell it to use this view
+    // controller instance as the delegate
+    //
     self.microphone = [EZMicrophone microphoneWithDelegate:self];
     self.player = [EZAudioPlayer audioPlayerWithDelegate:self];
-    
+
     //
     // Initialize UI components
     //
@@ -67,7 +69,7 @@
     [self setTitle:@"Not Recording" forButton:self.recordSwitch];
     self.playingStateLabel.stringValue = @"Not Playing";
     self.playButton.enabled = NO;
-    
+
     //
     // Setup notifications
     //
@@ -78,7 +80,6 @@
     //
     [self.microphone startFetchingAudio];
 }
-
 
 //------------------------------------------------------------------------------
 
@@ -209,7 +210,7 @@
  withNumberOfChannels:(UInt32)numberOfChannels
 {
     // Getting audio data as an array of float buffer arrays. What does that mean? Because the audio is coming in as a stereo signal the data is split into a left and right channel. So buffer[0] corresponds to the float* data for the left channel while buffer[1] corresponds to the float* data for the right channel.
-
+    
     // See the Thread Safety warning above, but in a nutshell these callbacks happen on a separate audio thread. We wrap any UI updating in a GCD block on the main thread to avoid blocking that audio flow.
     __weak typeof (self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -261,8 +262,8 @@
 - (void) audioPlayer:(EZAudioPlayer *)audioPlayer
          playedAudio:(float **)buffer
       withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels
-          inAudioFile:(EZAudioFile *)audioFile
+withNumberOfChannels:(UInt32)numberOfChannels
+         inAudioFile:(EZAudioFile *)audioFile
 {
     __weak typeof (self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{

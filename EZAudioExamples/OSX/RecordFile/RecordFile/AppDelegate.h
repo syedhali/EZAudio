@@ -1,8 +1,9 @@
 //
-//  RecordViewController.h
-//  EZAudioRecordExample
+//  AppDelegate.h
+//  RecordFile
 //
 //  Created by Syed Haris Ali on 12/1/13.
+//  Updated by Syed Haris Ali on 1/23/16.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,119 +26,130 @@
 
 #import <Cocoa/Cocoa.h>
 
-// Import EZAudio header
-#import "EZAudio.h"
+//
+// First import the EZAudio header
+//
+#include <EZAudio/EZAudio.h>
 
-// By default this will record a file to /Users/YOUR_USERNAME/Documents/test.caf
+//
+// By default this will record a file to /Users/YOUR_USERNAME/Documents/test.m4a
+//
 #define kAudioFilePath [NSString stringWithFormat:@"%@%@",NSHomeDirectory(),@"/Documents/test.m4a"]
 
 //------------------------------------------------------------------------------
-#pragma mark - RecordViewController
+#pragma mark - AppDelegate
 //------------------------------------------------------------------------------
 
-/**
- We will allow this view controller to act as an EZMicrophoneDelegate. This is how we listen for the microphone callback.
- */
-@interface RecordViewController : NSViewController <EZAudioPlayerDelegate,
-                                                    EZMicrophoneDelegate,
-                                                    EZRecorderDelegate>
+@interface AppDelegate : NSObject <EZAudioPlayerDelegate, EZMicrophoneDelegate, EZRecorderDelegate, NSApplicationDelegate>
 
-/**
- The label used to display the current time for recording/playback in the top left
- */
+//------------------------------------------------------------------------------
+#pragma mark - Properties
+//------------------------------------------------------------------------------
+
+@property (weak) IBOutlet NSWindow *window;
+
+//
+// The label used to display the current time for recording/playback in the top
+// left
+//
 @property (nonatomic, weak) IBOutlet NSTextField *currentTimeLabel;
 
 //------------------------------------------------------------------------------
 
-/**
- Use a OpenGL based plot to visualize the data coming in
- */
+//
+// Use a OpenGL based plot to visualize the data coming in
+//
 @property (nonatomic, weak) IBOutlet EZAudioPlotGL *recordingAudioPlot;
 
 //------------------------------------------------------------------------------
 
-/**
- A flag indicating whether we are recording or not
- */
+//
+// A flag indicating whether we are recording or not
+//
 @property (nonatomic, assign) BOOL isRecording;
 
 //------------------------------------------------------------------------------
 
-/**
- The microphone component
- */
+//
+// The microphone component
+//
 @property (nonatomic, strong) EZMicrophone *microphone;
 
 //------------------------------------------------------------------------------
 
-/**
- The switch used to toggle the microphone on/off
- */
+//
+// The switch used to toggle the microphone on/off
+//
 @property (nonatomic, weak) IBOutlet NSButton *microphoneSwitch;
 
 //------------------------------------------------------------------------------
 
-/**
- The audio player that will play the recorded file
- */
+//
+// The audio player that will play the recorded file
+//
 @property (nonatomic, strong) EZAudioPlayer *player;
 
 //------------------------------------------------------------------------------
 
-/**
- The recorder component
- */
+//
+// The recorder component
+//
 @property (nonatomic, strong) EZRecorder *recorder;
 
 //------------------------------------------------------------------------------
 
-/**
- The second audio plot used on the top right to display the current playing audio
- */
+//
+// The second audio plot used on the top right to display the current playing audio
+//
 @property (nonatomic, weak) IBOutlet EZAudioPlot *playingAudioPlot;
 
 //------------------------------------------------------------------------------
 
-/**
- The button the user taps to play the recorded audio file
- */
+//
+// The button the user taps to play the recorded audio file
+//
 @property (nonatomic, weak) IBOutlet NSButton *playButton;
 
 //------------------------------------------------------------------------------
 
-/**
- The label used to display the audio player play state
- */
+//
+// The label used to display the audio player play state
+//
 @property (nonatomic, weak) IBOutlet NSTextField *playingStateLabel;
 
 //------------------------------------------------------------------------------
 
-/**
- The switch used to toggle the recording on/off
- */
+//
+// The switch used to toggle the recording on/off
+//
 @property (nonatomic, weak) IBOutlet NSButton *recordSwitch;
 
 //------------------------------------------------------------------------------
 #pragma mark - Actions
 //------------------------------------------------------------------------------
 
-/**
- Stops the recorder and starts playing whatever has been recorded.
- */
+//
+// Stops the recorder and starts playing whatever has been recorded.
+//
 - (IBAction)playFile:(id)sender;
 
 //------------------------------------------------------------------------------
 
-/**
- Toggles the microphone on and off. When the microphone is on it will send its delegate (aka this view controller) the audio data in various ways (check out the EZMicrophoneDelegate documentation for more details);
- */
+//
+// Toggles the microphone on and off. When the microphone is on it will send
+// its delegate (aka this view controller) the audio data in various ways (check
+// out the EZMicrophoneDelegate documentation for more details);
+//
 - (IBAction)toggleMicrophone:(id)sender;
 
 //------------------------------------------------------------------------------
 
-/**
- Toggles the microphone on and off. When the microphone is on it will send its delegate (aka this view controller) the audio data in various ways (check out the EZMicrophoneDelegate documentation for more details);
- */
+//
+// Toggles the microphone on and off. When the microphone is on it will send
+// its delegate (aka this view controller) the audio data in various ways
+// (check out the EZMicrophoneDelegate documentation for more details);
+//
 - (IBAction)toggleRecording:(id)sender;
 
 @end
+

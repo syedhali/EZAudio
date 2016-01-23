@@ -23,9 +23,6 @@
       location = "group:EZAudioPassThroughExample/EZAudioPassThroughExample.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:EZAudioRecordExample/EZAudioRecordExample.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:EZAudioWaveformFromFileExample/EZAudioWaveformFromFileExample.xcodeproj">
    </FileRef>
 </Workspace>
