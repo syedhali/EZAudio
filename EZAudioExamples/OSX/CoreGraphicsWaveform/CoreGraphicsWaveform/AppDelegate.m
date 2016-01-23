@@ -1,8 +1,9 @@
 //
 //  AppDelegate.m
-//  EZAudioCoreGraphicsWaveformExample
+//  CoreGraphicsWaveform
 //
 //  Created by Syed Haris Ali on 12/1/13.
+//  Updated by Syed Haris Ali on 1/23/16.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -34,15 +35,18 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     //
-    // Customizing the audio plot's look
+    // Set plot's background color
     //
-    // Background color
     self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.984 green: 0.471 blue: 0.525 alpha: 1];
     
-    // Waveform color
+    //
+    // Set plot's waveform color
+    //
     self.audioPlot.color = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
     
-    // Plot type
+    //
+    // Plot type (buffer means real-time, rolling is over time)
+    //
     self.audioPlot.plotType = EZPlotTypeBuffer;
     
     //
@@ -183,16 +187,30 @@
 
 #pragma mark - EZMicrophoneDelegate
 #warning Thread Safety
-// Note that any callback that provides streamed audio data (like streaming microphone input) happens on a separate audio thread that should not be blocked. When we feed audio data into any of the UI components we need to explicity create a GCD block on the main thread to properly get the UI to work.
+//
+// Note that any callback that provides streamed audio data (like streaming
+// microphone input) happens on a separate audio thread that should not be
+// blocked. When we feed audio data into any of the UI components we need to
+// explicity create a GCD block on the main thread to properly get the UI to
+// work.
 - (void)   microphone:(EZMicrophone *)microphone
      hasAudioReceived:(float **)buffer
        withBufferSize:(UInt32)bufferSize
  withNumberOfChannels:(UInt32)numberOfChannels
 {
-    // See the Thread Safety warning above, but in a nutshell these callbacks happen on a separate audio thread. We wrap any UI updating in a GCD block on the main thread to avoid blocking that audio flow.
+    //
+    // See the Thread Safety warning above, but in a nutshell these callbacks
+    // happen on a separate audio thread. We wrap any UI updating in a GCD block
+    // on the main thread to avoid blocking that audio flow.
+    //
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(),^{
-        // All the audio plot needs is the buffer data (float*) and the size. Internally the audio plot will handle all the drawing related code, history management, and freeing its own resources. Hence, one badass line of code gets you a pretty plot :)
+        //
+        // All the audio plot needs is the buffer data (float *) and the size.
+        // Internally the audio plot will handle all the drawing related code,
+        // history management, and freeing its own resources. Hence, one badass
+        // line of code gets you a pretty plot :)
+        //
         NSInteger channel = [weakSelf.microphoneInputChannelPopUpButton indexOfSelectedItem];
         [weakSelf.audioPlot updateBuffer:buffer[channel] withBufferSize:bufferSize];
     });
@@ -202,8 +220,13 @@
 
 - (void)microphone:(EZMicrophone *)microphone hasAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription
 {
-    // The AudioStreamBasicDescription of the microphone stream. This is useful when configuring the EZRecorder or telling another component what audio format type to expect.
-    // Here's a print function to allow you to inspect it a little easier
+    // The AudioStreamBasicDescription of the microphone stream. This is useful
+    // when configuring the EZRecorder or telling another component what audio
+    // format type to expect.
+    
+    //
+    // Here's a print function to allow you to inspect it a little easier.
+    //
     [EZAudioUtilities printASBD:audioStreamBasicDescription];
 }
 
@@ -214,7 +237,10 @@
     withBufferSize:(UInt32)bufferSize
 withNumberOfChannels:(UInt32)numberOfChannels
 {
-    // Getting audio data as a buffer list that can be directly fed into the EZRecorder or EZOutput. Say whattt...
+    //
+    // Getting audio data as a buffer list that can be directly fed into
+    // the EZRecorder or EZOutput. Say whattt...
+    //
 }
 
 //------------------------------------------------------------------------------
