@@ -8,7 +8,7 @@
       location = "group:CoreGraphicsWaveform/CoreGraphicsWaveform.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:EZAudioOpenGLWaveformExample/EZAudioOpenGLWaveformExample.xcodeproj">
+      location = "group:OpenGLWaveform/OpenGLWaveform.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:EZAudioPlayFileExample/EZAudioPlayFileExample.xcodeproj">

@@ -1,0 +1,303 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6660627E1C5427CC00FB99FA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6660627D1C5427CC00FB99FA /* AppDelegate.m */; };
+		666062811C5427CC00FB99FA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 666062801C5427CC00FB99FA /* main.m */; };
+		666062831C5427CC00FB99FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 666062821C5427CC00FB99FA /* Assets.xcassets */; };
+		666062861C5427CC00FB99FA /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 666062841C5427CC00FB99FA /* MainMenu.xib */; };
+		6660629A1C5427F500FB99FA /* EZAudioOSX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 666062991C5427F500FB99FA /* EZAudioOSX.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		666062791C5427CC00FB99FA /* OpenGLWaveform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenGLWaveform.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6660627C1C5427CC00FB99FA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		6660627D1C5427CC00FB99FA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		666062801C5427CC00FB99FA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		666062821C5427CC00FB99FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		666062851C5427CC00FB99FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		666062871C5427CC00FB99FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		666062991C5427F500FB99FA /* EZAudioOSX.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EZAudioOSX.framework; path = ../../../build/Debug/EZAudioOSX.framework; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		666062761C5427CC00FB99FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6660629A1C5427F500FB99FA /* EZAudioOSX.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		662B6C4D1C542C4400353D48 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				666062991C5427F500FB99FA /* EZAudioOSX.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		666062701C5427CC00FB99FA = {
+			isa = PBXGroup;
+			children = (
+				6660627B1C5427CC00FB99FA /* OpenGLWaveform */,
+				662B6C4D1C542C4400353D48 /* Frameworks */,
+				6660627A1C5427CC00FB99FA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6660627A1C5427CC00FB99FA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				666062791C5427CC00FB99FA /* OpenGLWaveform.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6660627B1C5427CC00FB99FA /* OpenGLWaveform */ = {
+			isa = PBXGroup;
+			children = (
+				6660627C1C5427CC00FB99FA /* AppDelegate.h */,
+				6660627D1C5427CC00FB99FA /* AppDelegate.m */,
+				666062821C5427CC00FB99FA /* Assets.xcassets */,
+				666062841C5427CC00FB99FA /* MainMenu.xib */,
+				666062871C5427CC00FB99FA /* Info.plist */,
+				6660627F1C5427CC00FB99FA /* Supporting Files */,
+			);
+			path = OpenGLWaveform;
+			sourceTree = "<group>";
+		};
+		6660627F1C5427CC00FB99FA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				666062801C5427CC00FB99FA /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		666062781C5427CC00FB99FA /* OpenGLWaveform */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6660628A1C5427CC00FB99FA /* Build configuration list for PBXNativeTarget "OpenGLWaveform" */;
+			buildPhases = (
+				666062751C5427CC00FB99FA /* Sources */,
+				666062761C5427CC00FB99FA /* Frameworks */,
+				666062771C5427CC00FB99FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OpenGLWaveform;
+			productName = OpenGLWaveform;
+			productReference = 666062791C5427CC00FB99FA /* OpenGLWaveform.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		666062711C5427CC00FB99FA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = "Syed Haris Ali";
+				TargetAttributes = {
+					666062781C5427CC00FB99FA = {
+						CreatedOnToolsVersion = 7.2;
+					};
+				};
+			};
+			buildConfigurationList = 666062741C5427CC00FB99FA /* Build configuration list for PBXProject "OpenGLWaveform" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 666062701C5427CC00FB99FA;
+			productRefGroup = 6660627A1C5427CC00FB99FA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				666062781C5427CC00FB99FA /* OpenGLWaveform */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		666062771C5427CC00FB99FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				666062831C5427CC00FB99FA /* Assets.xcassets in Resources */,
+				666062861C5427CC00FB99FA /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		666062751C5427CC00FB99FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				666062811C5427CC00FB99FA /* main.m in Sources */,
+				6660627E1C5427CC00FB99FA /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		666062841C5427CC00FB99FA /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				666062851C5427CC00FB99FA /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		666062881C5427CC00FB99FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		666062891C5427CC00FB99FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		6660628B1C5427CC00FB99FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../..\"";
+				INFOPLIST_FILE = OpenGLWaveform/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sha.OpenGLWaveform;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		6660628C1C5427CC00FB99FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../..\"";
+				INFOPLIST_FILE = OpenGLWaveform/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sha.OpenGLWaveform;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		666062741C5427CC00FB99FA /* Build configuration list for PBXProject "OpenGLWaveform" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				666062881C5427CC00FB99FA /* Debug */,
+				666062891C5427CC00FB99FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6660628A1C5427CC00FB99FA /* Build configuration list for PBXNativeTarget "OpenGLWaveform" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6660628B1C5427CC00FB99FA /* Debug */,
+				6660628C1C5427CC00FB99FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 666062711C5427CC00FB99FA /* Project object */;
+}
