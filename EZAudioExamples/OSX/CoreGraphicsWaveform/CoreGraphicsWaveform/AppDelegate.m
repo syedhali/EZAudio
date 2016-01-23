@@ -1,5 +1,5 @@
 //
-//  CoreGraphicsWaveformViewController.m
+//  AppDelegate.m
 //  EZAudioCoreGraphicsWaveformExample
 //
 //  Created by Syed Haris Ali on 12/1/13.
@@ -23,15 +23,15 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "CoreGraphicsWaveformViewController.h"
+#import "AppDelegate.h"
 
-@implementation CoreGraphicsWaveformViewController
+@implementation AppDelegate
 
 //------------------------------------------------------------------------------
-#pragma mark - Customize the Audio Plot
+#pragma mark - Customize The Plot's Appearance
 //------------------------------------------------------------------------------
 
-- (void)awakeFromNib
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     //
     // Customizing the audio plot's look
@@ -44,7 +44,7 @@
     
     // Plot type
     self.audioPlot.plotType = EZPlotTypeBuffer;
-
+    
     //
     // Create the microphone
     //
@@ -192,7 +192,7 @@
     // See the Thread Safety warning above, but in a nutshell these callbacks happen on a separate audio thread. We wrap any UI updating in a GCD block on the main thread to avoid blocking that audio flow.
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(),^{
-    // All the audio plot needs is the buffer data (float*) and the size. Internally the audio plot will handle all the drawing related code, history management, and freeing its own resources. Hence, one badass line of code gets you a pretty plot :)
+        // All the audio plot needs is the buffer data (float*) and the size. Internally the audio plot will handle all the drawing related code, history management, and freeing its own resources. Hence, one badass line of code gets you a pretty plot :)
         NSInteger channel = [weakSelf.microphoneInputChannelPopUpButton indexOfSelectedItem];
         [weakSelf.audioPlot updateBuffer:buffer[channel] withBufferSize:bufferSize];
     });

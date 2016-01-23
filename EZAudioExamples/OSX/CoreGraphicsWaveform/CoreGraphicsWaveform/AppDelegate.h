@@ -1,5 +1,5 @@
 //
-//  CoreGraphicsWaveformViewController.h
+//  AppDelegate.h
 //  EZAudioCoreGraphicsWaveformExample
 //
 //  Created by Syed Haris Ali on 12/1/13.
@@ -25,55 +25,70 @@
 
 #import <Cocoa/Cocoa.h>
 
-// Import EZAudio header
-#import "EZAudio.h"
+//
+// First import the EZAudio header
+//
+#include <EZAudio/EZAudio.h>
 
-/**
- We will allow this view controller to act as an EZMicrophoneDelegate. This is how we listen for the microphone callback.
- */
-@interface CoreGraphicsWaveformViewController : NSViewController <EZMicrophoneDelegate>
+//------------------------------------------------------------------------------
+#pragma mark - AppDelegate
+//------------------------------------------------------------------------------
+
+@interface AppDelegate : NSObject <EZMicrophoneDelegate, NSApplicationDelegate>
+
+//------------------------------------------------------------------------------
+#pragma mark - Properties
+//------------------------------------------------------------------------------
+
+@property (assign) IBOutlet NSWindow *window;
 
 //------------------------------------------------------------------------------
 #pragma mark - Components
 //------------------------------------------------------------------------------
 
-/**
- The CoreGraphics based audio plot
- */
+//
+// The CoreGraphics based audio plot
+//
 @property (nonatomic, weak) IBOutlet EZAudioPlot *audioPlot;
 
-/**
- The microphone component
- */
+//
+// The microphone
+//
 @property (nonatomic, strong) EZMicrophone *microphone;
 
-/**
- The microphone pop up button (contains the menu for choosing a microphone input)
- */
+//
+// The microphone pop up button (contains the menu for choosing a microphone
+// input)
+//
 @property (nonatomic, weak) IBOutlet NSPopUpButton *microphoneInputPopUpButton;
 
-/**
- The microphone input channel pop up button (contains the menu for choosing a microphone input channel)
- */
+//
+// The microphone input channel pop up button (contains the menu for choosing a
+// microphone input channel)
+//
 @property (nonatomic, weak) IBOutlet NSPopUpButton *microphoneInputChannelPopUpButton;
 
-/**
- The checkbox button used to turn the microphone off/on
- */
+//
+// The checkbox button used to turn the microphone off/on
+//
 @property (nonatomic, weak) IBOutlet NSButton *microphoneSwitch;
 
 //------------------------------------------------------------------------------
 #pragma mark - Actions
 //------------------------------------------------------------------------------
 
-/**
- Switches the plot drawing type between a buffer plot (visualizes the current stream of audio data from the update function) or a rolling plot (visualizes the audio data over time, this is the classic waveform look)
- */
+//
+// Switches the plot drawing type between a buffer plot (visualizes the current
+// stream of audio data from the update function) or a rolling plot (visualizes
+// the audio data over time, this is the classic waveform look)
+//
 -(IBAction)changePlotType:(id)sender;
 
-/**
- Toggles the microphone on and off. When the microphone is on it will send its delegate (aka this view controller) the audio data in various ways (check out the EZMicrophoneDelegate documentation for more details);
- */
+//
+// Toggles the microphone on and off. When the microphone is on it will send its
+// delegate (aka this view controller) the audio data in various ways (check out
+// the EZMicrophoneDelegate documentation for more details)
+//
 -(IBAction)toggleMicrophone:(id)sender;
 
 @end
