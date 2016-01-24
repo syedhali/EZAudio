@@ -1,8 +1,9 @@
 //
-//  FFTViewController.m
-//  EZAudioFFTExample
+//  AppDelegate.m
+//  FFT
 //
-//  Created by Syed Haris Ali on 12/30/13.
+//  Created by Syed Haris Ali on 12/1/13.
+//  Updated by Syed Haris Ali on 1/23/16.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,14 +24,19 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "FFTViewController.h"
+#import "AppDelegate.h"
+
+//------------------------------------------------------------------------------
+#pragma mark - Constants
+//------------------------------------------------------------------------------
 
 static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
 
-@interface FFTViewController ()
-@end
+//------------------------------------------------------------------------------
+#pragma mark - AppDelegate (Implementation)
+//------------------------------------------------------------------------------
 
-@implementation FFTViewController
+@implementation AppDelegate
 
 //------------------------------------------------------------------------------
 #pragma mark - Customize the Audio Plot
@@ -49,7 +55,7 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     self.audioPlotFreq.shouldFill = YES;
     self.audioPlotFreq.plotType = EZPlotTypeBuffer;
     self.audioPlotFreq.shouldCenterYAxis = NO;
-  
+    
     //
     // Create an instance of the microphone and tell it to use this view controller instance as the delegate
     //

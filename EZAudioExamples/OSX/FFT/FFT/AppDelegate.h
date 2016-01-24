@@ -1,8 +1,9 @@
 //
-//  FFTViewController.h
-//  EZAudioFFTExample
+//  AppDelegate.h
+//  FFT
 //
-//  Created by Syed Haris Ali on 12/30/13.
+//  Created by Syed Haris Ali on 12/1/13.
+//  Updated by Syed Haris Ali on 1/23/16.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,40 +26,48 @@
 
 #import <Cocoa/Cocoa.h>
 
-/**
- EZAudio
- */
-#import "EZAudio.h"
+//
+// First import the EZAudio header
+//
+#include <EZAudio/EZAudio.h>
 
-/**
- The FFTViewController demonstrates how to use the Accelerate framework to calculate the real-time FFT of audio data provided by an EZAudioMicrophone.
- */
-@interface FFTViewController : NSViewController <EZMicrophoneDelegate, EZAudioFFTDelegate>
+//------------------------------------------------------------------------------
+#pragma mark - AppDelegate
+//------------------------------------------------------------------------------
 
-#pragma mark - Components
-/**
- EZAudioPlot for frequency plot
- */
+@interface AppDelegate : NSObject <EZMicrophoneDelegate, EZAudioFFTDelegate, NSApplicationDelegate>
+
+//------------------------------------------------------------------------------
+#pragma mark - Properties
+//------------------------------------------------------------------------------
+
+@property (weak) IBOutlet NSWindow *window;
+
+//
+// EZAudioPlot for frequency plot
+//
 @property (nonatomic, weak) IBOutlet EZAudioPlot *audioPlotFreq;
 
-/**
- EZAudioPlot for time plot
- */
+//
+// EZAudioPlot for time plot
+//
 @property (nonatomic, weak) IBOutlet EZAudioPlot *audioPlotTime;
 
-/**
- A label used to display the maximum frequency (i.e. the frequency with the highest energy) calculated from the FFT.
- */
+//
+// A label used to display the maximum frequency (i.e. the frequency with
+// the highest energy) calculated from the FFT.
+//
 @property (nonatomic, weak) IBOutlet NSTextField *maxFrequencyLabel;
 
-/**
- The microphone used to get input.
- */
+//
+// The microphone used to get input.
+//
 @property (nonatomic, strong) EZMicrophone *microphone;
 
-/**
- Used to calculate a rolling FFT of the incoming audio data.
- */
+//
+// Used to calculate a rolling FFT of the incoming audio data.
+//
 @property (nonatomic, strong) EZAudioFFTRolling *fft;
 
 @end
+
