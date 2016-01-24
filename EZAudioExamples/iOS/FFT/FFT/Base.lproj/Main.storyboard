@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Weo-wK-GIV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="DbL-8D-S45">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
-        <scene sceneID="JgX-xL-1L8">
+        <scene sceneID="Sw2-F1-aLn">
             <objects>
-                <viewController id="Weo-wK-GIV" customClass="FFTViewController" sceneMemberID="viewController">
+                <viewController id="DbL-8D-S45" customClass="ViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Gb6-mY-qlI"/>
-                        <viewControllerLayoutGuide type="bottom" id="YgU-XB-3Wp"/>
+                        <viewControllerLayoutGuide type="top" id="7Wg-WK-eWr"/>
+                        <viewControllerLayoutGuide type="bottom" id="Vea-Mg-aEM"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="qdz-w1-Fnd" customClass="EZAudioPlot">
+                    <view key="view" contentMode="scaleToFill" id="xgX-Wf-0FU" customClass="EZAudioPlot">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2rO-IY-dvl" customClass="EZAudioPlot">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5IB-r8-siZ" customClass="EZAudioPlot">
                                 <rect key="frame" x="18" y="18" width="564" height="64"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="64" id="V1K-Jj-DhO"/>
+                                    <constraint firstAttribute="height" constant="64" id="vqq-R9-K8s"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
@@ -32,7 +32,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jcb-nb-Ibd">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SR2-to-91D">
                                 <rect key="frame" x="18" y="100" width="0.0" height="0.0"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="18"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -41,11 +41,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="2rO-IY-dvl" firstAttribute="leading" secondItem="qdz-w1-Fnd" secondAttribute="leading" constant="18" id="8Ww-vp-FX4"/>
-                            <constraint firstAttribute="trailing" secondItem="2rO-IY-dvl" secondAttribute="trailing" constant="18" id="AJT-fs-rh8"/>
-                            <constraint firstItem="Jcb-nb-Ibd" firstAttribute="top" secondItem="2rO-IY-dvl" secondAttribute="bottom" constant="18" id="LrN-Wx-JIp"/>
-                            <constraint firstItem="Jcb-nb-Ibd" firstAttribute="leading" secondItem="2rO-IY-dvl" secondAttribute="leading" id="QHW-YQ-Jh0"/>
-                            <constraint firstItem="2rO-IY-dvl" firstAttribute="top" secondItem="qdz-w1-Fnd" secondAttribute="top" constant="18" id="Thl-Cl-cSH"/>
+                            <constraint firstItem="SR2-to-91D" firstAttribute="top" secondItem="5IB-r8-siZ" secondAttribute="bottom" constant="18" id="6Bn-YP-UIt"/>
+                            <constraint firstItem="SR2-to-91D" firstAttribute="leading" secondItem="5IB-r8-siZ" secondAttribute="leading" id="6hX-AB-2Ac"/>
+                            <constraint firstItem="5IB-r8-siZ" firstAttribute="top" secondItem="xgX-Wf-0FU" secondAttribute="top" constant="18" id="Yui-c4-P4p"/>
+                            <constraint firstAttribute="trailing" secondItem="5IB-r8-siZ" secondAttribute="trailing" constant="18" id="YvS-Rk-tXF"/>
+                            <constraint firstItem="5IB-r8-siZ" firstAttribute="leading" secondItem="xgX-Wf-0FU" secondAttribute="leading" constant="18" id="lNc-2M-8uf"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
@@ -57,12 +57,12 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                     <connections>
-                        <outlet property="audioPlotFreq" destination="qdz-w1-Fnd" id="TKq-sR-dWl"/>
-                        <outlet property="audioPlotTime" destination="2rO-IY-dvl" id="14G-ei-FpB"/>
-                        <outlet property="maxFrequencyLabel" destination="Jcb-nb-Ibd" id="F5A-UP-Fik"/>
+                        <outlet property="audioPlotFreq" destination="xgX-Wf-0FU" id="dFW-E2-30o"/>
+                        <outlet property="audioPlotTime" destination="5IB-r8-siZ" id="GIX-Ou-bz3"/>
+                        <outlet property="maxFrequencyLabel" destination="SR2-to-91D" id="27E-ab-sDI"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="xe6-rr-s1W" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tyD-VZ-2C9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="537" y="40"/>
         </scene>

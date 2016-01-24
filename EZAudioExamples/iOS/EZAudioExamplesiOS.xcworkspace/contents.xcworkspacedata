@@ -2,24 +2,24 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:EZAudioCoreGraphicsWaveformExample/EZAudioCoreGraphicsWaveformExample.xcodeproj">
+      location = "group:CoreGraphicsWaveform/CoreGraphicsWaveform.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:EZAudioOpenGLWaveformExample/EZAudioOpenGLWaveformExample.xcodeproj">
+      location = "group:OpenGLWaveform/OpenGLWaveform.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:EZAudioPlayFileExample/EZAudioPlayFileExample.xcodeproj">
+      location = "group:PlayFile/PlayFile.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:EZAudioRecordExample/EZAudioRecordExample.xcodeproj">
+      location = "group:RecordFile/RecordFile.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:EZAudioWaveformFromFileExample/EZAudioWaveformFromFileExample.xcodeproj">
+      location = "group:WaveformFromFile/WaveformFromFile.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:EZAudioCoreGraphicsWaveformExample/../EZAudioPassThroughExample/EZAudioPassThroughExample.xcodeproj">
+      location = "group:PassThrough/PassThrough.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:EZAudioFFTExample/EZAudioFFTExample.xcodeproj">
+      location = "group:FFT/FFT.xcodeproj">
    </FileRef>
 </Workspace>
