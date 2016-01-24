@@ -14,7 +14,25 @@
 		6660629A1C5427F500FB99FA /* EZAudioOSX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 666062991C5427F500FB99FA /* EZAudioOSX.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		66374DCD1C545312000B19D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66374DC81C545312000B19D0 /* EZAudio.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 469F4CF31B749F7800666A46;
+			remoteInfo = EZAudioiOS;
+		};
+		66374DCF1C545312000B19D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66374DC81C545312000B19D0 /* EZAudio.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8A5A4B9C1BBBDCB200A8A048;
+			remoteInfo = EZAudioOSX;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		66374DC81C545312000B19D0 /* EZAudio.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = EZAudio.xcodeproj; path = ../../../EZAudio.xcodeproj; sourceTree = "<group>"; };
 		666062791C5427CC00FB99FA /* OpenGLWaveform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenGLWaveform.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6660627C1C5427CC00FB99FA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6660627D1C5427CC00FB99FA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -45,9 +63,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		66374DC91C545312000B19D0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				66374DCE1C545312000B19D0 /* EZAudioiOS.framework */,
+				66374DD01C545312000B19D0 /* EZAudioOSX.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		666062701C5427CC00FB99FA = {
 			isa = PBXGroup;
 			children = (
+				66374DC81C545312000B19D0 /* EZAudio.xcodeproj */,
 				6660627B1C5427CC00FB99FA /* OpenGLWaveform */,
 				662B6C4D1C542C4400353D48 /* Frameworks */,
 				6660627A1C5427CC00FB99FA /* Products */,
@@ -128,12 +156,35 @@
 			mainGroup = 666062701C5427CC00FB99FA;
 			productRefGroup = 6660627A1C5427CC00FB99FA /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 66374DC91C545312000B19D0 /* Products */;
+					ProjectRef = 66374DC81C545312000B19D0 /* EZAudio.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				666062781C5427CC00FB99FA /* OpenGLWaveform */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		66374DCE1C545312000B19D0 /* EZAudioiOS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = EZAudioiOS.framework;
+			remoteRef = 66374DCD1C545312000B19D0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		66374DD01C545312000B19D0 /* EZAudioOSX.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = EZAudioOSX.framework;
+			remoteRef = 66374DCF1C545312000B19D0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		666062771C5427CC00FB99FA /* Resources */ = {

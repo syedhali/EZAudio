@@ -15,6 +15,23 @@
 		66374D581C543DF3000B19D0 /* EZAudioOSX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66374D571C543DF3000B19D0 /* EZAudioOSX.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		66374DD61C545314000B19D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66374DD11C545314000B19D0 /* EZAudio.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 469F4CF31B749F7800666A46;
+			remoteInfo = EZAudioiOS;
+		};
+		66374DD81C545314000B19D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66374DD11C545314000B19D0 /* EZAudio.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8A5A4B9C1BBBDCB200A8A048;
+			remoteInfo = EZAudioOSX;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		662B6CB51C542DF500353D48 /* PlayFile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlayFile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		662B6CB81C542DF500353D48 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -25,6 +42,7 @@
 		662B6CC31C542DF500353D48 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66374D511C542F5E000B19D0 /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "simple-drum-beat.wav"; path = "/Users/haris/Documents/code/openSource/EZAudio/EZAudioExamples/OSX/EZAudioPlayFileExample/EZAudioPlayFileExample/../../../simple-drum-beat.wav"; sourceTree = "<absolute>"; };
 		66374D571C543DF3000B19D0 /* EZAudioOSX.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EZAudioOSX.framework; path = ../../../build/Debug/EZAudioOSX.framework; sourceTree = "<group>"; };
+		66374DD11C545314000B19D0 /* EZAudio.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = EZAudio.xcodeproj; path = ../../../EZAudio.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +60,7 @@
 		662B6CAC1C542DF500353D48 = {
 			isa = PBXGroup;
 			children = (
+				66374DD11C545314000B19D0 /* EZAudio.xcodeproj */,
 				662B6CB71C542DF500353D48 /* PlayFile */,
 				66374D4E1C542E6D000B19D0 /* Frameworks */,
 				662B6CB61C542DF500353D48 /* Products */,
@@ -84,6 +103,15 @@
 				66374D571C543DF3000B19D0 /* EZAudioOSX.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		66374DD21C545314000B19D0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				66374DD71C545314000B19D0 /* EZAudioiOS.framework */,
+				66374DD91C545314000B19D0 /* EZAudioOSX.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -131,12 +159,35 @@
 			mainGroup = 662B6CAC1C542DF500353D48;
 			productRefGroup = 662B6CB61C542DF500353D48 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 66374DD21C545314000B19D0 /* Products */;
+					ProjectRef = 66374DD11C545314000B19D0 /* EZAudio.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				662B6CB41C542DF500353D48 /* PlayFile */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		66374DD71C545314000B19D0 /* EZAudioiOS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = EZAudioiOS.framework;
+			remoteRef = 66374DD61C545314000B19D0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		66374DD91C545314000B19D0 /* EZAudioOSX.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = EZAudioOSX.framework;
+			remoteRef = 66374DD81C545314000B19D0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		662B6CB31C542DF500353D48 /* Resources */ = {
