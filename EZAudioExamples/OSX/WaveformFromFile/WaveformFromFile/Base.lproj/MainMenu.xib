@@ -17,7 +17,6 @@
             <connections>
                 <outlet property="audioPlot" destination="wWu-i2-gfx" id="4qa-dp-6Na"/>
                 <outlet property="filePathLabel" destination="xUE-kw-cPJ" id="hSG-ND-bQK"/>
-                <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
