@@ -43,7 +43,7 @@
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSOpenSavePanelDelegate>
 
 //------------------------------------------------------------------------------
-#pragma mark - Components
+#pragma mark - Properties
 //------------------------------------------------------------------------------
 
 //

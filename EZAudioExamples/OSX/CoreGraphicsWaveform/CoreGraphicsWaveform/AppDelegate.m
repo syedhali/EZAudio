@@ -193,6 +193,7 @@
 // blocked. When we feed audio data into any of the UI components we need to
 // explicity create a GCD block on the main thread to properly get the UI to
 // work.
+//
 - (void)   microphone:(EZMicrophone *)microphone
      hasAudioReceived:(float **)buffer
        withBufferSize:(UInt32)bufferSize

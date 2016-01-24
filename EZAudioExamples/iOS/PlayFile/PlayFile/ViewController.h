@@ -44,7 +44,7 @@
 @interface ViewController : UIViewController <EZAudioPlayerDelegate>
 
 //------------------------------------------------------------------------------
-#pragma mark - Components
+#pragma mark - Properties
 //------------------------------------------------------------------------------
 
 //
