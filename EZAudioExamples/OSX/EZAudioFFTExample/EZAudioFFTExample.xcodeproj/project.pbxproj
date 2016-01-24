@@ -25,18 +25,7 @@
 		9417A9D71872130200D9D37B /* FFTViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9417A9D51872130200D9D37B /* FFTViewController.xib */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		666062971C5427D300FB99FA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 666062931C5427D300FB99FA /* OpenGLWaveform.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 666062791C5427CC00FB99FA;
-			remoteInfo = OpenGLWaveform;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		666062931C5427D300FB99FA /* OpenGLWaveform.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OpenGLWaveform.xcodeproj; path = ../OpenGLWaveform/OpenGLWaveform.xcodeproj; sourceTree = "<group>"; };
 		9417A8F31871492000D9D37B /* EZAudioFFTExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EZAudioFFTExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9417A8F61871492000D9D37B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		9417A8F91871492000D9D37B /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -83,18 +72,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		666062941C5427D300FB99FA /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				666062981C5427D300FB99FA /* OpenGLWaveform.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		9417A8EA1871492000D9D37B = {
 			isa = PBXGroup;
 			children = (
-				666062931C5427D300FB99FA /* OpenGLWaveform.xcodeproj */,
 				9417A8FC1871492000D9D37B /* EZAudioFFTExample */,
 				9417A8F51871492000D9D37B /* Frameworks */,
 				9417A8F41871492000D9D37B /* Products */,
@@ -203,28 +183,12 @@
 			mainGroup = 9417A8EA1871492000D9D37B;
 			productRefGroup = 9417A8F41871492000D9D37B /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 666062941C5427D300FB99FA /* Products */;
-					ProjectRef = 666062931C5427D300FB99FA /* OpenGLWaveform.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				9417A8F21871492000D9D37B /* EZAudioFFTExample */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		666062981C5427D300FB99FA /* OpenGLWaveform.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = OpenGLWaveform.app;
-			remoteRef = 666062971C5427D300FB99FA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		9417A8F11871492000D9D37B /* Resources */ = {
