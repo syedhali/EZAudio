@@ -59,13 +59,20 @@
     //
     // Customizing the audio plot's look
     //
+    
+    //
     // Background color
+    //
     self.audioPlot.backgroundColor = [UIColor colorWithRed:0.984 green:0.471 blue:0.525 alpha:1.0];
 
+    //
     // Waveform color
+    //
     self.audioPlot.color = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
 
+    //
     // Plot type
+    //
     self.audioPlot.plotType = EZPlotTypeBuffer;
 
     //
@@ -204,7 +211,8 @@
 //------------------------------------------------------------------------------
 
 //
-// Give the visualization of the current buffer (this is almost exactly the openFrameworks audio input eample)
+// Give the visualization of the current buffer (this is almost exactly the
+// openFrameworks audio input eample)
 //
 - (void)drawBufferPlot
 {
