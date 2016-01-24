@@ -71,15 +71,6 @@
     {
         NSLog(@"Error setting up audio session active: %@", error.localizedDescription);
     }
-    
-    //
-    // Override the output to the speaker
-    //
-    [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
-    if (error)
-    {
-        NSLog(@"Error overriding output to the speaker: %@", error.localizedDescription);
-    }
 
     //
     // Customizing the audio plot that'll show the current microphone input/recording
@@ -103,6 +94,16 @@
     self.microphone = [EZMicrophone microphoneWithDelegate:self];
     self.player = [EZAudioPlayer audioPlayerWithDelegate:self];
 
+    //
+    // Override the output to the speaker. Do this after creating the EZAudioPlayer
+    // to make sure the EZAudioDevice does not reset this.
+    //
+    [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
+    if (error)
+    {
+        NSLog(@"Error overriding output to the speaker: %@", error.localizedDescription);
+    }
+    
     //
     // Initialize UI components
     //
