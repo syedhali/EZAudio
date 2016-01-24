@@ -23,6 +23,6 @@
       location = "group:FFT/FFT.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:EZAudioPassThroughExample/EZAudioPassThroughExample.xcodeproj">
+      location = "group:PassThrough/PassThrough.xcodeproj">
    </FileRef>
 </Workspace>
