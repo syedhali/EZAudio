@@ -31,6 +31,20 @@
 @class EZAudioPlayer;
 
 //------------------------------------------------------------------------------
+#pragma mark - Data Structures
+//------------------------------------------------------------------------------
+
+typedef NS_ENUM(NSUInteger, EZAudioPlayerState)
+{
+    EZAudioPlayerStateEndOfFile,
+    EZAudioPlayerStatePaused,
+    EZAudioPlayerStatePlaying,
+    EZAudioPlayerStateReadyToPlay,
+    EZAudioPlayerStateSeeking,
+    EZAudioPlayerStateUnknown,
+};
+
+//------------------------------------------------------------------------------
 #pragma mark - Notifications
 //------------------------------------------------------------------------------
 
@@ -150,6 +164,13 @@ reachedEndOfAudioFile:(EZAudioFile *)audioFile;
  A BOOL indicating whether the player should loop the file
  */
 @property (nonatomic, assign) BOOL shouldLoop;
+
+//------------------------------------------------------------------------------
+
+/**
+ An EZAudioPlayerState value representing the current internal playback and file state of the EZAudioPlayer instance.
+ */
+@property (nonatomic, assign, readonly) EZAudioPlayerState state;
 
 //------------------------------------------------------------------------------
 #pragma mark - Initializers

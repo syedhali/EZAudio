@@ -1,0 +1,358 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		66374D6A1C54456C000B19D0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 66374D691C54456C000B19D0 /* AppDelegate.m */; };
+		66374D6D1C54456C000B19D0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66374D6C1C54456C000B19D0 /* main.m */; };
+		66374D6F1C54456C000B19D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66374D6E1C54456C000B19D0 /* Assets.xcassets */; };
+		66374D721C54456C000B19D0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66374D701C54456C000B19D0 /* MainMenu.xib */; };
+		66374D7B1C544584000B19D0 /* simple-drum-beat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 66374D7A1C544584000B19D0 /* simple-drum-beat.wav */; };
+		66374D7D1C54472A000B19D0 /* EZAudioOSX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66374D7C1C54472A000B19D0 /* EZAudioOSX.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		66374DFA1C545328000B19D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66374DF51C545328000B19D0 /* EZAudio.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 469F4CF31B749F7800666A46;
+			remoteInfo = EZAudioiOS;
+		};
+		66374DFC1C545328000B19D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66374DF51C545328000B19D0 /* EZAudio.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8A5A4B9C1BBBDCB200A8A048;
+			remoteInfo = EZAudioOSX;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		66374D651C54456C000B19D0 /* WaveformFromFile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WaveformFromFile.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		66374D681C54456C000B19D0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		66374D691C54456C000B19D0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		66374D6C1C54456C000B19D0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		66374D6E1C54456C000B19D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		66374D711C54456C000B19D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		66374D731C54456C000B19D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66374D7A1C544584000B19D0 /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "simple-drum-beat.wav"; path = "/Users/haris/Documents/code/openSource/EZAudio/EZAudioExamples/OSX/EZAudioWaveformFromFileExample/EZAudioWaveformFromFileExample/../../../simple-drum-beat.wav"; sourceTree = "<absolute>"; };
+		66374D7C1C54472A000B19D0 /* EZAudioOSX.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EZAudioOSX.framework; path = ../../../build/Debug/EZAudioOSX.framework; sourceTree = "<group>"; };
+		66374DF51C545328000B19D0 /* EZAudio.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = EZAudio.xcodeproj; path = ../../../EZAudio.xcodeproj; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		66374D621C54456C000B19D0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66374D7D1C54472A000B19D0 /* EZAudioOSX.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		66374D5C1C54456C000B19D0 = {
+			isa = PBXGroup;
+			children = (
+				66374DF51C545328000B19D0 /* EZAudio.xcodeproj */,
+				66374D671C54456C000B19D0 /* WaveformFromFile */,
+				66374D791C544577000B19D0 /* Frameworks */,
+				66374D661C54456C000B19D0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		66374D661C54456C000B19D0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				66374D651C54456C000B19D0 /* WaveformFromFile.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		66374D671C54456C000B19D0 /* WaveformFromFile */ = {
+			isa = PBXGroup;
+			children = (
+				66374D7A1C544584000B19D0 /* simple-drum-beat.wav */,
+				66374D681C54456C000B19D0 /* AppDelegate.h */,
+				66374D691C54456C000B19D0 /* AppDelegate.m */,
+				66374D6E1C54456C000B19D0 /* Assets.xcassets */,
+				66374D701C54456C000B19D0 /* MainMenu.xib */,
+				66374D731C54456C000B19D0 /* Info.plist */,
+				66374D6B1C54456C000B19D0 /* Supporting Files */,
+			);
+			path = WaveformFromFile;
+			sourceTree = "<group>";
+		};
+		66374D6B1C54456C000B19D0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				66374D6C1C54456C000B19D0 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		66374D791C544577000B19D0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				66374D7C1C54472A000B19D0 /* EZAudioOSX.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		66374DF61C545328000B19D0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				66374DFB1C545328000B19D0 /* EZAudioiOS.framework */,
+				66374DFD1C545328000B19D0 /* EZAudioOSX.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		66374D641C54456C000B19D0 /* WaveformFromFile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66374D761C54456C000B19D0 /* Build configuration list for PBXNativeTarget "WaveformFromFile" */;
+			buildPhases = (
+				66374D611C54456C000B19D0 /* Sources */,
+				66374D621C54456C000B19D0 /* Frameworks */,
+				66374D631C54456C000B19D0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WaveformFromFile;
+			productName = WaveformFromFile;
+			productReference = 66374D651C54456C000B19D0 /* WaveformFromFile.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		66374D5D1C54456C000B19D0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = "Syed Haris Ali";
+				TargetAttributes = {
+					66374D641C54456C000B19D0 = {
+						CreatedOnToolsVersion = 7.2;
+					};
+				};
+			};
+			buildConfigurationList = 66374D601C54456C000B19D0 /* Build configuration list for PBXProject "WaveformFromFile" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 66374D5C1C54456C000B19D0;
+			productRefGroup = 66374D661C54456C000B19D0 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 66374DF61C545328000B19D0 /* Products */;
+					ProjectRef = 66374DF51C545328000B19D0 /* EZAudio.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				66374D641C54456C000B19D0 /* WaveformFromFile */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		66374DFB1C545328000B19D0 /* EZAudioiOS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = EZAudioiOS.framework;
+			remoteRef = 66374DFA1C545328000B19D0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		66374DFD1C545328000B19D0 /* EZAudioOSX.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = EZAudioOSX.framework;
+			remoteRef = 66374DFC1C545328000B19D0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		66374D631C54456C000B19D0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66374D6F1C54456C000B19D0 /* Assets.xcassets in Resources */,
+				66374D721C54456C000B19D0 /* MainMenu.xib in Resources */,
+				66374D7B1C544584000B19D0 /* simple-drum-beat.wav in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		66374D611C54456C000B19D0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66374D6D1C54456C000B19D0 /* main.m in Sources */,
+				66374D6A1C54456C000B19D0 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		66374D701C54456C000B19D0 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				66374D711C54456C000B19D0 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		66374D741C54456C000B19D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../..\"";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		66374D751C54456C000B19D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../..\"";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		66374D771C54456C000B19D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WaveformFromFile/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sha.WaveformFromFile;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		66374D781C54456C000B19D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WaveformFromFile/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sha.WaveformFromFile;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		66374D601C54456C000B19D0 /* Build configuration list for PBXProject "WaveformFromFile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66374D741C54456C000B19D0 /* Debug */,
+				66374D751C54456C000B19D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		66374D761C54456C000B19D0 /* Build configuration list for PBXNativeTarget "WaveformFromFile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66374D771C54456C000B19D0 /* Debug */,
+				66374D781C54456C000B19D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 66374D5D1C54456C000B19D0 /* Project object */;
+}

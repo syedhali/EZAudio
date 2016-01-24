@@ -1,0 +1,397 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		66374E851C545AD8000B19D0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66374E841C545AD8000B19D0 /* main.m */; };
+		66374E881C545AD8000B19D0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 66374E871C545AD8000B19D0 /* AppDelegate.m */; };
+		66374E8B1C545AD8000B19D0 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66374E8A1C545AD8000B19D0 /* ViewController.m */; };
+		66374E8E1C545AD8000B19D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66374E8C1C545AD8000B19D0 /* Main.storyboard */; };
+		66374E901C545AD8000B19D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66374E8F1C545AD8000B19D0 /* Assets.xcassets */; };
+		66374E931C545AD8000B19D0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66374E911C545AD8000B19D0 /* LaunchScreen.storyboard */; };
+		66374F7F1C547A65000B19D0 /* EZAudioiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66374F241C545B52000B19D0 /* EZAudioiOS.framework */; };
+		66374F801C547A65000B19D0 /* EZAudioiOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 66374F241C545B52000B19D0 /* EZAudioiOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		66374F231C545B52000B19D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66374F1E1C545B52000B19D0 /* EZAudio.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 469F4CF31B749F7800666A46;
+			remoteInfo = EZAudioiOS;
+		};
+		66374F251C545B52000B19D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66374F1E1C545B52000B19D0 /* EZAudio.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8A5A4B9C1BBBDCB200A8A048;
+			remoteInfo = EZAudioOSX;
+		};
+		66374F811C547A65000B19D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66374F1E1C545B52000B19D0 /* EZAudio.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 469F4CF21B749F7800666A46;
+			remoteInfo = EZAudioiOS;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		66374F831C547A65000B19D0 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				66374F801C547A65000B19D0 /* EZAudioiOS.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		66374E801C545AD8000B19D0 /* RecordFile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RecordFile.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		66374E841C545AD8000B19D0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		66374E861C545AD8000B19D0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		66374E871C545AD8000B19D0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		66374E891C545AD8000B19D0 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		66374E8A1C545AD8000B19D0 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		66374E8D1C545AD8000B19D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		66374E8F1C545AD8000B19D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		66374E921C545AD8000B19D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		66374E941C545AD8000B19D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66374F1E1C545B52000B19D0 /* EZAudio.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = EZAudio.xcodeproj; path = ../../../EZAudio.xcodeproj; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		66374E7D1C545AD8000B19D0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66374F7F1C547A65000B19D0 /* EZAudioiOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		66374E771C545AD8000B19D0 = {
+			isa = PBXGroup;
+			children = (
+				66374F1E1C545B52000B19D0 /* EZAudio.xcodeproj */,
+				66374E821C545AD8000B19D0 /* RecordFile */,
+				66374E811C545AD8000B19D0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		66374E811C545AD8000B19D0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				66374E801C545AD8000B19D0 /* RecordFile.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		66374E821C545AD8000B19D0 /* RecordFile */ = {
+			isa = PBXGroup;
+			children = (
+				66374E861C545AD8000B19D0 /* AppDelegate.h */,
+				66374E871C545AD8000B19D0 /* AppDelegate.m */,
+				66374E891C545AD8000B19D0 /* ViewController.h */,
+				66374E8A1C545AD8000B19D0 /* ViewController.m */,
+				66374E8C1C545AD8000B19D0 /* Main.storyboard */,
+				66374E8F1C545AD8000B19D0 /* Assets.xcassets */,
+				66374E911C545AD8000B19D0 /* LaunchScreen.storyboard */,
+				66374E941C545AD8000B19D0 /* Info.plist */,
+				66374E831C545AD8000B19D0 /* Supporting Files */,
+			);
+			path = RecordFile;
+			sourceTree = "<group>";
+		};
+		66374E831C545AD8000B19D0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				66374E841C545AD8000B19D0 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		66374F1F1C545B52000B19D0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				66374F241C545B52000B19D0 /* EZAudioiOS.framework */,
+				66374F261C545B52000B19D0 /* EZAudioOSX.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		66374E7F1C545AD8000B19D0 /* RecordFile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66374E971C545AD8000B19D0 /* Build configuration list for PBXNativeTarget "RecordFile" */;
+			buildPhases = (
+				66374E7C1C545AD8000B19D0 /* Sources */,
+				66374E7D1C545AD8000B19D0 /* Frameworks */,
+				66374E7E1C545AD8000B19D0 /* Resources */,
+				66374F831C547A65000B19D0 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				66374F821C547A65000B19D0 /* PBXTargetDependency */,
+			);
+			name = RecordFile;
+			productName = RecordFile;
+			productReference = 66374E801C545AD8000B19D0 /* RecordFile.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		66374E781C545AD8000B19D0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = "Syed Haris Ali";
+				TargetAttributes = {
+					66374E7F1C545AD8000B19D0 = {
+						CreatedOnToolsVersion = 7.2;
+					};
+				};
+			};
+			buildConfigurationList = 66374E7B1C545AD8000B19D0 /* Build configuration list for PBXProject "RecordFile" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 66374E771C545AD8000B19D0;
+			productRefGroup = 66374E811C545AD8000B19D0 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 66374F1F1C545B52000B19D0 /* Products */;
+					ProjectRef = 66374F1E1C545B52000B19D0 /* EZAudio.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				66374E7F1C545AD8000B19D0 /* RecordFile */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		66374F241C545B52000B19D0 /* EZAudioiOS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = EZAudioiOS.framework;
+			remoteRef = 66374F231C545B52000B19D0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		66374F261C545B52000B19D0 /* EZAudioOSX.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = EZAudioOSX.framework;
+			remoteRef = 66374F251C545B52000B19D0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		66374E7E1C545AD8000B19D0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66374E931C545AD8000B19D0 /* LaunchScreen.storyboard in Resources */,
+				66374E901C545AD8000B19D0 /* Assets.xcassets in Resources */,
+				66374E8E1C545AD8000B19D0 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		66374E7C1C545AD8000B19D0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66374E8B1C545AD8000B19D0 /* ViewController.m in Sources */,
+				66374E881C545AD8000B19D0 /* AppDelegate.m in Sources */,
+				66374E851C545AD8000B19D0 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		66374F821C547A65000B19D0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = EZAudioiOS;
+			targetProxy = 66374F811C547A65000B19D0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		66374E8C1C545AD8000B19D0 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				66374E8D1C545AD8000B19D0 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		66374E911C545AD8000B19D0 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				66374E921C545AD8000B19D0 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		66374E951C545AD8000B19D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../..\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		66374E961C545AD8000B19D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../..\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		66374E981C545AD8000B19D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = RecordFile/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sha.RecordFile;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		66374E991C545AD8000B19D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = RecordFile/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sha.RecordFile;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		66374E7B1C545AD8000B19D0 /* Build configuration list for PBXProject "RecordFile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66374E951C545AD8000B19D0 /* Debug */,
+				66374E961C545AD8000B19D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		66374E971C545AD8000B19D0 /* Build configuration list for PBXNativeTarget "RecordFile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66374E981C545AD8000B19D0 /* Debug */,
+				66374E991C545AD8000B19D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 66374E781C545AD8000B19D0 /* Project object */;
+}
