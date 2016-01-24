@@ -102,7 +102,7 @@ Shows how to use the `EZMicrophone`, `EZOutput`, and the `EZAudioPlotGL` to pass
 Shows how to calculate the real-time FFT of the audio data coming from the `EZMicrophone` and the Accelerate framework. The audio data is plotted using two `EZAudioPlots` for the time and frequency displays.
 
 ### Documentation
-The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/1.1.3/
+The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/1.1.4/
 <br>You can also generate the docset yourself using appledocs by running the appledocs on the EZAudio source folder.
 
 ##<a name="GettingStarted">Getting Started
@@ -135,14 +135,14 @@ To begin using `EZAudio` you must first make sure you have the proper build requ
 You can add EZAudio to your project in a few ways: <br><br>1.) The easiest way to use EZAudio is via <a href="http://cocoapods.org/", target="_blank">Cocoapods</a>. Simply add EZAudio to your <a href="http://guides.cocoapods.org/using/the-podfile.html", target="_blank">Podfile</a> like so:
 
 `
-pod 'EZAudio', '~> 1.1.3'
+pod 'EZAudio', '~> 1.1.4'
 `
 
 ####<a name="AmazingAudioEngineCocoapod">Using EZAudio & The Amazing Audio Engine
 If you're also using the Amazing Audio Engine then use the `EZAudio/Core` subspec like so:
 
 `
-pod 'EZAudio/Core', '~> 1.1.3'
+pod 'EZAudio/Core', '~> 1.1.4'
 `
 
 2.) EZAudio now supports Carthage (thanks Andrew and Tommaso!). You can refer to Carthage's installation for a how-to guide:
