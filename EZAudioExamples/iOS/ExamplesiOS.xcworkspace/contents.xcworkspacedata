@@ -17,9 +17,9 @@
       location = "group:WaveformFromFile/WaveformFromFile.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:PassThrough/PassThrough.xcodeproj">
+      location = "group:FFT/FFT.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:FFT/FFT.xcodeproj">
+      location = "group:PassThrough/PassThrough.xcodeproj">
    </FileRef>
 </Workspace>
