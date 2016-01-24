@@ -315,10 +315,10 @@ typedef struct
     //
     // Perform the write
     //
-    [EZAudioUtilities checkResult:ExtAudioFileWrite(self.info->extAudioFileRef,
+    [EZAudioUtilities checkResult:ExtAudioFileWriteAsync(self.info->extAudioFileRef,
                                                          bufferSize,
                                                          bufferList)
-               operation:"Failed to write audio data to recorded audio file"];
+                        operation:"Failed to write audio data to recorded audio file"];
     
     //
     // Notify delegate
