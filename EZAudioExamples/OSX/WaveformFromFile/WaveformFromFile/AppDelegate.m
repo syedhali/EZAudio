@@ -1,8 +1,9 @@
 //
-//  WaveformFromFileViewController.m
-//  EZAudioWaveformFromFileExample
+//  AppDelegate.m
+//  WaveformFromFile
 //
 //  Created by Syed Haris Ali on 12/1/13.
+//  Updated by Syed Haris Ali on 1/23/16.
 //  Copyright (c) 2013 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,40 +24,54 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "WaveformFromFileViewController.h"
+#import "AppDelegate.h"
 
-@implementation WaveformFromFileViewController
+@implementation AppDelegate
 
 //------------------------------------------------------------------------------
 #pragma mark - Customize the Audio Plot
 //------------------------------------------------------------------------------
 
--(void)awakeFromNib
+-(void)applicationDidFinishLaunching:(NSNotification *)notification
 {
     //
     // Customizing the audio plot's look
     //
     
+    //
     // Background color
+    //
     self.audioPlot.backgroundColor = [NSColor colorWithCalibratedRed: 0.169 green: 0.643 blue: 0.675 alpha: 1];
     
+    //
     // Waveform color
+    //
     self.audioPlot.color           = [NSColor colorWithCalibratedRed: 1.000 green: 1.000 blue: 1.000 alpha: 1];
     
+    //
     // Plot type
+    //
     self.audioPlot.plotType        = EZPlotTypeBuffer;
     
+    //
     // Fill
+    //
     self.audioPlot.shouldFill      = YES;
     
+    //
     // Mirror
+    //
     self.audioPlot.shouldMirror    = YES;
     
+    //
     // Don't optimze for real-time because we don't need to re-render
     // the view 60 frames per second
+    //
     self.audioPlot.shouldOptimizeForRealtimePlot = NO;
     
+    //
     // Customize the layer with a shadow for fun
+    //
     self.audioPlot.waveformLayer.shadowOffset = CGSizeMake(0.0, -1.0);
     self.audioPlot.waveformLayer.shadowRadius = 0.0;
     self.audioPlot.waveformLayer.shadowColor = [NSColor colorWithCalibratedRed: 0.069 green: 0.543 blue: 0.575 alpha: 1].CGColor;
@@ -78,7 +93,7 @@
     openDlg.canChooseFiles = YES;
     openDlg.canChooseDirectories = NO;
     openDlg.delegate = self;
-    if ([openDlg runModal] == NSOKButton)
+    if ([openDlg runModal] == NSModalResponseOK)
     {
         NSArray *selectedFiles = [openDlg URLs];
         [self openFileWithFilePathURL:selectedFiles.firstObject];
@@ -91,7 +106,7 @@
 {
     NSBitmapImageRep *imageRep = [self.audioPlot bitmapImageRepForCachingDisplayInRect:self.audioPlot.bounds];
     [self.audioPlot cacheDisplayInRect:self.audioPlot.bounds toBitmapImageRep:imageRep];
-    NSData *data = [imageRep representationUsingType:NSPNGFileType properties:nil];
+    NSData *data = [imageRep representationUsingType:NSPNGFileType properties:@{}];
     NSString *filePath = [NSString stringWithFormat:@"%@/Documents/waveform.png",NSHomeDirectory()];
     [data writeToFile:filePath atomically:NO];
 }
@@ -106,9 +121,8 @@
     // Load the audio file and customize the UI
     //
     self.audioFile                 = [EZAudioFile audioFileWithURL:filePathURL];
-    self.eof                       = NO;
     self.filePathLabel.stringValue = filePathURL.lastPathComponent;
-  
+    
     //
     // Change back to a buffer plot, but mirror and fill the waveform
     //
@@ -127,18 +141,21 @@
     [self.audioFile getWaveformDataWithNumberOfPoints:1024
                                            completion:^(float **waveformData,
                                                         int length)
-    {
-        [weakSelf.audioPlot updateBuffer:waveformData[0]
-                          withBufferSize:length];
-    }];
+     {
+         [weakSelf.audioPlot updateBuffer:waveformData[0]
+                           withBufferSize:length];
+     }];
 }
 
 //------------------------------------------------------------------------------
 #pragma mark - NSOpenSavePanelDelegate
 //------------------------------------------------------------------------------
-/**
- Here's an example how to filter the open panel to only show the supported file types by the EZAudioFile (which are just the audio file types supported by Core Audio).
- */
+
+//
+// Here's an example how to filter the open panel to only show the supported
+// file types by the EZAudioFile (which are just the audio file types supported
+// by Core Audio).
+//
 - (BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename
 {
     NSString *ext = [filename pathExtension];
@@ -146,7 +163,5 @@
     BOOL isDirectory = [ext isEqualToString:@""];
     return [fileTypes containsObject:ext] || isDirectory;
 }
-
-//------------------------------------------------------------------------------
 
 @end
