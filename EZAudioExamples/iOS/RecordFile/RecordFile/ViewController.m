@@ -52,6 +52,15 @@
     {
         NSLog(@"Error setting up audio session active: %@", error.localizedDescription);
     }
+    
+    //
+    // Override the output to the speaker
+    //
+    [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
+    if (error)
+    {
+        NSLog(@"Error overriding output to the speaker: %@", error.localizedDescription);
+    }
 
     //
     // Customizing the audio plot that'll show the current microphone input/recording
@@ -119,21 +128,27 @@
 
 - (void)playerDidChangePlayState:(NSNotification *)notification
 {
-    EZAudioPlayer *player = [notification object];
-    BOOL isPlaying = [player isPlaying];
-    if (isPlaying)
-    {
-        self.recorder.delegate = nil;
-    }
-    self.playingStateLabel.text = isPlaying ? @"Playing" : @"Not Playing";
-    self.playingAudioPlot.hidden = !isPlaying;
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        EZAudioPlayer *player = [notification object];
+        BOOL isPlaying = [player isPlaying];
+        if (isPlaying)
+        {
+            weakSelf.recorder.delegate = nil;
+        }
+        weakSelf.playingStateLabel.text = isPlaying ? @"Playing" : @"Not Playing";
+        weakSelf.playingAudioPlot.hidden = !isPlaying;
+    });
 }
 
 //------------------------------------------------------------------------------
 
 - (void)playerDidReachEndOfFile:(NSNotification *)notification
 {
-    [self.playingAudioPlot clear];
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.playingAudioPlot clear];
+    });
 }
 
 //------------------------------------------------------------------------------

@@ -70,7 +70,9 @@
     self.player = [EZAudioPlayer audioPlayerWithDelegate:self];
     self.player.shouldLoop = YES;
     
+    //
     // Override the output to the speaker
+    //
     [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
     if (error)
     {
