@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="6nb-ry-TmX">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="MIg-xS-PGW">
+            <objects>
+                <viewController id="6nb-ry-TmX" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="KOy-3J-Mzf"/>
+                        <viewControllerLayoutGuide type="bottom" id="6WX-P2-CAm"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="W9I-KB-2ZB">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K6J-lA-CUh" customClass="EZAudioPlot">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="K6J-lA-CUh" firstAttribute="top" secondItem="W9I-KB-2ZB" secondAttribute="top" id="A7z-WB-apy"/>
+                            <constraint firstAttribute="trailing" secondItem="K6J-lA-CUh" secondAttribute="trailing" id="JMN-xd-wUO"/>
+                            <constraint firstItem="6WX-P2-CAm" firstAttribute="top" secondItem="K6J-lA-CUh" secondAttribute="bottom" id="MB7-uG-21G"/>
+                            <constraint firstItem="K6J-lA-CUh" firstAttribute="leading" secondItem="W9I-KB-2ZB" secondAttribute="leading" id="QCP-GF-esd"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="audioPlot" destination="K6J-lA-CUh" id="jVL-Jl-Qp5"/>
+                        <outlet property="view" destination="W9I-KB-2ZB" id="ge3-LD-lnB"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sE1-hp-Spj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="235" y="405"/>
+        </scene>
+    </scenes>
+</document>

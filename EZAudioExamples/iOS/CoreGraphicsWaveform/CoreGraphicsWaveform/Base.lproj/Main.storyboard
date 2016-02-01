@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="VVE-1A-cqe">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="rfa-Yl-ZLy">
+            <objects>
+                <viewController id="VVE-1A-cqe" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="roL-rP-TbW"/>
+                        <viewControllerLayoutGuide type="bottom" id="Vyk-X1-klK"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="jGo-0u-sSj">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rzq-Yi-IN7" customClass="EZAudioPlot">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="LOY-0w-MaL">
+                                <rect key="frame" x="16" y="520" width="157" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="157" id="LbH-hf-3te"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="Buffer"/>
+                                    <segment title="Rolling"/>
+                                </segments>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="changePlotType:" destination="VVE-1A-cqe" eventType="valueChanged" id="s2D-Ub-Ghc"/>
+                                </connections>
+                            </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oDc-7s-ORm">
+                                <rect key="frame" x="16" y="556" width="568" height="28"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Change Microphone Input">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="toggleMicrophonePickerView:" destination="VVE-1A-cqe" eventType="touchUpInside" id="87u-5U-uoh"/>
+                                </connections>
+                            </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Qr-bd-WoG">
+                                <rect key="frame" x="16" y="479" width="51" height="31"/>
+                                <color key="onTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="toggleMicrophone:" destination="VVE-1A-cqe" eventType="touchUpInside" id="WgY-ud-zXC"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CmL-jc-Qh5">
+                                <rect key="frame" x="73" y="487" width="33" height="16"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1MI-Rk-5WN">
+                                <rect key="frame" x="0.0" y="-216" width="600" height="216"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </pickerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Rzq-Yi-IN7" firstAttribute="leading" secondItem="jGo-0u-sSj" secondAttribute="leading" id="3B2-cv-QVs"/>
+                            <constraint firstItem="LOY-0w-MaL" firstAttribute="top" secondItem="3Qr-bd-WoG" secondAttribute="bottom" constant="10" id="4wF-gJ-pgC"/>
+                            <constraint firstItem="LOY-0w-MaL" firstAttribute="leading" secondItem="jGo-0u-sSj" secondAttribute="leading" constant="16" id="5mE-di-oUa"/>
+                            <constraint firstAttribute="trailing" secondItem="Rzq-Yi-IN7" secondAttribute="trailing" id="6Sb-Bo-0wK"/>
+                            <constraint firstItem="Vyk-X1-klK" firstAttribute="top" secondItem="Rzq-Yi-IN7" secondAttribute="bottom" id="8Sc-T9-Q3z"/>
+                            <constraint firstItem="LOY-0w-MaL" firstAttribute="top" secondItem="CmL-jc-Qh5" secondAttribute="bottom" constant="17" id="BXP-tk-dIP"/>
+                            <constraint firstItem="Rzq-Yi-IN7" firstAttribute="top" secondItem="1MI-Rk-5WN" secondAttribute="bottom" id="H5y-KA-GCk"/>
+                            <constraint firstAttribute="trailing" secondItem="1MI-Rk-5WN" secondAttribute="trailing" id="H9a-Kc-oAK"/>
+                            <constraint firstItem="Vyk-X1-klK" firstAttribute="top" secondItem="oDc-7s-ORm" secondAttribute="bottom" constant="16" id="L3n-Xr-76Y"/>
+                            <constraint firstItem="3Qr-bd-WoG" firstAttribute="leading" secondItem="jGo-0u-sSj" secondAttribute="leading" constant="16" id="QIz-pt-XLo"/>
+                            <constraint firstItem="oDc-7s-ORm" firstAttribute="top" secondItem="LOY-0w-MaL" secondAttribute="bottom" constant="8" id="QWe-rK-vQh"/>
+                            <constraint firstAttribute="trailing" secondItem="oDc-7s-ORm" secondAttribute="trailing" constant="16" id="YKg-xa-iHD"/>
+                            <constraint firstItem="CmL-jc-Qh5" firstAttribute="leading" secondItem="3Qr-bd-WoG" secondAttribute="trailing" constant="8" symbolic="YES" id="gUA-Bq-3bf"/>
+                            <constraint firstItem="oDc-7s-ORm" firstAttribute="leading" secondItem="jGo-0u-sSj" secondAttribute="leading" constant="16" id="kDH-dU-DEo"/>
+                            <constraint firstItem="1MI-Rk-5WN" firstAttribute="leading" secondItem="jGo-0u-sSj" secondAttribute="leading" id="owp-6I-RIi"/>
+                            <constraint firstItem="3Qr-bd-WoG" firstAttribute="leading" secondItem="LOY-0w-MaL" secondAttribute="leading" id="uYr-TW-5iu"/>
+                            <constraint firstItem="1MI-Rk-5WN" firstAttribute="top" secondItem="jGo-0u-sSj" secondAttribute="topMargin" constant="-216" id="zGl-dS-8cr"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="audioPlot" destination="Rzq-Yi-IN7" id="CYm-3x-eqw"/>
+                        <outlet property="microphoneInputPickerView" destination="1MI-Rk-5WN" id="Xgt-fX-Z2w"/>
+                        <outlet property="microphoneInputPickerViewTopConstraint" destination="zGl-dS-8cr" id="DSi-sx-AqP"/>
+                        <outlet property="microphoneInputToggleButton" destination="oDc-7s-ORm" id="RXg-P9-Cl1"/>
+                        <outlet property="microphoneTextLabel" destination="CmL-jc-Qh5" id="OXX-dE-jey"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3QZ-yS-IEA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="574" y="89"/>
+        </scene>
+    </scenes>
+</document>
