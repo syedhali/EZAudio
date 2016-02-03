@@ -8,6 +8,7 @@ Thank you guys for being so patient over the last year - I've been working like 
 ## Apps Using EZAudio
 I'd really like to start creating a list of projects made using EZAudio. If you've used EZAudio to make something cool, whether it's an app or open source visualization or whatever, please email me at syedhali07[at]gmail.com and I'll add it to our wall of fame!
 To start it off:
+- [Analog Synth ](https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=1076476110&mt=8) - Matt Fecher's analog synthesizer for iPad created entirely with the new [AudioKit 3.0](https://github.com/audiokit/AudioKit) framework [and EZAudio plots].
 - [Detour](https://www.detour.com/) - Gorgeous location-aware audio walks
 - [Jumpshare](https://jumpshare.com/) - Incredibly fast, real-time file sharing
 
