@@ -217,6 +217,9 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
 #elif TARGET_OS_MAC
     inputComponentDescription.componentSubType = kAudioUnitSubType_HALOutput;
 #endif
+    // The following must be set to zero unless a specific value is requested.
+    inputComponentDescription.componentFlags = 0;
+    inputComponentDescription.componentFlagsMask = 0;
     
     // get the first matching component
     AudioComponent inputComponent = AudioComponentFindNext( NULL , &inputComponentDescription);
