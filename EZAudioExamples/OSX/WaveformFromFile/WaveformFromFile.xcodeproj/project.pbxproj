@@ -40,7 +40,7 @@
 		66374D6E1C54456C000B19D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		66374D711C54456C000B19D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		66374D731C54456C000B19D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		66374D7A1C544584000B19D0 /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "simple-drum-beat.wav"; path = "/Users/haris/Documents/code/openSource/EZAudio/EZAudioExamples/OSX/EZAudioWaveformFromFileExample/EZAudioWaveformFromFileExample/../../../simple-drum-beat.wav"; sourceTree = "<absolute>"; };
+		66374D7A1C544584000B19D0 /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "simple-drum-beat.wav"; path = "../../simple-drum-beat.wav"; sourceTree = SOURCE_ROOT; };
 		66374D7C1C54472A000B19D0 /* EZAudioOSX.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EZAudioOSX.framework; path = ../../../build/Debug/EZAudioOSX.framework; sourceTree = "<group>"; };
 		66374DF51C545328000B19D0 /* EZAudio.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = EZAudio.xcodeproj; path = ../../../EZAudio.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
