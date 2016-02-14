@@ -68,7 +68,7 @@
 		66374EB51C545AEA000B19D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		66374EB71C545AEA000B19D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66374F151C545B4F000B19D0 /* EZAudio.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = EZAudio.xcodeproj; path = ../../../EZAudio.xcodeproj; sourceTree = "<group>"; };
-		66374F841C547F74000B19D0 /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "simple-drum-beat.wav"; path = "/Users/haris/Documents/code/openSource/EZAudio/EZAudioExamples/iOS/EZAudioWaveformFromFileExample/EZAudioWaveformFromFileExample/../../../simple-drum-beat.wav"; sourceTree = "<absolute>"; };
+		66374F841C547F74000B19D0 /* simple-drum-beat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "simple-drum-beat.wav"; path = "../../simple-drum-beat.wav"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
