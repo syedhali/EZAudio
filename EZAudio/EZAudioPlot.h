@@ -57,6 +57,11 @@ FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultHistoryBufferLength;
  */
 FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength;
 
+/**
+ The number of additional points required for the first and last point. These are required when drawing filled plots are both on the center line.
+ */
+FOUNDATION_EXPORT UInt32 const kEZAudioPlotAdditionalPointCount;
+
 //------------------------------------------------------------------------------
 #pragma mark - EZAudioPlotWaveformLayer
 //------------------------------------------------------------------------------

@@ -300,9 +300,12 @@ typedef struct
 - (void)setSampleData:(float *)data length:(int)length
 {
     const BOOL shouldFill = self.shouldFill;
-    int pointCount = (shouldFill ? length * 2 : length);
     
-    EZAudioPlotGLPoint *points = self.info->points;
+    int pointCount = (shouldFill ? length * 2 : length) + (shouldFill ? kEZAudioPlotAdditionalPointCount : 0);
+    
+    EZAudioPlotGLPoint *allPoints = self.info->points;
+    EZAudioPlotGLPoint *points = (shouldFill ? &allPoints[1] : allPoints);
+    
     for (int i = 0; i < length; i++)
     {
         if (shouldFill)
@@ -317,7 +320,16 @@ typedef struct
             points[i].y = data[i];
         }
     }
-    points[0].y = points[pointCount - 1].y = 0.0f;
+    
+    if (shouldFill)
+    {
+        const int first = 0;
+        const int last = pointCount - 1;
+        allPoints[first].x = 0.0f;
+        allPoints[last].x = length - 1;
+        allPoints[first].y = allPoints[last].y = 0.0f;
+    }
+    
     self.info->pointCount = pointCount;
     self.info->interpolated = shouldFill;
 #if !TARGET_OS_IPHONE
