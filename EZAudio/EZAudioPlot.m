@@ -271,7 +271,7 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
     if (pointCount > 0)
     {
         path = CGPathCreateMutable();
-        double xscale = (rect.size.width) / ((float)self.pointCount);
+        double xscale = (rect.size.width) / ((float)(self.pointCount - 1));
         double halfHeight = floor(rect.size.height / 2.0);
         int deviceOriginFlipped = [self isDeviceOriginFlipped] ? -1 : 1;
         CGAffineTransform xf = CGAffineTransformIdentity;
