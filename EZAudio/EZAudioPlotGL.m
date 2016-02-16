@@ -299,11 +299,13 @@ typedef struct
 
 - (void)setSampleData:(float *)data length:(int)length
 {
-    int pointCount = self.shouldFill ? length * 2 : length;
+    const BOOL shouldFill = self.shouldFill;
+    int pointCount = (shouldFill ? length * 2 : length);
+    
     EZAudioPlotGLPoint *points = self.info->points;
     for (int i = 0; i < length; i++)
     {
-        if (self.shouldFill)
+        if (shouldFill)
         {
             points[i * 2].x = points[i * 2 + 1].x = i;
             points[i * 2].y = data[i];
@@ -317,7 +319,7 @@ typedef struct
     }
     points[0].y = points[pointCount - 1].y = 0.0f;
     self.info->pointCount = pointCount;
-    self.info->interpolated = self.shouldFill;
+    self.info->interpolated = shouldFill;
 #if !TARGET_OS_IPHONE
     [self.openGLContext lock];
     glBindVertexArray(self.info->vab);
