@@ -223,7 +223,7 @@ Alternatively, you could also use the shared `EZMicrophone` instance and just as
 ```
 
 ####Setting The Device
-The `EZMicrophone` uses an `EZAudioDevice` instance to select what specific hardware destination it will use to pull audio data. You'd use this if you wanted to change the input device like in the EZAudioCoreGraphicsWaveformExample for [iOS](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/iOS/EZAudioCoreGraphicsWaveformExample) or [OSX](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/EZAudioCoreGraphicsWaveformExample). At any time you can change which input device is used by setting the device property:
+The `EZMicrophone` uses an `EZAudioDevice` instance to select what specific hardware destination it will use to pull audio data. You'd use this if you wanted to change the input device like in the EZAudioCoreGraphicsWaveformExample for [iOS](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/iOS/CoreGraphicsWaveform) or [OSX](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/CoreGraphicsWaveform). At any time you can change which input device is used by setting the device property:
 ```objectivec
 NSArray *inputs = [EZAudioDevice inputDevices];
 [self.microphone setDevice:[inputs lastObject]];
@@ -348,7 +348,7 @@ Alternatively, you could also use the shared output instance and just assign it 
 [EZOutput sharedOutput].delegate = self;
 ```
 ####Setting The Device
-The `EZOutput` uses an `EZAudioDevice` instance to select what specific hardware destination it will output audio to. You'd use this if you wanted to change the output device like in the [EZAudioPlayFileExample](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/EZAudioPlayFileExample) for OSX. At any time you can change which output device is used by setting the `device` property:
+The `EZOutput` uses an `EZAudioDevice` instance to select what specific hardware destination it will output audio to. You'd use this if you wanted to change the output device like in the [EZAudioPlayFileExample](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/PlayFile) for OSX. At any time you can change which output device is used by setting the `device` property:
 ```objectivec
 // By default the EZOutput uses the default output device, but you can change this at any time
 EZAudioDevice *currentOutputDevice = [EZAudioDevice currentOutputDevice];
@@ -677,7 +677,7 @@ When a seek occurs the `EZAudioFileDelegate` receives the seek event:
 ```
 
 ###<a name="EZAudioPlayer"></a>EZAudioPlayer
-Provides a class that combines the `EZAudioFile` and `EZOutput` for file playback of all Core Audio supported formats to any hardware device. Because the `EZAudioPlayer` internally hooks into the `EZAudioFileDelegate` and `EZOutputDelegate`, you should implement the `EZAudioPlayerDelegate` to receive the `playedAudio:...` and `updatedPosition:` events. The EZAudioPlayFileExample projects for [iOS](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/iOS/EZAudioPlayFileExample) and [OSX](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/EZAudioPlayFileExample) shows how to use the `EZAudioPlayer` to play audio files, visualize the samples with an audio plot, adjust the volume, and change the output device using the `EZAudioDevice` class. The `EZAudioPlayer` primarily uses `NSNotificationCenter` to post notifications because often times you have one audio player and multiple UI elements that need to listen for player events to properly update.
+Provides a class that combines the `EZAudioFile` and `EZOutput` for file playback of all Core Audio supported formats to any hardware device. Because the `EZAudioPlayer` internally hooks into the `EZAudioFileDelegate` and `EZOutputDelegate`, you should implement the `EZAudioPlayerDelegate` to receive the `playedAudio:...` and `updatedPosition:` events. The EZAudioPlayFileExample projects for [iOS](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/iOS/PlayFile) and [OSX](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/PlayFile) shows how to use the `EZAudioPlayer` to play audio files, visualize the samples with an audio plot, adjust the volume, and change the output device using the `EZAudioDevice` class. The `EZAudioPlayer` primarily uses `NSNotificationCenter` to post notifications because often times you have one audio player and multiple UI elements that need to listen for player events to properly update.
 
 ####Creating An Audio Player
 ```objectivec
