@@ -60,43 +60,43 @@ Within this repo you'll find the examples for iOS and OSX to get you up to speed
 
 ### Example Projects
 
-**_EZAudioCoreGraphicsWaveformExample_**
+**_CoreGraphicsWaveform_**
 
 ![CoreGraphicsWaveformExampleGif](https://cloud.githubusercontent.com/assets/1275640/8516226/1eb885ec-2366-11e5-8d76-3a4b4d982eb0.gif)
 
 Shows how to use the `EZMicrophone` and `EZAudioPlot` to visualize the audio data from the microphone in real-time. The waveform can be displayed as a buffer or a rolling waveform plot (traditional waveform look).
 
-**_EZAudioOpenGLWaveformExample_**
+**_OpenGLWaveform_**
 
 ![OpenGLWaveformExampleGif](https://cloud.githubusercontent.com/assets/1275640/8516234/499f6fd2-2366-11e5-9771-7d0afae59391.gif)
 
 Shows how to use the `EZMicrophone` and `EZAudioPlotGL` to visualize the audio data from the microphone in real-time. The drawing is using OpenGL so the performance much better for plots needing a lot of points.
 
-**_EZAudioPlayFileExample_**
+**_PlayFile_**
 
 ![PlayFileExample](https://cloud.githubusercontent.com/assets/1275640/8516245/711ca232-2366-11e5-8d20-2538164f3307.gif)
 
 Shows how to use the `EZAudioPlayer` and `EZAudioPlotGL` to playback, pause, and seek through an audio file while displaying its waveform as a buffer or a rolling waveform plot.
 
-**_EZAudioRecordWaveformExample_**
+**_RecordFile_**
 
 ![RecordWaveformExample](https://cloud.githubusercontent.com/assets/1275640/8516310/86da80f2-2367-11e5-84aa-aea25a439a76.gif)
 
 Shows how to use the `EZMicrophone`, `EZRecorder`, and `EZAudioPlotGL` to record the audio from the microphone input to a file while displaying the audio waveform of the incoming data. You can then playback the newly recorded audio file using AVFoundation and keep adding more audio data to the tail of the file.
 
-**_EZAudioWaveformFromFileExample_**
+**_WaveformFromFile_**
 
 ![WaveformExample](https://cloud.githubusercontent.com/assets/1275640/8516597/f27240ea-236a-11e5-8ecd-68cf05b7ce40.gif)
 
 Shows how to use the `EZAudioFile` and `EZAudioPlot` to animate in an audio waveform for an entire audio file.
 
-**_EZAudioPassThroughExample_**
+**_PassThrough_**
 
 ![PassthroughExample](https://cloud.githubusercontent.com/assets/1275640/8516692/7abfbe36-236c-11e5-9d69-4f82956177b3.gif)
 
 Shows how to use the `EZMicrophone`, `EZOutput`, and the `EZAudioPlotGL` to pass the microphone input to the output for playback while displaying the audio waveform (as a buffer or rolling plot) in real-time.
 
-**_EZAudioFFTExample_**
+**_FFT_**
 
 ![FFTExample](https://cloud.githubusercontent.com/assets/1275640/8662077/5621705a-2971-11e5-88ed-9a865e422ade.gif)
 
@@ -190,16 +190,16 @@ EZAudioDevice *currentOutputDevice = [EZAudioDevice currentOutputDevice];
 Provides access to the default device microphone in one line of code and provides delegate callbacks to receive the audio data as an AudioBufferList and float arrays.
 
 **_Relevant Example Projects_**
-- EZAudioCoreGraphicsWaveformExample (iOS)
-- EZAudioCoreGraphicsWaveformExample (OSX)
-- EZAudioOpenGLWaveformExample (iOS)
-- EZAudioOpenGLWaveformExample (OSX)
-- EZAudioRecordExample (iOS)
-- EZAudioRecordExample (OSX)
-- EZAudioPassThroughExample (iOS)
-- EZAudioPassThroughExample (OSX)
-- EZAudioFFTExample (iOS)
-- EZAudioFFTExample (OSX)
+- CoreGraphicsWaveform (iOS)
+- CoreGraphicsWaveform (OSX)
+- OpenGLWaveform (iOS)
+- OpenGLWaveform (OSX)
+- RecordFile (iOS)
+- RecordFile (OSX)
+- PassThrough (iOS)
+- PassThrough (OSX)
+- FFT (iOS)
+- FFT (OSX)
 
 ####Creating A Microphone
 
@@ -223,7 +223,7 @@ Alternatively, you could also use the shared `EZMicrophone` instance and just as
 ```
 
 ####Setting The Device
-The `EZMicrophone` uses an `EZAudioDevice` instance to select what specific hardware destination it will use to pull audio data. You'd use this if you wanted to change the input device like in the EZAudioCoreGraphicsWaveformExample for [iOS](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/iOS/CoreGraphicsWaveform) or [OSX](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/CoreGraphicsWaveform). At any time you can change which input device is used by setting the device property:
+The `EZMicrophone` uses an `EZAudioDevice` instance to select what specific hardware destination it will use to pull audio data. You'd use this if you wanted to change the input device like in the CoreGraphicsWaveform for [iOS](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/iOS/CoreGraphicsWaveform) or [OSX](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/CoreGraphicsWaveform). At any time you can change which input device is used by setting the device property:
 ```objectivec
 NSArray *inputs = [EZAudioDevice inputDevices];
 [self.microphone setDevice:[inputs lastObject]];
@@ -325,10 +325,10 @@ Provides flexible playback to the default output device by asking the `EZOutputD
 ```
 
 **_Relevant Example Projects_**
-- EZAudioPlayFileExample (iOS)
-- EZAudioPlayFileExample (OSX)
-- EZAudioPassThroughExample (iOS)
-- EZAudioPassThroughExample (OSX)
+- PlayFile (iOS)
+- PlayFile (OSX)
+- PassThrough (iOS)
+- PassThrough (OSX)
 
 ####Creating An Output
 
@@ -348,7 +348,7 @@ Alternatively, you could also use the shared output instance and just assign it 
 [EZOutput sharedOutput].delegate = self;
 ```
 ####Setting The Device
-The `EZOutput` uses an `EZAudioDevice` instance to select what specific hardware destination it will output audio to. You'd use this if you wanted to change the output device like in the [EZAudioPlayFileExample](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/PlayFile) for OSX. At any time you can change which output device is used by setting the `device` property:
+The `EZOutput` uses an `EZAudioDevice` instance to select what specific hardware destination it will output audio to. You'd use this if you wanted to change the output device like in the [PlayFile](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/PlayFile) for OSX. At any time you can change which output device is used by setting the `device` property:
 ```objectivec
 // By default the EZOutput uses the default output device, but you can change this at any time
 EZAudioDevice *currentOutputDevice = [EZAudioDevice currentOutputDevice];
@@ -567,8 +567,8 @@ Here's an example of how to add a delay audio unit (`kAudioUnitSubType_Delay`):
 Provides simple read/seek operations, pulls waveform amplitude data, and provides the `EZAudioFileDelegate` to notify of any read/seek action occuring on the `EZAudioFile`. This can be thought of as the NSImage/UIImage equivalent of the audio world.
 
 **_Relevant Example Projects_**
-- EZAudioWaveformFromFileExample (iOS)
-- EZAudioWaveformFromFileExample (OSX)
+- WaveformFromFile (iOS)
+- WaveformFromFile (OSX)
 
 ####Opening An Audio File
 To open an audio file create a new instance of the `EZAudioFile` class.
@@ -677,7 +677,7 @@ When a seek occurs the `EZAudioFileDelegate` receives the seek event:
 ```
 
 ###<a name="EZAudioPlayer"></a>EZAudioPlayer
-Provides a class that combines the `EZAudioFile` and `EZOutput` for file playback of all Core Audio supported formats to any hardware device. Because the `EZAudioPlayer` internally hooks into the `EZAudioFileDelegate` and `EZOutputDelegate`, you should implement the `EZAudioPlayerDelegate` to receive the `playedAudio:...` and `updatedPosition:` events. The EZAudioPlayFileExample projects for [iOS](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/iOS/PlayFile) and [OSX](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/PlayFile) shows how to use the `EZAudioPlayer` to play audio files, visualize the samples with an audio plot, adjust the volume, and change the output device using the `EZAudioDevice` class. The `EZAudioPlayer` primarily uses `NSNotificationCenter` to post notifications because often times you have one audio player and multiple UI elements that need to listen for player events to properly update.
+Provides a class that combines the `EZAudioFile` and `EZOutput` for file playback of all Core Audio supported formats to any hardware device. Because the `EZAudioPlayer` internally hooks into the `EZAudioFileDelegate` and `EZOutputDelegate`, you should implement the `EZAudioPlayerDelegate` to receive the `playedAudio:...` and `updatedPosition:` events. The PlayFile projects for [iOS](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/iOS/PlayFile) and [OSX](https://github.com/syedhali/EZAudio/tree/master/EZAudioExamples/OSX/PlayFile) shows how to use the `EZAudioPlayer` to play audio files, visualize the samples with an audio plot, adjust the volume, and change the output device using the `EZAudioDevice` class. The `EZAudioPlayer` primarily uses `NSNotificationCenter` to post notifications because often times you have one audio player and multiple UI elements that need to listen for player events to properly update.
 
 ####Creating An Audio Player
 ```objectivec
@@ -824,8 +824,8 @@ FOUNDATION_EXPORT NSString * const EZAudioPlayerDidSeekNotification;
 Provides a way to record any audio source to an audio file. This hooks into the other components quite nicely to do something like plot the audio waveform while recording to give visual feedback as to what is happening. The `EZRecorderDelegate` provides methods to listen to write events and a final close event on the `EZRecorder` (explained [below](#EZRecorderDelegateExplanation)).
 
 *Relevant Example Projects*
-- EZAudioRecordExample (iOS)
-- EZAudioRecordExample (OSX)
+- RecordFile (iOS)
+- RecordFile (OSX)
 
 ####Creating A Recorder
 
@@ -947,14 +947,14 @@ This will trigger the EZRecorder's delegate method:
 Provides an audio waveform plot that uses CoreGraphics to perform the drawing. On iOS this is a subclass of UIView while on OSX this is a subclass of NSView. As of the 1.0.0 release, the waveforms are drawn using CALayers where compositing is done on the GPU. As a result, there have been some huge performance gains and CPU usage per real-time (i.e. 60 frames per second redrawing) plot is now about 2-3% CPU as opposed to the 20-30% we were experiencing before.
 
 *Relevant Example Projects*
-- EZAudioCoreGraphicsWaveformExample (iOS)
-- EZAudioCoreGraphicsWaveformExample (OSX)
-- EZAudioRecordExample (iOS)
-- EZAudioRecordExample (OSX)
-- EZAudioWaveformFromFileExample (iOS)
-- EZAudioWaveformFromFileExample (OSX)
-- EZAudioFFTExample (iOS)
-- EZAudioFFTExample (OSX)
+- CoreGraphicsWaveform (iOS)
+- CoreGraphicsWaveform (OSX)
+- RecordFile (iOS)
+- RecordFile (OSX)
+- WaveformFromFile (iOS)
+- WaveformFromFile (OSX)
+- FFT (iOS)
+- FFT (OSX)
 
 ####Creating An Audio Plot
 
@@ -1024,17 +1024,17 @@ All plots have only one update function, `updateBuffer:withBufferSize:`, which e
 ```
 
 ###<a name="EZAudioPlotGL"></a>EZAudioPlotGL
-Provides an audio waveform plot that uses OpenGL to perform the drawing. The API this class are exactly the same as those for the EZAudioPlot above. On iOS this is a subclass of the GLKView while on OSX this is a subclass of the NSOpenGLView. In most cases this is the plot you want to use, it's GPU-accelerated, can handle lots of points  while displaying 60 frames per second (the EZAudioPlot starts to choke on anything greater than 1024), and performs amazingly on all devices. The only downside is that you can only have one OpenGL plot onscreen at a time. However, you can combine OpenGL plots with Core Graphics plots in the view hierachy (see the EZAudioRecordExample for an example of how to do this).
+Provides an audio waveform plot that uses OpenGL to perform the drawing. The API this class are exactly the same as those for the EZAudioPlot above. On iOS this is a subclass of the GLKView while on OSX this is a subclass of the NSOpenGLView. In most cases this is the plot you want to use, it's GPU-accelerated, can handle lots of points  while displaying 60 frames per second (the EZAudioPlot starts to choke on anything greater than 1024), and performs amazingly on all devices. The only downside is that you can only have one OpenGL plot onscreen at a time. However, you can combine OpenGL plots with Core Graphics plots in the view hierachy (see the RecordFile for an example of how to do this).
 
 *Relevant Example Projects*
-- EZAudioOpenGLWaveformExample (iOS)
-- EZAudioOpenGLWaveformExample (OSX)
-- EZAudioPlayFileExample (iOS)
-- EZAudioPlayFileExample (OSX)
-- EZAudioRecordExample (iOS)
-- EZAudioRecordExample (OSX)
-- EZAudioPassThroughExample (iOS)
-- EZAudioPassThroughExample (OSX)
+- OpenGLWaveform (iOS)
+- OpenGLWaveform (OSX)
+- PlayFile (iOS)
+- PlayFile (OSX)
+- RecordFile (iOS)
+- RecordFile (OSX)
+- PassThrough (iOS)
+- PassThrough (OSX)
 
 ####Creating An OpenGL Audio Plot
 
