@@ -397,7 +397,8 @@
     address.mSelector = kAudioDevicePropertyStreamConfiguration;
     
     AudioBufferList streamConfiguration;
-    UInt32 propSize = sizeof(streamConfiguration);
+	UInt32 propSize;
+	AudioObjectGetPropertyDataSize(deviceID, &address, 0, NULL, &propSize);
     [EZAudioUtilities checkResult:AudioObjectGetPropertyData(deviceID,
                                                  &address,
                                                  0,
