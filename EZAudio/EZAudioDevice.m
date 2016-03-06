@@ -395,23 +395,32 @@
     address.mScope = scope;
     address.mElement = kAudioObjectPropertyElementMaster;
     address.mSelector = kAudioDevicePropertyStreamConfiguration;
-    
-    AudioBufferList streamConfiguration;
+	
 	UInt32 propSize;
-	AudioObjectGetPropertyDataSize(deviceID, &address, 0, NULL, &propSize);
+	
+	[EZAudioUtilities checkResult:AudioObjectGetPropertyDataSize(deviceID,
+																 &address,
+																 0,
+																 NULL,
+																 &propSize)
+						operation:"Failed to get frame size size"];
+	
+	AudioBufferList * streamConfiguration = (AudioBufferList *)malloc(propSize);
     [EZAudioUtilities checkResult:AudioObjectGetPropertyData(deviceID,
                                                  &address,
                                                  0,
                                                  NULL,
                                                  &propSize,
-                                                 &streamConfiguration)
+                                                 streamConfiguration)
                         operation:"Failed to get frame size"];
     
     NSInteger channelCount = 0;
-    for (NSInteger i = 0; i < streamConfiguration.mNumberBuffers; i++)
+    for (NSInteger i = 0; i < streamConfiguration->mNumberBuffers; i++)
     {
-        channelCount += streamConfiguration.mBuffers[i].mNumberChannels;
+        channelCount += streamConfiguration->mBuffers[i].mNumberChannels;
     }
+	
+	free(streamConfiguration);
     
     return channelCount;
 }
