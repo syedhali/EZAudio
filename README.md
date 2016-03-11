@@ -11,6 +11,7 @@ To start it off:
 - [Analog Synth ](https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=1076476110&mt=8) - Matt Fecher's analog synthesizer for iPad created entirely with the new [AudioKit 3.0](https://github.com/audiokit/AudioKit) framework [and EZAudio plots].
 - [Detour](https://www.detour.com/) - Gorgeous location-aware audio walks
 - [Jumpshare](https://jumpshare.com/) - Incredibly fast, real-time file sharing
+- [Tunerval](https://itunes.apple.com/ie/app/tunerval-learn-to-hear-musical/id1088620067?mt=8) - Learn to hear musical intervals in your head
 
 ##Features
 
