@@ -23,6 +23,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#pragma once
+
 #import <GLKit/GLKit.h>
 #import "EZPlot.h"
 #if !TARGET_OS_IPHONE
