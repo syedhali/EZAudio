@@ -180,7 +180,7 @@ Similarly, to get all the available output devices use the `outputDevices` class
 NSArray *outputDevices = [EZAudioDevice outputDevices];
 ```
 
-or to just get the currently selected output device use the `currentInputDevice` method:
+or to just get the currently selected output device use the `currentOutputDevice` method:
 ```objectivec
 // On iOS this will default to the headset speaker, while on OSX this will be your selected
 // output device from the Sound preferences
