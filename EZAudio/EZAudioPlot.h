@@ -204,4 +204,6 @@ FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength;
 @property (nonatomic, assign) EZPlotHistoryInfo  *historyInfo;
 @property (nonatomic, assign) CGPoint            *points;
 @property (nonatomic, assign) UInt32              pointCount;
+@property (nonatomic, assign) UIColor            *originalColor;
+@property (nonatomic, assign) Boolean            fadeOut;
 @end
