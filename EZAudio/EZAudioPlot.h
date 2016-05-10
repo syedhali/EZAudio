@@ -188,7 +188,7 @@ FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength;
 //------------------------------------------------------------------------------
 
 /**
- Main method used to copy the sample data from the source buffer and update the 
+ Main method used to copy the sample data from the source buffer and update the
  plot. Subclasses can overwrite this method for custom behavior.
  @param data   A float array of the sample data. Subclasses should copy this data to a separate array to avoid threading issues.
  @param length The length of the float array as an int.
@@ -196,6 +196,15 @@ FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength;
 -(void)setSampleData:(float *)data length:(int)length;
 
 //------------------------------------------------------------------------------
+
+/**
+ Used to alter the color of the waveform, but keeps the original color intact, you cou can always revert to the init state.
+ @param color   A UIColor you'd like to set the waveform to.
+ */
+- (void)updateColor:(id)color;
+
+//------------------------------------------------------------------------------
+
 
 @end
 
@@ -205,5 +214,5 @@ FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength;
 @property (nonatomic, assign) CGPoint            *points;
 @property (nonatomic, assign) UInt32              pointCount;
 @property (nonatomic, assign) UIColor            *originalColor;
-@property (nonatomic, assign) Boolean            fadeOut;
+@property (nonatomic, assign) BOOL                fadeOut;
 @end

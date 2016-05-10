@@ -90,6 +90,11 @@
 - (IBAction)toggleMicrophonePickerView:(id)sender;
 
 //
+// Toggles the waveform fadeout on low levels.
+//
+- (IBAction)toggleFadeout:(id)sender;
+
+//
 // Toggles the microphone on and off. When the microphone is on it will send its
 // delegate (aka this view controller) the audio data in various ways (check out
 // the EZMicrophoneDelegate documentation for more details);

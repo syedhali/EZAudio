@@ -202,8 +202,6 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
 }
 - (void)updateColor:(id)color
 {
-    [super setColor:color];
-    
     self.waveformLayer.strokeColor = [color CGColor];
     if (self.shouldFill)
     {
@@ -292,10 +290,11 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
             double opacityThreshold = 0.0001;
             double opacityVal = 1.0;
             if(fabs(avg) < opacityThreshold){
-                opacityVal = pow(fabs(avg)/opacityThreshold,5);
+                opacityVal = pow(fabs(avg)/opacityThreshold,2);
             }
             [self updateColor:[self.originalColor colorWithAlphaComponent:(CGFloat)opacityVal]];
-            
+        }else{
+            [self updateColor:self.originalColor];
         }
         path = CGPathCreateMutable();
         double xscale = (rect.size.width) / ((float)self.pointCount);
