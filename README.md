@@ -1,6 +1,6 @@
 ![alt text](https://cloud.githubusercontent.com/assets/1275640/15996081/9f676e26-30d8-11e6-893b-c2135dd7d3c7.png "EZAudioDeprecatedLogo")
 
-As of today, June 12, 2016, I’m officially deprecating EZAudio. I’d like to thank everyone for the support over the last few years I’ve been hacking on EZAudio and working to make it better.
+As of today, June 13, 2016, I’m officially deprecating EZAudio. I’d like to thank everyone for the support over the last few years I’ve been hacking on EZAudio and working to make it better.
 
 ## Alternatives
 
