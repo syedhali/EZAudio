@@ -517,6 +517,13 @@ typedef NSRect EZRect;
       withBufferSize:(UInt32)bufferSize
        toHistoryInfo:(EZPlotHistoryInfo *)historyInfo;
 
+
+//------------------------------------------------------------------------------
+
++ (void)removeEndWithSize:(UInt32)bufferSizeToRemove
+          fromHistoryInfo:(EZPlotHistoryInfo *)historyInfo;
+
+
 //------------------------------------------------------------------------------
 
 /**
