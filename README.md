@@ -4,11 +4,9 @@ As of today, June 13, 2016, I’m officially deprecating EZAudio. I’d like to 
 
 ## Alternatives
 
-Aure (of [AudioKit](http://audiokit.io/)) and Michael (of [The Amazing Audio Engine 2](https://github.com/TheAmazingAudioEngine/TheAmazingAudioEngine2)) are continuing to make huge strides in their respective frameworks. They actively maintain these projects and can better answer your audio related queries. Here are their repos:
+The best alternative to EZAudio is now [AudioKit](http://audiokit.io/). Note that [The Amazing Audio Engine](https://github.com/TheAmazingAudioEngine/TheAmazingAudioEngine) and [The Amazing Audio Engine 2](https://github.com/TheAmazingAudioEngine/TheAmazingAudioEngine2) have now both been retired as well. Any further contributions I make to iOS/macOS/tvOS audio programming will be to AudioKit.
 
 - [AudioKit](https://github.com/audiokit/AudioKit)
-- [The Amazing Audio Engine 2](https://github.com/TheAmazingAudioEngine/TheAmazingAudioEngine2)
-- [AVAudioEngine](https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVAudioEngine_Class/)
 
 ## Why?
 
