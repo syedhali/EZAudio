@@ -106,7 +106,7 @@ Shows how to calculate the real-time FFT of the audio data coming from the `EZMi
 The official documentation for EZAudio can be found here: http://cocoadocs.org/docsets/EZAudio/1.1.4/
 <br>You can also generate the docset yourself using appledocs by running the appledocs on the EZAudio source folder.
 
-##<a name="GettingStarted">Getting Started
+## <a name="GettingStarted">Getting Started
 To begin using `EZAudio` you must first make sure you have the proper build requirements and frameworks. Below you'll find explanations of each component and code snippets to show how to use each to perform common tasks like getting microphone data, updating audio waveform plots, reading/seeking through audio files, and performing playback.
 
 ### Build Requirements
