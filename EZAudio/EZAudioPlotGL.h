@@ -46,6 +46,7 @@ typedef struct
 /**
  EZAudioPlotGL is a subclass of either a GLKView on iOS or an NSOpenGLView on OSX. As of 0.6.0 this class no longer depends on an embedded GLKViewController for iOS as the display link is just manually managed within this single view instead. The EZAudioPlotGL provides the same kind of audio plot as the EZAudioPlot, but uses OpenGL to GPU-accelerate the drawing of the points, which means you can fit a lot more points and complex geometries.
  */
+IB_DESIGNABLE
 #if TARGET_OS_IPHONE
 @interface EZAudioPlotGL : GLKView
 #elif TARGET_OS_MAC

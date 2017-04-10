@@ -25,6 +25,8 @@
 
 #import "EZAudioUtilities.h"
 
+@import Accelerate;
+
 static float    const  EZAudioUtilitiesFixedNoteA       = 440.0f;
 static int      const  EZAudioUtilitiesFixedNoteAIndex  = 9;
 static int      const  EZAudioUtilitiesFixedNoteAOctave = 4;
@@ -473,12 +475,14 @@ BOOL __shouldExitOnCheckResultFail = YES;
 
 //------------------------------------------------------------------------------
 
-+ (float)RMS:(float *)buffer   length:(int)bufferSize
++ (float)RMS:(const float *)buffer   length:(int)bufferSize
 {
-    float sum = 0.0;
-    for(int i = 0; i < bufferSize; i++)
-        sum += buffer[i] * buffer[i];
-    return sqrtf( sum / bufferSize);
+    float *squared = calloc(bufferSize, sizeof(float));
+    vDSP_vsq(buffer, 1, squared, 1, bufferSize);
+    float mean;
+    vDSP_meanv(squared, 1, &mean, bufferSize);
+    free(squared);
+    return sqrtf(mean);
 }
 
 //------------------------------------------------------------------------------
@@ -655,7 +659,7 @@ BOOL __shouldExitOnCheckResultFail = YES;
 #pragma mark - EZPlotHistoryInfo Utility
 //------------------------------------------------------------------------------
 
-+ (void)appendBufferRMS:(float *)buffer
++ (void)appendBufferRMS:(const float *)buffer
          withBufferSize:(UInt32)bufferSize
           toHistoryInfo:(EZPlotHistoryInfo *)historyInfo
 {
@@ -670,7 +674,7 @@ BOOL __shouldExitOnCheckResultFail = YES;
 
 //------------------------------------------------------------------------------
 
-+ (void)appendBuffer:(float *)buffer
++ (void)appendBuffer:(const float *)buffer
       withBufferSize:(UInt32)bufferSize
        toHistoryInfo:(EZPlotHistoryInfo *)historyInfo
 {
