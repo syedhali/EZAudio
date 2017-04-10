@@ -73,6 +73,7 @@
 				666062321C5421A400FB99FA /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		666062321C5421A400FB99FA /* Products */ = {
 			isa = PBXGroup;

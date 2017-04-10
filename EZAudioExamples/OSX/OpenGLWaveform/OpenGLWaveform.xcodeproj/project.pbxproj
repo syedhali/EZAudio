@@ -81,6 +81,7 @@
 				6660627A1C5427CC00FB99FA /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		6660627A1C5427CC00FB99FA /* Products */ = {
 			isa = PBXGroup;

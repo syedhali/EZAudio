@@ -140,6 +140,7 @@
 				469F4CF41B749F7800666A46 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		469F4CF41B749F7800666A46 /* Products */ = {
 			isa = PBXGroup;

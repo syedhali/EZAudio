@@ -33,6 +33,7 @@ UInt32 const kEZAudioPlotMaxHistoryBufferLength = 8192;
 UInt32 const kEZAudioPlotDefaultHistoryBufferLength = 512;
 UInt32 const EZAudioPlotDefaultHistoryBufferLength = 512;
 UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
+UInt32 const kEZAudioPlotAdditionalPointCount = 2;
 
 //------------------------------------------------------------------------------
 #pragma mark - EZAudioPlot (Implementation)
@@ -271,7 +272,7 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
     if (pointCount > 0)
     {
         path = CGPathCreateMutable();
-        double xscale = (rect.size.width) / ((float)self.pointCount);
+        double xscale = (rect.size.width) / ((float)(self.pointCount - 1 - kEZAudioPlotAdditionalPointCount));
         double halfHeight = floor(rect.size.height / 2.0);
         int deviceOriginFlipped = [self isDeviceOriginFlipped] ? -1 : 1;
         CGAffineTransform xf = CGAffineTransformIdentity;
@@ -347,14 +348,22 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
 
 - (void)setSampleData:(float *)data length:(int)length
 {
-    CGPoint *points = self.points;
-    for (int i = 0; i < length; i++)
-    {
-        points[i].x = i;
-        points[i].y = data[i] * self.gain;
-    }
-    points[0].y = points[length - 1].y = 0.0f;
-    self.pointCount = length;
+	CGPoint *allPoints = self.points;
+	
+	CGPoint *points = &allPoints[1];
+	for (int i = 0; i < length; i++)
+	{
+		points[i].x = i;
+		points[i].y = data[i] * self.gain;
+	}
+	
+	const int first = 0;
+	const int last = length + 1;
+	allPoints[first].x = 0.0f;
+	allPoints[last].x = length - 1;
+	allPoints[first].y = allPoints[last].y = 0.0f;
+	
+	self.pointCount = length + kEZAudioPlotAdditionalPointCount;
 }
 
 //------------------------------------------------------------------------------
