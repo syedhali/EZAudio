@@ -117,7 +117,7 @@
         return;
     }
     
-    BOOL stop;
+    BOOL stop = NO;
     for (AVAudioSessionPortDescription *inputDevicePortDescription in inputs)
     {
         // add any additional sub-devices
@@ -130,6 +130,10 @@
                 device.port = inputDevicePortDescription;
                 device.dataSource = inputDeviceDataSourceDescription;
                 block(device, &stop);
+                if (stop)
+                {
+                    break;
+                }
             }
         }
         else
@@ -153,7 +157,7 @@
     AVAudioSessionRouteDescription *currentRoute = [[AVAudioSession sharedInstance] currentRoute];
     NSArray *portDescriptions = [currentRoute outputs];
     
-    BOOL stop;
+    BOOL stop = NO;
     for (AVAudioSessionPortDescription *outputDevicePortDescription in portDescriptions)
     {
         // add any additional sub-devices
@@ -166,6 +170,10 @@
                 device.port = outputDevicePortDescription;
                 device.dataSource = outputDeviceDataSourceDescription;
                 block(device, &stop);
+                if (stop)
+                {
+                    break;
+                }
             }
         }
         else
