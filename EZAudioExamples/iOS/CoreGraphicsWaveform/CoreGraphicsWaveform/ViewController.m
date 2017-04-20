@@ -88,6 +88,7 @@
     // Waveform color
     //
     self.audioPlot.color = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+    self.audioPlot.fadeOut = YES;
 
     //
     // Plot type
@@ -196,6 +197,14 @@
         [self.microphone startFetchingAudio];
         self.microphoneTextLabel.text = @"Microphone On";
     }
+}
+
+//------------------------------------------------------------------------------
+
+- (void)toggleFadeout:(id)sender
+{
+    BOOL isOn = [sender isOn];
+    self.audioPlot.fadeOut = isOn;
 }
 
 //------------------------------------------------------------------------------
