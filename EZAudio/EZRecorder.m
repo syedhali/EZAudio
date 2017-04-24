@@ -64,6 +64,11 @@ typedef struct
     {
         [self closeAudioFile];
     }
+    
+    if(self.info->fileURL){
+        CFRelease(self.info->fileURL);
+    }
+    
     free(self.info);
 }
 
@@ -128,7 +133,7 @@ typedef struct
         // Set defaults
         self.info = (EZRecorderInfo *)calloc(1, sizeof(EZRecorderInfo));
         self.info->audioFileTypeID  = audioFileTypeID;
-        self.info->fileURL = (__bridge CFURLRef)url;
+        self.info->fileURL = url ? (CFURLRef)CFBridgingRetain(url) : NULL;
         self.info->clientFormat = clientFormat;
         self.info->fileFormat = fileFormat;
         self.delegate = delegate;
