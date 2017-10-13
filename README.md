@@ -4,7 +4,7 @@ A simple, intuitive audio framework for iOS and OSX.
 
 ## Deprecated
 
-EZAudio has recently been deprecated in favor of AudioKit. However, since some people are still forking and using EZAudio I've decided to restore the README as it was. [Check out the note below](#Deprecated).
+EZAudio has recently been deprecated in favor of [AudioKit](https://github.com/audiokit/AudioKit). However, since some people are still forking and using EZAudio I've decided to restore the README as it was. [Check out the note below](#Deprecated).
 
 ## Apps Using EZAudio
 I'd really like to start creating a list of projects made using EZAudio. If you've used EZAudio to make something cool, whether it's an app or open source visualization or whatever, please email me at syedhali07[at]gmail.com and I'll add it to our wall of fame!
