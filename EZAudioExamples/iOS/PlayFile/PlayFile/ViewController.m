@@ -26,7 +26,8 @@
 //
 
 #import "ViewController.h"
-
+#import "PlayFile-Swift.h"
+#import "AppDelegate.h"
 @implementation ViewController
 
 //------------------------------------------------------------------------------
@@ -53,6 +54,7 @@
 
 - (void)viewDidLoad
 {
+    _myTmpInt = 0;
     [super viewDidLoad];
     
     //
@@ -87,7 +89,8 @@
     // Create the audio player
     //
     self.player = [EZAudioPlayer audioPlayerWithDelegate:self];
-    self.player.shouldLoop = YES;
+    // 希望通过这样的方式进行波形图的初始化。
+    self.player.shouldLoop = NO;
     
     //
     // Override the output to the speaker
@@ -110,8 +113,27 @@
     
     /*
      Try opening the sample file
+     #define kAudioFileDefault [[NSBundle mainBundle] pathForResource:@"simple-drum-beat" ofType:@"wav"]
+     
+     当前我们的存储位置
+     //1.获取沙盒地址
+     NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+     filePath = [path stringByAppendingString:@"/RRecord.wav"];
+     
+     //2.获取文件路径
+     self.recordFileUrl = [NSURL fileURLWithPath:filePath];
      */
-    [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault]];
+    #define kAudioFileDefault2 [[NSBundle mainBundle] pathForResource:@"la - 1" ofType:@"wav"]
+    
+    //1.获取沙盒地址
+    NSString *path2 = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *filePath2 = [path2 stringByAppendingString:@"/RRecord.wav"];
+    
+    //2.获取文件路径
+    NSURL *recordFileUrl2 = [NSURL fileURLWithPath:filePath2];
+    [self openFileWithFilePathURL:[NSURL fileURLWithPath: filePath2]];
+//    [self openFileWithFilePathURL:[NSURL fileURLWithPath:kAudioFileDefault2]];
+    // 这个位置确定file位置
 }
 
 //------------------------------------------------------------------------------
@@ -140,6 +162,40 @@
 {
     EZAudioPlayer *player = [notification object];
     NSLog(@"Player changed audio file: %@", [player audioFile]);
+    //    _taytay = [player.audioFile totalFrames];
+    size_t size = sizeof(float) * [player.audioFile totalFrames];
+    size_t small = size/512;
+    small++;
+    size = small * 512;
+    _taytay = (float *)malloc(size);
+    _theTailLenth = size;
+    _actualLenth = [player.audioFile totalFrames];
+}
+//------------------------------------------------------------------------------
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString: @"goM"]){
+//        segue.destinationViewController
+        NSLog(@"I was here");
+        NSNumber *c0 = [NSNumber numberWithDouble:0];
+        NSMutableArray *mArr = [NSMutableArray arrayWithObjects: c0,nil];
+        NSNumber *c1 = [NSNumber numberWithDouble:1];
+//        [mArr addObject:c1];
+        for (int i = 0;i<_actualLenth;i++){
+            float tmp = _taytay[i];
+            NSNumber *tmpNum = [NSNumber numberWithFloat:tmp];
+            [mArr addObject:tmpNum];
+        }
+        NSArray *myArray = [mArr copy];
+//        // NSArray --> NSMutableArray
+//        NSMutableArray *myMutableArray = [myArray mutableCopy];
+//        // NSMutableArray --> NSArray
+//        NSArray *myArray = [myMutableArray copy];
+        [((FinallyViewController*) segue.destinationViewController) getTayTayWithMan:( myArray)];
+//        AppDelegate *app = (AppDelegate *)[[UIApplication  sharedApplication] delegate];
+//        app.myAppArray = myArray;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -217,17 +273,37 @@
     self.audioPlot.shouldFill = YES;
     self.audioPlot.shouldMirror = YES;
     __weak typeof (self) weakSelf = self;
-    [self.audioFile getWaveformDataWithCompletionBlock:^(float **waveformData,
+    // getWaveformDataWithNumberOfPoints
+    // 超级无敌关键步骤
+//    [self.audioFile getWaveformDataWithCompletionBlock:^(float **waveformData,
+//                                                         int length)
+//     {
+//         [weakSelf.audioPlot updateBuffer:waveformData[0]
+//                           withBufferSize:length];
+//     }];
+    // getWaveformDataWithNumberOfPoints
+    // 超级无敌关键步骤
+    [self.audioFile getWaveformDataWithNumberOfPoints:1024
+                                           completion:^(float **waveformData,
                                                          int length)
      {
          [weakSelf.audioPlot updateBuffer:waveformData[0]
                            withBufferSize:length];
+         NSLog(@"1数组第一维度长度: %u", sizeof(waveformData)/sizeof(waveformData[0]));
+         NSLog(@"1数组第二维度长度: %u", sizeof(waveformData[0])/sizeof(waveformData[0][0]));
      }];
-    
+
     //
     // Play the audio file
     //
     [self.player setAudioFile:self.audioFile];
+    
+    // myTime 今早实力
+    EZAudioFloatData *a = [self.audioFile getWaveformDataWithNumberOfPoints : 8000];
+    int count1 = sizeof([a buffers]) / sizeof([a buffers][0]);
+    int count2 = sizeof([a buffers][0]) / sizeof([a buffers][0][0]);
+    NSLog(@"数组一维长度: %d",count1);
+    NSLog(@"数组二维长度: %d",count2);
 }
 
 //------------------------------------------------------------------------------
@@ -267,7 +343,29 @@
           inAudioFile:(EZAudioFile *)audioFile
 {
     __weak typeof (self) weakSelf = self;
+    // 超级无敌关键步骤
     dispatch_async(dispatch_get_main_queue(), ^{
+        _myTmpInt++;
+        NSLog(@"counting : %d",_myTmpInt);
+//        NSLog(@"2数组一维的长度: %lu",sizeof(buffer)/sizeof(buffer[0]));
+//        NSLog(@"2数组二维的长度: %lu",sizeof(buffer[0])/sizeof(buffer[0][0]));
+//        for (int i = 0; i < numberOfChannels; i++)
+//        {
+//            memcpy(buffersCopy[i], buffers[i], size);
+//        }
+//        memcpy(_taytay[_myTmpInt-1],buffer[0],sizeof(float)*512);
+        for (int i = 0;i<512;i++){
+//            _taytay[][0]
+            long long tmpIndex = (_myTmpInt-1)*512+i;
+            if (tmpIndex >= _actualLenth){
+                break;
+            }
+            if (_myTmpInt == 2){
+                NSLog(@"my[2][%d]: %f",i,buffer[0][i]);
+            }
+            _taytay[tmpIndex] = buffer[0][i];
+//            memcpy(_taytay[tmpIndex],buffer[0][i],sizeof(float));
+        }
         [weakSelf.audioPlot updateBuffer:buffer[0]
                           withBufferSize:bufferSize];
     });

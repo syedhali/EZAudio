@@ -60,6 +60,30 @@
 @property (nonatomic, strong) EZAudioPlayer *player;
 
 //------------------------------------------------------------------------------
+//
+// myCounting
+//
+@property (nonatomic) int myTmpInt;
+
+//------------------------------------------------------------------------------
+//
+// myCounting2
+//
+@property (nonatomic) float *taytay;
+
+//------------------------------------------------------------------------------
+//
+// myCounting3
+//
+@property (nonatomic) long long theTailLenth;
+
+//------------------------------------------------------------------------------
+//
+// myCounting4
+//
+@property (nonatomic) long long actualLenth;
+
+//------------------------------------------------------------------------------
 
 //
 // The CoreGraphics based audio plot
