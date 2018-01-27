@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C3431A8201264B30019176C /* ViewController2.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C3431A7201264B30019176C /* ViewController2.m */; };
+		0C3431AA20126DB30019176C /* RRecord2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0C3431A920126DB30019176C /* RRecord2.wav */; };
+		0C3431AC20131D5A0019176C /* la - 1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0C3431AB20131D5A0019176C /* la - 1.wav */; };
+		0C3431AE201329DF0019176C /* FinallyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3431AD201329DF0019176C /* FinallyViewController.swift */; };
 		66374E621C545AC6000B19D0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66374E611C545AC6000B19D0 /* main.m */; };
 		66374E651C545AC6000B19D0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 66374E641C545AC6000B19D0 /* AppDelegate.m */; };
 		66374E681C545AC6000B19D0 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66374E671C545AC6000B19D0 /* ViewController.m */; };
@@ -57,6 +61,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0C34319C20125F280019176C /* PlayFile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PlayFile-Bridging-Header.h"; sourceTree = "<group>"; };
+		0C3431A6201264B30019176C /* ViewController2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController2.h; sourceTree = "<group>"; };
+		0C3431A7201264B30019176C /* ViewController2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController2.m; sourceTree = "<group>"; };
+		0C3431A920126DB30019176C /* RRecord2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = RRecord2.wav; sourceTree = "<group>"; };
+		0C3431AB20131D5A0019176C /* la - 1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "la - 1.wav"; sourceTree = "<group>"; };
+		0C3431AD201329DF0019176C /* FinallyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinallyViewController.swift; sourceTree = "<group>"; };
 		66374E5D1C545AC6000B19D0 /* PlayFile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlayFile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66374E611C545AC6000B19D0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		66374E631C545AC6000B19D0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -103,16 +113,22 @@
 		66374E5F1C545AC6000B19D0 /* PlayFile */ = {
 			isa = PBXGroup;
 			children = (
+				0C3431AB20131D5A0019176C /* la - 1.wav */,
 				66374F7B1C5475DF000B19D0 /* simple-drum-beat.wav */,
+				0C3431A920126DB30019176C /* RRecord2.wav */,
 				66374E631C545AC6000B19D0 /* AppDelegate.h */,
 				66374E641C545AC6000B19D0 /* AppDelegate.m */,
 				66374E661C545AC6000B19D0 /* ViewController.h */,
 				66374E671C545AC6000B19D0 /* ViewController.m */,
+				0C3431A6201264B30019176C /* ViewController2.h */,
+				0C3431A7201264B30019176C /* ViewController2.m */,
 				66374E691C545AC6000B19D0 /* Main.storyboard */,
 				66374E6C1C545AC6000B19D0 /* Assets.xcassets */,
 				66374E6E1C545AC6000B19D0 /* LaunchScreen.storyboard */,
 				66374E711C545AC6000B19D0 /* Info.plist */,
 				66374E601C545AC6000B19D0 /* Supporting Files */,
+				0C34319C20125F280019176C /* PlayFile-Bridging-Header.h */,
+				0C3431AD201329DF0019176C /* FinallyViewController.swift */,
 			);
 			path = PlayFile;
 			sourceTree = "<group>";
@@ -167,6 +183,7 @@
 				TargetAttributes = {
 					66374E5C1C545AC6000B19D0 = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0920;
 					};
 				};
 			};
@@ -218,6 +235,8 @@
 			files = (
 				66374F7C1C5475DF000B19D0 /* simple-drum-beat.wav in Resources */,
 				66374E701C545AC6000B19D0 /* LaunchScreen.storyboard in Resources */,
+				0C3431AA20126DB30019176C /* RRecord2.wav in Resources */,
+				0C3431AC20131D5A0019176C /* la - 1.wav in Resources */,
 				66374E6D1C545AC6000B19D0 /* Assets.xcassets in Resources */,
 				66374E6B1C545AC6000B19D0 /* Main.storyboard in Resources */,
 			);
@@ -231,6 +250,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				66374E681C545AC6000B19D0 /* ViewController.m in Sources */,
+				0C3431A8201264B30019176C /* ViewController2.m in Sources */,
+				0C3431AE201329DF0019176C /* FinallyViewController.swift in Sources */,
 				66374E651C545AC6000B19D0 /* AppDelegate.m in Sources */,
 				66374E621C545AC6000B19D0 /* main.m in Sources */,
 			);
@@ -354,11 +375,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = PlayFile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sha.PlayFile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PlayFile/PlayFile-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -366,11 +391,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = PlayFile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sha.PlayFile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PlayFile/PlayFile-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
