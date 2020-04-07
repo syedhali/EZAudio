@@ -82,7 +82,6 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
 //------------------------------------------------------------------------------
 
 @interface EZOutput ()
-@property (nonatomic, strong) EZAudioFloatConverter *floatConverter;
 @property (nonatomic, assign) EZOutputInfo *info;
 @end
 
@@ -98,12 +97,8 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
 
 - (void)dealloc
 {
-//    if (self.floatConverter)
-//    {
-//        self.floatConverter = nil;
-        [EZAudioUtilities freeFloatBuffers:self.info->floatData
-                          numberOfChannels:self.info->clientFormat.mChannelsPerFrame];
-//    }
+    [EZAudioUtilities freeFloatBuffers:self.info->floatData
+                      numberOfChannels:self.info->clientFormat.mChannelsPerFrame];
     [EZAudioUtilities checkResult:AUGraphStop(self.info->graph)
                         operation:"Failed to stop graph"];
     [EZAudioUtilities checkResult:AUGraphClose(self.info->graph)
@@ -744,10 +739,10 @@ OSStatus EZOutputGraphRenderCallback(void                       *inRefCon,
         if ([output.delegate respondsToSelector:@selector(output:playedAudio:withBufferSize:withNumberOfChannels:)])
         {
             UInt32 channels = output.info->clientFormat.mChannelsPerFrame;
-            float **data = output.info->floatData;
             UInt32 frames = ioData->mBuffers[0].mDataByteSize / output.info->clientFormat.mBytesPerFrame;
+            float **data = output.info->floatData;
             for (int i = 0; i < ioData->mNumberBuffers; i++) {
-                data[i] = (float *)ioData->mBuffers[i].mData;
+                memcpy(data[i], ioData->mBuffers[i].mData, ioData->mBuffers[i].mDataByteSize);
             }
             [output.delegate output:output
                         playedAudio:data
