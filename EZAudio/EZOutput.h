@@ -218,6 +218,10 @@ FOUNDATION_EXPORT Float64 const EZOutputDefaultSampleRate;
 
 //------------------------------------------------------------------------------
 
+@property (nonatomic, readonly) UInt32 maximumFramesPerSlice;
+
+//------------------------------------------------------------------------------
+
 ///-----------------------------------------------------------
 /// @name Setting/Getting The Data Source and Delegate
 ///-----------------------------------------------------------
