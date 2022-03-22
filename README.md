@@ -11,6 +11,11 @@ I'd really like to start creating a list of projects made using EZAudio. If you'
 To start it off:
 - [Detour](https://www.detour.com/) - Gorgeous location-aware audio walks
 - [Jumpshare](https://jumpshare.com/) - Incredibly fast, real-time file sharing
+- Piano Tuner (Home Edition)
+- Piano Tuner (Pro Edition)
+- Music Pitch Detector
+- Piano Prober
+- Multi Tuner
 
 ## Features
 
