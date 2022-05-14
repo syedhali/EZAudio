@@ -710,8 +710,8 @@ BOOL __shouldExitOnCheckResultFail = YES;
 + (void)freeHistoryInfo:(EZPlotHistoryInfo *)historyInfo
 {
     free(historyInfo->buffer);
-    free(historyInfo);
     TPCircularBufferCleanup(&historyInfo->circularBuffer);
+    free(historyInfo);
 }
 
 //------------------------------------------------------------------------------
