@@ -622,6 +622,17 @@ BOOL __shouldExitOnCheckResultFail = YES;
         *blue = components[2];
         *alpha = components[3];
     }
+    else if (componentCount == 2)
+    {
+        const CGFloat *components = CGColorGetComponents(color);
+        *red = components[0];
+        *green = components[0];
+        *blue = components[0];
+        *alpha = components[1];
+    }
+    else {
+		// should throw an exception maybe
+	}
 }
 
 //------------------------------------------------------------------------------
