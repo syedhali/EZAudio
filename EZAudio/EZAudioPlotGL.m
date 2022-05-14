@@ -299,11 +299,16 @@ typedef struct
 
 - (void)setSampleData:(float *)data length:(int)length
 {
-    int pointCount = self.shouldFill ? length * 2 : length;
-    EZAudioPlotGLPoint *points = self.info->points;
+    const BOOL shouldFill = self.shouldFill;
+    
+    int pointCount = (shouldFill ? length * 2 : length) + (shouldFill ? kEZAudioPlotAdditionalPointCount : 0);
+    
+    EZAudioPlotGLPoint *allPoints = self.info->points;
+    EZAudioPlotGLPoint *points = (shouldFill ? &allPoints[1] : allPoints);
+    
     for (int i = 0; i < length; i++)
     {
-        if (self.shouldFill)
+        if (shouldFill)
         {
             points[i * 2].x = points[i * 2 + 1].x = i;
             points[i * 2].y = data[i];
@@ -315,9 +320,18 @@ typedef struct
             points[i].y = data[i];
         }
     }
-    points[0].y = points[pointCount - 1].y = 0.0f;
+    
+    if (shouldFill)
+    {
+        const int first = 0;
+        const int last = pointCount - 1;
+        allPoints[first].x = 0.0f;
+        allPoints[last].x = length - 1;
+        allPoints[first].y = allPoints[last].y = 0.0f;
+    }
+    
     self.info->pointCount = pointCount;
-    self.info->interpolated = self.shouldFill;
+    self.info->interpolated = shouldFill;
 #if !TARGET_OS_IPHONE
     [self.openGLContext lock];
     glBindVertexArray(self.info->vab);
@@ -485,7 +499,7 @@ typedef struct
     glClear(GL_COLOR_BUFFER_BIT);
     GLenum mode = interpolated ? GL_TRIANGLE_STRIP : GL_LINE_STRIP;
     float interpolatedFactor = interpolated ? 2.0f : 1.0f;
-    float xscale = 2.0f / ((float)pointCount / interpolatedFactor);
+    float xscale = 2.0f / (((float)(pointCount) / interpolatedFactor) - 3.0f);
     float yscale = 1.0f * gain;
     GLKMatrix4 transform = GLKMatrix4MakeTranslation(-1.0f, 0.0f, 0.0f);
     transform = GLKMatrix4Scale(transform, xscale, yscale, 1.0f);
