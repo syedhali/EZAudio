@@ -595,7 +595,7 @@ __weak typeof (self) weakSelf = self;
 // Get a waveform with 1024 points of data. We can adjust the number of points to whatever level
 // of detail is needed by the application
 [self.audioFile getWaveformDataWithNumberOfPoints:1024
-                                  completionBlock:^(float **waveformData,
+                                       completion:^(float **waveformData,
                                                     int length)
 {
      [weakSelf.audioPlot updateBuffer:waveformData[0]
