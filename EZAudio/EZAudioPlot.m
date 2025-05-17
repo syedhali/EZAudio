@@ -203,9 +203,10 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
 - (void)setShouldOptimizeForRealtimePlot:(BOOL)shouldOptimizeForRealtimePlot
 {
     _shouldOptimizeForRealtimePlot = shouldOptimizeForRealtimePlot;
-    if (shouldOptimizeForRealtimePlot && !self.displayLink)
+    if (shouldOptimizeForRealtimePlot)
     {
-        self.displayLink = [EZAudioDisplayLink displayLinkWithDelegate:self];
+        if (self.displayLink == nil)
+            self.displayLink = [EZAudioDisplayLink displayLinkWithDelegate:self];
         [self.displayLink start];
     }
     else
@@ -313,7 +314,7 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
 #pragma mark - Update
 //------------------------------------------------------------------------------
 
-- (void)updateBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize
+- (void)updateBuffer:(const float *)buffer withBufferSize:(UInt32)bufferSize
 {
     // append the buffer to the history
     [EZAudioUtilities appendBufferRMS:buffer
@@ -345,7 +346,7 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
 
 //------------------------------------------------------------------------------
 
-- (void)setSampleData:(float *)data length:(int)length
+- (void)setSampleData:(const float *)data length:(int)length
 {
     CGPoint *points = self.points;
     for (int i = 0; i < length; i++)

@@ -84,19 +84,20 @@ FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength;
  See EZPlot for full API methods and properties (colors, plot type, update function)
  
  */
+IB_DESIGNABLE
 @interface EZAudioPlot : EZPlot
 
 /**
  A BOOL that allows optimizing the audio plot's drawing for real-time displays. Since the update function may be updating the plot's data very quickly (over 60 frames per second) this property will throttle the drawing calls to be 60 frames per second (or whatever the screen rate is). Specifically, it disables implicit path change animations on the `waveformLayer` and sets up a display link to render 60 fps (audio updating the plot at 44.1 kHz causes it to re-render 86 fps - far greater than what is needed for a visual display).
  */
-@property (nonatomic, assign) BOOL shouldOptimizeForRealtimePlot;
+@property (nonatomic, assign) IBInspectable BOOL shouldOptimizeForRealtimePlot;
 
 //------------------------------------------------------------------------------
 
 /**
  A BOOL indicating whether the plot should center itself vertically.
  */
-@property (nonatomic, assign) BOOL shouldCenterYAxis;
+@property (nonatomic, assign) IBInspectable BOOL shouldCenterYAxis;
 
 //------------------------------------------------------------------------------
 
@@ -193,7 +194,7 @@ FOUNDATION_EXPORT UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength;
  @param data   A float array of the sample data. Subclasses should copy this data to a separate array to avoid threading issues.
  @param length The length of the float array as an int.
  */
--(void)setSampleData:(float *)data length:(int)length;
+-(void)setSampleData:(const float *)data length:(int)length;
 
 //------------------------------------------------------------------------------
 
