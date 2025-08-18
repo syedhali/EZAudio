@@ -539,7 +539,16 @@ BOOL __shouldExitOnCheckResultFail = YES;
     fprintf(stderr, "Error: %s (%s)\n", operation, errorString);
     if (__shouldExitOnCheckResultFail)
     {
-        exit(-1);
+        @try {
+            NSException *e = [NSException
+                              exceptionWithName:@"EZAudioException"
+                              reason:[NSString stringWithCString:errorString encoding:NSUTF8StringEncoding]
+                              userInfo:nil];
+            @throw e;
+        }
+        @catch(NSException *e) {
+            @throw; // rethrows e implicitly
+        }
     }
 }
 
