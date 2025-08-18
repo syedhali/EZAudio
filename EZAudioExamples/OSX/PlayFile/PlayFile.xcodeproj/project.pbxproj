@@ -66,6 +66,7 @@
 				662B6CB61C542DF500353D48 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		662B6CB61C542DF500353D48 /* Products */ = {
 			isa = PBXGroup;

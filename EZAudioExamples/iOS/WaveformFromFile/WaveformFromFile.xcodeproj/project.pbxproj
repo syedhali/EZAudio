@@ -91,6 +91,7 @@
 				66374EA41C545AEA000B19D0 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		66374EA41C545AEA000B19D0 /* Products */ = {
 			isa = PBXGroup;

@@ -64,6 +64,7 @@
 				66374D891C544D2E000B19D0 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		66374D891C544D2E000B19D0 /* Products */ = {
 			isa = PBXGroup;
