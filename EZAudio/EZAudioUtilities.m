@@ -302,6 +302,24 @@ BOOL __shouldExitOnCheckResultFail = YES;
 
 //------------------------------------------------------------------------------
 
++ (AudioStreamBasicDescription)stereoSignedIntegerPackedFormatWithSampleRate:(float)sampleRate
+{
+  AudioStreamBasicDescription asbd;
+  UInt32 floatByteSize   = sizeof(float);
+  asbd.mChannelsPerFrame = 2;
+  asbd.mBitsPerChannel   = 4 * floatByteSize;
+  asbd.mBytesPerFrame    = asbd.mChannelsPerFrame * floatByteSize;
+  asbd.mFramesPerPacket  = 1;
+  asbd.mBytesPerPacket   = asbd.mFramesPerPacket * asbd.mBytesPerFrame;
+  asbd.mFormatFlags      = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
+  asbd.mFormatID         = kAudioFormatLinearPCM;
+  asbd.mSampleRate       = sampleRate;
+  asbd.mReserved         = 0;
+  return asbd;
+}
+
+//------------------------------------------------------------------------------
+
 + (AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)sampleRate
 {
     AudioStreamBasicDescription asbd;
