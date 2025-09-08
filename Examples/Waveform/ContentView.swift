@@ -19,6 +19,16 @@ class ContentViewModel: NSObject, ObservableObject {
     @Published var audioData: [Float] = []
     
     override init() {
+        #if os(iOS)
+        let session = AVAudioSession.sharedInstance()
+            do {
+            try session.setCategory(.record, mode: .default)
+            try session.setActive(true)
+        } catch {
+            fatalError()
+        }
+        #endif
+
         microphone = EZMicrophone()
         super.init()
         microphone.delegate = self

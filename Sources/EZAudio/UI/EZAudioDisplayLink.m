@@ -33,7 +33,8 @@
 #pragma mark - CVDisplayLink Callback (Declaration)
 //------------------------------------------------------------------------------
 
-#if TARGET_OS_MAC
+#if TARGET_OS_IPHONE
+#elif TARGET_OS_MAC
 static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLinkRef,
                                            const CVTimeStamp *now,
                                            const CVTimeStamp *outputTime,

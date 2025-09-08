@@ -42,7 +42,7 @@ public struct EZAudioPlotView: ViewRepresentable {
     }
     
     fileprivate func updateView(_ view: EZAudioPlot) {
-        view.color = NSColor(color)
+//        view.color = NSColor(color)
         view.shouldFill = shouldFill
         view.shouldMirror = shouldMirror
         view.shouldCenterYAxis = shouldCenterYAxis

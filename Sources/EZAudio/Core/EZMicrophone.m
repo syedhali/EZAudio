@@ -655,10 +655,10 @@ static OSStatus EZAudioMicrophoneCallback(void                       *inRefCon,
         [microphone.floatConverter convertDataFromAudioBufferList:info->audioBufferList
                                                withNumberOfFrames:inNumberFrames
                                                    toFloatBuffers:info->floatData];
-        [microphone.delegate microphone:microphone
-                       hasAudioReceived:info->floatData
-                         withBufferSize:inNumberFrames
-                   withNumberOfChannels:info->streamFormat.mChannelsPerFrame];
+//        [microphone.delegate microphone:microphone
+//                       hasAudioReceived:info->floatData
+//                         withBufferSize:inNumberFrames
+//                   withNumberOfChannels:info->streamFormat.mChannelsPerFrame];
     }
     
     return result;
