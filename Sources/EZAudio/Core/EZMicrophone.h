@@ -93,7 +93,7 @@
  @warning This function executes on a background thread to avoid blocking any audio operations. If operations should be performed on any other thread (like the main thread) it should be performed within a dispatch block like so: dispatch_async(dispatch_get_main_queue(), ^{ ...Your Code... })
  */
 - (void)    microphone:(EZMicrophone *)microphone
-      hasAudioReceived:(float **)buffer
+      hasAudioReceived:(const float * _Nonnull const * _Nonnull)buffer
         withBufferSize:(UInt32)bufferSize
   withNumberOfChannels:(UInt32)numberOfChannels;
 

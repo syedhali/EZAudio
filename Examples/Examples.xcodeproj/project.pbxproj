@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		666326002E6F585C004EF705 /* EZAudio in Frameworks */ = {isa = PBXBuildFile; productRef = 666325FF2E6F585C004EF705 /* EZAudio */; };
-		6663260A2E6F5BCB004EF705 /* EZAudioUI in Frameworks */ = {isa = PBXBuildFile; productRef = 666326092E6F5BCB004EF705 /* EZAudioUI */; };
+		6663260D2E6F64B9004EF705 /* EZAudio in Frameworks */ = {isa = PBXBuildFile; productRef = 6663260C2E6F64B9004EF705 /* EZAudio */; };
+		6663260F2E6F64B9004EF705 /* EZAudioSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 6663260E2E6F64B9004EF705 /* EZAudioSwiftUI */; };
+		666326112E6F64B9004EF705 /* EZAudioUI in Frameworks */ = {isa = PBXBuildFile; productRef = 666326102E6F64B9004EF705 /* EZAudioUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,8 +35,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6663260A2E6F5BCB004EF705 /* EZAudioUI in Frameworks */,
+				666326112E6F64B9004EF705 /* EZAudioUI in Frameworks */,
+				6663260D2E6F64B9004EF705 /* EZAudio in Frameworks */,
 				666326002E6F585C004EF705 /* EZAudio in Frameworks */,
+				6663260F2E6F64B9004EF705 /* EZAudioSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,7 +99,9 @@
 			name = Waveform;
 			packageProductDependencies = (
 				666325FF2E6F585C004EF705 /* EZAudio */,
-				666326092E6F5BCB004EF705 /* EZAudioUI */,
+				6663260C2E6F64B9004EF705 /* EZAudio */,
+				6663260E2E6F64B9004EF705 /* EZAudioSwiftUI */,
+				666326102E6F64B9004EF705 /* EZAudioUI */,
 			);
 			productName = Waveform;
 			productReference = 666325F22E6F5832004EF705 /* Waveform.app */;
@@ -126,7 +132,7 @@
 			mainGroup = 666325CF2E6F57BC004EF705;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				666325FE2E6F585C004EF705 /* XCLocalSwiftPackageReference "../../EZAudio" */,
+				6663260B2E6F64B9004EF705 /* XCLocalSwiftPackageReference "../../EZAudio" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 666325D92E6F57BC004EF705 /* Products */;
@@ -287,6 +293,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This example app needs the microphone input to plot it's samples.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -326,6 +333,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This example app needs the microphone input to plot it's samples.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -377,7 +385,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		666325FE2E6F585C004EF705 /* XCLocalSwiftPackageReference "../../EZAudio" */ = {
+		6663260B2E6F64B9004EF705 /* XCLocalSwiftPackageReference "../../EZAudio" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../EZAudio;
 		};
@@ -388,9 +396,16 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = EZAudio;
 		};
-		666326092E6F5BCB004EF705 /* EZAudioUI */ = {
+		6663260C2E6F64B9004EF705 /* EZAudio */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 666325FE2E6F585C004EF705 /* XCLocalSwiftPackageReference "../../EZAudio" */;
+			productName = EZAudio;
+		};
+		6663260E2E6F64B9004EF705 /* EZAudioSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = EZAudioSwiftUI;
+		};
+		666326102E6F64B9004EF705 /* EZAudioUI */ = {
+			isa = XCSwiftPackageProductDependency;
 			productName = EZAudioUI;
 		};
 /* End XCSwiftPackageProductDependency section */

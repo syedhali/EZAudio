@@ -313,7 +313,7 @@ UInt32 const EZAudioPlotDefaultMaxHistoryBufferLength = 8192;
 #pragma mark - Update
 //------------------------------------------------------------------------------
 
-- (void)updateBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize
+- (void)updateBuffer:(const float *)buffer withBufferSize:(UInt32)bufferSize
 {
     // append the buffer to the history
     [EZAudioUtilities appendBufferRMS:buffer

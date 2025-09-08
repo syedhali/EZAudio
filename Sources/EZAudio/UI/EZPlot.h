@@ -137,6 +137,6 @@ typedef NS_ENUM(NSInteger, EZPlotType)
  @param bufferSize The size of the float array that will be mapped to the y-axis.
  @warning The bufferSize is expected to be the same, constant value once initial triggered. For plots using OpenGL a vertex buffer object will be allocated with a maximum buffersize of (2 * the initial given buffer size) to account for any interpolation necessary for filling in the graph. Updates use the glBufferSubData(...) function, which will crash if the buffersize exceeds the initial maximum allocated size.
  */
--(void)updateBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize;
+-(void)updateBuffer:(const float * _Nonnull)buffer withBufferSize:(UInt32)bufferSize;
 
 @end

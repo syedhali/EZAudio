@@ -9,7 +9,8 @@ let package = Package(
     ],
     products: [
         .library(name: "EZAudio", targets: ["EZAudio"]),
-        .library(name: "EZAudioUI", targets: ["EZAudioUI"])
+        .library(name: "EZAudioUI", targets: ["EZAudioUI"]),
+        .library(name: "EZAudioSwiftUI", targets: ["EZAudioSwiftUI"])
     ],
     dependencies: [
         .package(url: "https://github.com/michaeltyson/TPCircularBuffer.git", from: "1.6.2")
@@ -38,6 +39,11 @@ let package = Package(
                 .linkedFramework("AppKit", .when(platforms: [.macOS])),
                 .linkedFramework("QuartzCore")
             ]
+        ),
+        .target(
+            name: "EZAudioSwiftUI",
+            dependencies: ["EZAudioUI"],
+            path: "Sources/EZAudio/SwiftUI"
         )
     ]
 )
