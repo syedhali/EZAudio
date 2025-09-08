@@ -24,13 +24,16 @@
 //  THE SOFTWARE.
 
 #import "EZAudioDisplayLink.h"
+#import <QuartzCore/QuartzCore.h>
+#if TARGET_OS_MAC
+#import <CoreVideo/CoreVideo.h>
+#endif
 
 //------------------------------------------------------------------------------
 #pragma mark - CVDisplayLink Callback (Declaration)
 //------------------------------------------------------------------------------
 
-#if TARGET_OS_IPHONE
-#elif TARGET_OS_MAC
+#if TARGET_OS_MAC
 static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLinkRef,
                                            const CVTimeStamp *now,
                                            const CVTimeStamp *outputTime,
