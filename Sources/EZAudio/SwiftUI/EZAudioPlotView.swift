@@ -42,7 +42,6 @@ public struct EZAudioPlotView: PlatformViewRepresentable {
     }
 
     fileprivate func updateView(_ view: EZAudioPlot) {
-
 //        view.color = PlatformColor(color)
         view.shouldFill = shouldFill
         view.shouldMirror = shouldMirror
