@@ -26,9 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
                                 alpha:(CGFloat *)alpha
 {
     size_t componentCount = CGColorGetNumberOfComponents(color);
-    if (componentCount == 4)
-    {
-        const CGFloat *components = CGColorGetComponents(color);
+    if (componentCount == 4) {
+        const CGFloat * components = CGColorGetComponents(color);
         *red = components[0];
         *green = components[1];
         *blue = components[2];

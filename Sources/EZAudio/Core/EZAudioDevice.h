@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
+//  of this software and associated documentation files (the "Software"), to
+//  deal in the Software without restriction, including without limitation the
+//  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+//  sell copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
 //
 //  The above copyright notice and this permission notice shall be included in
@@ -19,12 +19,12 @@
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 //  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//  THE SOFTWARE.
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+//  IN THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import <Foundation/Foundation.h>
 
 #if TARGET_OS_IPHONE
 #import <AVFoundation/AVFoundation.h>
@@ -32,7 +32,14 @@
 #endif
 
 /**
- The EZAudioDevice provides an interface for getting the available input and output hardware devices on iOS and OSX. On iOS the EZAudioDevice uses the available devices found from the AVAudioSession, while on OSX the EZAudioDevice wraps the AudioHardware API to find any devices that are connected including the built-in devices (for instance, Built-In Microphone, Display Audio). Since the AVAudioSession and AudioHardware APIs are quite different the EZAudioDevice has different properties available on each platform. The EZMicrophone now supports setting any specific EZAudioDevice from the `inputDevices` function.
+ The EZAudioDevice provides an interface for getting the available input and
+ output hardware devices on iOS and OSX. On iOS the EZAudioDevice uses the
+ available devices found from the AVAudioSession, while on OSX the EZAudioDevice
+ wraps the AudioHardware API to find any devices that are connected including
+ the built-in devices (for instance, Built-In Microphone, Display Audio). Since
+ the AVAudioSession and AudioHardware APIs are quite different the EZAudioDevice
+ has different properties available on each platform. The EZMicrophone now
+ supports setting any specific EZAudioDevice from the `inputDevices` function.
  */
 @interface EZAudioDevice : NSObject
 
@@ -46,7 +53,8 @@
 
 /**
  Provides the current EZAudioDevice that is being used to pull input.
- @return An EZAudioDevice instance representing the currently selected input device.
+ @return An EZAudioDevice instance representing the currently selected input
+ device.
  */
 + (EZAudioDevice *)currentInputDevice;
 
@@ -54,22 +62,26 @@
 
 /**
  Provides the current EZAudioDevice that is being used to output audio.
- @return An EZAudioDevice instance representing the currently selected ouotput device.
+ @return An EZAudioDevice instance representing the currently selected ouotput
+ device.
  */
 + (EZAudioDevice *)currentOutputDevice;
 
 //------------------------------------------------------------------------------
 
 /**
- Enumerates all the available input devices and returns the result in an NSArray of EZAudioDevice instances.
- @return An NSArray containing EZAudioDevice instances, one for each available input device.
+ Enumerates all the available input devices and returns the result in an NSArray
+ of EZAudioDevice instances.
+ @return An NSArray containing EZAudioDevice instances, one for each available
+ input device.
  */
 + (NSArray *)inputDevices;
 
 //------------------------------------------------------------------------------
 
 /**
- Enumerates all the available output devices and returns the result in an NSArray of EZAudioDevice instances.
+ Enumerates all the available output devices and returns the result in an
+ NSArray of EZAudioDevice instances.
  @return An NSArray of output EZAudioDevice instances.
  */
 + (NSArray *)outputDevices;
@@ -81,25 +93,28 @@
 /**
  Enumerates all the available input devices.
     - iOS only
- @param block When enumerating this block executes repeatedly for each EZAudioDevice found. It contains two arguments - first, the EZAudioDevice found, then a pointer to a stop BOOL to allow breaking out of the enumeration)
+ @param block When enumerating this block executes repeatedly for each
+ EZAudioDevice found. It contains two arguments - first, the EZAudioDevice
+ found, then a pointer to a stop BOOL to allow breaking out of the enumeration)
  */
-+ (void)enumerateInputDevicesUsingBlock:(void(^)(EZAudioDevice *device,
-                                                 BOOL *stop))block;
++ (void)enumerateInputDevicesUsingBlock:(void (^)(EZAudioDevice * device, BOOL * stop))block;
 
 //------------------------------------------------------------------------------
 
 /**
  Enumerates all the available output devices.
  - iOS only
- @param block When enumerating this block executes repeatedly for each EZAudioDevice found. It contains two arguments - first, the EZAudioDevice found, then a pointer to a stop BOOL to allow breaking out of the enumeration)
+ @param block When enumerating this block executes repeatedly for each
+ EZAudioDevice found. It contains two arguments - first, the EZAudioDevice
+ found, then a pointer to a stop BOOL to allow breaking out of the enumeration)
  */
-+ (void)enumerateOutputDevicesUsingBlock:(void (^)(EZAudioDevice *device,
-                                                   BOOL *stop))block;
++ (void)enumerateOutputDevicesUsingBlock:(void (^)(EZAudioDevice * device, BOOL * stop))block;
 
 #elif TARGET_OS_MAC
 
 /**
- Enumerates all the available devices and returns the result in an NSArray of EZAudioDevice instances.
+ Enumerates all the available devices and returns the result in an NSArray of
+ EZAudioDevice instances.
     - OSX only
  @return An NSArray of input and output EZAudioDevice instances.
  */
@@ -108,12 +123,13 @@
 //------------------------------------------------------------------------------
 
 /**
- Enumerates all the available devices. 
+ Enumerates all the available devices.
     - OSX only
- @param block When enumerating this block executes repeatedly for each EZAudioDevice found. It contains two arguments - first, the EZAudioDevice found, then a pointer to a stop BOOL to allow breaking out of the enumeration)
+ @param block When enumerating this block executes repeatedly for each
+ EZAudioDevice found. It contains two arguments - first, the EZAudioDevice
+ found, then a pointer to a stop BOOL to allow breaking out of the enumeration)
  */
-+ (void)enumerateDevicesUsingBlock:(void(^)(EZAudioDevice *device,
-                                            BOOL *stop))block;
++ (void)enumerateDevicesUsingBlock:(void (^)(EZAudioDevice * device, BOOL * stop))block;
 
 #endif
 
@@ -124,7 +140,7 @@
 /**
  An NSString representing a human-reable version of the device.
  */
-@property (nonatomic, copy, readonly) NSString *name;
+@property (nonatomic, copy, readonly) NSString * name;
 
 #if TARGET_OS_IPHONE
 
@@ -132,15 +148,16 @@
  An AVAudioSessionPortDescription describing an input or output hardware port.
     - iOS only
  */
-@property (nonatomic, strong, readonly) AVAudioSessionPortDescription *port;
+@property (nonatomic, strong, readonly) AVAudioSessionPortDescription * port;
 
 //------------------------------------------------------------------------------
 
 /**
- An AVAudioSessionDataSourceDescription describing a specific data source for the `port` provided.
+ An AVAudioSessionDataSourceDescription describing a specific data source for
+ the `port` provided.
     - iOS only
  */
-@property (nonatomic, strong, readonly) AVAudioSessionDataSourceDescription *dataSource;
+@property (nonatomic, strong, readonly) AVAudioSessionDataSourceDescription * dataSource;
 
 #elif TARGET_OS_MAC
 
@@ -156,7 +173,7 @@
  An NSString representing the name of the manufacturer of the device.
     - OSX only
  */
-@property (nonatomic, copy, readonly) NSString *manufacturer;
+@property (nonatomic, copy, readonly) NSString * manufacturer;
 
 //------------------------------------------------------------------------------
 
@@ -180,7 +197,7 @@
  An NSString representing the persistent identifier for the AudioDevice.
     - OSX only
  */
-@property (nonatomic, copy, readonly) NSString *UID;
+@property (nonatomic, copy, readonly) NSString * UID;
 
 #endif
 

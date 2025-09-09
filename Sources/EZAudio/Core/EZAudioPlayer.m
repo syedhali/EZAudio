@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
+//  of this software and associated documentation files (the "Software"), to
+//  deal in the Software without restriction, including without limitation the
+//  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+//  sell copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
 //
 //  The above copyright notice and this permission notice shall be included in
@@ -19,9 +19,9 @@
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 //  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//  THE SOFTWARE.
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+//  IN THE SOFTWARE.
 
 #import "EZAudioPlayer.h"
 #import "EZAudioUtilities.h"
@@ -77,11 +77,9 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
 
 //------------------------------------------------------------------------------
 
-+ (instancetype)audioPlayerWithAudioFile:(EZAudioFile *)audioFile
-                                   delegate:(id<EZAudioPlayerDelegate>)delegate
++ (instancetype)audioPlayerWithAudioFile:(EZAudioFile *)audioFile delegate:(id<EZAudioPlayerDelegate>)delegate
 {
-    return [[self alloc] initWithAudioFile:audioFile
-                                  delegate:delegate];
+    return [[self alloc] initWithAudioFile:audioFile delegate:delegate];
 }
 
 //------------------------------------------------------------------------------
@@ -93,8 +91,7 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
 
 //------------------------------------------------------------------------------
 
-+ (instancetype)audioPlayerWithURL:(NSURL *)url
-                             delegate:(id<EZAudioPlayerDelegate>)delegate
++ (instancetype)audioPlayerWithURL:(NSURL *)url delegate:(id<EZAudioPlayerDelegate>)delegate
 {
     return [[self alloc] initWithURL:url delegate:delegate];
 }
@@ -106,8 +103,7 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
 - (instancetype)init
 {
     self = [super init];
-    if (self)
-    {
+    if (self) {
         [self setup];
     }
     return self;
@@ -118,8 +114,7 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
 - (instancetype)initWithDelegate:(id<EZAudioPlayerDelegate>)delegate
 {
     self = [self init];
-    if (self)
-    {
+    if (self) {
         self.delegate = delegate;
     }
     return self;
@@ -134,12 +129,10 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
 
 //------------------------------------------------------------------------------
 
-- (instancetype)initWithAudioFile:(EZAudioFile *)audioFile
-                            delegate:(id<EZAudioPlayerDelegate>)delegate
+- (instancetype)initWithAudioFile:(EZAudioFile *)audioFile delegate:(id<EZAudioPlayerDelegate>)delegate
 {
     self = [self initWithDelegate:delegate];
-    if (self)
-    {
+    if (self) {
         self.audioFile = audioFile;
     }
     return self;
@@ -154,12 +147,10 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
 
 //------------------------------------------------------------------------------
 
-- (instancetype)initWithURL:(NSURL *)url
-                      delegate:(id<EZAudioPlayerDelegate>)delegate
+- (instancetype)initWithURL:(NSURL *)url delegate:(id<EZAudioPlayerDelegate>)delegate
 {
     self = [self initWithDelegate:delegate];
-    if (self)
-    {
+    if (self) {
         self.audioFile = [EZAudioFile audioFileWithURL:url delegate:self];
     }
     return self;
@@ -171,12 +162,9 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
 
 + (instancetype)sharedAudioPlayer
 {
-    static EZAudioPlayer *player;
+    static EZAudioPlayer * player;
     static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^
-    {
-        player = [[self alloc] init];
-    });
+    dispatch_once(&onceToken, ^{ player = [[self alloc] init]; });
     return player;
 }
 
@@ -272,8 +260,7 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
     _audioFile.delegate = self;
     AudioStreamBasicDescription inputFormat = _audioFile.clientFormat;
     [self.output setInputFormat:inputFormat];
-    [[NSNotificationCenter defaultCenter] postNotificationName:EZAudioPlayerDidChangeAudioFileNotification
-                                                        object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:EZAudioPlayerDidChangeAudioFileNotification object:self];
 }
 
 //------------------------------------------------------------------------------
@@ -281,8 +268,7 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
 - (void)setCurrentTime:(NSTimeInterval)currentTime
 {
     [self.audioFile setCurrentTime:currentTime];
-    [[NSNotificationCenter defaultCenter] postNotificationName:EZAudioPlayerDidSeekNotification
-                                                        object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:EZAudioPlayerDidSeekNotification object:self];
 }
 
 //------------------------------------------------------------------------------
@@ -306,8 +292,7 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
 - (void)setPan:(float)pan
 {
     [self.output setPan:pan];
-    [[NSNotificationCenter defaultCenter] postNotificationName:EZAudioPlayerDidChangePanNotification
-                                                        object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:EZAudioPlayerDidChangePanNotification object:self];
 }
 
 //------------------------------------------------------------------------------
@@ -315,8 +300,7 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
 - (void)setVolume:(float)volume
 {
     [self.output setVolume:volume];
-    [[NSNotificationCenter defaultCenter] postNotificationName:EZAudioPlayerDidChangeVolumeNotification
-                                                        object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:EZAudioPlayerDidChangeVolumeNotification object:self];
 }
 
 //------------------------------------------------------------------------------
@@ -337,12 +321,12 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
     // stop playing anything that might currently be playing
     //
     [self pause];
-    
+
     //
     // set new stream
     //
     self.audioFile = audioFile;
-    
+
     //
     // begin playback
     //
@@ -364,37 +348,28 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
     self.state = EZAudioPlayerStateSeeking;
     [self.audioFile seekToFrame:frame];
     self.state = self.isPlaying ? EZAudioPlayerStatePlaying : EZAudioPlayerStatePaused;
-    [[NSNotificationCenter defaultCenter] postNotificationName:EZAudioPlayerDidSeekNotification
-                                                        object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:EZAudioPlayerDidSeekNotification object:self];
 }
 
 //------------------------------------------------------------------------------
 #pragma mark - EZOutputDataSource
 //------------------------------------------------------------------------------
 
-- (OSStatus)        output:(EZOutput *)output
- shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
-        withNumberOfFrames:(UInt32)frames
-                 timestamp:(const AudioTimeStamp *)timestamp
+- (OSStatus)output:(EZOutput *)output
+    shouldFillAudioBufferList:(AudioBufferList *)audioBufferList
+           withNumberOfFrames:(UInt32)frames
+                    timestamp:(const AudioTimeStamp *)timestamp
 {
-    if (self.audioFile)
-    {
+    if (self.audioFile) {
         UInt32 bufferSize;
         BOOL eof;
-        [self.audioFile readFrames:frames
-                   audioBufferList:audioBufferList
-                        bufferSize:&bufferSize
-                               eof:&eof];
-        if (eof && [self.delegate respondsToSelector:@selector(audioPlayer:reachedEndOfAudioFile:)]) 
-        {
+        [self.audioFile readFrames:frames audioBufferList:audioBufferList bufferSize:&bufferSize eof:&eof];
+        if (eof && [self.delegate respondsToSelector:@selector(audioPlayer:reachedEndOfAudioFile:)]) {
             [self.delegate audioPlayer:self reachedEndOfAudioFile:self.audioFile];
         }
-        if (eof && self.shouldLoop)
-        {
+        if (eof && self.shouldLoop) {
             [self seekToFrame:0];
-        }
-        else if (eof)
-        {
+        } else if (eof) {
             [self pause];
             [self seekToFrame:0];
             self.state = EZAudioPlayerStateEndOfFile;
@@ -411,11 +386,8 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
 
 - (void)audioFileUpdatedPosition:(EZAudioFile *)audioFile
 {
-    if ([self.delegate respondsToSelector:@selector(audioPlayer:updatedPosition:inAudioFile:)])
-    {
-        [self.delegate audioPlayer:self
-                   updatedPosition:[audioFile frameIndex]
-                       inAudioFile:audioFile];
+    if ([self.delegate respondsToSelector:@selector(audioPlayer:updatedPosition:inAudioFile:)]) {
+        [self.delegate audioPlayer:self updatedPosition:[audioFile frameIndex] inAudioFile:audioFile];
     }
 }
 
@@ -433,19 +405,18 @@ NSString * const EZAudioPlayerDidSeekNotification = @"EZAudioPlayerDidSeekNotifi
 
 - (void)output:(EZOutput *)output changedPlayingState:(BOOL)isPlaying
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:EZAudioPlayerDidChangePlayStateNotification
-                                                        object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:EZAudioPlayerDidChangePlayStateNotification object:self];
 }
 
 //------------------------------------------------------------------------------
 
-- (void)       output:(EZOutput *)output
-          playedAudio:(float **)buffer
-       withBufferSize:(UInt32)bufferSize
- withNumberOfChannels:(UInt32)numberOfChannels
+- (void)output:(EZOutput *)output
+             playedAudio:(float **)buffer
+          withBufferSize:(UInt32)bufferSize
+    withNumberOfChannels:(UInt32)numberOfChannels
 {
-    if ([self.delegate respondsToSelector:@selector(audioPlayer:playedAudio:withBufferSize:withNumberOfChannels:inAudioFile:)])
-    {
+    if ([self.delegate respondsToSelector:@selector(audioPlayer:
+                                                    playedAudio:withBufferSize:withNumberOfChannels:inAudioFile:)]) {
         [self.delegate audioPlayer:self
                        playedAudio:buffer
                     withBufferSize:bufferSize

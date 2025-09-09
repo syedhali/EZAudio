@@ -1,0 +1,36 @@
+#!/bin/bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT_DIR"
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+if ! have clang-format; then
+  echo "⚠️  clang-format not found (brew install clang-format)"
+fi
+if ! have swiftformat; then
+  echo "⚠️  swiftformat not found (brew install swiftformat)"
+fi
+
+# ----- Objective-C / C -----
+# Core and UI: .h .m .mm .c
+if have clang-format; then
+  echo "🔧 Formatting Objective-C/C…"
+  find Sources/EZAudio/Core Sources/EZAudio/UI \
+    -type f \( -name '*.h' -o -name '*.m' -o -name '*.mm' -o -name '*.c' \) \
+    -print0 | xargs -0 -I{} clang-format -i "{}"
+fi
+
+# ----- Swift -----
+# Swift sources in SwiftUI + any Swift in Core/UI + Example apps
+if have swiftformat; then
+  echo "🔧 Formatting Swift…"
+  swiftformat --quiet \
+    Sources/EZAudio/SwiftUI \
+    Sources/EZAudio/Core \
+    Sources/EZAudio/UI \
+    Examples
+fi
+
+echo "✅ Done."

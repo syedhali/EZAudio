@@ -1,0 +1,19 @@
+BasedOnStyle: WebKit
+IndentWidth: 4
+ColumnLimit: 120
+UseTab: Never
+
+AlignConsecutiveDeclarations: None
+DerivePointerAlignment: false
+PointerAlignment: Middle
+BinPackParameters: false
+BinPackArguments: false
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowAllArgumentsOnNextLine: false
+
+# ObjC specifics
+---
+Language: ObjC
+ObjCBreakBeforeNestedBlockParam: true
+ObjCSpaceAfterProperty: true
+ObjCSpaceBeforeProtocolList: true

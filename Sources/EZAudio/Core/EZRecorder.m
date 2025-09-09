@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
+//  of this software and associated documentation files (the "Software"), to
+//  deal in the Software without restriction, including without limitation the
+//  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+//  sell copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
 //
 //  The above copyright notice and this permission notice shall be included in
@@ -19,9 +19,9 @@
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 //  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//  THE SOFTWARE.
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+//  IN THE SOFTWARE.
 
 #import "EZRecorder.h"
 #import "EZAudioUtilities.h"
@@ -30,13 +30,12 @@
 #pragma mark - Data Structures
 //------------------------------------------------------------------------------
 
-typedef struct
-{
-    AudioFileTypeID             audioFileTypeID;
-    ExtAudioFileRef             extAudioFileRef;
+typedef struct {
+    AudioFileTypeID audioFileTypeID;
+    ExtAudioFileRef extAudioFileRef;
     AudioStreamBasicDescription clientFormat;
-    BOOL                        closed;
-    CFURLRef                    fileURL;
+    BOOL closed;
+    CFURLRef fileURL;
     AudioStreamBasicDescription fileFormat;
 } EZRecorderInfo;
 
@@ -45,7 +44,7 @@ typedef struct
 //------------------------------------------------------------------------------
 
 @interface EZRecorder ()
-@property (nonatomic, assign) EZRecorderInfo *info;
+@property (nonatomic, assign) EZRecorderInfo * info;
 @end
 
 //------------------------------------------------------------------------------
@@ -60,8 +59,7 @@ typedef struct
 
 - (void)dealloc
 {
-    if (!self.info->closed)
-    {
+    if (!self.info->closed) {
         [self closeAudioFile];
     }
     free(self.info);
@@ -75,10 +73,7 @@ typedef struct
                clientFormat:(AudioStreamBasicDescription)clientFormat
                    fileType:(EZRecorderFileType)fileType
 {
-    return [self initWithURL:url
-                clientFormat:clientFormat
-                    fileType:fileType
-                    delegate:nil];
+    return [self initWithURL:url clientFormat:clientFormat fileType:fileType delegate:nil];
 }
 
 //------------------------------------------------------------------------------
@@ -88,10 +83,8 @@ typedef struct
                    fileType:(EZRecorderFileType)fileType
                    delegate:(id<EZRecorderDelegate>)delegate
 {
-    AudioStreamBasicDescription fileFormat = [EZRecorder formatForFileType:fileType
-                                                          withSourceFormat:clientFormat];
-    AudioFileTypeID audioFileTypeID = [EZRecorder fileTypeIdForFileType:fileType
-                                                       withSourceFormat:clientFormat];
+    AudioStreamBasicDescription fileFormat = [EZRecorder formatForFileType:fileType withSourceFormat:clientFormat];
+    AudioFileTypeID audioFileTypeID = [EZRecorder fileTypeIdForFileType:fileType withSourceFormat:clientFormat];
     return [self initWithURL:url
                 clientFormat:clientFormat
                   fileFormat:fileFormat
@@ -121,13 +114,11 @@ typedef struct
             audioFileTypeID:(AudioFileTypeID)audioFileTypeID
                    delegate:(id<EZRecorderDelegate>)delegate
 {
-    
     self = [super init];
-    if (self)
-    {
+    if (self) {
         // Set defaults
         self.info = (EZRecorderInfo *)calloc(1, sizeof(EZRecorderInfo));
-        self.info->audioFileTypeID  = audioFileTypeID;
+        self.info->audioFileTypeID = audioFileTypeID;
         self.info->fileURL = (__bridge CFURLRef)url;
         self.info->clientFormat = clientFormat;
         self.info->fileFormat = fileFormat;
@@ -139,13 +130,11 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-- (instancetype)initWithDestinationURL:(NSURL*)url
-                        sourceFormat:(AudioStreamBasicDescription)sourceFormat
-                 destinationFileType:(EZRecorderFileType)destinationFileType
+- (instancetype)initWithDestinationURL:(NSURL *)url
+                          sourceFormat:(AudioStreamBasicDescription)sourceFormat
+                   destinationFileType:(EZRecorderFileType)destinationFileType
 {
-    return [self initWithURL:url
-                clientFormat:sourceFormat
-                    fileType:destinationFileType];
+    return [self initWithURL:url clientFormat:sourceFormat fileType:destinationFileType];
 }
 
 //------------------------------------------------------------------------------
@@ -156,9 +145,7 @@ typedef struct
                    clientFormat:(AudioStreamBasicDescription)clientFormat
                        fileType:(EZRecorderFileType)fileType
 {
-    return [[self alloc] initWithURL:url
-                        clientFormat:clientFormat
-                            fileType:fileType];
+    return [[self alloc] initWithURL:url clientFormat:clientFormat fileType:fileType];
 }
 
 //------------------------------------------------------------------------------
@@ -168,10 +155,7 @@ typedef struct
                        fileType:(EZRecorderFileType)fileType
                        delegate:(id<EZRecorderDelegate>)delegate
 {
-    return [[self alloc] initWithURL:url
-                        clientFormat:clientFormat
-                            fileType:fileType
-                            delegate:delegate];
+    return [[self alloc] initWithURL:url clientFormat:clientFormat fileType:fileType delegate:delegate];
 }
 
 //------------------------------------------------------------------------------
@@ -204,9 +188,9 @@ typedef struct
 
 //------------------------------------------------------------------------------
 
-+ (instancetype)recorderWithDestinationURL:(NSURL*)url
-                             sourceFormat:(AudioStreamBasicDescription)sourceFormat
-                      destinationFileType:(EZRecorderFileType)destinationFileType
++ (instancetype)recorderWithDestinationURL:(NSURL *)url
+                              sourceFormat:(AudioStreamBasicDescription)sourceFormat
+                       destinationFileType:(EZRecorderFileType)destinationFileType
 {
     return [[EZRecorder alloc] initWithDestinationURL:url
                                          sourceFormat:sourceFormat
@@ -221,24 +205,23 @@ typedef struct
                                 withSourceFormat:(AudioStreamBasicDescription)sourceFormat
 {
     AudioStreamBasicDescription asbd;
-    switch (fileType)
-    {
-        case EZRecorderFileTypeAIFF:
-            asbd = [EZAudioUtilities AIFFFormatWithNumberOfChannels:sourceFormat.mChannelsPerFrame
-                                                         sampleRate:sourceFormat.mSampleRate];
-            break;
-        case EZRecorderFileTypeM4A:
-            asbd = [EZAudioUtilities M4AFormatWithNumberOfChannels:sourceFormat.mChannelsPerFrame
-                                                        sampleRate:sourceFormat.mSampleRate];
-            break;
-            
-        case EZRecorderFileTypeWAV:
-            asbd = [EZAudioUtilities stereoFloatInterleavedFormatWithSampleRate:sourceFormat.mSampleRate];
-            break;
-            
-        default:
-            asbd = [EZAudioUtilities stereoCanonicalNonInterleavedFormatWithSampleRate:sourceFormat.mSampleRate];
-            break;
+    switch (fileType) {
+    case EZRecorderFileTypeAIFF:
+        asbd = [EZAudioUtilities AIFFFormatWithNumberOfChannels:sourceFormat.mChannelsPerFrame
+                                                     sampleRate:sourceFormat.mSampleRate];
+        break;
+    case EZRecorderFileTypeM4A:
+        asbd = [EZAudioUtilities M4AFormatWithNumberOfChannels:sourceFormat.mChannelsPerFrame
+                                                    sampleRate:sourceFormat.mSampleRate];
+        break;
+
+    case EZRecorderFileTypeWAV:
+        asbd = [EZAudioUtilities stereoFloatInterleavedFormatWithSampleRate:sourceFormat.mSampleRate];
+        break;
+
+    default:
+        asbd = [EZAudioUtilities stereoCanonicalNonInterleavedFormatWithSampleRate:sourceFormat.mSampleRate];
+        break;
     }
     return asbd;
 }
@@ -249,23 +232,22 @@ typedef struct
                         withSourceFormat:(AudioStreamBasicDescription)sourceFormat
 {
     AudioFileTypeID audioFileTypeID;
-    switch (fileType)
-    {
-        case EZRecorderFileTypeAIFF:
-            audioFileTypeID = kAudioFileAIFFType;
-            break;
-            
-        case EZRecorderFileTypeM4A:
-            audioFileTypeID = kAudioFileM4AType;
-            break;
-            
-        case EZRecorderFileTypeWAV:
-            audioFileTypeID = kAudioFileWAVEType;
-            break;
-            
-        default:
-            audioFileTypeID = kAudioFileWAVEType;
-            break;
+    switch (fileType) {
+    case EZRecorderFileTypeAIFF:
+        audioFileTypeID = kAudioFileAIFFType;
+        break;
+
+    case EZRecorderFileTypeM4A:
+        audioFileTypeID = kAudioFileM4AType;
+        break;
+
+    case EZRecorderFileTypeWAV:
+        audioFileTypeID = kAudioFileWAVEType;
+        break;
+
+    default:
+        audioFileTypeID = kAudioFileWAVEType;
+        break;
     }
     return audioFileTypeID;
 }
@@ -276,24 +258,21 @@ typedef struct
 {
     // Finish filling out the destination format description
     UInt32 propSize = sizeof(self.info->fileFormat);
-    [EZAudioUtilities checkResult:AudioFormatGetProperty(kAudioFormatProperty_FormatInfo,
-                                                         0,
-                                                         NULL,
-                                                         &propSize,
-                                                         &self.info->fileFormat)
-                        operation:"Failed to fill out rest of destination format"];
-    
+    [EZAudioUtilities
+        checkResult:AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, NULL, &propSize, &self.info->fileFormat)
+          operation:"Failed to fill out rest of destination format"];
+
     //
     // Create the audio file
     //
     [EZAudioUtilities checkResult:ExtAudioFileCreateWithURL(self.info->fileURL,
-                                                            self.info->audioFileTypeID,
-                                                            &self.info->fileFormat,
-                                                            NULL,
-                                                            kAudioFileFlags_EraseFile,
-                                                            &self.info->extAudioFileRef)
+                                      self.info->audioFileTypeID,
+                                      &self.info->fileFormat,
+                                      NULL,
+                                      kAudioFileFlags_EraseFile,
+                                      &self.info->extAudioFileRef)
                         operation:"Failed to create audio file"];
-    
+
     //
     // Set the client format
     //
@@ -304,27 +283,25 @@ typedef struct
 #pragma mark - Events
 //------------------------------------------------------------------------------
 
-- (void)appendDataFromBufferList:(AudioBufferList *)bufferList
-                  withBufferSize:(UInt32)bufferSize
+- (void)appendDataFromBufferList:(AudioBufferList *)bufferList withBufferSize:(UInt32)bufferSize
 {
     //
     // Make sure the audio file is not closed
     //
-    NSAssert(!self.info->closed, @"Cannot append data when EZRecorder has been closed. You must create a new instance.;");
-    
+    NSAssert(!self.info->closed,
+        @"Cannot append data when EZRecorder has been "
+        @"closed. You must create a new instance.;");
+
     //
     // Perform the write
-    //    
-    [EZAudioUtilities checkResult:ExtAudioFileWrite(self.info->extAudioFileRef,
-                                                    bufferSize,
-                                                    bufferList)
+    //
+    [EZAudioUtilities checkResult:ExtAudioFileWrite(self.info->extAudioFileRef, bufferSize, bufferList)
                         operation:"Failed to write audio data to recorded audio file"];
-    
+
     //
     // Notify delegate
     //
-    if ([self.delegate respondsToSelector:@selector(recorderUpdatedCurrentTime:)])
-    {
+    if ([self.delegate respondsToSelector:@selector(recorderUpdatedCurrentTime:)]) {
         [self.delegate recorderUpdatedCurrentTime:self];
     }
 }
@@ -333,20 +310,18 @@ typedef struct
 
 - (void)closeAudioFile
 {
-    if (!self.info->closed)
-    {
+    if (!self.info->closed) {
         //
         // Close, audio file can no longer be written to
         //
         [EZAudioUtilities checkResult:ExtAudioFileDispose(self.info->extAudioFileRef)
                             operation:"Failed to close audio file"];
         self.info->closed = YES;
-        
+
         //
         // Notify delegate
         //
-        if ([self.delegate respondsToSelector:@selector(recorderDidClose:)])
-        {
+        if ([self.delegate respondsToSelector:@selector(recorderDidClose:)]) {
             [self.delegate recorderDidClose:self];
         }
     }
@@ -367,8 +342,7 @@ typedef struct
 {
     NSTimeInterval currentTime = 0.0;
     NSTimeInterval duration = [self duration];
-    if (duration != 0.0)
-    {
+    if (duration != 0.0) {
         currentTime = (NSTimeInterval)[EZAudioUtilities MAP:(float)[self frameIndex]
                                                     leftMin:0.0f
                                                     leftMax:(float)[self totalFrames]
@@ -383,7 +357,7 @@ typedef struct
 - (NSTimeInterval)duration
 {
     NSTimeInterval frames = (NSTimeInterval)[self totalFrames];
-    return (NSTimeInterval) frames / self.info->fileFormat.mSampleRate;
+    return (NSTimeInterval)frames / self.info->fileFormat.mSampleRate;
 }
 
 //------------------------------------------------------------------------------
@@ -412,8 +386,7 @@ typedef struct
 - (SInt64)frameIndex
 {
     SInt64 frameIndex;
-    [EZAudioUtilities checkResult:ExtAudioFileTell(self.info->extAudioFileRef,
-                                                   &frameIndex)
+    [EZAudioUtilities checkResult:ExtAudioFileTell(self.info->extAudioFileRef, &frameIndex)
                         operation:"Failed to get frame index"];
     return frameIndex;
 }
@@ -425,9 +398,9 @@ typedef struct
     SInt64 totalFrames;
     UInt32 propSize = sizeof(SInt64);
     [EZAudioUtilities checkResult:ExtAudioFileGetProperty(self.info->extAudioFileRef,
-                                                          kExtAudioFileProperty_FileLengthFrames,
-                                                          &propSize,
-                                                          &totalFrames)
+                                      kExtAudioFileProperty_FileLengthFrames,
+                                      &propSize,
+                                      &totalFrames)
                         operation:"Recorder failed to get total frames."];
     return totalFrames;
 }
@@ -436,7 +409,7 @@ typedef struct
 
 - (NSURL *)url
 {
-    return (__bridge NSURL*)self.info->fileURL;
+    return (__bridge NSURL *)self.info->fileURL;
 }
 
 //------------------------------------------------------------------------------
@@ -446,9 +419,9 @@ typedef struct
 - (void)setClientFormat:(AudioStreamBasicDescription)clientFormat
 {
     [EZAudioUtilities checkResult:ExtAudioFileSetProperty(self.info->extAudioFileRef,
-                                                          kExtAudioFileProperty_ClientDataFormat,
-                                                          sizeof(clientFormat),
-                                                          &clientFormat)
+                                      kExtAudioFileProperty_ClientDataFormat,
+                                      sizeof(clientFormat),
+                                      &clientFormat)
                         operation:"Failed to set client format on recorded audio file"];
     self.info->clientFormat = clientFormat;
 }

@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
+//  of this software and associated documentation files (the "Software"), to
+//  deal in the Software without restriction, including without limitation the
+//  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+//  sell copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
 //
 //  The above copyright notice and this permission notice shall be included in
@@ -19,9 +19,9 @@
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 //  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//  THE SOFTWARE.
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+//  IN THE SOFTWARE.
 
 #import "EZAudioDisplayLink.h"
 #import <QuartzCore/QuartzCore.h>
@@ -36,11 +36,11 @@
 #if TARGET_OS_IPHONE
 #elif TARGET_OS_MAC
 static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLinkRef,
-                                           const CVTimeStamp *now,
-                                           const CVTimeStamp *outputTime,
-                                           CVOptionFlags flagsIn,
-                                           CVOptionFlags *flagsOut,
-                                           void   *displayLinkContext);
+    const CVTimeStamp * now,
+    const CVTimeStamp * outputTime,
+    CVOptionFlags flagsIn,
+    CVOptionFlags * flagsOut,
+    void * displayLinkContext);
 #endif
 
 //------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLinkRef,
 
 @interface EZAudioDisplayLink ()
 #if TARGET_OS_IPHONE
-@property (nonatomic, strong) CADisplayLink *displayLink;
+@property (nonatomic, strong) CADisplayLink * displayLink;
 #elif TARGET_OS_MAC
 @property (nonatomic, assign) CVDisplayLinkRef displayLink;
 #endif
@@ -83,7 +83,7 @@ static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLinkRef,
 
 + (instancetype)displayLinkWithDelegate:(id<EZAudioDisplayLinkDelegate>)delegate
 {
-    EZAudioDisplayLink *displayLink = [[self alloc] init];
+    EZAudioDisplayLink * displayLink = [[self alloc] init];
     displayLink.delegate = delegate;
     return displayLink;
 }
@@ -92,11 +92,10 @@ static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLinkRef,
 #pragma mark - Initialization
 //------------------------------------------------------------------------------
 
-- (instancetype) init
+- (instancetype)init
 {
     self = [super init];
-    if (self)
-    {
+    if (self) {
         [self setup];
     }
     return self;
@@ -114,9 +113,7 @@ static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLinkRef,
     [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 #elif TARGET_OS_MAC
     CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
-    CVDisplayLinkSetOutputCallback(self.displayLink,
-                                   EZAudioDisplayLinkCallback,
-                                   (__bridge void *)(self));
+    CVDisplayLinkSetOutputCallback(self.displayLink, EZAudioDisplayLinkCallback, (__bridge void *)(self));
     CVDisplayLinkStart(self.displayLink);
 #endif
 }
@@ -151,10 +148,8 @@ static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLinkRef,
 
 - (void)update
 {
-    if (!self.stopped)
-    {
-        if ([self.delegate respondsToSelector:@selector(displayLinkNeedsDisplay:)])
-        {
+    if (!self.stopped) {
+        if ([self.delegate respondsToSelector:@selector(displayLinkNeedsDisplay:)]) {
             [self.delegate displayLinkNeedsDisplay:self];
         }
     }
@@ -171,13 +166,13 @@ static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLinkRef,
 #if TARGET_OS_IPHONE
 #elif TARGET_OS_MAC
 static CVReturn EZAudioDisplayLinkCallback(CVDisplayLinkRef displayLinkRef,
-                                           const CVTimeStamp *now,
-                                           const CVTimeStamp *outputTime,
-                                           CVOptionFlags flagsIn,
-                                           CVOptionFlags *flagsOut,
-                                           void   *displayLinkContext)
+    const CVTimeStamp * now,
+    const CVTimeStamp * outputTime,
+    CVOptionFlags flagsIn,
+    CVOptionFlags * flagsOut,
+    void * displayLinkContext)
 {
-    EZAudioDisplayLink *displayLink = (__bridge EZAudioDisplayLink*)displayLinkContext;
+    EZAudioDisplayLink * displayLink = (__bridge EZAudioDisplayLink *)displayLinkContext;
     [displayLink update];
     return kCVReturnSuccess;
 }

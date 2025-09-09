@@ -4,8 +4,9 @@ import PackageDescription
 let package = Package(
     name: "EZAudio",
     platforms: [
-        .iOS(.v13),
-        .macOS(.v10_13)
+        .iOS(.v14),
+        
+        .macOS(.v11)
     ],
     products: [
         .library(name: "EZAudio", targets: ["EZAudio"]),

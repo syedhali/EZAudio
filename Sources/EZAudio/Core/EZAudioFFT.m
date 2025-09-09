@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Syed Haris Ali. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
+//  of this software and associated documentation files (the "Software"), to
+//  deal in the Software without restriction, including without limitation the
+//  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+//  sell copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
 //
 //  The above copyright notice and this permission notice shall be included in
@@ -19,9 +19,9 @@
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 //  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//  THE SOFTWARE.
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+//  IN THE SOFTWARE.
 
 #import "EZAudioFFT.h"
 #import "EZAudioUtilities.h"
@@ -30,16 +30,15 @@
 #pragma mark - Data Structures
 //------------------------------------------------------------------------------
 
-typedef struct EZAudioFFTInfo
-{
-    FFTSetup       fftSetup;
-    COMPLEX_SPLIT  complexA;
-    float         *outFFTData;
-    vDSP_Length    outFFTDataLength;
-    float         *inversedFFTData;
-    vDSP_Length    maxFrequencyIndex;
-    float          maxFrequencyMangitude;
-    float          maxFrequency;
+typedef struct EZAudioFFTInfo {
+    FFTSetup fftSetup;
+    COMPLEX_SPLIT complexA;
+    float * outFFTData;
+    vDSP_Length outFFTDataLength;
+    float * inversedFFTData;
+    vDSP_Length maxFrequencyIndex;
+    float maxFrequencyMangitude;
+    float maxFrequency;
 } EZAudioFFTInfo;
 
 //------------------------------------------------------------------------------
@@ -47,8 +46,8 @@ typedef struct EZAudioFFTInfo
 //------------------------------------------------------------------------------
 
 @interface EZAudioFFT ()
-@property (assign,    nonatomic) EZAudioFFTInfo *info;
-@property (readwrite, nonatomic) vDSP_Length     maximumBufferSize;
+@property (assign, nonatomic) EZAudioFFTInfo * info;
+@property (readwrite, nonatomic) vDSP_Length maximumBufferSize;
 @end
 
 //------------------------------------------------------------------------------
@@ -74,12 +73,9 @@ typedef struct EZAudioFFTInfo
 #pragma mark - Initializers
 //------------------------------------------------------------------------------
 
-- (instancetype)initWithMaximumBufferSize:(vDSP_Length)maximumBufferSize
-                               sampleRate:(float)sampleRate
+- (instancetype)initWithMaximumBufferSize:(vDSP_Length)maximumBufferSize sampleRate:(float)sampleRate
 {
-    return [self initWithMaximumBufferSize:maximumBufferSize
-                                sampleRate:sampleRate
-                                  delegate:nil];
+    return [self initWithMaximumBufferSize:maximumBufferSize sampleRate:sampleRate delegate:nil];
 }
 
 //------------------------------------------------------------------------------
@@ -89,8 +85,7 @@ typedef struct EZAudioFFTInfo
                                  delegate:(id<EZAudioFFTDelegate>)delegate
 {
     self = [super init];
-    if (self)
-    {
+    if (self) {
         self.maximumBufferSize = (vDSP_Length)maximumBufferSize;
         self.sampleRate = sampleRate;
         self.delegate = delegate;
@@ -103,11 +98,9 @@ typedef struct EZAudioFFTInfo
 #pragma mark - Class Initializers
 //------------------------------------------------------------------------------
 
-+ (instancetype)fftWithMaximumBufferSize:(vDSP_Length)maximumBufferSize
-                              sampleRate:(float)sampleRate
++ (instancetype)fftWithMaximumBufferSize:(vDSP_Length)maximumBufferSize sampleRate:(float)sampleRate
 {
-    return [[self alloc] initWithMaximumBufferSize:maximumBufferSize
-                                        sampleRate:sampleRate];
+    return [[self alloc] initWithMaximumBufferSize:maximumBufferSize sampleRate:sampleRate];
 }
 
 //------------------------------------------------------------------------------
@@ -116,9 +109,7 @@ typedef struct EZAudioFFTInfo
                               sampleRate:(float)sampleRate
                                 delegate:(id<EZAudioFFTDelegate>)delegate
 {
-    return [[self alloc] initWithMaximumBufferSize:maximumBufferSize
-                                        sampleRate:sampleRate
-                                          delegate:delegate];
+    return [[self alloc] initWithMaximumBufferSize:maximumBufferSize sampleRate:sampleRate delegate:delegate];
 }
 
 //------------------------------------------------------------------------------
@@ -128,7 +119,7 @@ typedef struct EZAudioFFTInfo
 - (void)setup
 {
     NSAssert(self.maximumBufferSize > 0, @"Expected FFT buffer size to be greater than 0!");
-    
+
     //
     // Initialize FFT
     //
@@ -151,45 +142,40 @@ typedef struct EZAudioFFTInfo
 
 - (float *)computeFFTWithBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize
 {
-    if (buffer == NULL)
-    {
+    if (buffer == NULL) {
         return NULL;
     }
-    
+
     //
     // Calculate real + imaginary components and normalize
     //
     vDSP_Length log2n = log2f(bufferSize);
     long nOver2 = bufferSize / 2;
     float mFFTNormFactor = 10.0 / (2 * bufferSize);
-    vDSP_ctoz((COMPLEX*)buffer, 2, &(self.info->complexA), 1, nOver2);
+    vDSP_ctoz((COMPLEX *)buffer, 2, &(self.info->complexA), 1, nOver2);
     vDSP_fft_zrip(self.info->fftSetup, &(self.info->complexA), 1, log2n, FFT_FORWARD);
     vDSP_vsmul(self.info->complexA.realp, 1, &mFFTNormFactor, self.info->complexA.realp, 1, nOver2);
     vDSP_vsmul(self.info->complexA.imagp, 1, &mFFTNormFactor, self.info->complexA.imagp, 1, nOver2);
     vDSP_zvmags(&(self.info->complexA), 1, self.info->outFFTData, 1, nOver2);
     vDSP_fft_zrip(self.info->fftSetup, &(self.info->complexA), 1, log2n, FFT_INVERSE);
-    vDSP_ztoc(&(self.info->complexA), 1, (COMPLEX *) self.info->inversedFFTData , 2, nOver2);
+    vDSP_ztoc(&(self.info->complexA), 1, (COMPLEX *)self.info->inversedFFTData, 2, nOver2);
     self.info->outFFTDataLength = nOver2;
-    
+
     //
     // Calculate max freq
     //
-    if (self.sampleRate > 0.0f)
-    {
+    if (self.sampleRate > 0.0f) {
         vDSP_maxvi(self.info->outFFTData, 1, &self.info->maxFrequencyMangitude, &self.info->maxFrequencyIndex, nOver2);
         self.info->maxFrequency = [self frequencyAtIndex:self.info->maxFrequencyIndex];
     }
-    
+
     //
     // Notify delegate
     //
-    if ([self.delegate respondsToSelector:@selector(fft:updatedWithFFTData:bufferSize:)])
-    {
-        [self.delegate fft:self
-        updatedWithFFTData:self.info->outFFTData
-                bufferSize:nOver2];
+    if ([self.delegate respondsToSelector:@selector(fft:updatedWithFFTData:bufferSize:)]) {
+        [self.delegate fft:self updatedWithFFTData:self.info->outFFTData bufferSize:nOver2];
     }
-    
+
     //
     // Return the FFT
     //
@@ -200,8 +186,7 @@ typedef struct EZAudioFFTInfo
 
 - (float)frequencyAtIndex:(vDSP_Length)index
 {
-    if (!(self.info->outFFTData == NULL || self.sampleRate == 0.0f))
-    {
+    if (!(self.info->outFFTData == NULL || self.sampleRate == 0.0f)) {
         float nyquistMaxFreq = self.sampleRate / 2.0;
         return ((float)index / (float)self.info->outFFTDataLength) * nyquistMaxFreq;
     }
@@ -212,8 +197,7 @@ typedef struct EZAudioFFTInfo
 
 - (float)frequencyMagnitudeAtIndex:(vDSP_Length)index
 {
-    if (self.info->outFFTData != NULL)
-    {
+    if (self.info->outFFTData != NULL) {
         return self.info->outFFTData[index];
     }
     return NSNotFound;
@@ -277,8 +261,8 @@ typedef struct EZAudioFFTInfo
 //------------------------------------------------------------------------------
 
 @interface EZAudioFFTRolling ()
-@property (assign,    nonatomic) EZPlotHistoryInfo *historyInfo;
-@property (readwrite, nonatomic) vDSP_Length        windowSize;
+@property (assign, nonatomic) EZPlotHistoryInfo * historyInfo;
+@property (readwrite, nonatomic) vDSP_Length windowSize;
 
 @end
 
@@ -297,13 +281,9 @@ typedef struct EZAudioFFTInfo
 #pragma mark - Initialization
 //------------------------------------------------------------------------------
 
-- (instancetype)initWithWindowSize:(vDSP_Length)windowSize
-                        sampleRate:(float)sampleRate
+- (instancetype)initWithWindowSize:(vDSP_Length)windowSize sampleRate:(float)sampleRate
 {
-    return [self initWithWindowSize:windowSize
-                  historyBufferSize:windowSize * 8
-                         sampleRate:sampleRate
-                           delegate:nil];
+    return [self initWithWindowSize:windowSize historyBufferSize:windowSize * 8 sampleRate:sampleRate delegate:nil];
 }
 
 //------------------------------------------------------------------------------
@@ -324,10 +304,7 @@ typedef struct EZAudioFFTInfo
                  historyBufferSize:(vDSP_Length)historyBufferSize
                         sampleRate:(float)sampleRate
 {
-    return [self initWithWindowSize:windowSize
-                  historyBufferSize:historyBufferSize
-                         sampleRate:sampleRate
-                           delegate:nil];
+    return [self initWithWindowSize:windowSize historyBufferSize:historyBufferSize sampleRate:sampleRate delegate:nil];
 }
 
 //------------------------------------------------------------------------------
@@ -337,13 +314,11 @@ typedef struct EZAudioFFTInfo
                         sampleRate:(float)sampleRate
                           delegate:(id<EZAudioFFTDelegate>)delegate
 {
-    self = [super initWithMaximumBufferSize:historyBufferSize
-                                 sampleRate:sampleRate];
-    if (self)
-    {
+    self = [super initWithMaximumBufferSize:historyBufferSize sampleRate:sampleRate];
+    if (self) {
         self.delegate = delegate;
         self.windowSize = windowSize;
-        
+
         //
         // Allocate an appropriately sized history buffer in bytes
         //
@@ -357,11 +332,9 @@ typedef struct EZAudioFFTInfo
 #pragma mark - Class Initializers
 //------------------------------------------------------------------------------
 
-+ (instancetype)fftWithWindowSize:(vDSP_Length)windowSize
-                       sampleRate:(float)sampleRate
++ (instancetype)fftWithWindowSize:(vDSP_Length)windowSize sampleRate:(float)sampleRate
 {
-    return [[self alloc] initWithWindowSize:windowSize
-                                 sampleRate:sampleRate];
+    return [[self alloc] initWithWindowSize:windowSize sampleRate:sampleRate];
 }
 
 //------------------------------------------------------------------------------
@@ -370,9 +343,7 @@ typedef struct EZAudioFFTInfo
                        sampleRate:(float)sampleRate
                          delegate:(id<EZAudioFFTDelegate>)delegate
 {
-    return [[self alloc] initWithWindowSize:windowSize
-                                 sampleRate:sampleRate
-                                   delegate:delegate];
+    return [[self alloc] initWithWindowSize:windowSize sampleRate:sampleRate delegate:delegate];
 }
 
 //------------------------------------------------------------------------------
@@ -381,9 +352,7 @@ typedef struct EZAudioFFTInfo
                 historyBufferSize:(vDSP_Length)historyBufferSize
                        sampleRate:(float)sampleRate
 {
-    return [[self alloc] initWithWindowSize:windowSize
-                          historyBufferSize:historyBufferSize
-                                 sampleRate:sampleRate];
+    return [[self alloc] initWithWindowSize:windowSize historyBufferSize:historyBufferSize sampleRate:sampleRate];
 }
 
 //------------------------------------------------------------------------------
@@ -403,26 +372,21 @@ typedef struct EZAudioFFTInfo
 #pragma mark - Actions
 //------------------------------------------------------------------------------
 
-- (float *)computeFFTWithBuffer:(float *)buffer
-                 withBufferSize:(UInt32)bufferSize
+- (float *)computeFFTWithBuffer:(float *)buffer withBufferSize:(UInt32)bufferSize
 {
-    if (buffer == NULL)
-    {
+    if (buffer == NULL) {
         return NULL;
     }
-    
+
     //
     // Append buffer to history window
     //
-    [EZAudioUtilities appendBuffer:buffer
-                    withBufferSize:bufferSize
-                     toHistoryInfo:self.historyInfo];
-    
+    [EZAudioUtilities appendBuffer:buffer withBufferSize:bufferSize toHistoryInfo:self.historyInfo];
+
     //
     // Call super to calculate the FFT of the window
     //
-    return [super computeFFTWithBuffer:self.historyInfo->buffer
-                        withBufferSize:self.historyInfo->bufferSize];
+    return [super computeFFTWithBuffer:self.historyInfo->buffer withBufferSize:self.historyInfo->bufferSize];
 }
 
 //------------------------------------------------------------------------------

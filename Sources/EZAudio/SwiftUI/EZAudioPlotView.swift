@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  EZAudioPlotView.swift
 //  EZAudio
 //
 //  Created by Haris Ali on 9/8/25.
@@ -8,7 +8,7 @@
 import EZAudioUI
 import SwiftUI
 
-public struct EZAudioPlotView: ViewRepresentable {
+public struct EZAudioPlotView: PlatformViewRepresentable {
     public var audioData: [Float]
     public var color: Color
     public var shouldFill: Bool
@@ -16,7 +16,7 @@ public struct EZAudioPlotView: ViewRepresentable {
     public var shouldCenterYAxis: Bool
     public var plotType: EZPlotType
     public var shouldOptimizeForRealtimePlot: Bool
-    
+
     public init(
         audioData: [Float],
         color: Color = .blue,
@@ -34,54 +34,52 @@ public struct EZAudioPlotView: ViewRepresentable {
         self.plotType = plotType
         self.shouldOptimizeForRealtimePlot = shouldOptimizeForRealtimePlot
     }
-    
+
     fileprivate func makeView() -> EZAudioPlot {
         let view = EZAudioPlot()
         updateView(view)
         return view
     }
-    
+
     fileprivate func updateView(_ view: EZAudioPlot) {
-//        view.color = NSColor(color)
+
+//        view.color = PlatformColor(color)
         view.shouldFill = shouldFill
         view.shouldMirror = shouldMirror
         view.shouldCenterYAxis = shouldCenterYAxis
         view.plotType = plotType
         view.shouldOptimizeForRealtimePlot = shouldOptimizeForRealtimePlot
-        view.updateBuffer(
-            audioData,
-            withBufferSize: UInt32(audioData.count)
-        )
+        let count = UInt32(audioData.count)
+        view.updateBuffer(audioData, withBufferSize: count)
         view.redraw()
     }
-    
 }
 
 #if os(macOS)
-extension EZAudioPlotView {
-    public func makeNSView(context: Context) -> EZAudioPlot {
-        makeView()
+    public extension EZAudioPlotView {
+        func makeNSView(context _: Context) -> EZAudioPlot {
+            makeView()
+        }
+
+        func updateNSView(_ view: EZAudioPlot, context _: Context) {
+            updateView(view)
+        }
     }
-    
-    public func updateNSView(_ view: EZAudioPlot, context: Context) {
-        updateView(view)
-    }
-}
 #else
-extension EZAudioPlotView {
-    public func makeUIView(context: Context) -> EZAudioPlot {
-        makeView()
+    public extension EZAudioPlotView {
+        func makeUIView(context _: Context) -> EZAudioPlot {
+            makeView()
+        }
+
+        func updateUIView(_ view: EZAudioPlot, context _: Context) {
+            updateView(view)
+        }
     }
-    
-    public func updateUIView(_ view: EZAudioPlot, context: Context) {
-        updateView(view)
-    }
-}
 #endif
 
 private struct EZAudioPlotPreview: View {
     // Controls (Double for SwiftUI Slider)
-    @State private var type: Waveform = .sine
+    @State private var type: WaveformGenerator.Kind = .sine
     @State private var frequency: Double = 3.0
     @State private var amplitude: Double = 0.75
     @State private var sampleCount: Int = 1024
@@ -95,7 +93,7 @@ private struct EZAudioPlotPreview: View {
 
     // Recompute samples (convert Double → Float)
     private var samples: [Float] {
-        generateWaveform(
+        WaveformGenerator.generateWaveform(
             type,
             frequency: Float(frequency),
             amplitude: Float(amplitude),
@@ -118,39 +116,45 @@ private struct EZAudioPlotPreview: View {
             .clipShape(RoundedRectangle(cornerRadius: 12))
             // avoid macOS 12 ShapeStyle API; use Color explicitly
             .overlay(RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.secondary.opacity(0.3)))
+                .stroke(Color.secondary.opacity(0.3)))
 
             // Controls (no GroupBox initializer that requires macOS 12)
             VStack(alignment: .leading, spacing: 8) {
                 Text("Waveform").font(.headline)
                 HStack {
                     Picker("Type", selection: $type) {
-                        ForEach(Waveform.allCases) { w in
+                        ForEach(WaveformGenerator.Kind.allCases) { w in
                             Text(w.rawValue.capitalized).tag(w)
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
 
-                    Stepper("Samples: \(sampleCount)",
-                            value: $sampleCount,
-                            in: 64...4096,
-                            step: 64)
+                    Stepper(
+                        "Samples: \(sampleCount)",
+                        value: $sampleCount,
+                        in: 64 ... 4096,
+                        step: 64
+                    )
                 }
 
                 HStack {
-                    LabeledSlider(title: "Frequency",
-                                  value: $frequency,
-                                  range: 0.25...16,
-                                  step: 0.25)
-                    LabeledSlider(title: "Amplitude",
-                                  value: $amplitude,
-                                  range: 0...1,
-                                  step: 0.05)
+                    LabeledSlider(
+                        title: "Frequency",
+                        value: $frequency,
+                        range: 0.25 ... 16,
+                        step: 0.25
+                    )
+                    LabeledSlider(
+                        title: "Amplitude",
+                        value: $amplitude,
+                        range: 0 ... 1,
+                        step: 0.05
+                    )
                 }
             }
             .padding(10)
             .background(RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.secondary.opacity(0.08)))
+                .fill(Color.secondary.opacity(0.08)))
 
             VStack(alignment: .leading, spacing: 8) {
                 Text("Plot Options").font(.headline)
@@ -166,13 +170,15 @@ private struct EZAudioPlotPreview: View {
                     }
                     .pickerStyle(SegmentedPickerStyle())
 
-                    Toggle("Optimize Realtime",
-                           isOn: $shouldOptimizeForRealtimePlot)
+                    Toggle(
+                        "Optimize Realtime",
+                        isOn: $shouldOptimizeForRealtimePlot
+                    )
                 }
             }
             .padding(10)
             .background(RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.secondary.opacity(0.08)))
+                .fill(Color.secondary.opacity(0.08)))
         }
         .padding(.horizontal)
         .padding(.vertical, 40)
